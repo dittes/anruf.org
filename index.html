@@ -61,30 +61,47 @@ body[data-view=home] #home, body[data-view=join] #join, body[data-view=room] #ro
 
 /* ---------- home ---------- */
 #home{flex-direction:column;min-height:100dvh}
-.hero{padding:clamp(24px,7vh,80px) var(--gutter) 40px;display:grid;gap:clamp(28px,5vh,48px)}
-h1{margin:0;font-weight:800;font-size:clamp(3.2rem,20vw,10rem);line-height:.88;letter-spacing:-.055em}
-h1 .ln{display:block;overflow:hidden;padding-bottom:.06em}
+/* feines Punktraster, zur Mitte hin ausgeblendet */
+#home::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background-image:radial-gradient(color-mix(in oklab,var(--ink) 16%,transparent) 1px,transparent 1.3px);background-size:22px 22px;
+  -webkit-mask-image:radial-gradient(ellipse 70% 55% at 70% 30%,#000 10%,transparent 75%);mask-image:radial-gradient(ellipse 70% 55% at 70% 30%,#000 10%,transparent 75%)}
+.hero{padding:clamp(20px,5vh,64px) var(--gutter) clamp(28px,5vh,56px);display:grid;gap:clamp(22px,4vh,40px);justify-items:start}
+h1{margin:0;font-weight:800;font-size:clamp(3.4rem,19.5vw,9rem);line-height:.86;letter-spacing:-.06em}
+h1 .ln{display:block;overflow:hidden;padding-bottom:.07em}
 h1 .ln span{display:inline-block;transform:translateY(105%);animation:rise .9s var(--ease) forwards}
 h1 .ln:nth-child(2) span{animation-delay:.08s}
 h1 .ln:nth-child(3) span{animation-delay:.16s}
-h1 em{font-style:normal;color:var(--accent)}
+h1 em{font-style:normal;color:var(--accent);display:inline-block;animation:blink-dot 5s 1.4s ease-in-out infinite}
+@keyframes blink-dot{0%,86%,100%{transform:none}90%{transform:translateY(-.08em) scale(1.15)}}
 @keyframes rise{to{transform:none}}
-.lede{max-width:34ch;margin:0;font-size:clamp(1.05rem,2.6vw,1.3rem);color:var(--mute);font-weight:400;opacity:0;animation:fade .8s .35s var(--ease) forwards}
+.lede{max-width:30ch;margin:0;font-size:clamp(1.1rem,2.6vw,1.35rem);color:var(--mute);font-weight:400;opacity:0;animation:fade .8s .35s var(--ease) forwards}
+.lede b{color:var(--ink);font-weight:600}
 @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-.start{display:flex;align-items:center;gap:22px;flex-wrap:wrap;opacity:0;animation:fade .8s .45s var(--ease) forwards}
-.call-btn{position:relative;flex:none;width:clamp(112px,26vw,136px);aspect-ratio:1;border-radius:50%;border:0;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;
-  transition:transform .55s var(--spring),background .3s}
-.call-btn::before,.call-btn::after{content:"";position:absolute;inset:0;border-radius:50%;border:1.5px solid var(--accent);animation:sonar 3s cubic-bezier(.2,.6,.3,1) infinite;pointer-events:none}
+
+/* der Anruf-Orb */
+.dial{justify-self:center;display:grid;justify-items:center;gap:22px;opacity:0;animation:fade .9s .45s var(--ease) forwards}
+.orb{position:relative;width:clamp(230px,68vw,340px);aspect-ratio:1;display:grid;place-items:center}
+.orb::before{content:"";position:absolute;inset:6%;border-radius:50%;background:radial-gradient(circle,color-mix(in oklab,var(--accent) 22%,transparent) 0,transparent 68%);filter:blur(18px);animation:glow 4s ease-in-out infinite}
+@keyframes glow{50%{transform:scale(1.12);opacity:.7}}
+.orb-ring{position:absolute;inset:0;width:100%;height:100%;animation:spin 22s linear infinite;color:var(--ink);overflow:visible}
+.orb-ring text{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;fill:currentColor;text-transform:uppercase}
+.orb-ring .tick{fill:var(--accent)}
+.orb:hover .orb-ring{animation-duration:7s}
+@keyframes spin{to{transform:rotate(360deg)}}
+.call-btn{position:relative;width:64%;aspect-ratio:1;border-radius:50%;border:0;color:var(--on-accent);display:grid;place-items:center;gap:0;
+  background:radial-gradient(circle at 32% 28%,color-mix(in oklab,var(--accent) 70%,#fff) 0,var(--accent) 42%,color-mix(in oklab,var(--accent) 80%,#000) 100%);
+  box-shadow:0 22px 50px -12px color-mix(in oklab,var(--accent) 70%,transparent),inset 0 -8px 20px color-mix(in oklab,var(--accent) 60%,#000),inset 0 6px 14px rgba(255,255,255,.28);
+  transition:transform .6s var(--spring),box-shadow .4s}
+.call-btn::before,.call-btn::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--accent);animation:sonar 3s cubic-bezier(.2,.6,.3,1) infinite;pointer-events:none}
 .call-btn::after{animation-delay:1.5s}
-@keyframes sonar{from{transform:scale(1);opacity:.75}to{transform:scale(2.15);opacity:0}}
-.call-btn svg{width:38%;height:38%;transition:transform .5s var(--spring)}
+@keyframes sonar{from{transform:scale(1);opacity:.7}to{transform:scale(1.75);opacity:0}}
+.call-btn .ic{width:34%;height:34%;animation:ring 3s 1.2s ease-in-out infinite}
+.call-btn .cta{position:absolute;bottom:17%;font-weight:700;font-size:clamp(.8rem,3.2vw,.95rem);letter-spacing:-.01em;opacity:.95}
+@keyframes ring{0%,70%,100%{transform:rotate(0)}74%{transform:rotate(-14deg)}78%{transform:rotate(12deg)}82%{transform:rotate(-9deg)}86%{transform:rotate(6deg)}90%{transform:rotate(0)}}
 .call-btn:hover{transform:scale(1.05)}
-.call-btn:hover svg{animation:wiggle .7s ease-in-out}
-.call-btn:active{transform:scale(.94)}
-@keyframes wiggle{0%,100%{transform:rotate(0)}20%{transform:rotate(-16deg)}40%{transform:rotate(13deg)}60%{transform:rotate(-9deg)}80%{transform:rotate(5deg)}}
-.start-copy{display:grid;gap:12px}
-.start-title{font-size:clamp(1.5rem,4.6vw,2.1rem);font-weight:650;letter-spacing:-.03em;line-height:1}
-.opts{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.call-btn:active{transform:scale(.93)}
+.call-btn:focus-visible{outline-offset:8px;border-radius:50%}
+.opts{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center}
 
 .seg{display:inline-flex;padding:4px;border-radius:999px;background:var(--card);border:1px solid var(--line);position:relative}
 .seg input{position:absolute;opacity:0;pointer-events:none}
@@ -99,12 +116,24 @@ h1 em{font-style:normal;color:var(--accent)}
 .name input:focus{width:14ch}
 .name .mono{color:var(--mute)}
 
-/* steps */
-.steps{padding:8px var(--gutter) 64px;display:grid;gap:0;list-style:none;margin:0;counter-reset:s}
-.steps li{display:grid;grid-template-columns:auto 1fr;gap:4px 18px;padding:20px 0;border-top:1px solid var(--line);opacity:0;animation:fade .8s var(--ease) forwards}
-.steps li:nth-child(1){animation-delay:.6s}.steps li:nth-child(2){animation-delay:.7s}.steps li:nth-child(3){animation-delay:.8s}
-.steps .mono{color:var(--accent);grid-row:span 2;padding-top:.45em}
-.steps b{font-size:clamp(1.25rem,3.6vw,1.6rem);font-weight:650;letter-spacing:-.025em;line-height:1.15}
+/* Laufband */
+.marquee{overflow:hidden;border-block:1px solid var(--line);padding:14px 0;opacity:0;animation:fade .8s .6s var(--ease) forwards;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.marquee-track{display:flex;width:max-content;animation:marquee 38s linear infinite}
+.marquee span{font-size:clamp(1.05rem,2.6vw,1.35rem);font-weight:650;letter-spacing:-.02em;white-space:nowrap;padding-right:1.6em;display:inline-flex;align-items:center;gap:1.6em}
+.marquee span::after{content:"";width:.42em;height:.42em;border-radius:50%;background:var(--accent)}
+@keyframes marquee{to{transform:translateX(-50%)}}
+
+/* Schritte als Karten */
+.steps{padding:clamp(28px,5vh,56px) var(--gutter) 64px;display:grid;gap:12px;list-style:none;margin:0}
+.steps li{position:relative;overflow:hidden;display:grid;gap:10px;padding:22px 22px 24px;border-radius:26px;background:var(--card);border:1px solid var(--line);
+  opacity:0;animation:fade .8s var(--ease) forwards;transition:transform .5s var(--spring),box-shadow .4s}
+.steps li:nth-child(1){animation-delay:.7s}.steps li:nth-child(2){animation-delay:.8s}.steps li:nth-child(3){animation-delay:.9s}
+.steps li:hover{transform:translateY(-4px) rotate(-.4deg);box-shadow:0 20px 40px -20px rgba(0,0,0,.25)}
+.steps .num{position:absolute;right:-.06em;top:-.2em;font-size:7.5rem;font-weight:800;letter-spacing:-.08em;line-height:1;color:color-mix(in oklab,var(--ink) 6%,transparent);pointer-events:none}
+.steps .si{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:color-mix(in oklab,var(--accent) 14%,transparent);color:var(--accent)}
+.steps .si svg{width:24px;height:24px}
+.steps b{font-size:clamp(1.3rem,3.6vw,1.6rem);font-weight:700;letter-spacing:-.03em;line-height:1.1}
 .steps span{color:var(--mute)}
 
 .btn{text-decoration:none;height:52px;padding:0 22px;border-radius:16px;border:1px solid var(--ink);background:var(--ink);color:var(--paper);font-weight:600;letter-spacing:-.01em;display:inline-flex;align-items:center;justify-content:center;gap:10px;transition:transform .4s var(--spring),background .3s,color .3s}
@@ -164,7 +193,7 @@ footer a:hover{color:var(--ink)}
 .tile.self .label .pen{display:block}
 .tile.self .label:hover{transform:translateY(-2px)}
 .tile .state{position:absolute;top:12px;right:12px;font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);display:none;z-index:2}
-.tile.connecting .state{display:block}
+.tile.connecting .state,.tile.vwait .state{display:block}
 .tile.connecting .blobwrap{animation:pulse 1.6s ease-in-out infinite}
 @keyframes pulse{50%{opacity:.45;transform:scale(.94)}}
 .tile .sonar{position:absolute;inset:0;display:none;place-items:center;pointer-events:none}
@@ -249,16 +278,16 @@ dialog p{margin:0 0 16px;color:var(--mute)}
 @keyframes toast-out{to{opacity:0;transform:translateY(-10px)}}
 .unlock{position:fixed;z-index:40;inset:auto 16px calc(100px + env(safe-area-inset-bottom)) 16px;margin:auto;width:max-content;display:none}
 .unlock.show{display:inline-flex}
+.dbg{position:absolute;z-index:6;top:8px;left:8px;margin:0;padding:6px 8px;border-radius:8px;background:rgba(0,0,0,.65);color:#fff;font:10px/1.35 var(--mono);white-space:pre;pointer-events:none}
 .noscript,.unsupported{padding:40px var(--gutter);font-size:1.1rem}
 
 @media (min-width:760px){
-  .hero{grid-template-columns:1.25fr 1fr;align-items:end}
-  .hero h1{grid-column:1/-1;font-size:clamp(3.4rem,9.4vw,10rem)}
-  h1 .ln{display:inline-block;margin-right:.14em}
-  h1 .ln:last-child{margin-right:0}
-  .start{justify-self:start}
-  .lede{align-self:center}
-  .steps{grid-template-columns:repeat(3,1fr);gap:28px}
+  .hero{grid-template-columns:1.1fr 1fr;grid-template-rows:auto 1fr;column-gap:4vw;align-items:center;min-height:min(78vh,760px)}
+  .hero h1{grid-column:1;grid-row:1;font-size:clamp(4rem,9.6vw,10rem);align-self:end}
+  .lede{grid-column:1;grid-row:2;align-self:start}
+  .dial{grid-column:2;grid-row:1/3}
+  .orb{width:clamp(280px,32vw,420px)}
+  .steps{grid-template-columns:repeat(3,1fr);gap:16px}
 }
 /* Mobile: Chat als Bottom-Sheet, kompakteres Dock */
 @media (max-width:759px){
@@ -293,29 +322,38 @@ dialog p{margin:0 0 16px;color:var(--mute)}
 
   <section class="hero">
     <h1><span class="ln"><span>Ruf</span></span><span class="ln"><span>einfach</span></span><span class="ln"><span>an<em>.</em></span></span></h1>
-    <p class="lede">Kein Konto. Keine App. Ein Link genügt, und ihr sprecht direkt miteinander, von Browser zu Browser.</p>
-    <div class="start">
-      <button class="call-btn" id="startCall" aria-label="Neuen Anruf starten">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h3.5l2 5-2.5 1.5a11 11 0 0 0 5.5 5.5l1.5-2.5 5 2V19a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>
-      </button>
-      <div class="start-copy">
-        <div class="start-title">Anruf starten</div>
-        <div class="opts">
-          <div class="seg" role="radiogroup" aria-label="Art des Anrufs">
-            <span class="pill" aria-hidden="true"></span>
-            <input type="radio" name="mode" id="mAudio" value="audio"><label for="mAudio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>Audio</label>
-            <input type="radio" name="mode" id="mVideo" value="video"><label for="mVideo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="6" width="13" height="12" rx="3"/><path d="m16 10 5-3v10l-5-3z"/></svg>Video</label>
-          </div>
-          <label class="name"><span class="mono">Du</span><input id="nameInput" maxlength="24" autocomplete="nickname" spellcheck="false" aria-label="Dein Name"></label>
+    <p class="lede">Kein Konto, keine App. <b>Ein Link genügt</b>, und ihr sprecht direkt miteinander, von Browser zu Browser.</p>
+    <div class="dial">
+      <div class="orb">
+        <svg class="orb-ring" viewBox="0 0 200 200" aria-hidden="true">
+          <defs><path id="orbPath" d="M100,100 m-88,0 a88,88 0 1,1 176,0 a88,88 0 1,1 -176,0"/></defs>
+          <text><textPath href="#orbPath" textLength="548" lengthAdjust="spacing">Anruf starten · Link teilen · Sprechen · </textPath></text>
+        </svg>
+        <button class="call-btn" id="startCall" aria-label="Neuen Anruf starten">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h3.5l2 5-2.5 1.5a11 11 0 0 0 5.5 5.5l1.5-2.5 5 2V19a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>
+          <span class="cta">Anruf starten</span>
+        </button>
+      </div>
+      <div class="opts">
+        <div class="seg" role="radiogroup" aria-label="Art des Anrufs">
+          <span class="pill" aria-hidden="true"></span>
+          <input type="radio" name="mode" id="mAudio" value="audio"><label for="mAudio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>Audio</label>
+          <input type="radio" name="mode" id="mVideo" value="video"><label for="mVideo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="6" width="13" height="12" rx="3"/><path d="m16 10 5-3v10l-5-3z"/></svg>Video</label>
         </div>
+        <label class="name"><span class="mono">Du</span><input id="nameInput" maxlength="24" autocomplete="nickname" spellcheck="false" aria-label="Dein Name"></label>
       </div>
     </div>
   </section>
 
+  <div class="marquee" aria-hidden="true"><div class="marquee-track">
+    <span>Kein Konto</span><span>Keine App</span><span>Ende-zu-Ende verschlüsselt</span><span>Audio</span><span>Video</span><span>Chat</span><span>Bis zu 8 Personen</span><span>Keine Aufzeichnung</span>
+    <span>Kein Konto</span><span>Keine App</span><span>Ende-zu-Ende verschlüsselt</span><span>Audio</span><span>Video</span><span>Chat</span><span>Bis zu 8 Personen</span><span>Keine Aufzeichnung</span>
+  </div></div>
+
   <ol class="steps">
-    <li><span class="mono">01</span><b>Tippen</b><span>Ein Tipp auf den Knopf, und dein Anruf ist offen.</span></li>
-    <li><span class="mono">02</span><b>Link schicken</b><span>Per Messenger, Mail oder QR-Code. Bis zu 8 Personen.</span></li>
-    <li><span class="mono">03</span><b>Sprechen &amp; schreiben</b><span>Audio, Video und Chat. Direkt und verschlüsselt, ohne Aufzeichnung.</span></li>
+    <li><span class="num" aria-hidden="true">1</span><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h3.5l2 5-2.5 1.5a11 11 0 0 0 5.5 5.5l1.5-2.5 5 2V19a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></span><b>Tippen</b><span>Ein Tipp auf den großen Knopf, und dein Anruf ist offen.</span></li>
+    <li><span class="num" aria-hidden="true">2</span><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg></span><b>Link schicken</b><span>Per Messenger, Mail oder QR-Code. Bis zu 8 Personen.</span></li>
+    <li><span class="num" aria-hidden="true">3</span><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-9l-5 4v-4H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z"/></svg></span><b>Sprechen &amp; schreiben</b><span>Audio, Video und Chat. Direkt und verschlüsselt, ohne Aufzeichnung.</span></li>
   </ol>
 
   <footer class="mono">
@@ -513,18 +551,43 @@ function ensureAudioCtx() {
   } catch {}
   return actx
 }
-function chime(kind = 'join') {
-  if (!actx) return
-  const t = actx.currentTime
-  const notes = kind === 'join' ? [660, 990] : kind === 'leave' ? [760, 520] : [1180]
-  notes.forEach((f, i) => {
-    const o = actx.createOscillator(), g = actx.createGain()
-    o.type = 'sine'; o.frequency.value = f
-    g.gain.setValueAtTime(0, t + i * .11)
-    g.gain.linearRampToValueAtTime(kind === 'msg' ? .035 : .06, t + i * .11 + .02)
-    g.gain.exponentialRampToValueAtTime(.0001, t + i * .11 + .3)
-    o.connect(g).connect(actx.destination); o.start(t + i * .11); o.stop(t + i * .11 + .35)
+// Sanfte, glockenartige Töne: Grundton + leise Obertöne, weicher Ausklang und ein Hauch Echo.
+let fxIn = null
+function fxBus() {
+  if (fxIn) return fxIn
+  const out = actx.createGain(); out.gain.value = .9
+  const lp = actx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 3400; lp.Q.value = .3
+  const dl = actx.createDelay(1); dl.delayTime.value = .21
+  const fb = actx.createGain(); fb.gain.value = .26
+  const wet = actx.createGain(); wet.gain.value = .2
+  lp.connect(out); lp.connect(dl); dl.connect(fb); fb.connect(dl); dl.connect(wet); wet.connect(out)
+  out.connect(actx.destination)
+  return (fxIn = lp)
+}
+function note(f, at, dur, vol) {
+  ;[[1, 1], [2, .22], [3.01, .06]].forEach(([m, g]) => {
+    const o = actx.createOscillator(), v = actx.createGain()
+    o.type = 'sine'; o.frequency.value = f * m
+    v.gain.setValueAtTime(0, at)
+    v.gain.linearRampToValueAtTime(vol * g, at + .015)
+    v.gain.exponentialRampToValueAtTime(.0001, at + dur / m)
+    o.connect(v); v.connect(fxBus()); o.start(at); o.stop(at + dur + .05)
   })
+}
+const SOUNDS = {
+  enter: {n: [[523.25, 0], [659.25, .09], [783.99, .18], [1046.5, .3]], d: 1.4, v: .075}, // C-E-G-C aufwärts
+  join:  {n: [[659.25, 0], [987.77, .11]], d: 1.1, v: .065},                             // E-H
+  leave: {n: [[783.99, 0], [587.33, .13]], d: 1.1, v: .06},                              // G-D
+  end:   {n: [[783.99, 0], [659.25, .12], [523.25, .24], [392, .38]], d: 1.5, v: .07},   // G-E-C-G abwärts
+  msg:   {n: [[1318.5, 0]], d: .45, v: .03}
+}
+function chime(kind) {
+  const snd = SOUNDS[kind]; if (!actx || !snd) return
+  try {
+    if (actx.state === 'suspended') actx.resume()
+    const t = actx.currentTime + .03
+    snd.n.forEach(([f, d]) => note(f, t + d, snd.d, snd.v))
+  } catch {}
 }
 
 /* =================== Startseite & Einstellungen =================== */
@@ -616,9 +679,11 @@ async function getMedia(video) {
   }
 }
 // iOS/Android: Video-Elemente müssen explizit stumm & inline sein, sonst blockiert Autoplay.
-function prepVideo(v) {
+function prepVideo(v, p) {
   v.muted = true; v.defaultMuted = true; v.playsInline = true; v.autoplay = true
   v.setAttribute('playsinline', ''); v.setAttribute('webkit-playsinline', '')
+  const upd = () => refreshVideo(p)
+  ;['playing', 'resize', 'loadeddata', 'pause'].forEach(e => v.addEventListener(e, upd))
 }
 function playSafe(el) {
   const p = el.play?.()
@@ -640,7 +705,7 @@ function makeTile(p, self) {
   t.querySelector('.initial').textContent = (p.name || '?')[0].toUpperCase()
   t.querySelector('.nm').textContent = self ? p.name + ' (du)' : p.name
   p.body = t.querySelector('.body'); p.halo = t.querySelector('.halo'); p.video = t.querySelector('video')
-  prepVideo(p.video)
+  prepVideo(p.video, p)
   p.seed = (hash(p.id) % 1000) / 100
   $('#stage').append(t)
   return t
@@ -674,20 +739,50 @@ function attachAnalyser(p, stream) {
     p.src.connect(p.an); p.analysedTrack = at
   } catch {}
 }
-// Zeigt das Video eines Teilnehmers. Eigener, rein visueller MediaStream je Video-Element –
-// so stört die Tonwiedergabe nicht und mobile Browser spielen das (stumme) Video zuverlässig ab.
+// Zeigt das Video eines Teilnehmers. Das Bild wird erst eingeblendet, wenn wirklich Frames
+// ankommen (sonst bleibt die animierte Fläche sichtbar statt eines schwarzen Kastens).
 function refreshVideo(p) {
   const s = p.stream
   const vt = s?.getVideoTracks().find(t => t.readyState === 'live') || null
-  const on = !!vt && p.cam !== false
+  const want = !!vt && p.cam !== false
   if (vt && p.videoTrack !== vt) {
-    p.videoTrack = vt
-    p.video.srcObject = new MediaStream([vt])
-    vt.onunmute = () => { playSafe(p.video); refreshVideo(p) }
-    vt.onended = () => refreshVideo(p)
+    p.videoTrack = vt; p.vTries = 0
+    p.video.srcObject = s
+    vt.addEventListener('unmute', () => { playSafe(p.video); refreshVideo(p) })
+    vt.addEventListener('mute', () => refreshVideo(p))
+    vt.addEventListener('ended', () => refreshVideo(p))
   }
-  if (on && p.video.paused) playSafe(p.video)
-  p.tile.classList.toggle('cam', on)
+  if (want && p.video.paused) playSafe(p.video)
+  const showing = want && !p.video.paused && p.video.videoWidth > 0
+  p.tile.classList.toggle('cam', showing)
+  p.tile.classList.toggle('vwait', want && !showing)
+  if (want && !showing && !p.tile.classList.contains('connecting') && (p.vTries || 0) < 3) p.tile.querySelector('.state').textContent = 'Video lädt…'
+  clearTimeout(p.vTimer)
+  if (want && !showing) p.vTimer = setTimeout(() => videoWatchdog(p), 3500)
+}
+// Falls nach einigen Sekunden noch kein Bild da ist: neu anhängen (hilft v. a. Safari/iOS),
+// danach um einen Tipp bitten (z. B. Stromsparmodus blockiert Autoplay).
+function videoWatchdog(p) {
+  if (!R || !p.videoTrack || p.tile.classList.contains('cam')) return
+  p.vTries = (p.vTries || 0) + 1
+  if (p.vTries <= 2) {
+    const tracks = p.vTries === 1 ? [p.videoTrack] : p.stream.getTracks()
+    p.video.srcObject = new MediaStream(tracks)
+    playSafe(p.video)
+  } else {
+    p.tile.querySelector('.state').textContent = 'Tippen für Video'
+    $('#unlockBtn').classList.add('show')
+  }
+  setTimeout(() => refreshVideo(p), 400)
+}
+function resumeMedia() {
+  if (!R) return
+  ensureAudioCtx()
+  ;[R.self, ...R.peers.values()].forEach(p => {
+    if (p.audio?.srcObject && p.audio.paused) p.audio.play().catch(() => {})
+    if (p.video?.srcObject && p.video.paused) p.video.play().then(() => refreshVideo(p)).catch(() => {})
+  })
+  $('#unlockBtn').classList.remove('show')
 }
 function attachStream(p, stream) {
   p.stream = stream
@@ -702,12 +797,8 @@ function attachStream(p, stream) {
   stream.onaddtrack = () => { attachAnalyser(p, stream); refreshVideo(p) }
   stream.onremovetrack = () => refreshVideo(p)
 }
-$('#unlockBtn').addEventListener('click', () => {
-  ensureAudioCtx()
-  R?.peers.forEach(p => { p.audio?.play().catch(() => {}); p.video?.play().catch(() => {}) })
-  R?.self.video?.play().catch(() => {})
-  $('#unlockBtn').classList.remove('show')
-})
+$('#unlockBtn').addEventListener('click', resumeMedia)
+$('#room').addEventListener('pointerdown', resumeMedia, {passive: true})
 
 function myMeta() {
   const a = R.stream.getAudioTracks()[0]
@@ -758,6 +849,7 @@ async function enterRoom(slug) {
   $('#waitLink').textContent = link
   $('#waitQr').innerHTML = qrSvg(link)
   syncControls(); layout(); show('room')
+  chime('enter')
 
   R.meta = room.makeAction('meta')
   R.meta.onMessage = (d, {peerId}) => {
@@ -827,6 +919,7 @@ function peerOf(id) {
 function leaveRoom(goHome = true) {
   if (!R) return
   const r = R; R = null
+  chime('end')
   try { r.room.leave() } catch {}
   r.stream.getTracks().forEach(t => t.stop())
   r.peers.forEach(p => { if (p.audio) p.audio.srcObject = null; if (p.video) p.video.srcObject = null; try { p.src?.disconnect() } catch {} })
@@ -1039,6 +1132,28 @@ function frame(ts) {
   }
   requestAnimationFrame(frame)
 }
+
+/* =================== Diagnose (?debug) =================== */
+if (qs.has('debug')) setInterval(async () => {
+  if (!R) return
+  for (const [id, pc] of Object.entries(R.room.getPeers())) {
+    const p = R.peers.get(id); if (!p) continue
+    try {
+      const st = await pc.getStats(); let pair, vin; const cand = {}
+      st.forEach(r => {
+        if (r.type === 'candidate-pair' && r.nominated && r.state === 'succeeded') pair = r
+        if (r.type === 'local-candidate' || r.type === 'remote-candidate') cand[r.id] = r
+        if (r.type === 'inbound-rtp' && r.kind === 'video') vin = r
+      })
+      let d = p.tile.querySelector('.dbg')
+      if (!d) { d = document.createElement('pre'); d.className = 'dbg'; p.tile.append(d) }
+      d.textContent = `${pc.connectionState} · ${cand[pair?.localCandidateId]?.candidateType || '?'}/${cand[pair?.remoteCandidateId]?.candidateType || '?'}\n` +
+        `rtp video: ${vin ? `${vin.frameWidth || 0}x${vin.frameHeight || 0} dec ${vin.framesDecoded || 0}` : '—'}\n` +
+        `track: ${p.videoTrack ? p.videoTrack.readyState + (p.videoTrack.muted ? ' muted' : '') : '—'} cam=${p.cam}\n` +
+        `el: ${p.video.videoWidth}x${p.video.videoHeight} ${p.video.paused ? 'paused' : 'playing'}`
+    } catch {}
+  }
+}, 1000)
 
 /* =================== Routing =================== */
 function route() {
