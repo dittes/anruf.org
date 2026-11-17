@@ -360,7 +360,6 @@ dialog p{margin:0 0 16px;color:var(--mute)}
 /* ---------- Vollbild ---------- */
 .fsbtn .i-exit{display:none}
 .fsbtn.on .i-exit{display:block}.fsbtn.on .i-enter{display:none}
-body.fs #room .rbar{display:none}
 body.fs #room .rbody{padding:8px}
 body.fs #room .dock{position:fixed;z-index:20;left:0;right:0;bottom:0;padding-top:28px;background:linear-gradient(to top,rgba(0,0,0,.55),transparent);transition:transform .45s var(--ease),opacity .45s;color-scheme:dark}
 body.fs.idle #room .dock{transform:translateY(110%);opacity:0;pointer-events:none}
@@ -378,6 +377,49 @@ body.fs .stage.present .strip{width:clamp(110px,13vw,170px)}
 .sharebar i{width:9px;height:9px;border-radius:50%;background:#fff;animation:pulse 1.4s ease-in-out infinite;flex:none}
 .sharebar button{height:34px;padding:0 14px;border-radius:999px;border:0;background:#fff;color:#141412;font-weight:650}
 [hidden]{display:none!important}
+
+/* ---------- Verbindungsdetails (i) ---------- */
+.rright{position:relative;display:flex;align-items:center;gap:10px;flex:none}
+.infobtn{position:relative;width:32px;height:32px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--mute);display:grid;place-items:center;flex:none;transition:transform .35s var(--spring),color .3s,border-color .3s}
+.infobtn:hover,.infobtn[aria-expanded="true"]{color:var(--ink);border-color:var(--ink)}
+.infobtn:active{transform:scale(.92)}
+.infobtn svg{width:17px;height:17px}
+.infobtn .dot{position:absolute;top:-3px;right:-3px;width:11px;height:11px;border-radius:50%;background:var(--mute);border:2px solid var(--paper);transition:background .4s}
+.dot.good,.chip.good i{background:#2FA84F}.dot.warn,.chip.warn i{background:#E8A317}.dot.bad{background:var(--danger)}
+.infobox{position:absolute;z-index:30;top:calc(100% + 8px);right:0;width:min(344px,calc(100vw - 24px));padding:16px;border-radius:24px;background:var(--card);color:var(--ink);border:1px solid var(--line);box-shadow:0 24px 60px -16px rgba(0,0,0,.38);display:grid;gap:14px;text-align:left;font-size:1rem;animation:dlg .35s var(--spring);max-height:calc(100dvh - 90px);overflow:auto;overscroll-behavior:contain}
+.chip{justify-self:start;display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;font-weight:650;font-size:.94rem;letter-spacing:-.01em;background:color-mix(in oklab,var(--mute) 16%,transparent)}
+.chip i{width:9px;height:9px;border-radius:50%;background:var(--mute);flex:none}
+.chip.good{background:color-mix(in oklab,#2FA84F 18%,transparent)}
+.chip.warn{background:color-mix(in oklab,#E8A317 22%,transparent)}
+.ib-head{display:grid;gap:7px}
+.ib-sub{margin:0;font-size:.84rem;color:var(--mute);line-height:1.38}
+.ib-graph{display:grid;gap:7px}
+.ib-graph svg{width:100%;height:72px;display:block;border-radius:14px;background:var(--paper);border:1px solid var(--line)}
+.ib-graph .grid{stroke:var(--line);stroke-width:1;vector-effect:non-scaling-stroke}
+.ib-graph .area{fill:color-mix(in oklab,var(--accent) 24%,transparent);stroke:none}
+.ib-graph .ld{fill:none;stroke:var(--accent);stroke-width:1.8;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.ib-graph .lu{fill:none;stroke:var(--ink);stroke-width:1.5;stroke-dasharray:4 3;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke;opacity:.75}
+.ib-legend{display:flex;justify-content:space-between;gap:10px;font-family:var(--mono);font-size:.72rem;color:var(--mute)}
+.ib-legend span{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.ib-legend i{width:14px;height:0;border-top:2px solid var(--accent);display:inline-block}
+.ib-legend i.u{border-top:2px dashed var(--ink);opacity:.75}
+.ib-legend b{color:var(--ink);font-weight:620}
+.ib-scale{font-family:var(--mono);font-size:.64rem;color:var(--mute);letter-spacing:.03em}
+.ib-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0}
+.ib-stats div{padding:9px 12px;border-radius:15px;background:var(--paper);border:1px solid var(--line);min-width:0}
+.ib-stats dt{font-family:var(--mono);font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
+.ib-stats dd{margin:2px 0 0;font-weight:650;font-size:1.02rem;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ib-peers{list-style:none;margin:0;padding:0;display:grid;gap:10px;max-height:210px;overflow:auto;overscroll-behavior:contain}
+.ib-peers li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;align-items:baseline;font-size:.92rem}
+.ib-peers .pn{display:flex;align-items:center;gap:7px;min-width:0;font-weight:620}
+.ib-peers .pn span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ib-peers .pn i{width:8px;height:8px;border-radius:50%;flex:none;background:var(--mute)}
+.ib-peers .pn i.good{background:#2FA84F}.ib-peers .pn i.warn{background:#E8A317}.ib-peers .pn i.bad{background:var(--danger)}
+.ib-peers .pp{font-family:var(--mono);font-size:.76rem;color:var(--mute);white-space:nowrap}
+.ib-peers .pd{grid-column:1/-1;font-family:var(--mono);font-size:.66rem;color:var(--mute);line-height:1.4;overflow-wrap:anywhere}
+.ib-note{margin:0;font-size:.74rem;color:var(--mute);line-height:1.4;display:flex;gap:8px;align-items:flex-start}
+.ib-note svg{width:14px;height:14px;flex:none;margin-top:2px}
+body.fs #room .rbar{display:none}
 </style>
 </head>
 <body data-view="home">
@@ -465,7 +507,32 @@ body.fs .stage.present .strip{width:clamp(110px,13vw,170px)}
       <a class="mark" href="./" id="roomHome" aria-label="Auflegen und zur Startseite">anruf<i>.org</i></a>
       <span class="rname" id="roomName"></span>
     </div>
-    <span class="rmeta mono" id="roomMeta"></span>
+    <div class="rright">
+      <span class="rmeta mono" id="roomMeta"></span>
+      <button class="infobtn" id="infoBtn" type="button" aria-label="Verbindungsdetails" aria-expanded="false" aria-controls="infoBox">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.2M12 7.9h.01"/></svg>
+        <i class="dot" id="infoDot" aria-hidden="true"></i>
+      </button>
+      <div class="infobox" id="infoBox" role="region" aria-label="Verbindungsdetails" hidden>
+        <div class="ib-head"><span class="chip" id="ibChip"><i></i><span id="ibChipTx">Wartet</span></span><p class="ib-sub" id="ibSub"></p></div>
+        <div class="ib-graph">
+          <svg viewBox="0 0 240 72" preserveAspectRatio="none" role="img" aria-label="Datenrate der letzten 60 Sekunden">
+            <line class="grid" x1="0" x2="240" y1="36" y2="36"/>
+            <path class="area" id="ibArea"/><path class="ld" id="ibLd"/><path class="lu" id="ibLu"/>
+          </svg>
+          <div class="ib-legend"><span><i></i>Empfang <b id="ibDown">0 kbit/s</b></span><span><i class="u"></i>Senden <b id="ibUp">0 kbit/s</b></span></div>
+          <div class="ib-scale" id="ibScale"></div>
+        </div>
+        <dl class="ib-stats">
+          <div><dt>Gesendet</dt><dd id="ibSent">0 B</dd></div>
+          <div><dt>Empfangen</dt><dd id="ibRecv">0 B</dd></div>
+          <div><dt>Ping</dt><dd id="ibPing">—</dd></div>
+          <div><dt>Qualität</dt><dd id="ibQual">—</dd></div>
+        </dl>
+        <ul class="ib-peers" id="ibPeers"></ul>
+        <p class="ib-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span>Audio und Video sind per DTLS-SRTP verschlüsselt. Die Zahlen gelten für diesen Anruf und werden nirgends gespeichert.</span></p>
+      </div>
+    </div>
   </header>
   <div class="rbody">
     <section class="stage alone" id="stage" aria-live="polite">
@@ -925,9 +992,8 @@ async function enterRoom(slug) {
   }
   btn.disabled = false
   ensureAudioCtx()
-  const turn = await getTurn()
+  // Bewusst ohne TURN: Der Relay-Server kommt erst ins Spiel, wenn der direkte Weg nicht klappt (siehe watchIce).
   const cfg = {appId: APP_ID, relayConfig: {urls: RELAYS, warnOnRelayFailure: false}}
-  if (turn) cfg.turnConfig = turn
   const errored = new Set()
   const room = joinRoom(cfg, 'anruf/' + slug, {
     onJoinError: d => {
@@ -937,6 +1003,8 @@ async function enterRoom(slug) {
   })
   R = {slug, room, stream, peers: new Map(), joinedAt: Date.now(), startedAt: 0, cam: stream.getVideoTracks().length > 0, unread: 0}
   R.self = {id: selfId, name: myName, color: colorFor(selfId), level: 0}
+  R.net = {peers: new Map(), t: performance.now(), sent: 0, recv: 0, up: 0, down: 0, hUp: [], hDown: [], relayAsked: false}
+  setInfo(false); pinnedInfo = false; paintInfoDot()
   $('#stage').querySelectorAll('.tile').forEach(t => t.remove())
   $('#msgs').replaceChildren()
   sysMsg('Nachrichten gehen direkt an alle im Anruf und werden nirgends gespeichert.')
@@ -1023,6 +1091,7 @@ async function enterRoom(slug) {
     if (p.video) p.video.srcObject = null
     try { p.src?.disconnect() } catch {}
     removeScreen(p, false)
+    R.net?.peers.delete(id)
     p.tile.classList.add('out'); setTimeout(() => { p.tile.remove(); layout() }, 380)
     const nm = p.name && p.name !== '…' ? p.name : 'Jemand'
     toast(`${nm} hat aufgelegt`); sysMsg(`${nm} hat aufgelegt`)
@@ -1043,6 +1112,7 @@ async function enterRoom(slug) {
   }
 
   R.timer = setInterval(layout, 1000)
+  R.netTimer = setInterval(netTick, 1000)
   try { R.wake = await navigator.wakeLock?.request('screen') } catch {}
   requestAnimationFrame(frame)
 }
@@ -1069,7 +1139,8 @@ function leaveRoom(goHome = true) {
   $('#shareBar').hidden = true
   setFs(false)
   try { r.self.src?.disconnect() } catch {}
-  clearInterval(r.timer)
+  clearInterval(r.timer); clearInterval(r.netTimer)
+  setInfo(false)
   r.wake?.release?.().catch?.(() => {})
   $('#unlockBtn').classList.remove('show')
   $$('dialog[open]').forEach(d => d.close())
@@ -1474,7 +1545,7 @@ function wakeUI() {
   document.body.classList.remove('idle'); clearTimeout(idleT)
   if (!document.body.classList.contains('fs')) return
   idleT = setTimeout(() => {
-    if (chatOpen() || $('dialog[open]') || $('#dock').matches(':hover')) wakeUI()
+    if (chatOpen() || $('dialog[open]') || !$('#infoBox').hidden || $('#dock').matches(':hover')) wakeUI()
     else document.body.classList.add('idle')
   }, 3500)
 }
@@ -1488,6 +1559,190 @@ addEventListener('keydown', e => {
   const tag = e.target?.tagName
   if ((e.key === 'f' || e.key === 'F') && tag !== 'INPUT' && tag !== 'TEXTAREA' && !$('dialog[open]')) { e.preventDefault(); setFs(!isFs()) }
 })
+
+/* ---- Verbindungs-Monitor: TURN nur als Fallback + Statistik ---- */
+// Ablauf: Jede Verbindung startet nur mit STUN (direkter Weg). Hängt ICE länger als TURN_AFTER_MS
+// im Verbindungsaufbau, werden die TURN-Server nachträglich eingetragen und ICE neu gestartet.
+// Erst dann werden Zugangsdaten bei Metered abgeholt.
+const TURN_AFTER_MS = 6000
+const HIST = 60
+const comma = x => String(x).replace('.', ',')
+const fmtRate = b => b < 1000 ? `${Math.round(b)} bit/s` : b < 1e6 ? `${Math.round(b / 1e3)} kbit/s` : `${comma((b / 1e6).toFixed(1))} Mbit/s`
+const fmtBytes = b => b < 1024 ? `${Math.round(b)} B` : b < 1048576 ? `${Math.round(b / 1024)} KB` : b < 1073741824 ? `${comma((b / 1048576).toFixed(1))} MB` : `${comma((b / 1073741824).toFixed(2))} GB`
+
+function watchIce(id, pc, n, now) {
+  const st = pc.iceConnectionState, cs = pc.connectionState
+  if (cs === 'closed') return
+  if (cs === 'connected' || st === 'connected' || st === 'completed') { n.checkingSince = 0; return }
+  if (st === 'checking' || cs === 'connecting') n.checkingSince ||= now
+  if (!n.checkingSince || n.relayTried) return
+  // Nur eine Seite startet zuerst (kleinere ID), die andere erst später. So geraten sie nicht aneinander.
+  const wait = TURN_AFTER_MS + (selfId < id ? 0 : 6000)
+  if (now - n.checkingSince > wait) { n.relayTried = true; useRelay(pc) }
+}
+async function useRelay(pc) {
+  const r = R
+  const turn = await getTurn()
+  if (!R || R !== r || !turn || pc.connectionState === 'closed' || pc.connectionState === 'connected') return
+  try {
+    const cfg = pc.getConfiguration()
+    cfg.iceServers = [...(cfg.iceServers || []), ...turn]
+    pc.setConfiguration(cfg)
+    pc.restartIce()
+    if (!r.net.relayAsked) { r.net.relayAsked = true; toast('Direkt klappt nicht. Ich versuche es über einen Relay-Server.', 4500) }
+  } catch (err) { console.warn('anruf.org: Relay-Fallback fehlgeschlagen', err) }
+}
+
+function parseStats(rep) {
+  const by = new Map(); rep.forEach(r => by.set(r.id, r))
+  let sel = null
+  rep.forEach(r => { if (r.type === 'transport' && r.selectedCandidatePairId) sel = by.get(r.selectedCandidatePairId) || sel })
+  if (!sel) rep.forEach(r => {
+    if (r.type === 'candidate-pair' && (r.selected || (r.nominated && r.state === 'succeeded')) && (!sel || (r.bytesReceived || 0) > (sel.bytesReceived || 0))) sel = r
+  })
+  const o = {sel, local: sel && by.get(sel.localCandidateId), remote: sel && by.get(sel.remoteCandidateId), rtt: null, loss: null, jitter: null, vid: null}
+  if (sel && typeof sel.currentRoundTripTime === 'number') o.rtt = sel.currentRoundTripTime * 1000
+  let lost = 0, recv = 0
+  rep.forEach(r => {
+    const kind = r.kind || r.mediaType
+    if (r.type === 'inbound-rtp' && !r.isRemote) {
+      if (kind === 'audio') { lost += r.packetsLost || 0; recv += r.packetsReceived || 0; if (typeof r.jitter === 'number') o.jitter = r.jitter * 1000 }
+      if (kind === 'video' && r.frameWidth && (!o.vid || r.frameWidth > o.vid.w)) o.vid = {w: r.frameWidth, h: r.frameHeight, fps: Math.round(r.framesPerSecond || 0)}
+    }
+    if (o.rtt == null && r.type === 'remote-inbound-rtp' && typeof r.roundTripTime === 'number') o.rtt = r.roundTripTime * 1000
+  })
+  if (recv + lost > 50) o.loss = Math.max(0, lost) / (recv + lost) * 100
+  return o
+}
+
+async function netTick() {
+  const r = R; if (!r || r.netBusy) return
+  r.netBusy = true
+  try {
+    const net = r.net, now = performance.now(), dt = Math.max(.25, (now - net.t) / 1000); net.t = now
+    let up = 0, down = 0
+    await Promise.all(Object.entries(r.room.getPeers()).map(async ([id, pc]) => {
+      if (!r.peers.has(id)) return
+      let n = net.peers.get(id); if (!n) { n = {}; net.peers.set(id, n) }
+      watchIce(id, pc, n, now)
+      n.state = pc.connectionState
+      let st; try { st = parseStats(await pc.getStats()) } catch { return }
+      n.st = st
+      const sel = st.sel; if (!sel) return
+      const cs = sel.bytesSent || 0, cr = sel.bytesReceived || 0
+      const ds = n.ls == null || cs < n.ls ? cs : cs - n.ls
+      const dr = n.lr == null || cr < n.lr ? cr : cr - n.lr
+      n.ls = cs; n.lr = cr
+      net.sent += ds; net.recv += dr; up += ds * 8 / dt; down += dr * 8 / dt
+    }))
+    if (R !== r) return
+    net.up = up; net.down = down
+    net.hUp.push(up); net.hDown.push(down)
+    if (net.hUp.length > HIST) { net.hUp.shift(); net.hDown.shift() }
+    paintInfoDot()
+    if (!$('#infoBox').hidden) renderInfo()
+  } finally { r.netBusy = false }
+}
+
+// Zusammenfassung für Anzeige und Statuspunkt
+function netSummary() {
+  const rows = []
+  for (const [id, p] of R.peers) {
+    const n = R.net.peers.get(id), st = n?.st
+    const connected = n?.state === 'connected' && !!st?.sel
+    let kind = null
+    if (connected) kind = st.local?.candidateType === 'relay' || st.remote?.candidateType === 'relay' ? 'relay' : 'direct'
+    rows.push({p, n, st, connected, kind})
+  }
+  const conn = rows.filter(x => x.connected)
+  let level = 'idle', chip = 'Wartet auf andere', sub = 'Sobald jemand beitritt, siehst du hier, wie ihr verbunden seid.'
+  if (rows.length && !conn.length) {
+    level = 'idle'; chip = 'Verbindet…'
+    sub = R.net.relayAsked ? 'Der direkte Weg klappt nicht. Ein Relay-Server wird versucht.' : 'Die Browser suchen den besten Weg zueinander.'
+  } else if (conn.length) {
+    const relay = conn.some(x => x.kind === 'relay')
+    level = relay ? 'warn' : 'good'
+    chip = relay ? (conn.every(x => x.kind === 'relay') ? 'Über Relay-Server' : 'Teils über Relay-Server') : 'Direkt · Peer-to-Peer'
+    sub = relay ? 'Ein direkter Weg war nicht möglich. Der Relay-Server leitet die verschlüsselten Daten nur weiter.' : 'Audio, Video und Daten gehen ohne Server zwischen euch hin und her.'
+  }
+  return {rows, conn, level, chip, sub}
+}
+function pingClass(ms) { return ms == null ? '' : ms < 120 ? 'good' : ms < 300 ? 'warn' : 'bad' }
+function qualityOf(conn) {
+  let worst = 0
+  for (const x of conn) {
+    const {rtt, loss, jitter} = x.st
+    let q = 0
+    if (rtt != null && rtt > 120) q = Math.max(q, 1)
+    if ((rtt != null && rtt > 250) || (loss != null && loss > 2) || (jitter != null && jitter > 60)) q = Math.max(q, 2)
+    if ((rtt != null && rtt > 450) || (loss != null && loss > 6)) q = 3
+    worst = Math.max(worst, q)
+  }
+  return ['Sehr gut', 'Gut', 'Wackelig', 'Schlecht'][worst]
+}
+function paintInfoDot() {
+  if (!R?.net) return
+  const {level, conn} = netSummary()
+  const bad = conn.length && qualityOf(conn) === 'Schlecht'
+  $('#infoDot').className = 'dot ' + (bad ? 'bad' : level === 'idle' ? '' : level)
+}
+function drawGraph() {
+  const {hUp, hDown} = R.net
+  const W = 240, H = 72, step = W / (HIST - 1)
+  const max = Math.max(150e3, ...hUp, ...hDown) * 1.15
+  const pts = a => a.map((v, i) => [W - (a.length - 1 - i) * step, H - 3 - (v / max) * (H - 8)])
+  const line = a => a.length ? 'M' + pts(a).map(([x, y]) => `${x.toFixed(1)} ${y.toFixed(1)}`).join('L') : ''
+  const d = pts(hDown)
+  $('#ibLd').setAttribute('d', line(hDown)); $('#ibLu').setAttribute('d', line(hUp))
+  $('#ibArea').setAttribute('d', d.length ? `M${d[0][0].toFixed(1)} ${H}L` + d.map(([x, y]) => `${x.toFixed(1)} ${y.toFixed(1)}`).join('L') + `L${d[d.length - 1][0].toFixed(1)} ${H}Z` : '')
+  $('#ibScale').textContent = `letzte 60 Sekunden · Skala bis ${fmtRate(max)}`
+}
+const mk = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e }
+function renderInfo() {
+  if (!R?.net) return
+  const net = R.net, sum = netSummary()
+  const chip = $('#ibChip'); chip.className = 'chip ' + (sum.level === 'idle' ? '' : sum.level)
+  $('#ibChipTx').textContent = sum.chip; $('#ibSub').textContent = sum.sub
+  $('#ibDown').textContent = fmtRate(net.down); $('#ibUp').textContent = fmtRate(net.up)
+  $('#ibSent').textContent = fmtBytes(net.sent); $('#ibRecv').textContent = fmtBytes(net.recv)
+  const rtts = sum.conn.map(x => x.st.rtt).filter(v => v != null)
+  $('#ibPing').textContent = rtts.length ? `${Math.round(rtts.reduce((a, v) => a + v, 0) / rtts.length)} ms` : '—'
+  $('#ibQual').textContent = sum.conn.length ? qualityOf(sum.conn) : '—'
+  drawGraph()
+  const ul = $('#ibPeers'); ul.replaceChildren()
+  for (const x of sum.rows) {
+    const li = mk('li')
+    const pn = mk('div', 'pn'); pn.append(mk('i', pingClass(x.st?.rtt)), mk('span', null, x.p.name))
+    li.append(pn, mk('span', 'pp', x.connected ? `${x.kind === 'relay' ? 'Relay' : 'Direkt'}${x.st.rtt != null ? ' · ' + Math.round(x.st.rtt) + ' ms' : ''}` : 'verbindet…'))
+    if (x.connected) {
+      const l = x.st.local, rm = x.st.remote
+      const proto = (l?.candidateType === 'relay' ? l.relayProtocol || l.protocol : l?.protocol || '').toUpperCase()
+      const parts = []
+      if (l && rm) parts.push(`${proto ? proto + ' · ' : ''}${l.candidateType} ↔ ${rm.candidateType}`)
+      if (x.st.loss != null) parts.push(`Verlust ${comma(x.st.loss.toFixed(1))} %`)
+      if (x.st.jitter != null) parts.push(`Jitter ${Math.round(x.st.jitter)} ms`)
+      if (x.st.vid) parts.push(`Video ${x.st.vid.w}×${x.st.vid.h}${x.st.vid.fps ? ' · ' + x.st.vid.fps + ' fps' : ''}`)
+      if (parts.length) li.append(mk('span', 'pd', parts.join(' · ')))
+    }
+    ul.append(li)
+  }
+}
+let pinnedInfo = false, infoT = 0
+function setInfo(open) {
+  const box = $('#infoBox'); box.hidden = !open
+  $('#infoBtn').setAttribute('aria-expanded', open)
+  if (open && R?.net) renderInfo()
+  wakeUI()
+}
+$('#infoBtn').addEventListener('click', () => {
+  if (!$('#infoBox').hidden && !pinnedInfo) { pinnedInfo = true; return }   // per Hover geöffnet: Klick hält es fest
+  pinnedInfo = !pinnedInfo; setInfo(pinnedInfo)
+})
+const infoWrap = $('.rright')
+infoWrap.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') { clearTimeout(infoT); setInfo(true) } })
+infoWrap.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse' && !pinnedInfo) infoT = setTimeout(() => setInfo(false), 250) })
+document.addEventListener('pointerdown', e => { if (pinnedInfo && !infoWrap.contains(e.target)) { pinnedInfo = false; setInfo(false) } })
+addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#infoBox').hidden) { pinnedInfo = false; setInfo(false); $('#infoBtn').focus() } })
 
 /* ---- Teilen ---- */
 const canShare = !!navigator.share

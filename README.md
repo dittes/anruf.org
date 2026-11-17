@@ -9,7 +9,8 @@ Ruf einfach an. Anrufe mit Audio, Video, Text-Chat, Dateien und Bildschirmfreiga
 - **Chat:** Textnachrichten laufen über den verschlüsselten WebRTC-Datenkanal und werden nicht gespeichert. Pro Anruf sind maximal 8 Personen erlaubt (Mesh-Topologie).
 - **Dateien & Bilder:** Über die Büroklammer im Chat, per Drag & Drop oder per Einfügen (Strg/Cmd+V). Bilder erscheinen als Vorschau, alles andere als Datei zum Speichern. Maximal 25 MB pro Datei, bis zu 5 Dateien auf einmal. Die Übertragung läuft über den Datenkanal, nichts wird zwischengespeichert.
 - **Bildschirm teilen:** Ganzer Bildschirm, einzelnes Fenster oder Tab, wahlweise mit oder ohne Ton. Es präsentiert immer nur eine Person. Die Präsentation wird groß angezeigt, die Teilnehmenden rücken in einen Streifen daneben. Der Button erscheint nur in Browsern mit `getDisplayMedia` (Desktop-Chrome, Edge, Firefox, Safari; Smartphones meist nicht).
-- **Vollbild:** Knopf im Dock, Taste `F` oder Doppelklick auf eine Präsentation. Im Vollbild blendet sich die Steuerung nach 3,5 Sekunden aus und kommt bei Bewegung oder Tipp zurück. Wo der Browser kein Element-Vollbild kann (iPhone-Safari), nutzt die Seite ein Vollbild-Layout.
+- **Vollbild:** Knopf im Dock, Taste `F` oder Doppelklick auf eine Präsentation. Im Vollbild ist die Kopfzeile (mit dem (i)) ausgeblendet, die Steuerung unten blendet sich nach 3,5 Sekunden aus und kommt bei Bewegung oder Tipp zurück. Wo der Browser kein Element-Vollbild kann (iPhone-Safari), nutzt die Seite ein Vollbild-Layout.
+- **Verbindungsdetails:** Das (i) neben Teilnehmerzahl und Zeit (Hover oder Klick) zeigt, ob der Anruf direkt (P2P) oder über Relay läuft, Ping, eine Live-Grafik der Datenrate, den Gesamtverkehr, Verlust, Jitter und die Video-Auflösung pro Teilnehmer. Die Werte kommen aus `RTCPeerConnection.getStats()` und bleiben im Browser.
 - **Umbenennen:** Tipp im Anruf auf das eigene Namensschild.
 - **Keine externen Ressourcen:** Es werden keine Web-Fonts geladen (nur Systemschriften), die Libraries liegen im Repo. Das ist gut für die DSGVO.
 
@@ -22,12 +23,15 @@ Ruf einfach an. Anrufe mit Audio, Video, Text-Chat, Dateien und Bildschirmfreiga
 | Konstante | Zweck |
 |---|---|
 | `DEFAULT_RELAYS` | Nostr-Relays für das Signaling. Bei Änderungen auch `datenschutz.html` anpassen. |
-| `TURN` / `TURN_FALLBACK` | Open Relay / Metered: App-Domain und API-Key sowie statische Zugangsdaten als Fallback. |
+| `TURN` / `TURN_FALLBACK` | Open Relay / Metered: App-Domain und API-Key sowie statische Zugangsdaten als Fallback. Wird nur im Notfall benutzt. |
+| `TURN_AFTER_MS` | Wie lange der direkte Weg versucht wird, bevor TURN dazukommt. |
 | `LIMIT` | Maximale Teilnehmerzahl pro Anruf. |
 
-### TURN
+### TURN (nur als Fallback)
 
-TURN ist über Metered Open Relay eingerichtet (`anruf.metered.live`, 20 GB pro Monat frei). Die Seite holt beim Start eines Anrufs kurzlebige Zugangsdaten über die REST-API. Scheitert das, nutzt sie die statischen Zugangsdaten in `TURN_FALLBACK`. Beides darf öffentlich im Frontend stehen.
+Jede Verbindung startet **ohne** TURN, nur mit STUN, also direkt von Browser zu Browser. Hängt der Verbindungsaufbau länger als `TURN_AFTER_MS` (6 Sekunden) fest, trägt die Seite die TURN-Server nachträglich in die Verbindung ein und startet ICE neu. Erst dann holt sie kurzlebige Zugangsdaten über die Metered-REST-API (Fallback: die statischen Zugangsdaten in `TURN_FALLBACK`). Nur eine Seite (die mit der kleineren ID) startet sofort, die andere erst 6 Sekunden später, damit beide nicht gleichzeitig neu verhandeln. Beides darf öffentlich im Frontend stehen.
+
+Ob eine Verbindung direkt oder über Relay läuft, zeigt das (i) oben rechts im Anruf.
 
 Den Verbrauch im Blick behalten: <https://dashboard.metered.ca>
 
