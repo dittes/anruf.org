@@ -1,12 +1,15 @@
 # anruf.org
 
-Ruf einfach an. Anrufe mit Audio, Video und Text-Chat direkt von Browser zu Browser (WebRTC), ohne Konto, ohne App und ohne eigenen Server. Die Seite ist rein statisch und läuft auf GitHub Pages.
+Ruf einfach an. Anrufe mit Audio, Video, Text-Chat, Dateien und Bildschirmfreigabe direkt von Browser zu Browser (WebRTC), ohne Konto, ohne App und ohne eigenen Server. Die Seite ist rein statisch und läuft auf GitHub Pages.
 
 ## So funktioniert es
 
 - **Medien:** Audio und Video laufen per WebRTC direkt zwischen den Browsern und sind Ende-zu-Ende verschlüsselt (DTLS-SRTP).
 - **Verbindungsaufbau:** [Trystero](https://github.com/dmotz/trystero) 0.25.4 übernimmt das Signaling über öffentliche Nostr-Relays. Die Library liegt gebündelt in `vendor/trystero.mjs`.
 - **Chat:** Textnachrichten laufen über den verschlüsselten WebRTC-Datenkanal und werden nicht gespeichert. Pro Anruf sind maximal 8 Personen erlaubt (Mesh-Topologie).
+- **Dateien & Bilder:** Über die Büroklammer im Chat, per Drag & Drop oder per Einfügen (Strg/Cmd+V). Bilder erscheinen als Vorschau, alles andere als Datei zum Speichern. Maximal 25 MB pro Datei, bis zu 5 Dateien auf einmal. Die Übertragung läuft über den Datenkanal, nichts wird zwischengespeichert.
+- **Bildschirm teilen:** Ganzer Bildschirm, einzelnes Fenster oder Tab, wahlweise mit oder ohne Ton. Es präsentiert immer nur eine Person. Die Präsentation wird groß angezeigt, die Teilnehmenden rücken in einen Streifen daneben. Der Button erscheint nur in Browsern mit `getDisplayMedia` (Desktop-Chrome, Edge, Firefox, Safari; Smartphones meist nicht).
+- **Vollbild:** Knopf im Dock, Taste `F` oder Doppelklick auf eine Präsentation. Im Vollbild blendet sich die Steuerung nach 3,5 Sekunden aus und kommt bei Bewegung oder Tipp zurück. Wo der Browser kein Element-Vollbild kann (iPhone-Safari), nutzt die Seite ein Vollbild-Layout.
 - **Umbenennen:** Tipp im Anruf auf das eigene Namensschild.
 - **Keine externen Ressourcen:** Es werden keine Web-Fonts geladen (nur Systemschriften), die Libraries liegen im Repo. Das ist gut für die DSGVO.
 

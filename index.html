@@ -307,6 +307,77 @@ dialog p{margin:0 0 16px;color:var(--mute)}
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
   .aura{display:none}
 }
+
+/* ---------- Dateien im Chat ---------- */
+.attach{width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--ink);display:grid;place-items:center;flex:none;transition:transform .4s var(--spring)}
+.attach:hover{transform:rotate(-12deg) scale(1.05)}
+.attach svg{width:20px;height:20px}
+.msg .bubble.file{padding:6px;display:grid;gap:6px;min-width:0;max-width:100%}
+.msg .bubble.file img{display:block;max-width:100%;max-height:260px;border-radius:13px;cursor:zoom-in;background:var(--card)}
+.fileinfo{display:flex;align-items:center;gap:10px;padding:6px 8px;min-width:0}
+.fileinfo .fic{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;flex:none;background:color-mix(in oklab,currentColor 12%,transparent)}
+.fileinfo .fic svg{width:20px;height:20px}
+.fileinfo .ft{min-width:0;display:grid;gap:1px;flex:1}
+.fileinfo .fn{font-weight:600;font-size:.92rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fileinfo .fs{font-family:var(--mono);font-size:.68rem;opacity:.7}
+.fileinfo .dl{height:34px;padding:0 12px;border-radius:999px;border:1px solid currentColor;color:inherit;background:transparent;font-weight:600;font-size:.82rem;text-decoration:none;display:none;align-items:center;flex:none}
+.bubble.done .dl{display:inline-flex}
+.fbar{height:4px;border-radius:99px;background:color-mix(in oklab,currentColor 18%,transparent);overflow:hidden;margin:0 8px 4px}
+.fbar i{display:block;height:100%;width:0;background:currentColor;transition:width .2s linear}
+.bubble.done .fbar{display:none}
+.msg.me .bubble.file .fic{background:rgba(255,255,255,.22)}
+.dropzone{position:absolute;inset:0;z-index:5;border-radius:28px;border:2px dashed var(--accent);background:color-mix(in oklab,var(--card) 88%,transparent);display:none;place-items:center;font-weight:650;pointer-events:none}
+.chat.drag .dropzone{display:grid}
+.chat{position:relative}
+#lightbox{padding:0;border:0;background:transparent;width:auto;max-width:96vw;max-height:96dvh;box-shadow:none;overflow:visible}
+#lightbox img{display:block;max-width:96vw;max-height:90dvh;border-radius:16px}
+#lightbox .lbbar{display:flex;gap:8px;justify-content:center;margin-top:10px}
+
+/* ---------- Bildschirm teilen / Präsentation ---------- */
+.ctl.live{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.sharebadge{display:none;position:absolute;z-index:3;top:12px;left:12px;gap:6px;align-items:center;padding:6px 10px;border-radius:999px;background:var(--accent);color:var(--on-accent);font-family:var(--mono);font-size:.7rem;letter-spacing:.04em}
+.tile.screen .sharebadge{display:inline-flex}
+.tile.screen{background:#000}
+.tile.screen video{object-fit:contain;opacity:1;transform:none}
+.tile.screen .blobwrap,.tile.screen .sonar{display:none}
+.tile.screen.self-screen .label .pen{display:none}
+.tile.screen.self-screen{cursor:default}
+/* Präsentation: große Fläche + Streifen mit Teilnehmern */
+.stage.present{display:flex;flex-direction:row;gap:12px;grid-template-columns:none}
+.stage.present .tile.screen{flex:1;min-width:0;height:100%;order:0}
+.stage.present .strip{order:1;display:flex;flex-direction:column;gap:10px;width:clamp(120px,16vw,200px);flex:none;min-height:0;overflow-y:auto;overscroll-behavior:contain}
+.stage.present .strip .tile{flex:none;width:100%;aspect-ratio:4/3;border-radius:18px;height:auto}
+.stage.present .strip .tile .label{left:6px;bottom:6px;padding:4px 7px;font-size:.62rem;max-width:calc(100% - 12px)}
+.stage.present.duo .tile.self{position:relative;right:auto;top:auto;width:100%;aspect-ratio:4/3;border-radius:18px;box-shadow:none}
+.stage.present .waiting{display:none}
+@media (max-width:759px){
+  .stage.present{flex-direction:column}
+  .stage.present .strip{flex-direction:row;width:auto;height:clamp(84px,14dvh,120px);overflow-x:auto;overflow-y:hidden}
+  .stage.present .strip .tile{width:auto;height:100%;aspect-ratio:4/3}
+}
+.pres-hint{position:absolute;z-index:6;left:50%;bottom:12px;transform:translateX(-50%);display:none}
+
+/* ---------- Vollbild ---------- */
+.fsbtn .i-exit{display:none}
+.fsbtn.on .i-exit{display:block}.fsbtn.on .i-enter{display:none}
+body.fs #room .rbar{display:none}
+body.fs #room .rbody{padding:8px}
+body.fs #room .dock{position:fixed;z-index:20;left:0;right:0;bottom:0;padding-top:28px;background:linear-gradient(to top,rgba(0,0,0,.55),transparent);transition:transform .45s var(--ease),opacity .45s;color-scheme:dark}
+body.fs.idle #room .dock{transform:translateY(110%);opacity:0;pointer-events:none}
+body.fs.idle{cursor:none}
+body.fs #room .tile{border-radius:20px}
+body.fs .stage.present .strip{width:clamp(110px,13vw,170px)}
+@media (max-width:759px){ body.fs #room .rbody{padding:0} body.fs .tile{border-radius:0} }
+.optrow{display:flex;gap:12px;align-items:flex-start;padding:14px;border-radius:16px;border:1px solid var(--line);background:var(--paper);cursor:pointer}
+.optrow input{width:22px;height:22px;margin:2px 0 0;accent-color:var(--accent);flex:none}
+.optrow b{display:block;font-weight:650}
+.optrow small{display:block;color:var(--mute);font-size:.84rem;line-height:1.35;margin-top:2px}
+.strip{display:contents}
+.sharebar{position:fixed;z-index:25;top:12px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:10px;padding:6px 6px 6px 14px;border-radius:999px;background:var(--accent);color:var(--on-accent);font-weight:600;font-size:.92rem;box-shadow:0 10px 30px rgba(0,0,0,.25);max-width:calc(100vw - 24px);white-space:nowrap}
+.sharebar[hidden]{display:none}
+.sharebar i{width:9px;height:9px;border-radius:50%;background:#fff;animation:pulse 1.4s ease-in-out infinite;flex:none}
+.sharebar button{height:34px;padding:0 14px;border-radius:999px;border:0;background:#fff;color:#141412;font-weight:650}
+[hidden]{display:none!important}
 </style>
 </head>
 <body data-view="home">
@@ -346,14 +417,14 @@ dialog p{margin:0 0 16px;color:var(--mute)}
   </section>
 
   <div class="marquee" aria-hidden="true"><div class="marquee-track">
-    <span>Kein Konto</span><span>Keine App</span><span>Ende-zu-Ende verschlüsselt</span><span>Audio</span><span>Video</span><span>Chat</span><span>Bis zu 8 Personen</span><span>Keine Aufzeichnung</span>
-    <span>Kein Konto</span><span>Keine App</span><span>Ende-zu-Ende verschlüsselt</span><span>Audio</span><span>Video</span><span>Chat</span><span>Bis zu 8 Personen</span><span>Keine Aufzeichnung</span>
+    <span>Kein Konto</span><span>Keine App</span><span>Ende-zu-Ende verschlüsselt</span><span>Audio</span><span>Video</span><span>Chat</span><span>Dateien</span><span>Bildschirm teilen</span><span>Bis zu 8 Personen</span><span>Keine Aufzeichnung</span>
+    <span>Kein Konto</span><span>Keine App</span><span>Ende-zu-Ende verschlüsselt</span><span>Audio</span><span>Video</span><span>Chat</span><span>Dateien</span><span>Bildschirm teilen</span><span>Bis zu 8 Personen</span><span>Keine Aufzeichnung</span>
   </div></div>
 
   <ol class="steps">
     <li><span class="num" aria-hidden="true">1</span><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h3.5l2 5-2.5 1.5a11 11 0 0 0 5.5 5.5l1.5-2.5 5 2V19a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></span><b>Tippen</b><span>Ein Tipp auf den großen Knopf, und dein Anruf ist offen.</span></li>
     <li><span class="num" aria-hidden="true">2</span><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg></span><b>Link schicken</b><span>Per Messenger, Mail oder QR-Code. Bis zu 8 Personen.</span></li>
-    <li><span class="num" aria-hidden="true">3</span><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-9l-5 4v-4H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z"/></svg></span><b>Sprechen &amp; schreiben</b><span>Audio, Video und Chat. Direkt und verschlüsselt, ohne Aufzeichnung.</span></li>
+    <li><span class="num" aria-hidden="true">3</span><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-9l-5 4v-4H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z"/></svg></span><b>Sprechen &amp; schreiben</b><span>Audio, Video, Chat, Dateien und Bildschirm. Direkt und verschlüsselt, ohne Aufzeichnung.</span></li>
   </ol>
 
   <footer class="mono">
@@ -388,6 +459,7 @@ dialog p{margin:0 0 16px;color:var(--mute)}
 
 <!-- ============ ROOM ============ -->
 <main id="room" class="view">
+  <div class="sharebar" id="shareBar" hidden><i aria-hidden="true"></i><span>Du teilst deinen Bildschirm</span><button type="button" id="shareStop">Beenden</button></div>
   <header class="rbar">
     <div class="rinfo">
       <a class="mark" href="./" id="roomHome" aria-label="Auflegen und zur Startseite">anruf<i>.org</i></a>
@@ -397,6 +469,7 @@ dialog p{margin:0 0 16px;color:var(--mute)}
   </header>
   <div class="rbody">
     <section class="stage alone" id="stage" aria-live="polite">
+      <div class="strip" id="strip"></div>
       <div class="waiting" id="waiting">
         <div><h3>Warte auf die andere Seite…</h3><p>Schick diesen Link. Wer ihn öffnet, ist sofort bei dir.</p></div>
         <div class="qr" id="waitQr" aria-hidden="true"></div>
@@ -408,14 +481,17 @@ dialog p{margin:0 0 16px;color:var(--mute)}
         <div><h3>Chat</h3><span class="mono">Direkt · nicht gespeichert</span></div>
         <button class="x" id="chatClose" aria-label="Chat schließen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
       </div>
+      <div class="dropzone" aria-hidden="true">Dateien hier ablegen</div>
       <ol class="msgs" id="msgs" aria-live="polite"></ol>
       <form class="compose" id="compose" autocomplete="off">
+        <button class="attach" id="attachBtn" type="button" aria-label="Datei oder Bild senden"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11.5 12 19.5a5 5 0 0 1-7-7l8.5-8.5a3.3 3.3 0 0 1 4.7 4.7L9.7 17.2a1.7 1.7 0 0 1-2.4-2.4L15 7"/></svg></button>
+        <input id="fileInput" type="file" multiple hidden>
         <input id="msgInput" maxlength="1000" placeholder="Nachricht schreiben…" enterkeyhint="send" aria-label="Nachricht">
         <button class="send" id="sendBtn" aria-label="Senden" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
       </form>
     </aside>
   </div>
-  <nav class="dock" aria-label="Anrufsteuerung">
+  <nav class="dock" id="dock" aria-label="Anrufsteuerung">
     <button class="ctl" id="micBtn" aria-label="Mikrofon stummschalten" aria-pressed="false">
       <svg class="i-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
       <svg class="i-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M15 9.5V6a3 3 0 0 0-5.8-1M9 9v2a3 3 0 0 0 4.6 2.5M5 11a7 7 0 0 0 11.3 5.5M19 11a7 7 0 0 1-.6 2.8M12 18v3M3 3l18 18"/></svg>
@@ -427,6 +503,13 @@ dialog p{margin:0 0 16px;color:var(--mute)}
     <button class="ctl" id="chatBtn" aria-label="Chat öffnen" aria-expanded="false">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-9l-5 4v-4H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z"/></svg>
       <span class="badge" id="badge"></span>
+    </button>
+    <button class="ctl" id="screenBtn" aria-label="Bildschirm teilen" aria-pressed="false" hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2.5"/><path d="M8 20h8M12 16v4M12 12V8m0 0-2.5 2.5M12 8l2.5 2.5"/></svg>
+    </button>
+    <button class="ctl fsbtn" id="fsBtn" aria-label="Vollbild" aria-pressed="false">
+      <svg class="i-enter" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V5a1 1 0 0 1 1-1h4M20 9V5a1 1 0 0 0-1-1h-4M4 15v4a1 1 0 0 0 1 1h4M20 15v4a1 1 0 0 1-1 1h-4"/></svg>
+      <svg class="i-exit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4v4a1 1 0 0 1-1 1H4M15 4v4a1 1 0 0 0 1 1h4M9 20v-4a1 1 0 0 0-1-1H4M15 20v-4a1 1 0 0 1 1-1h4"/></svg>
     </button>
     <button class="ctl" id="inviteBtn" aria-label="Link teilen">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>
@@ -452,6 +535,20 @@ dialog p{margin:0 0 16px;color:var(--mute)}
   </form>
 </dialog>
 
+<dialog id="screenDlg" aria-labelledby="screenTitle">
+  <form id="screenForm">
+    <h3 id="screenTitle">Bildschirm teilen</h3>
+    <p>Du wählst gleich im Browser, ob du den ganzen Bildschirm, ein einzelnes Fenster oder einen Tab zeigst. Alle im Anruf sehen es live.</p>
+    <label class="optrow"><input type="checkbox" id="screenAudio" checked><span><b>Ton mitsenden</b><small>Systemton oder Tab-Ton, zum Beispiel für ein Video. Dein Mikrofon bleibt davon unabhängig.</small></span></label>
+    <div class="dlg-actions"><button class="btn ghost" type="button" id="screenCancel">Abbrechen</button><button class="btn accent" type="submit">Teilen</button></div>
+  </form>
+</dialog>
+
+<dialog id="lightbox" aria-label="Bildansicht">
+  <img id="lbImg" alt="">
+  <div class="lbbar"><a class="btn" id="lbDl" download>Speichern</a><button class="btn ghost" id="lbClose" type="button" style="background:var(--card)">Schließen</button></div>
+</dialog>
+
 <button class="btn accent unlock" id="unlockBtn">Ton &amp; Video aktivieren</button>
 <div class="toasts" id="toasts" role="status" aria-live="polite"></div>
 
@@ -460,6 +557,7 @@ dialog p{margin:0 0 16px;color:var(--mute)}
     <div class="sonar" aria-hidden="true"><i></i><i></i><i></i></div>
     <div class="blobwrap"><svg viewBox="-100 -100 200 200" aria-hidden="true"><path class="halo"/><path class="body"/></svg><span class="initial"></span></div>
     <video playsinline autoplay muted disablepictureinpicture></video>
+    <span class="sharebadge"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2.5"/><path d="M8 20h8M12 16v4"/></svg>Bildschirm</span>
     <span class="state">verbindet…</span>
     <button class="label" type="button" tabindex="-1"><svg class="mic-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 9.5V6a3 3 0 0 0-5.8-1M9 9v2a3 3 0 0 0 4.6 2.5M5 11a7 7 0 0 0 11.3 5.5M12 18v3M3 3l18 18"/></svg><span class="nm"></span><svg class="pen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16v4zM13.5 6.5l4 4"/></svg></button>
   </div>
@@ -707,7 +805,7 @@ function makeTile(p, self) {
   p.body = t.querySelector('.body'); p.halo = t.querySelector('.halo'); p.video = t.querySelector('video')
   prepVideo(p.video, p)
   p.seed = (hash(p.id) % 1000) / 100
-  $('#stage').append(t)
+  $('#strip').append(t)
   return t
 }
 function layout() {
@@ -719,6 +817,7 @@ function layout() {
   stage.style.setProperty('--cols', cols)
   stage.classList.toggle('alone', R.peers.size === 0)
   stage.classList.toggle('duo', !wide && n === 2)
+  stage.classList.toggle('present', [...R.peers.values()].some(p => p.screen))
   $('#roomMeta').textContent = R.peers.size === 0 ? 'wartet…' : `${n} · ${fmtTime()}`
   document.title = `${R.peers.size ? '(' + n + ') ' : ''}Anruf · anruf.org`
 }
@@ -781,10 +880,13 @@ function resumeMedia() {
   ;[R.self, ...R.peers.values()].forEach(p => {
     if (p.audio?.srcObject && p.audio.paused) p.audio.play().catch(() => {})
     if (p.video?.srcObject && p.video.paused) p.video.play().then(() => refreshVideo(p)).catch(() => {})
+    if (p.screen) { p.screen.audio?.paused && p.screen.audio.play().catch(() => {}); const v = p.screen.tile.querySelector('video'); v.paused && v.play().catch(() => {}) }
   })
   $('#unlockBtn').classList.remove('show')
 }
 function attachStream(p, stream) {
+  if (p.screen?.stream === stream || p.screenSid === stream.id) return
+  if (p.stream && p.stream !== stream) p.prevStream = p.stream
   p.stream = stream
   p.tile.classList.remove('connecting')
   if (!p.audio) { p.audio = new Audio(); p.audio.autoplay = true; p.audio.setAttribute('playsinline', '') }
@@ -860,12 +962,40 @@ async function enterRoom(slug) {
     if (n !== p.name) {
       const old = p.name
       p.name = n; p.tile.querySelector('.nm').textContent = n
+      if (p.screen) p.screen.tile.querySelector('.nm').textContent = n + ' · Bildschirm'
       p.tile.querySelector('.initial').textContent = n[0].toUpperCase()
       if (!p.greeted) { p.greeted = true; toast(`${n} ist da`); sysMsg(`${n} ist beigetreten`) }
       else { toast(`${old} heißt jetzt ${n}`); sysMsg(`${old} heißt jetzt ${n}`) }
     }
     p.cam = !!d.cam; p.tile.classList.toggle('muted', !d.mic)
     refreshVideo(p)
+  }
+  R.scr = room.makeAction('screen')
+  R.scr.onMessage = (d, {peerId}) => {
+    if (!R || R.room !== room || !d || typeof d !== 'object') return
+    const p = peerOf(peerId)
+    if (d.on && typeof d.sid === 'string') { p.screenSid = d.sid; p.screenAud = !!d.aud; const s = p.pendingScreen; if (s && s.id === d.sid) addScreen(p, s) }
+    else if (!d.on) { removeScreen(p, true); p.screenSid = null }
+  }
+  R.file = room.makeAction('file')
+  R.file.onReceiveProgress = (pr, {peerId, metadata}) => {
+    if (!R || R.room !== room) return
+    const m = fileMeta(metadata); if (!m) return
+    fileBubble(peerOf(peerId), m, false).progress(pr)
+  }
+  R.file.onMessage = (data, {peerId, metadata}) => {
+    if (!R || R.room !== room) return
+    const m = fileMeta(metadata); if (!m || !data) return
+    const bytes = data instanceof Blob ? data : new Blob([data])
+    if (bytes.size > MAX_FILE) return
+    const p = peerOf(peerId)
+    const h = fileBubble(p, m, false)
+    h.done(new Blob([bytes], {type: m.img ? m.t : 'application/octet-stream'}))
+    if (!chatOpen()) {
+      setBadge((R.unread || 0) + 1)
+      toast(`${p.name}: ${m.n.length > 40 ? m.n.slice(0, 40) + '…' : m.n}`, 3200)
+      chime('msg')
+    }
   }
   R.chat = room.makeAction('chat')
   R.chat.onMessage = (d, {peerId}) => {
@@ -880,6 +1010,7 @@ async function enterRoom(slug) {
     peerOf(id)
     if (fresh && R.peers.size >= LIMIT) { toast('Dieser Anruf ist voll.', 4000); leaveRoom(true); return }
     if (stream.getTracks().length) room.addStream(stream, {target: id})
+    if (R.screen) shareTo(id)
     sendMeta(id)
     if (!R.startedAt) R.startedAt = Date.now()
     chime('join'); layout()
@@ -891,6 +1022,7 @@ async function enterRoom(slug) {
     if (p.audio) p.audio.srcObject = null
     if (p.video) p.video.srcObject = null
     try { p.src?.disconnect() } catch {}
+    removeScreen(p, false)
     p.tile.classList.add('out'); setTimeout(() => { p.tile.remove(); layout() }, 380)
     const nm = p.name && p.name !== '…' ? p.name : 'Jemand'
     toast(`${nm} hat aufgelegt`); sysMsg(`${nm} hat aufgelegt`)
@@ -898,8 +1030,17 @@ async function enterRoom(slug) {
     if (!R.peers.size) R.startedAt = 0
     layout()
   }
-  room.onPeerStream = (s, id) => { if (R?.room === room) attachStream(peerOf(id), s) }
-  room.onPeerTrack = (t, s, id) => { if (R?.room === room) attachStream(peerOf(id), s) }
+  room.onPeerStream = (s, id, meta) => {
+    if (R?.room !== room) return
+    const p = peerOf(id)
+    if (meta?.screen || p.screenSid === s.id) { p.screenSid = s.id; addScreen(p, s) } else attachStream(p, s)
+  }
+  room.onPeerTrack = (t, s, id) => {
+    if (R?.room !== room) return
+    const p = peerOf(id)
+    if (p.screenSid === s.id || p.screen?.stream === s) { p.pendingScreen = s; if (p.screenSid === s.id) addScreen(p, s) }
+    else attachStream(p, s)
+  }
 
   R.timer = setInterval(layout, 1000)
   try { R.wake = await navigator.wakeLock?.request('screen') } catch {}
@@ -922,7 +1063,11 @@ function leaveRoom(goHome = true) {
   chime('end')
   try { r.room.leave() } catch {}
   r.stream.getTracks().forEach(t => t.stop())
-  r.peers.forEach(p => { if (p.audio) p.audio.srcObject = null; if (p.video) p.video.srcObject = null; try { p.src?.disconnect() } catch {} })
+  r.screen?.stream.getTracks().forEach(t => { t.onended = null; t.stop() })
+  r.peers.forEach(p => { if (p.audio) p.audio.srcObject = null; if (p.video) p.video.srcObject = null; if (p.screen?.audio) p.screen.audio.srcObject = null; try { p.src?.disconnect() } catch {} })
+  r.urls?.forEach(u => URL.revokeObjectURL(u))
+  $('#shareBar').hidden = true
+  setFs(false)
   try { r.self.src?.disconnect() } catch {}
   clearInterval(r.timer)
   r.wake?.release?.().catch?.(() => {})
@@ -1065,6 +1210,284 @@ if (window.visualViewport) {
   }
   vv.addEventListener('resize', onVV); vv.addEventListener('scroll', onVV); onVV()
 }
+
+/* ---- Dateien & Bilder im Chat ---- */
+const MAX_FILE = 25 * 1024 * 1024
+const IMG_RE = /^image\/(png|jpeg|gif|webp|avif)$/
+const fmtSize = b => b < 1024 ? b + ' B' : b < 1048576 ? (b / 1024).toFixed(0) + ' KB' : (b / 1048576).toFixed(1) + ' MB'
+const cleanFile = s => String(s ?? '').replace(/[\u0000-\u001f\u007f<>:"\/\\|?*]/g, '_').replace(/^\.+/, '').trim().slice(0, 100) || 'datei'
+function fileMeta(m) {
+  if (!m || typeof m !== 'object' || typeof m.id !== 'string') return null
+  const size = Number(m.s)
+  if (!Number.isFinite(size) || size < 0 || size > MAX_FILE) return null
+  const t = typeof m.t === 'string' ? m.t.slice(0, 60) : ''
+  return {id: m.id.slice(0, 40), n: cleanFile(m.n), t, s: size, img: IMG_RE.test(t)}
+}
+const FILE_IC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg>'
+// Erzeugt (oder findet) die Chat-Blase für eine Datei. Gibt Handles für Fortschritt und Fertigstellung zurück.
+function fileBubble(p, m, mine) {
+  const key = `${p.id}:${m.id}`
+  R.files ??= new Map()
+  let h = R.files.get(key); if (h) return h
+  const li = document.createElement('li'); li.className = 'msg' + (mine ? ' me' : '')
+  li.style.setProperty('--c', p.color)
+  const who = document.createElement('div'); who.className = 'who'
+  const t = new Date().toLocaleTimeString('de-DE', {hour: '2-digit', minute: '2-digit'})
+  if (mine) who.append(t); else who.append(document.createElement('i'), `${p.name} · ${t}`)
+  const b = document.createElement('div'); b.className = 'bubble file'
+  const info = document.createElement('div'); info.className = 'fileinfo'
+  const ic = document.createElement('span'); ic.className = 'fic'; ic.innerHTML = FILE_IC
+  const tx = document.createElement('div'); tx.className = 'ft'
+  const fn = document.createElement('span'); fn.className = 'fn'; fn.textContent = m.n
+  const fs = document.createElement('span'); fs.className = 'fs'; fs.textContent = fmtSize(m.s)
+  tx.append(fn, fs)
+  const dl = document.createElement('a'); dl.className = 'dl'; dl.textContent = 'Speichern'; dl.download = m.n
+  info.append(ic, tx, dl)
+  const bar = document.createElement('div'); bar.className = 'fbar'; bar.innerHTML = '<i></i>'
+  b.append(info, bar); li.append(who, b); appendToChat(li)
+  const fill = bar.firstChild
+  h = {
+    progress(pr) { fill.style.width = Math.round(Math.min(1, Math.max(0, pr)) * 100) + '%' },
+    // Datei anzeigen (bei Bildern als Vorschau) und den Speichern-Link setzen
+    show(blob) {
+      const url = URL.createObjectURL(blob); (R.urls ??= []).push(url)
+      dl.href = url
+      if (m.img) {
+        const img = document.createElement('img'); img.alt = m.n
+        img.addEventListener('load', () => { const mm = $('#msgs'); mm.scrollTop = mm.scrollHeight })
+        img.addEventListener('click', () => openLightbox(url, m.n))
+        img.src = url; b.prepend(img)
+      }
+    },
+    finish() { fill.style.width = '100%'; b.classList.add('done') },
+    done(blob) { this.show(blob); this.finish() }
+  }
+  R.files.set(key, h)
+  return h
+}
+function openLightbox(url, name) {
+  $('#lbImg').src = url; $('#lbImg').alt = name
+  const a = $('#lbDl'); a.href = url; a.download = name
+  $('#lightbox').showModal()
+}
+$('#lbClose').addEventListener('click', () => $('#lightbox').close())
+$('#lightbox').addEventListener('click', e => { if (e.target === $('#lightbox')) $('#lightbox').close() })
+
+async function sendFiles(list) {
+  if (!R) return
+  const files = [...list].filter(f => f && f.size >= 0).slice(0, 5)
+  if (!files.length) return
+  if (!R.peers.size) { toast('Noch ist niemand da, der die Datei empfangen kann.', 3500); return }
+  setChat(true)
+  for (const f of files) {
+    if (!R) return
+    if (f.size === 0) { toast(`${f.name || 'Datei'} ist leer.`); continue }
+    if (f.size > MAX_FILE) { toast(`${f.name || 'Datei'} ist zu groß (max. ${fmtSize(MAX_FILE)}).`, 4000); continue }
+    const m = {id: crypto.randomUUID?.() ?? String(Math.random()).slice(2), n: cleanFile(f.name || 'bild.png'), t: f.type || '', s: f.size}
+    m.img = IMG_RE.test(m.t)
+    const meta = fileMeta({...m})
+    const h = fileBubble(R.self, meta, true)
+    h.show(f)
+    const prog = new Map()
+    try {
+      await R.file.send(f, {metadata: {id: m.id, n: m.n, t: m.t, s: m.s}, onProgress: (pr, {peerId}) => {
+        prog.set(peerId, pr)
+        h.progress([...prog.values()].reduce((a, v) => a + v, 0) / Math.max(1, R?.peers.size || 1))
+      }})
+      h.finish()
+    } catch { toast('Senden fehlgeschlagen.') }
+  }
+}
+$('#attachBtn').addEventListener('click', () => $('#fileInput').click())
+$('#fileInput').addEventListener('change', e => { sendFiles(e.target.files); e.target.value = '' })
+msgInput.addEventListener('paste', e => {
+  const fl = [...(e.clipboardData?.files || [])]
+  if (fl.length) { e.preventDefault(); sendFiles(fl) }
+})
+const hasFiles = e => [...(e.dataTransfer?.types || [])].includes('Files')
+$('#room').addEventListener('dragover', e => { if (!hasFiles(e)) return; e.preventDefault(); if (chatOpen()) $('#chat').classList.add('drag') })
+$('#room').addEventListener('dragleave', e => { if (e.relatedTarget && $('#room').contains(e.relatedTarget)) return; $('#chat').classList.remove('drag') })
+$('#room').addEventListener('drop', e => {
+  if (!hasFiles(e)) return
+  e.preventDefault(); $('#chat').classList.remove('drag'); sendFiles(e.dataTransfer.files)
+})
+
+/* ---- Bildschirm teilen ---- */
+const canScreen = !!navigator.mediaDevices?.getDisplayMedia
+$('#screenBtn').hidden = !canScreen
+function syncScreenUI() {
+  const on = !!R?.screen
+  const b = $('#screenBtn'); b.classList.toggle('live', on); b.setAttribute('aria-pressed', on)
+  b.setAttribute('aria-label', on ? 'Bildschirmfreigabe beenden' : 'Bildschirm teilen')
+  $('#shareBar').hidden = !on
+  if (on) $('#shareBar span').textContent = R.screen.audio ? 'Du teilst Bildschirm und Ton' : 'Du teilst deinen Bildschirm'
+}
+function shareTo(id) {
+  const sc = R.screen; if (!sc) return
+  try { R.scr.send({on: true, sid: sc.stream.id, aud: sc.audio}, {target: id})?.catch?.(() => {}) } catch {}
+  try { R.room.addStream(sc.stream, {target: id, metadata: {screen: true}}) } catch {}
+  setTimeout(() => tuneScreen(), 1200)
+}
+// Bitrate/Bildrate des Screen-Videos erhöhen, damit Text scharf bleibt.
+async function tuneScreen() {
+  if (!R?.screen) return
+  const vt = R.screen.stream.getVideoTracks()[0]
+  for (const pc of Object.values(R.room.getPeers())) {
+    for (const snd of pc.getSenders?.() || []) {
+      if (snd.track !== vt) continue
+      try {
+        const prm = snd.getParameters(); prm.encodings = prm.encodings?.length ? prm.encodings : [{}]
+        prm.encodings[0].maxBitrate = 3_000_000; prm.encodings[0].maxFramerate = 30
+        prm.degradationPreference = 'maintain-resolution'
+        await snd.setParameters(prm)
+      } catch {}
+    }
+  }
+}
+async function startScreen(withAudio) {
+  if (!R || R.screen) return
+  let ds
+  try {
+    ds = await navigator.mediaDevices.getDisplayMedia({
+      video: {frameRate: {ideal: 30, max: 30}},
+      audio: withAudio ? {echoCancellation: false, noiseSuppression: false, autoGainControl: false} : false,
+      selfBrowserSurface: 'exclude', surfaceSwitching: 'include', systemAudio: withAudio ? 'include' : 'exclude'
+    })
+  } catch (err) {
+    if (err.name !== 'NotAllowedError' && err.name !== 'AbortError') toast('Bildschirm konnte nicht geteilt werden.')
+    return
+  }
+  if (!R) { ds.getTracks().forEach(t => t.stop()); return }
+  const vt = ds.getVideoTracks()[0]
+  try { vt.contentHint = 'detail' } catch {}
+  const hasAudio = ds.getAudioTracks().length > 0
+  if (withAudio && !hasAudio) toast('Für diese Auswahl gibt es keinen Ton. Tipp: Bei „Tab“ oder „Gesamter Bildschirm“ den Haken für Ton setzen.', 5500)
+  R.screen = {stream: ds, audio: hasAudio}
+  vt.onended = () => stopScreen()
+  for (const id of R.peers.keys()) shareTo(id)
+  syncScreenUI(); layout()
+  toast(R.peers.size ? 'Dein Bildschirm ist jetzt für alle sichtbar.' : 'Du teilst deinen Bildschirm, sobald jemand da ist.', 3200)
+}
+function stopScreen() {
+  const sc = R?.screen; if (!sc) return
+  R.screen = null
+  sc.stream.getTracks().forEach(t => { t.onended = null; t.stop() })
+  try { R.scr.send({on: false})?.catch?.(() => {}) } catch {}
+  try { R.room.removeStream(sc.stream) } catch {}
+  syncScreenUI(); layout()
+}
+function addScreen(p, s) {
+  if (p.screen?.stream === s) {
+    const v = p.screen.tile.querySelector('video'), vt = s.getVideoTracks()[0]
+    if (vt && v.srcObject?.getVideoTracks()[0] !== vt) { v.srcObject = new MediaStream([vt]); playSafe(v) }
+    if (s.getAudioTracks().length && !p.screen.audio) startScreenAudio(p)
+    return
+  }
+  removeScreen(p, false)
+  if (p.stream === s) {   // Screen-Stream wurde fälschlich als Kamera angehängt: Kamera-Stream wiederherstellen
+    const prev = p.prevStream
+    p.stream = null; p.videoTrack = null; p.video.srcObject = null; if (p.audio) p.audio.srcObject = null
+    if (prev && prev !== s) attachStream(p, prev); else refreshVideo(p)
+  }
+  const t = $('#tileTpl').content.firstElementChild.cloneNode(true)
+  t.classList.remove('connecting'); t.classList.add('screen')
+  t.style.setProperty('--c', p.color)
+  t.querySelector('.blobwrap').remove(); t.querySelector('.sonar').remove(); t.querySelector('.state').remove()
+  const lb = t.querySelector('.label'); lb.disabled = true
+  t.querySelector('.nm').textContent = p.name + ' · Bildschirm'
+  const v = t.querySelector('video')
+  v.muted = true; v.defaultMuted = true; v.playsInline = true; v.autoplay = true
+  v.setAttribute('playsinline', ''); v.setAttribute('webkit-playsinline', '')
+  v.srcObject = new MediaStream(s.getVideoTracks())
+  t.addEventListener('dblclick', () => setFs(!isFs()))
+  $('#stage').prepend(t)
+  p.screen = {stream: s, tile: t, audio: null}
+  playSafe(v)
+  if (s.getAudioTracks().length) startScreenAudio(p)
+  s.onaddtrack = () => addScreen(p, s)
+  s.onremovetrack = () => { if (!s.getTracks().length) removeScreen(p, true) }
+  toast(`${p.name} teilt den Bildschirm`)
+  sysMsg(`${p.name} teilt den Bildschirm`)
+  layout()
+}
+function startScreenAudio(p) {
+  const a = new Audio(); a.autoplay = true; a.setAttribute('playsinline', '')
+  a.srcObject = new MediaStream(p.screen.stream.getAudioTracks())
+  p.screen.audio = a; playSafe(a)
+}
+function removeScreen(p, announce) {
+  const sc = p.screen; p.pendingScreen = null
+  if (!sc) return
+  p.screen = null
+  if (sc.audio) sc.audio.srcObject = null
+  sc.tile.querySelector('video').srcObject = null
+  sc.tile.classList.add('out'); setTimeout(() => { sc.tile.remove(); if (R) layout() }, 380)
+  if (announce) { toast(`${p.name} teilt den Bildschirm nicht mehr`); sysMsg(`${p.name} hat die Freigabe beendet`) }
+  if (R) layout()
+}
+$('#screenBtn').addEventListener('click', () => {
+  if (!R) return
+  if (R.screen) { stopScreen(); return }
+  const other = [...R.peers.values()].find(p => p.screen)
+  if (other) { toast(`${other.name} präsentiert gerade.`, 3200); return }
+  if (!R.peers.size) { toast('Noch ist niemand da, dem du etwas zeigen kannst.', 3200); return }
+  $('#screenAudio').checked = store.get('screenaudio', '1') === '1'
+  $('#screenDlg').showModal()
+})
+$('#shareStop').addEventListener('click', stopScreen)
+$('#screenCancel').addEventListener('click', () => $('#screenDlg').close())
+$('#screenForm').addEventListener('submit', e => {
+  e.preventDefault()
+  const a = $('#screenAudio').checked; store.set('screenaudio', a ? '1' : '0')
+  $('#screenDlg').close(); startScreen(a)
+})
+
+/* ---- Vollbild ---- */
+const FS = document.documentElement
+const fsNative = !!(FS.requestFullscreen || FS.webkitRequestFullscreen)
+let fakeFs = false, idleT = 0
+const isFs = () => !!(document.fullscreenElement || document.webkitFullscreenElement) || fakeFs
+function syncFs() {
+  const on = isFs()
+  document.body.classList.toggle('fs', on)
+  const b = $('#fsBtn'); b.classList.toggle('on', on); b.setAttribute('aria-pressed', on)
+  b.setAttribute('aria-label', on ? 'Vollbild beenden' : 'Vollbild')
+  wakeUI(); requestAnimationFrame(layout)
+}
+async function setFs(on) {
+  if (on === isFs()) return
+  if (on) {
+    let ok = false
+    if (fsNative) {
+      try { await (FS.requestFullscreen ? FS.requestFullscreen({navigationUI: 'hide'}) : FS.webkitRequestFullscreen()); ok = true } catch {}
+    }
+    if (!ok) fakeFs = true   // z. B. iPhone-Safari: Vollbild per Layout statt Browser-API
+  } else {
+    fakeFs = false
+    if (document.fullscreenElement || document.webkitFullscreenElement) {
+      try { await (document.exitFullscreen?.() ?? document.webkitExitFullscreen?.()) } catch {}
+    }
+  }
+  syncFs()
+}
+function wakeUI() {
+  document.body.classList.remove('idle'); clearTimeout(idleT)
+  if (!document.body.classList.contains('fs')) return
+  idleT = setTimeout(() => {
+    if (chatOpen() || $('dialog[open]') || $('#dock').matches(':hover')) wakeUI()
+    else document.body.classList.add('idle')
+  }, 3500)
+}
+$('#fsBtn').addEventListener('click', () => setFs(!isFs()))
+document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement) fakeFs = false; syncFs() })
+document.addEventListener('webkitfullscreenchange', () => { if (!document.webkitFullscreenElement) fakeFs = false; syncFs() })
+;['pointermove', 'pointerdown', 'keydown', 'touchstart'].forEach(ev => addEventListener(ev, () => { if (document.body.classList.contains('fs')) wakeUI() }, {passive: true}))
+addEventListener('keydown', e => {
+  if (!R || e.ctrlKey || e.metaKey || e.altKey) return
+  if (e.key === 'Escape' && fakeFs && !chatOpen() && !$('dialog[open]')) { setFs(false); return }
+  const tag = e.target?.tagName
+  if ((e.key === 'f' || e.key === 'F') && tag !== 'INPUT' && tag !== 'TEXTAREA' && !$('dialog[open]')) { e.preventDefault(); setFs(!isFs()) }
+})
 
 /* ---- Teilen ---- */
 const canShare = !!navigator.share
