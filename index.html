@@ -1104,10 +1104,93 @@ function swapVideo(s, oldT, newT) {
 
 /* =================== Hintergrund: unscharf oder Bild =================== */
 // MediaPipe-Selfie-Segmentierung (lokal in vendor/mediapipe, wird erst beim ersten Einschalten geladen).
-// Kamera -> verstecktes <video> -> Maske (256 px breit) -> Canvas -> captureStream() -> gesendeter Track.
+// Ablauf pro Bild (alles in WebGL2, nur die kleine 256er-Maske kommt von MediaPipe als Float-Array):
+//   Kamera -> Maske (256 px) -> zeitliche Glättung -> kantenbewusstes Hochskalieren (Joint Bilateral, geführt
+//   vom Kamerabild) -> smoothstep -> [Blur] gewichteter Gauß nur über Hintergrund-Pixel (Person ausgespart)
+//   -> [Bild] Kanten-Entfärbung -> Zusammensetzen -> canvas.captureStream() -> gesendeter Track.
+// Pixelwerte gelten für 720p und werden auf andere Auflösungen umgerechnet.
+const FX_CFG = {
+  maskThresholdLow: .3, maskThresholdHigh: .85,  // smoothstep auf der verfeinerten Maske
+  bilateralSigmaSpace: 1.0,                      // in Masken-Pixeln
+  bilateralSigmaColor: .1,                       // Farbabstand (0..1) im Kamerabild
+  blurRadiusPx: 24, blurMaskDilationPx: 3, blurResolutionScale: .5,
+  edgeDecontamination: true, edgeDecontaminationStrength: .75,
+  temporalSmoothing: .25,
+  targetFPS: 30
+}
+const FX_DEBUG = qs.has('fxdebug')
+const FX_VIEWS = ['Ergebnis', 'Kamera', 'Maske roh', 'Maske verfeinert', 'Blur-Ausschluss (dilatiert)', 'Hintergrund maskenbewusst unscharf', 'Vordergrund entfärbt']
+
+const GLSL_VS = `#version 300 es
+void main(){ vec2 p = vec2((gl_VertexID << 1) & 2, gl_VertexID & 2); gl_Position = vec4(p * 2.0 - 1.0, 0.0, 1.0); }`
+const GLSL_HEAD = `#version 300 es
+precision highp float;
+uniform vec2 uSize;   // Größe des Ziels in Pixeln
+out vec4 o;
+vec2 UV(){ return gl_FragCoord.xy / uSize; }
+`
+// Alle Texturen liegen in Bildrichtung (t = 0 ist oben). Nur der letzte Schritt auf den Canvas dreht um.
+const FX_SHADERS = {
+  // zeitliche Glättung auf Maskenauflösung, weniger Glättung bei Bewegung (gegen Nachziehen)
+  temporal: `uniform sampler2D uRaw, uPrev; uniform float uK;
+    void main(){ vec2 uv = UV(); float c = texture(uRaw, uv).r, p = texture(uPrev, uv).r;
+      float k = uK * (1.0 - smoothstep(.08, .35, abs(c - p))); o = vec4(mix(c, p, k), 0, 0, 1); }`,
+  // Joint Bilateral Upsampling: 4x4 Masken-Texel, gewichtet nach Abstand und Farbähnlichkeit zum Kamerapixel
+  refine: `uniform sampler2D uMask, uSmall, uVid; uniform vec2 uMaskSize; uniform float uSigS, uSigR, uLo, uHi;
+    void main(){ vec2 uv = UV(); vec3 g = texture(uVid, uv).rgb;
+      vec2 mc = uv * uMaskSize - .5, base = floor(mc); float s = 0., ws = 0.;
+      for (int j = -1; j <= 2; j++) for (int i = -1; i <= 2; i++) {
+        vec2 t = base + vec2(i, j); vec2 q = (t + .5) / uMaskSize; vec2 d = t - mc;
+        vec3 dc = texture(uSmall, q).rgb - g;
+        float w = exp(-dot(d, d) / (2. * uSigS * uSigS)) * exp(-dot(dc, dc) / (2. * uSigR * uSigR));
+        s += texture(uMask, q).r * w; ws += w; }
+      float bil = texture(uMask, uv).r;                 // bilinear als Rückfall
+      float a = ws > 1e-4 ? s / ws : bil;
+      o = vec4(smoothstep(uLo, uHi, a), a, bil, 1); }`,
+  // Vorbereitung für den Blur (reduzierte Auflösung): Person + Rand ausschließen, Farbe mit Hintergrund-Gewicht
+  prep: `uniform sampler2D uAlpha, uVid; uniform vec2 uFull; uniform float uDil;
+    void main(){ vec2 uv = UV(); float m = texture(uAlpha, uv).r; vec2 px = uDil / uFull;
+      for (int i = 0; i < 8; i++) { float an = float(i) * .785398; vec2 dir = vec2(cos(an), sin(an));
+        m = max(m, texture(uAlpha, uv + dir * px).r); m = max(m, texture(uAlpha, uv + dir * px * .5).r); }
+      float w = 1. - m; o = vec4(texture(uVid, uv).rgb * w, w); }`,
+  // separierbarer Gauß, Farbe und Gewicht zusammen
+  blur: `uniform sampler2D uSrc; uniform vec2 uDir; uniform float uR;
+    void main(){ vec2 uv = UV(); vec2 st = uDir / uSize; float sig = max(uR * .5, .5);
+      vec4 acc = vec4(0); float wsum = 0.;
+      for (int i = -48; i <= 48; i++) { float f = float(i); if (abs(f) > uR) continue;
+        float w = exp(-f * f / (2. * sig * sig)); acc += texture(uSrc, uv + st * f) * w; wsum += w; }
+      o = acc / wsum; }`,
+  // Zusammensetzen
+  final: `uniform sampler2D uVid, uAlpha, uBlur, uBg, uMaskRaw, uPrep; uniform int uMode, uView; uniform float uStrength, uFlip;
+    // Push-Pull: von grob nach fein. Wo eine feine Stufe genug Hintergrund-Gewicht hat, gewinnt sie;
+    // wo die Person alles verdeckt, bleibt die nächstgröbere Schätzung. Weich überblendet, ohne Stufen.
+    vec4 bgEst(vec2 uv){ vec4 s = textureLod(uBlur, uv, 7.); vec3 c = s.rgb / max(s.a, 1e-4); float ok = step(1e-4, s.a);
+      for (int l = 6; l >= 0; l--) { s = textureLod(uBlur, uv, float(l)); float w = smoothstep(.0, .2, s.a);
+        c = mix(c, s.rgb / max(s.a, 1e-4), w); ok = max(ok, step(1e-4, s.a)); }
+      return vec4(c, ok); }
+    void main(){ vec2 uv = UV(); if (uFlip > .5) uv.y = 1. - uv.y;
+      vec3 orig = texture(uVid, uv).rgb; float a = texture(uAlpha, uv).r;
+      vec4 est = bgEst(uv);
+      vec3 fg = orig;
+      if (uMode == 1 && uStrength > 0. && est.a > .5) {          // Kanten-Entfärbung nur beim Bild-Hintergrund
+        vec3 corr = clamp((orig - (1. - a) * est.rgb) / max(a, .1), 0., 1.);
+        float e = 1. - pow(abs(2. * a - 1.), 3.);                // 0 bei a = 0 und a = 1, voll am Rand
+        fg = mix(orig, corr, uStrength * e); }
+      vec3 bg = uMode == 0 ? (est.a > .5 ? est.rgb : orig) : texture(uBg, uv).rgb;
+      vec3 c = mix(bg, fg, a);
+      if (uView == 1) c = orig;
+      else if (uView == 2) c = vec3(texture(uMaskRaw, uv).r);
+      else if (uView == 3) c = vec3(a);
+      else if (uView == 4) c = vec3(1. - texture(uPrep, uv).a);
+      else if (uView == 5) c = est.rgb;
+      else if (uView == 6) c = mix(vec3(0, .6, 0), fg, a);
+      o = vec4(c, 1); }`
+}
+
 const FX = {
-  ok: !!HTMLCanvasElement.prototype.captureStream && typeof WebAssembly === 'object',
+  ok: !!HTMLCanvasElement.prototype.captureStream && typeof WebAssembly === 'object' && 'WebGL2RenderingContext' in window,
   kind: 'none', seg: null, loading: null, raw: null, out: null, running: false, custom: null,
+  view: 0, segEvery: 1, frame: 0, stats: {fps: 0, seg: 0, gpu: 0},
   load() {
     return this.loading ??= (async () => {
       const base = new URL('vendor/mediapipe/', location.href).href
@@ -1134,18 +1217,19 @@ const FX = {
     this.vid.srcObject = new MediaStream([raw])
     await this.vid.play().catch(() => {})
     const st = raw.getSettings()
-    this.cv ??= this.canvas(st.width || 1280, st.height || 720)
-    this.cx = this.cv.getContext('2d')
-    this.prev = null
-    this.out = this.cv.captureStream(30).getVideoTracks()[0]
-    this.running = true
+    this.cv = this.canvas(st.width || 1280, st.height || 720)
+    this.glInit()
+    this.out = this.cv.captureStream(FX_CFG.targetFPS).getVideoTracks()[0]
+    this.running = true; this.reset = true; this.haveMask = false; this.mi = 0; this.mw = this.mh = 0; this.bgDirty = true
     this.tick()
+    if (FX_DEBUG) this.debugUI()
     return this.out
   },
   // Andere Kamera, gleicher Ausgangs-Track: Die Gegenseite merkt nichts.
   swapRaw(raw) {
     const old = this.raw; this.raw = raw
     this.vid.srcObject = new MediaStream([raw]); this.vid.play().catch(() => {})
+    this.reset = true
     old?.stop()
   },
   unwrap() {
@@ -1153,10 +1237,11 @@ const FX = {
     const res = {raw: this.raw, out: this.out}
     this.raw = this.out = null
     if (this.vid) this.vid.srcObject = null
+    this.glFree()
     return res
   },
   stop() { const {raw, out} = this.unwrap(); raw?.stop(); out?.stop() },
-  setKind(k) { this.kind = k; this.bg = null },
+  setKind(k) { this.kind = k; this.bgDirty = true },
   // Taktgeber im Worker: läuft auch weiter, wenn der Tab im Hintergrund ist (rAF würde pausieren).
   tick() {
     if (!this.worker && !this.running) return
@@ -1164,60 +1249,151 @@ const FX = {
       this.worker = new Worker(URL.createObjectURL(new Blob(['let t;onmessage=e=>{clearInterval(t);if(e.data)t=setInterval(()=>postMessage(0),e.data)}'], {type: 'text/javascript'})))
       this.worker.onmessage = () => this.render()
     }
-    this.worker.postMessage(this.running ? 33 : 0)
+    this.worker.postMessage(this.running ? Math.round(1000 / FX_CFG.targetFPS) : 0)
   },
-  render() {
-    const v = this.vid
-    if (!this.running || !v || v.readyState < 2 || !v.videoWidth) return
-    const W = v.videoWidth, H = v.videoHeight
-    if (this.cv.width !== W || this.cv.height !== H) { this.cv.width = W; this.cv.height = H; this.bg = null }
-    const sw = 256, sh = Math.max(16, Math.round(sw * H / W))
-    if (!this.sm || this.sm.height !== sh) {
-      this.sm = this.canvas(sw, sh); this.smx = this.sm.getContext('2d', {willReadFrequently: false})
-      this.prev = null
+
+  /* ---- WebGL2 ---- */
+  glInit() {
+    const gl = this.gl = this.cv.getContext('webgl2', {alpha: false, antialias: false, depth: false, premultipliedAlpha: false, preserveDrawingBuffer: false})
+    if (!gl) throw new Error('WebGL2 nicht verfügbar')
+    this.f16 = !!gl.getExtension('EXT_color_buffer_float')   // Float-Ziele für den gewichteten Blur
+    const sh = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s)
+      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s)); return s }
+    const vs = sh(gl.VERTEX_SHADER, GLSL_VS)
+    this.P = {}
+    for (const [name, src] of Object.entries(FX_SHADERS)) {
+      const p = gl.createProgram(); gl.attachShader(p, vs); gl.attachShader(p, sh(gl.FRAGMENT_SHADER, GLSL_HEAD + src)); gl.linkProgram(p)
+      if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(p))
+      const u = {}, n = gl.getProgramParameter(p, gl.ACTIVE_UNIFORMS)
+      for (let i = 0; i < n; i++) { const nm = gl.getActiveUniform(p, i).name; u[nm] = gl.getUniformLocation(p, nm) }
+      this.P[name] = {p, u}
     }
+    this.vao = gl.createVertexArray()
+    this.T = {}; this.F = {}; this.sizes = {}
+    gl.pixelStorei(gl.UNPACK_ALIGNMENT, 1)
+  },
+  glFree() {
+    const gl = this.gl; if (!gl) return
+    Object.values(this.T || {}).forEach(t => gl.deleteTexture(t))
+    Object.values(this.F || {}).forEach(f => gl.deleteFramebuffer(f))
+    Object.values(this.P || {}).forEach(({p}) => gl.deleteProgram(p))
+    gl.getExtension('WEBGL_lose_context')?.loseContext()
+    this.gl = null; this.T = this.F = this.P = null
+  },
+  // Textur (+ Framebuffer) in passender Größe holen; wird nur bei Größenänderung neu angelegt
+  tex(name, w, h, fmt, fbo, mips) {
+    const gl = this.gl, key = `${w}x${h}`
+    if (this.T[name] && this.sizes[name] === key) return this.T[name]
+    if (this.T[name]) gl.deleteTexture(this.T[name])
+    const t = this.T[name] = gl.createTexture(); this.sizes[name] = key
+    gl.bindTexture(gl.TEXTURE_2D, t)
+    const [ifmt, f, type] = fmt === 'r8' ? [gl.R8, gl.RED, gl.UNSIGNED_BYTE] : fmt === 'r16f' ? [gl.R16F, gl.RED, gl.FLOAT]
+      : fmt === 'rgba16f' ? [gl.RGBA16F, gl.RGBA, gl.HALF_FLOAT] : [gl.RGBA8, gl.RGBA, gl.UNSIGNED_BYTE]
+    const levels = mips ? Math.floor(Math.log2(Math.max(w, h))) + 1 : 1
+    gl.texStorage2D(gl.TEXTURE_2D, levels, ifmt, w, h)
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, mips ? gl.LINEAR_MIPMAP_LINEAR : gl.LINEAR)
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
+    t.fmt = [f, type]
+    if (fbo) {
+      this.F[name] ??= gl.createFramebuffer()
+      gl.bindFramebuffer(gl.FRAMEBUFFER, this.F[name])
+      gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, t, 0)
+    }
+    return t
+  },
+  pass(name, target, w, h, uniforms, textures) {
+    const gl = this.gl, {p, u} = this.P[name]
+    gl.useProgram(p); gl.bindVertexArray(this.vao)
+    gl.bindFramebuffer(gl.FRAMEBUFFER, target ? this.F[target] : null)
+    gl.viewport(0, 0, w, h)
+    gl.uniform2f(u.uSize, w, h)
+    let unit = 0
+    for (const [k, t] of Object.entries(textures)) { if (!u[k] || !t) continue; gl.activeTexture(gl.TEXTURE0 + unit); gl.bindTexture(gl.TEXTURE_2D, t); gl.uniform1i(u[k], unit++) }
+    for (const [k, v] of Object.entries(uniforms)) {
+      if (!u[k]) continue
+      if (Array.isArray(v)) gl.uniform2f(u[k], v[0], v[1]); else if (k === 'uMode' || k === 'uView') gl.uniform1i(u[k], v); else gl.uniform1f(u[k], v)
+    }
+    gl.drawArrays(gl.TRIANGLES, 0, 3)
+  },
+
+  render() {
+    const v = this.vid, gl = this.gl
+    if (!this.running || !gl || !v || v.readyState < 2 || !v.videoWidth) return
+    const t0 = performance.now()
+    const W = v.videoWidth, H = v.videoHeight, sc = H / 720
+    if (this.cv.width !== W || this.cv.height !== H) { this.cv.width = W; this.cv.height = H; this.reset = true }
+    // 1) Kamerabild hochladen
+    const tVid = this.tex('vid', W, H, 'rgba8')
+    gl.bindTexture(gl.TEXTURE_2D, tVid); gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, gl.RGBA, gl.UNSIGNED_BYTE, v)
+    // 2) Segmentierung (bei langsamen Geräten nur jedes zweite Bild)
+    if (this.frame++ % this.segEvery === 0) this.segment(v, W, H)
+    if (!this.haveMask) { this.pass('final', null, W, H, {uMode: 2, uView: 1, uFlip: 1}, {uVid: tVid}); return }
+    const mw = this.mw, mh = this.mh
+    // 3) Maske verfeinern (volle Auflösung)
+    this.tex('alpha', W, H, 'rgba8', true)
+    this.pass('refine', 'alpha', W, H, {uMaskSize: [mw, mh], uSigS: FX_CFG.bilateralSigmaSpace, uSigR: FX_CFG.bilateralSigmaColor, uLo: FX_CFG.maskThresholdLow, uHi: FX_CFG.maskThresholdHigh},
+      {uMask: this.T['mask' + this.mi], uSmall: this.T.small, uVid: tVid})
+    // 4) maskenbewusster Blur auf reduzierter Auflösung (auch als Hintergrund-Schätzung für die Entfärbung)
+    const bs = FX_CFG.blurResolutionScale, bw = Math.max(16, Math.round(W * bs)), bh = Math.max(16, Math.round(H * bs))
+    const ffmt = this.f16 ? 'rgba16f' : 'rgba8'
+    this.tex('prep', bw, bh, ffmt, true); this.tex('b1', bw, bh, ffmt, true); this.tex('b2', bw, bh, ffmt, true, true)
+    this.pass('prep', 'prep', bw, bh, {uFull: [W, H], uDil: FX_CFG.blurMaskDilationPx * sc}, {uAlpha: this.T.alpha, uVid: tVid})
+    const r = Math.min(48, FX_CFG.blurRadiusPx * sc * bs)
+    this.pass('blur', 'b1', bw, bh, {uDir: [1, 0], uR: r}, {uSrc: this.T.prep})
+    this.pass('blur', 'b2', bw, bh, {uDir: [0, 1], uR: r}, {uSrc: this.T.b1})
+    gl.bindTexture(gl.TEXTURE_2D, this.T.b2); gl.generateMipmap(gl.TEXTURE_2D)
+    // 5) Hintergrundbild (nur bei Wechsel neu hochladen)
+    const mode = this.kind === 'blur' ? 0 : 1
+    if (mode === 1 && (this.bgDirty || this.sizes.bg !== `${W}x${H}`)) {
+      const t = this.tex('bg', W, H, 'rgba8'); gl.bindTexture(gl.TEXTURE_2D, t)
+      gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, gl.RGBA, gl.UNSIGNED_BYTE, bgCanvas(this.kind, W, H)); this.bgDirty = false
+    }
+    // 6) Zusammensetzen auf den Canvas
+    this.pass('final', null, W, H, {uMode: mode, uView: this.view, uFlip: 1, uStrength: FX_CFG.edgeDecontamination ? FX_CFG.edgeDecontaminationStrength : 0},
+      {uVid: tVid, uAlpha: this.T.alpha, uBlur: this.T.b2, uBg: this.T.bg || tVid, uMaskRaw: this.T.raw, uPrep: this.T.prep})
+    // Statistik
+    const now = performance.now()
+    this.stats.gpu = this.stats.gpu * .9 + (now - t0) * .1
+    if (this.lastT) this.stats.fps = this.stats.fps * .9 + 1000 / (now - this.lastT) * .1
+    this.lastT = now
+    if (FX_DEBUG && this.dbg && this.frame % 10 === 0) this.dbg.textContent = `${FX_VIEWS[this.view]} (Taste 0–6)\n${this.stats.fps.toFixed(0)} fps · Segmentierung ${this.stats.seg.toFixed(1)} ms · gesamt ${this.stats.gpu.toFixed(1)} ms · jedes ${this.segEvery}. Bild\n${W}×${H} · Maske ${mw}×${mh} · ${this.f16 ? 'float' : '8 bit'}`
+  },
+  segment(v, W, H) {
+    const gl = this.gl, sw = 256, sh = Math.max(16, Math.round(sw * H / W))
+    if (!this.sm || this.sm.height !== sh) { this.sm = this.canvas(sw, sh); this.smx = this.sm.getContext('2d'); this.reset = true }
     this.smx.drawImage(v, 0, 0, sw, sh)
+    const t0 = performance.now()
     try {
-      this.seg.segmentForVideo(this.sm, performance.now(), res => {
+      this.seg.segmentForVideo(this.sm, t0, res => {
         const m = res.confidenceMasks?.[0]; if (!m) return
-        const mw = m.width, mh = m.height, a = m.getAsFloat32Array()
-        if (!this.mk || this.mk.width !== mw || this.mk.height !== mh) {
-          this.mk = this.canvas(mw, mh); this.mkx = this.mk.getContext('2d')
-          this.mkd = this.mkx.createImageData(mw, mh); this.prev = null
-        }
-        if (!this.prev || this.prev.length !== a.length) this.prev = Float32Array.from(a)
-        const d = this.mkd.data, prev = this.prev
-        for (let i = 0; i < a.length; i++) {
-          const c = prev[i] = prev[i] * .35 + a[i] * .65          // leicht glätten gegen Flackern
-          const x = Math.min(1, Math.max(0, (c - .3) / .45))      // Kante etwas schärfen
-          d[i * 4 + 3] = x * x * (3 - 2 * x) * 255
-        }
-        this.mkx.putImageData(this.mkd, 0, 0)
+        const mw = m.width, mh = m.height
+        if (mw !== this.mw || mh !== this.mh) { this.mw = mw; this.mh = mh; this.reset = true }
+        // Rohmaske (Float, kleine Auflösung) und das passende kleine Kamerabild als Farb-Führung hochladen
+        const raw = this.tex('raw', mw, mh, 'r16f')
+        gl.bindTexture(gl.TEXTURE_2D, raw); gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, mw, mh, gl.RED, gl.FLOAT, m.getAsFloat32Array())
+        const small = this.tex('small', mw, mh, 'rgba8')
+        gl.bindTexture(gl.TEXTURE_2D, small)
+        if (mw === sw && mh === sh) gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, gl.RGBA, gl.UNSIGNED_BYTE, this.sm)
+        // zeitliche Glättung im Ping-Pong
+        const next = this.mi ? 0 : 1
+        this.tex('mask0', mw, mh, 'r8', true); this.tex('mask1', mw, mh, 'r8', true)
+        this.pass('temporal', 'mask' + next, mw, mh, {uK: this.reset ? 0 : FX_CFG.temporalSmoothing}, {uRaw: raw, uPrev: this.T['mask' + (this.mi || 0)]})
+        this.mi = next; this.reset = false; this.haveMask = true
       })
     } catch (e) { if (!this.warned) { this.warned = true; console.warn('anruf.org: Segmentierung', e) } }
-    const cx = this.cx
-    if (!this.mk) { cx.drawImage(v, 0, 0, W, H); return }
-    // 1) Hintergrund
-    if (this.kind === 'blur') {
-      const bw = Math.max(24, Math.round(W / 12)), bh = Math.max(14, Math.round(bw * H / W))
-      if (!this.bl || this.bl.width !== bw || this.bl.height !== bh) { this.bl = this.canvas(bw, bh); this.blx = this.bl.getContext('2d') }
-      this.blx.drawImage(v, 0, 0, bw, bh)
-      cx.imageSmoothingEnabled = true; cx.imageSmoothingQuality = 'high'
-      if ('filter' in cx) cx.filter = `blur(${Math.round(W / 220)}px)`
-      cx.drawImage(this.bl, -W * .03, -H * .03, W * 1.06, H * 1.06)
-      if ('filter' in cx) cx.filter = 'none'
-    } else {
-      if (!this.bg || this.bg.width !== W || this.bg.height !== H) this.bg = bgCanvas(this.kind, W, H)
-      cx.drawImage(this.bg, 0, 0)
-    }
-    // 2) Person: Maske hochskalieren (weiche Kante), Kamerabild hineinzeichnen
-    if (!this.pc || this.pc.width !== W || this.pc.height !== H) { this.pc = this.canvas(W, H); this.pcx = this.pc.getContext('2d') }
-    const px = this.pcx
-    px.globalCompositeOperation = 'copy'; px.imageSmoothingEnabled = true; px.imageSmoothingQuality = 'high'
-    px.drawImage(this.mk, 0, 0, W, H)
-    px.globalCompositeOperation = 'source-in'
-    px.drawImage(v, 0, 0, W, H)
-    cx.drawImage(this.pc, 0, 0)
+    const dt = performance.now() - t0
+    this.stats.seg = this.stats.seg * .9 + dt * .1
+    // adaptiv: braucht die Segmentierung zu lange, nur jedes 2. (oder 3.) Bild segmentieren
+    this.segEvery = this.stats.seg > 28 ? 3 : this.stats.seg > 16 ? 2 : 1
+  },
+  debugUI() {
+    if (this.dbg) return
+    const d = this.dbg = document.createElement('pre')
+    d.style.cssText = 'position:fixed;z-index:99;left:8px;bottom:8px;margin:0;padding:8px 10px;border-radius:10px;background:rgba(0,0,0,.75);color:#fff;font:11px/1.4 ui-monospace,monospace;pointer-events:none;white-space:pre'
+    document.body.append(d)
+    addEventListener('keydown', e => { if (/^[0-6]$/.test(e.key) && !/^(INPUT|TEXTAREA)$/.test(e.target.tagName)) this.view = +e.key })
   }
 }
 
