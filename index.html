@@ -148,17 +148,80 @@ footer nav{display:flex;gap:18px}
 footer a{text-decoration:none}
 footer a:hover{color:var(--ink)}
 
-/* ---------- join ---------- */
+/* eigener Raumname auf der Startseite */
+.linkish{border:0;background:transparent;padding:6px 4px;color:var(--mute);font-family:var(--mono);font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:4px;transition:color .3s}
+.linkish:hover{color:var(--ink);text-decoration-color:var(--accent)}
+.roomform{display:inline-flex;align-items:center;gap:2px;padding:5px 5px 5px 14px;border-radius:999px;border:1px solid var(--line);background:var(--card);animation:fade .4s var(--ease);max-width:100%}
+.roomform:focus-within{border-color:var(--ink)}
+.roomform .mono{color:var(--mute);white-space:nowrap}
+.roomform input{border:0;background:transparent;outline:0;width:17ch;min-width:0;font-family:var(--mono);font-size:.85rem;padding:6px 6px 6px 0}
+.roomform button{width:38px;height:38px;border-radius:50%;border:0;background:var(--ink);color:var(--paper);display:grid;place-items:center;flex:none;transition:transform .35s var(--spring)}
+.roomform button:hover{transform:translateX(2px)}
+.roomform button svg{width:18px;height:18px}
+.roomhint{flex-basis:100%;text-align:center;margin:0;color:var(--mute);font-size:.8rem}
+
+/* ---------- Vorschau vor dem Beitreten ---------- */
 #join{flex-direction:column;min-height:100dvh}
-.join{flex:1;display:grid;align-content:center;gap:26px;padding:24px var(--gutter) 64px;max-width:760px}
-.join .mono{color:var(--accent)}
-.join h2{margin:0;font-weight:800;font-size:clamp(2.2rem,9vw,5.6rem);line-height:.92;letter-spacing:-.05em;word-break:break-word}
-.join p{margin:0;color:var(--mute);font-size:1.15rem;max-width:36ch}
-.join .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.join .go{height:64px;padding:0 30px;border-radius:999px;font-size:1.15rem}
-.join .go svg{width:22px;height:22px}
-.join > *{opacity:0;animation:fade .7s var(--ease) forwards}
-.join > *:nth-child(2){animation-delay:.06s}.join > *:nth-child(3){animation-delay:.12s}.join > *:nth-child(4){animation-delay:.18s}.join > *:nth-child(5){animation-delay:.24s}
+.pj{flex:1;display:grid;align-content:center;gap:28px;padding:4px var(--gutter) 48px;width:100%;max-width:1180px;margin-inline:auto}
+.pj-side{display:grid;gap:20px;align-content:center;min-width:0}
+.pj-side .mono{color:var(--accent)}
+.pj h2{margin:0;font-weight:800;font-size:clamp(2rem,7vw,4.2rem);line-height:.95;letter-spacing:-.05em;overflow-wrap:anywhere}
+.pj p{margin:0;color:var(--mute);font-size:1.08rem;max-width:36ch}
+.pj .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.pj .go{height:62px;padding:0 30px;border-radius:999px;font-size:1.12rem}
+.pj .go svg{width:22px;height:22px}
+.pj .go:disabled{opacity:.5;cursor:wait}
+.pj > *{opacity:0;animation:fade .7s var(--ease) forwards}
+.pj > *:nth-child(2){animation-delay:.08s}
+.field{display:grid;gap:8px}
+.field .mono{color:var(--mute)}
+.field input{height:58px;padding:0 18px;border-radius:18px;border:1px solid var(--line);background:var(--card);outline:0;font-size:1.15rem;font-weight:550;transition:border-color .3s;width:100%;max-width:420px}
+.field input:focus{border-color:var(--ink)}
+.pv{position:relative;aspect-ratio:16/10;min-height:300px;border-radius:28px;overflow:hidden;background:var(--card);border:1px solid var(--line);display:grid;place-items:center;container-type:size}
+.pv video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1);opacity:0;transition:opacity .4s;background:#000}
+.pv.cam video{opacity:1}
+.pv.cam .pv-off{opacity:0;pointer-events:none}
+.pv-off{position:relative;display:grid;justify-items:center;gap:12px;text-align:center;padding:16px 20px 88px;color:var(--mute);transition:opacity .3s}
+.pv-ini{width:min(112px,30cqh);aspect-ratio:1;border-radius:50%;background:var(--c,var(--accent));display:grid;place-items:center;font-weight:800;font-size:clamp(1.6rem,12cqh,3rem);letter-spacing:-.04em;color:#141412;box-shadow:0 0 0 0 color-mix(in oklab,var(--c,var(--accent)) 40%,transparent);transition:box-shadow .12s}
+.pv-msg{max-width:30ch;font-size:.95rem}
+.pv-meter{position:absolute;z-index:2;left:14px;top:14px;display:flex;gap:3px;align-items:flex-end;height:30px;padding:7px 10px;border-radius:999px;background:color-mix(in oklab,var(--paper) 78%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:var(--ink)}
+.pv-meter i{width:4px;border-radius:2px;background:currentColor;opacity:.22;transition:opacity .08s,background .08s}
+.pv-meter i:nth-child(1){height:30%}.pv-meter i:nth-child(2){height:50%}.pv-meter i:nth-child(3){height:70%}.pv-meter i:nth-child(4){height:85%}.pv-meter i:nth-child(5){height:100%}
+.pv-meter i.on{opacity:1;background:var(--accent)}
+.pv-meter.off{color:var(--danger)}
+.pv-ctl{position:absolute;z-index:2;left:0;right:0;bottom:14px;display:flex;justify-content:center;gap:10px}
+.pv .ctl{background:color-mix(in oklab,var(--card) 80%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.pv .ctl.off{background:var(--danger);border-color:var(--danger);color:#fff}
+.pv-busy{position:absolute;z-index:2;right:14px;top:14px;padding:7px 12px;border-radius:999px;background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;animation:pulse 1.4s ease-in-out infinite}
+.av{display:grid;gap:14px;margin-top:16px}
+.av-h{color:var(--mute)}
+.fx{display:grid;gap:8px}
+.fx-row{display:flex;gap:8px;overflow-x:auto;padding:3px;margin:-3px;scrollbar-width:none}
+.fx-row::-webkit-scrollbar{display:none}
+.fxo{flex:none;width:62px;height:44px;border-radius:14px;border:1px solid var(--line);background:var(--card) center/cover no-repeat;display:grid;place-items:center;color:var(--ink);transition:transform .35s var(--spring),box-shadow .25s}
+.fxo:hover{transform:translateY(-2px)}
+.fxo svg{width:20px;height:20px}
+.fxo[aria-checked=true]{box-shadow:0 0 0 2px var(--paper),0 0 0 4.5px var(--accent)}
+.fxo:disabled{opacity:.45;cursor:wait}
+.fx.nocam .fx-row{opacity:.55}
+.dev summary{cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:8px;color:var(--mute);font-family:var(--mono);font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;padding:4px 0}
+.dev summary::-webkit-details-marker{display:none}
+.dev summary:hover{color:var(--ink)}
+.dev summary svg{width:14px;height:14px;transition:transform .3s var(--ease)}
+.dev[open] summary svg{transform:rotate(90deg)}
+.dev-grid{display:grid;gap:10px;margin-top:10px}
+.dev label{display:grid;gap:5px;font-size:.84rem;color:var(--mute)}
+.dev select{height:46px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:0 12px;font:inherit;font-size:.95rem;width:100%;min-width:0}
+.dev .btn{height:44px;justify-self:start;border-radius:14px;font-size:.92rem}
+#avDlg .av{margin-top:4px}
+#avDlg .fx-row{flex-wrap:wrap}
+.pv.err .pv-ctl,.pv.err .pv-meter{display:none}
+.pv.err .pv-off{padding-bottom:20px}
+@media (max-width:759px){ .pv{aspect-ratio:4/3;min-height:260px} }
+#avDlg .dev-grid{margin-top:4px}
+@media (min-width:900px){
+  .pj{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:56px;align-items:center}
+}
 
 /* ---------- room ---------- */
 #room{flex-direction:column;height:100dvh;overflow:hidden}
@@ -192,6 +255,13 @@ footer a:hover{color:var(--ink)}
 .tile.self .label{cursor:pointer;transition:transform .35s var(--spring)}
 .tile.self .label .pen{display:block}
 .tile.self .label:hover{transform:translateY(-2px)}
+.tile .fxbtn{position:absolute;z-index:3;top:10px;right:10px;width:36px;height:36px;border-radius:50%;border:0;display:none;place-items:center;background:color-mix(in oklab,var(--paper) 82%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:var(--ink);transition:transform .35s var(--spring),opacity .3s}
+.tile .fxbtn svg{width:18px;height:18px}
+.tile .fxbtn:hover{transform:rotate(-12deg) scale(1.06)}
+.tile.self .fxbtn{display:grid}
+.tile.self.screen .fxbtn{display:none}
+.stage.duo .tile.self .fxbtn,.stage.present .tile.self .fxbtn{top:5px;right:5px;width:28px;height:28px}
+.stage.duo .tile.self .fxbtn svg,.stage.present .tile.self .fxbtn svg{width:15px;height:15px}
 .tile .state{position:absolute;top:12px;right:12px;font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);display:none;z-index:2}
 .tile.connecting .state,.tile.vwait .state{display:block}
 .tile.connecting .blobwrap{animation:pulse 1.6s ease-in-out infinite}
@@ -420,6 +490,64 @@ body.fs .stage.present .strip{width:clamp(110px,13vw,170px)}
 .ib-note{margin:0;font-size:.74rem;color:var(--mute);line-height:1.4;display:flex;gap:8px;align-items:flex-start}
 .ib-note svg{width:14px;height:14px;flex:none;margin-top:2px}
 body.fs #room .rbar{display:none}
+
+/* ---------- Einladen-Knopf in der Kopfzeile ---------- */
+.invitebtn{height:34px;padding:0 13px 0 11px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);display:inline-flex;align-items:center;gap:7px;font-weight:620;font-size:.88rem;letter-spacing:-.01em;flex:none;transition:transform .35s var(--spring),border-color .3s}
+.invitebtn:hover{transform:translateY(-1px);border-color:var(--ink)}
+.invitebtn svg{width:16px;height:16px}
+.lockico{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;border:0;background:color-mix(in oklab,var(--accent) 16%,transparent);color:var(--accent);flex:none}
+.lockico svg{width:15px;height:15px}
+@media (max-width:520px){ .invitebtn span{display:none} .invitebtn{width:34px;padding:0;justify-content:center} .rmeta{display:none} }
+
+/* ---------- Reaktionen & Hand ---------- */
+.reactpop{position:fixed;z-index:26;left:50%;bottom:calc(92px + env(safe-area-inset-bottom));transform:translateX(-50%);display:flex;align-items:center;gap:2px;padding:6px;border-radius:999px;background:var(--card);border:1px solid var(--line);box-shadow:0 20px 50px -14px rgba(0,0,0,.4);animation:dlg .35s var(--spring);max-width:calc(100vw - 24px)}
+.reactpop button{width:46px;height:46px;border-radius:50%;border:0;background:transparent;font-size:1.55rem;line-height:1;display:grid;place-items:center;transition:transform .3s var(--spring),background .2s;flex:none}
+.reactpop button:hover{transform:scale(1.18) translateY(-2px);background:color-mix(in oklab,var(--ink) 7%,transparent)}
+.reactpop .sep{width:1px;height:28px;background:var(--line);margin:0 4px;flex:none}
+.reactpop .handb{width:auto;padding:0 14px 0 10px;border-radius:999px;font-size:.92rem;font-weight:620;gap:6px;display:inline-flex;color:var(--ink)}
+.reactpop .handb i{font-style:normal;font-size:1.3rem}
+.reactpop .handb[aria-pressed=true]{background:#FFD34E;color:#141412}
+@media (max-width:420px){ .reactpop button{width:40px;height:40px;font-size:1.35rem} .reactpop .handb span{display:none} .reactpop .handb{padding:0 10px} }
+.fly{position:absolute;z-index:6;left:var(--x,50%);bottom:12%;font-size:clamp(2rem,16cqmin,4.4rem);line-height:1;pointer-events:none;animation:fly 2.8s var(--ease) forwards;filter:drop-shadow(0 6px 14px rgba(0,0,0,.25))}
+@keyframes fly{0%{opacity:0;transform:translate(-50%,30px) scale(.4)}14%{opacity:1;transform:translate(-50%,0) scale(1.15)}22%{transform:translate(-50%,-8%) scale(1)}100%{opacity:0;transform:translate(-50%,-260%) rotate(var(--r,0deg))}}
+.tile .hand{position:absolute;z-index:3;top:10px;left:10px;display:none;padding:4px 9px;border-radius:999px;background:#FFD34E;font-size:1.25rem;line-height:1.2;transform-origin:70% 90%;animation:wave 1.6s ease-in-out 3}
+.tile.hand-up .hand{display:block}
+@keyframes wave{0%,60%,100%{transform:rotate(0)}15%{transform:rotate(16deg)}30%{transform:rotate(-10deg)}45%{transform:rotate(12deg)}}
+.stage.duo .tile.self .hand,.stage.present .strip .hand{top:5px;left:5px;padding:2px 6px;font-size:.9rem}
+
+/* ---------- Hinweise: stumm, Anklopfen, Verbindung ---------- */
+.hint{position:fixed;z-index:44;left:50%;bottom:calc(94px + env(safe-area-inset-bottom));transform:translateX(-50%);display:flex;align-items:center;gap:10px;padding:7px 7px 7px 16px;border-radius:999px;background:var(--ink);color:var(--paper);font-size:.92rem;box-shadow:0 14px 34px rgba(0,0,0,.28);animation:toast .45s var(--spring);white-space:nowrap;max-width:calc(100vw - 24px)}
+.hint span{overflow:hidden;text-overflow:ellipsis}
+.hint:not(:has(button:not([hidden]))){padding-right:16px}
+.hint button{height:34px;padding:0 14px;border-radius:999px;border:0;background:var(--accent);color:var(--on-accent);font-weight:650;flex:none}
+.notes{position:fixed;z-index:45;right:16px;top:64px;display:grid;gap:10px;width:min(340px,calc(100vw - 32px))}
+.note{display:grid;gap:10px;padding:14px 14px 12px 16px;border-radius:20px;background:var(--card);color:var(--ink);border:1px solid var(--line);box-shadow:0 20px 50px -14px rgba(0,0,0,.4);animation:dlg .45s var(--spring)}
+.note.bye{animation:toast-out .3s var(--ease) forwards}
+.note p{margin:0;font-size:.95rem;line-height:1.38}
+.note .acts{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.note .btn{height:40px;padding:0 14px;border-radius:12px;font-size:.9rem}
+@media (max-width:759px){ .notes{left:16px;right:16px;top:auto;bottom:calc(92px + env(safe-area-inset-bottom));width:auto} }
+.rbody{position:relative}
+.knockwait{position:absolute;z-index:8;inset:4px var(--gutter) 12px;border-radius:28px;background:color-mix(in oklab,var(--card) 94%,transparent);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--line);display:grid;place-content:center;justify-items:center;gap:14px;text-align:center;padding:24px;animation:fade .5s var(--ease)}
+.knockwait .kico{width:84px;height:84px;border-radius:50%;display:grid;place-items:center;background:color-mix(in oklab,var(--accent) 16%,transparent);color:var(--accent);animation:knock 1.6s ease-in-out infinite}
+.knockwait .kico svg{width:40px;height:40px}
+@keyframes knock{0%,50%,100%{transform:none}8%,24%{transform:rotate(-8deg) scale(1.05)}16%,32%{transform:rotate(6deg)}}
+.knockwait h3{margin:0;font-size:1.5rem;font-weight:700;letter-spacing:-.03em}
+.knockwait p{margin:0;color:var(--mute);max-width:34ch}
+
+/* ---------- Bild-im-Bild-Fenster ---------- */
+body.pip{margin:0;height:100vh;display:flex;flex-direction:column;gap:6px;padding:6px;overflow:hidden;background:var(--paper)}
+body.pip::before{display:none}
+body.pip .stage{flex:1;min-height:0;gap:6px}
+body.pip .tile{border-radius:14px}
+body.pip .tile .label{left:6px;bottom:6px;padding:3px 7px;font-size:.62rem}
+body.pip .waiting,body.pip .fxbtn,body.pip .tile .state{display:none!important}
+body.pip .stage.duo .tile.self{width:28%;right:6px;top:6px;border-radius:10px}
+.pipbar{display:flex;justify-content:center;gap:8px}
+.pipbar .ctl{width:40px;height:40px}
+.pipbar .ctl svg{width:18px;height:18px}
+.pipbar .hang{height:40px;padding:0 14px}
+.pipbar .hang span{display:none}
 </style>
 </head>
 <body data-view="home">
@@ -448,12 +576,13 @@ body.fs #room .rbar{display:none}
         </button>
       </div>
       <div class="opts">
-        <div class="seg" role="radiogroup" aria-label="Art des Anrufs">
-          <span class="pill" aria-hidden="true"></span>
-          <input type="radio" name="mode" id="mAudio" value="audio"><label for="mAudio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>Audio</label>
-          <input type="radio" name="mode" id="mVideo" value="video"><label for="mVideo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="6" width="13" height="12" rx="3"/><path d="m16 10 5-3v10l-5-3z"/></svg>Video</label>
-        </div>
-        <label class="name"><span class="mono">Du</span><input id="nameInput" maxlength="24" autocomplete="nickname" spellcheck="false" aria-label="Dein Name"></label>
+        <button class="linkish" id="customBtn" type="button" aria-expanded="false" aria-controls="roomForm">Eigenen Raumnamen wählen</button>
+        <form class="roomform" id="roomForm" autocomplete="off" hidden>
+          <span class="mono" aria-hidden="true">anruf.org/#</span>
+          <input id="roomInput" maxlength="48" spellcheck="false" autocapitalize="off" placeholder="familie-mueller" aria-label="Raumname" enterkeyhint="go">
+          <button type="submit" aria-label="Raum öffnen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        </form>
+        <p class="roomhint" id="roomHint" hidden>Wer denselben Namen eingibt, landet im selben Raum.</p>
       </div>
     </div>
   </section>
@@ -480,21 +609,52 @@ body.fs #room .rbar{display:none}
   <header class="top">
     <a class="mark" href="./" aria-label="anruf.org – Startseite">anruf<i>.org</i></a>
   </header>
-  <section class="join" id="joinBox">
-    <span class="mono">Einladung zum Anruf</span>
-    <h2 id="joinTitle"></h2>
-    <p>Jemand hat dir diesen Link geschickt. Tipp auf „Beitreten“ und ihr seid verbunden.</p>
-    <div class="row">
-      <div class="seg" role="radiogroup" aria-label="Art der Teilnahme">
-        <span class="pill" aria-hidden="true"></span>
-        <input type="radio" name="mode2" id="jAudio" value="audio"><label for="jAudio">Audio</label>
-        <input type="radio" name="mode2" id="jVideo" value="video"><label for="jVideo">Video</label>
+  <section class="pj" id="joinBox">
+    <div class="pj-media">
+      <div class="pv" id="pv">
+        <video id="pvVideo" playsinline autoplay muted disablepictureinpicture></video>
+        <div class="pv-off"><span class="pv-ini" id="pvIni"></span><span class="pv-msg" id="pvMsg">Kamera ist aus</span><button class="btn" id="pvRetry" type="button" hidden>Erneut versuchen</button></div>
+        <div class="pv-meter" id="pvMeter" title="Mikrofon-Pegel" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+        <span class="pv-busy" id="pvBusy" hidden>Effekt lädt…</span>
+        <div class="pv-ctl">
+          <button class="ctl" id="pvMic" type="button" aria-label="Mikrofon stummschalten" aria-pressed="false">
+            <svg class="i-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+            <svg class="i-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M15 9.5V6a3 3 0 0 0-5.8-1M9 9v2a3 3 0 0 0 4.6 2.5M5 11a7 7 0 0 0 11.3 5.5M19 11a7 7 0 0 1-.6 2.8M12 18v3M3 3l18 18"/></svg>
+          </button>
+          <button class="ctl" id="pvCam" type="button" aria-label="Kamera einschalten" aria-pressed="false">
+            <svg class="i-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="6" width="13" height="12" rx="3"/><path d="m16 10 5-3v10l-5-3z"/></svg>
+            <svg class="i-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M16 12.5V9a3 3 0 0 0-3-3H9M5.5 6.2A3 3 0 0 0 3 9v6a3 3 0 0 0 3 3h7a3 3 0 0 0 2.5-1.3M16 10l5-3v10l-2.2-1.3M3 3l18 18"/></svg>
+          </button>
+        </div>
       </div>
-      <label class="name"><span class="mono">Du</span><input id="nameInput2" maxlength="24" autocomplete="nickname" spellcheck="false" aria-label="Dein Name"></label>
+      <div id="avHome">
+        <div class="av" id="av">
+          <div class="fx" id="fxBox" role="radiogroup" aria-label="Hintergrund">
+            <span class="av-h mono">Hintergrund</span>
+            <div class="fx-row" id="fxRow"></div>
+            <input type="file" id="fxFile" accept="image/*" hidden>
+          </div>
+          <details class="dev" id="devBox">
+            <summary><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>Mikrofon, Kamera, Lautsprecher</summary>
+            <div class="dev-grid">
+              <label>Mikrofon<select id="selMic"></select></label>
+              <label>Kamera<select id="selCam"></select></label>
+              <label id="spkRow" hidden>Lautsprecher<select id="selSpk"></select></label>
+              <button class="btn ghost" type="button" id="spkTest">Ton testen</button>
+            </div>
+          </details>
+        </div>
+      </div>
     </div>
-    <div class="row">
-      <button class="btn accent go" id="joinBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h3.5l2 5-2.5 1.5a11 11 0 0 0 5.5 5.5l1.5-2.5 5 2V19a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>Beitreten</button>
-      <a class="btn ghost go" href="./">Zurück</a>
+    <div class="pj-side">
+      <span class="mono" id="pjEyebrow">Einladung zum Anruf</span>
+      <h2 id="joinTitle"></h2>
+      <p id="pjText">Schau kurz, ob Bild und Ton passen. Dann tipp auf „Beitreten“.</p>
+      <label class="field"><span class="mono">Dein Name</span><input id="nameInput2" maxlength="24" autocomplete="nickname" spellcheck="false" enterkeyhint="go"></label>
+      <div class="row">
+        <button class="btn accent go" id="joinBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h3.5l2 5-2.5 1.5a11 11 0 0 0 5.5 5.5l1.5-2.5 5 2V19a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>Beitreten</button>
+        <a class="btn ghost go" href="./">Zurück</a>
+      </div>
     </div>
   </section>
 </main>
@@ -506,9 +666,11 @@ body.fs #room .rbar{display:none}
     <div class="rinfo">
       <a class="mark" href="./" id="roomHome" aria-label="Auflegen und zur Startseite">anruf<i>.org</i></a>
       <span class="rname" id="roomName"></span>
+      <button class="lockico" id="lockIco" type="button" aria-label="Anruf ist abgeschlossen" title="Abgeschlossen: Neue müssen anklopfen" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></button>
     </div>
     <div class="rright">
       <span class="rmeta mono" id="roomMeta"></span>
+      <button class="invitebtn" id="inviteBtn" type="button" aria-label="Jemanden einladen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg><span>Einladen</span></button>
       <button class="infobtn" id="infoBtn" type="button" aria-label="Verbindungsdetails" aria-expanded="false" aria-controls="infoBox">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.2M12 7.9h.01"/></svg>
         <i class="dot" id="infoDot" aria-hidden="true"></i>
@@ -543,6 +705,12 @@ body.fs #room .rbar{display:none}
         <div class="linkbox"><code id="waitLink"></code><button class="btn" data-copy>Kopieren</button><button class="btn ghost" data-share hidden>Teilen</button></div>
       </div>
     </section>
+    <div class="knockwait" id="knockWait" hidden>
+      <span class="kico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16M3 21h18M14 12h.01" stroke-width="1.7"/></svg></span>
+      <h3>Der Anruf ist abgeschlossen</h3>
+      <p>Du hast angeklopft. Sobald dich jemand reinlässt, bist du dabei.</p>
+      <button class="btn ghost" type="button" id="knockCancel">Abbrechen</button>
+    </div>
     <aside class="chat" id="chat" aria-label="Chat">
       <div class="chat-head">
         <div><h3>Chat</h3><span class="mono">Direkt · nicht gespeichert</span></div>
@@ -559,17 +727,20 @@ body.fs #room .rbar{display:none}
     </aside>
   </div>
   <nav class="dock" id="dock" aria-label="Anrufsteuerung">
-    <button class="ctl" id="micBtn" aria-label="Mikrofon stummschalten" aria-pressed="false">
+    <button class="ctl" id="micBtn" aria-label="Mikrofon stummschalten" aria-pressed="false" title="Mikrofon (M) · Leertaste halten zum Sprechen">
       <svg class="i-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
       <svg class="i-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M15 9.5V6a3 3 0 0 0-5.8-1M9 9v2a3 3 0 0 0 4.6 2.5M5 11a7 7 0 0 0 11.3 5.5M19 11a7 7 0 0 1-.6 2.8M12 18v3M3 3l18 18"/></svg>
     </button>
-    <button class="ctl" id="camBtn" aria-label="Kamera einschalten" aria-pressed="false">
+    <button class="ctl" id="camBtn" aria-label="Kamera einschalten" aria-pressed="false" title="Kamera (V)">
       <svg class="i-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="6" width="13" height="12" rx="3"/><path d="m16 10 5-3v10l-5-3z"/></svg>
       <svg class="i-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M16 12.5V9a3 3 0 0 0-3-3H9M5.5 6.2A3 3 0 0 0 3 9v6a3 3 0 0 0 3 3h7a3 3 0 0 0 2.5-1.3M16 10l5-3v10l-2.2-1.3M3 3l18 18"/></svg>
     </button>
     <button class="ctl" id="chatBtn" aria-label="Chat öffnen" aria-expanded="false">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-9l-5 4v-4H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z"/></svg>
       <span class="badge" id="badge"></span>
+    </button>
+    <button class="ctl" id="reactBtn" aria-label="Reaktion oder Hand heben" aria-expanded="false" aria-controls="reactPop" title="Reaktion oder Hand heben">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5a4.5 4.5 0 0 0 7 0"/><path d="M9 9.5h.01M15 9.5h.01" stroke-width="2.6"/></svg>
     </button>
     <button class="ctl" id="screenBtn" aria-label="Bildschirm teilen" aria-pressed="false" hidden>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2.5"/><path d="M8 20h8M12 16v4M12 12V8m0 0-2.5 2.5M12 8l2.5 2.5"/></svg>
@@ -578,18 +749,23 @@ body.fs #room .rbar{display:none}
       <svg class="i-enter" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V5a1 1 0 0 1 1-1h4M20 9V5a1 1 0 0 0-1-1h-4M4 15v4a1 1 0 0 0 1 1h4M20 15v4a1 1 0 0 1-1 1h-4"/></svg>
       <svg class="i-exit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4v4a1 1 0 0 1-1 1H4M15 4v4a1 1 0 0 0 1 1h4M9 20v-4a1 1 0 0 0-1-1H4M15 20v-4a1 1 0 0 1 1-1h4"/></svg>
     </button>
-    <button class="ctl" id="inviteBtn" aria-label="Link teilen">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>
-    </button>
     <button class="hang" id="hangBtn" aria-label="Auflegen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h3.5l2 5-2.5 1.5a11 11 0 0 0 5.5 5.5l1.5-2.5 5 2V19a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg><span>Auflegen</span></button>
   </nav>
+  <div class="reactpop" id="reactPop" role="group" aria-label="Reaktionen" hidden>
+    <button type="button" data-e="👍" aria-label="Daumen hoch">👍</button><button type="button" data-e="❤️" aria-label="Herz">❤️</button><button type="button" data-e="😂" aria-label="Lachen">😂</button><button type="button" data-e="😮" aria-label="Staunen">😮</button><button type="button" data-e="👏" aria-label="Applaus">👏</button><button type="button" data-e="🎉" aria-label="Feiern">🎉</button>
+    <span class="sep" aria-hidden="true"></span>
+    <button type="button" class="handb" id="handBtn" aria-pressed="false"><i aria-hidden="true">✋</i><span>Hand heben</span></button>
+  </div>
+  <div class="hint" id="hint" role="status" hidden><span id="hintTx"></span><button type="button" id="hintBtn">Mikro an</button></div>
 </main>
+<div class="notes" id="notes" aria-live="polite"></div>
 
 <dialog id="shareDlg" aria-labelledby="shareTitle">
   <h3 id="shareTitle">Jemanden dazuholen</h3>
   <p>Wer diesen Link öffnet, landet direkt hier.</p>
   <div class="dlg-qr"><div class="qr" id="dlgQr" aria-hidden="true"></div></div>
   <div class="linkbox"><code id="dlgLink"></code></div>
+  <label class="optrow" style="margin-top:14px"><input type="checkbox" id="lockChk"><span><b>Anruf abschließen</b><small>Wer den Link jetzt noch öffnet, muss anklopfen und wird von jemandem hier reingelassen.</small></span></label>
   <div class="dlg-actions"><button class="btn ghost" id="dlgClose">Schließen</button><button class="btn ghost" data-share hidden>Teilen</button><button class="btn" data-copy>Link kopieren</button></div>
 </dialog>
 
@@ -600,6 +776,12 @@ body.fs #room .rbar{display:none}
     <input class="dlg-input" id="nameDlgInput" maxlength="24" autocomplete="nickname" spellcheck="false" aria-label="Dein Name">
     <div class="dlg-actions"><button class="btn ghost" type="button" id="nameCancel">Abbrechen</button><button class="btn" type="submit">Speichern</button></div>
   </form>
+</dialog>
+
+<dialog id="avDlg" aria-labelledby="avTitle">
+  <h3 id="avTitle">Kamera &amp; Ton</h3>
+  <div id="avSlot"></div>
+  <div class="dlg-actions"><button class="btn" type="button" id="avClose">Fertig</button></div>
 </dialog>
 
 <dialog id="screenDlg" aria-labelledby="screenTitle">
@@ -626,6 +808,8 @@ body.fs #room .rbar{display:none}
     <video playsinline autoplay muted disablepictureinpicture></video>
     <span class="sharebadge"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2.5"/><path d="M8 20h8M12 16v4"/></svg>Bildschirm</span>
     <span class="state">verbindet…</span>
+    <span class="hand" aria-label="Hand gehoben">✋</span>
+    <button class="fxbtn" type="button" aria-label="Kamera, Ton und Hintergrund" title="Kamera, Ton &amp; Hintergrund"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8zM18.5 15.5l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg></button>
     <button class="label" type="button" tabindex="-1"><svg class="mic-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 9.5V6a3 3 0 0 0-5.8-1M9 9v2a3 3 0 0 0 4.6 2.5M5 11a7 7 0 0 0 11.3 5.5M12 18v3M3 3l18 18"/></svg><span class="nm"></span><svg class="pen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16v4zM13.5 6.5l4 4"/></svg></button>
   </div>
 </template>
@@ -662,6 +846,8 @@ const RELAYS = qs.get('relay') ? [qs.get('relay')] : DEFAULT_RELAYS
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
 const $ = s => document.querySelector(s)
 const $$ = s => [...document.querySelectorAll(s)]
+// Fest gemerkt, weil die Bühne für Bild-im-Bild in ein anderes Fenster wandern kann
+const STAGE = $('#stage'), STRIP = $('#strip')
 const TAU = Math.PI * 2
 
 /* =================== kleine Helfer =================== */
@@ -693,11 +879,15 @@ function toast(msg, ms = 2600) {
   $('#toasts').append(el)
   setTimeout(() => { el.classList.add('bye'); setTimeout(() => el.remove(), 400) }, ms)
 }
+let viewWanted = 'home'
 function show(view) {
-  if (document.body.dataset.view === view) return
-  const apply = () => { document.body.dataset.view = view; window.scrollTo(0, 0); requestAnimationFrame(syncSegs) }
-  if (document.startViewTransition && !reduced) document.startViewTransition(apply)
-  else apply()
+  if (viewWanted === view && document.body.dataset.view === view) return
+  viewWanted = view
+  const apply = () => { document.body.dataset.view = viewWanted; window.scrollTo(0, 0); requestAnimationFrame(syncSegs) }
+  if (document.startViewTransition && !reduced) {
+    const vt = document.startViewTransition(apply)
+    ;[vt.ready, vt.finished, vt.updateCallbackDone].forEach(pr => pr?.catch?.(() => {}))
+  } else apply()
 }
 const linkFor = slug => `${location.origin}${location.pathname}${location.search}#${slug}`
 function qrSvg(text) {
@@ -741,7 +931,8 @@ function note(f, at, dur, vol) {
 }
 const SOUNDS = {
   enter: {n: [[523.25, 0], [659.25, .09], [783.99, .18], [1046.5, .3]], d: 1.4, v: .075}, // C-E-G-C aufwärts
-  join:  {n: [[659.25, 0], [987.77, .11]], d: 1.1, v: .065},                             // E-H
+  join:  {n: [[587.33, 0], [880, .13], [1174.66, .26]], d: 1.6, v: .12},                // D-A-D aufwärts, gut hörbar
+  knock: {n: [[311.13, 0], [311.13, .16], [415.3, .5], [415.3, .66]], d: .32, v: .17},   // tok-tok … tok-tok
   leave: {n: [[783.99, 0], [587.33, .13]], d: 1.1, v: .06},                              // G-D
   end:   {n: [[783.99, 0], [659.25, .12], [523.25, .24], [392, .38]], d: 1.5, v: .07},   // G-E-C-G abwärts
   msg:   {n: [[1318.5, 0]], d: .45, v: .03}
@@ -764,18 +955,13 @@ function syncSegs() {
     pill.style.transform = `translateX(${checked.offsetLeft - 4}px)`
   })
 }
-function setMode(m) {
-  mode = m; store.set('mode', m)
-  $('#mAudio').checked = $('#jAudio').checked = m === 'audio'
-  $('#mVideo').checked = $('#jVideo').checked = m === 'video'
-  syncSegs()
-}
-$$('input[name=mode], input[name=mode2]').forEach(i => i.addEventListener('change', () => setMode(i.value)))
+function setMode(m) { mode = m; store.set('mode', m) }
 
 function setName(n) {
   n = cleanName(n); if (!n || n === myName) return
   myName = n; store.set('name', n)
-  $('#nameInput').value = $('#nameInput2').value = n
+  $('#nameInput2').value = n
+  $('#pvIni').textContent = n[0].toUpperCase()
   if (R) {
     R.self.name = n
     R.self.tile.querySelector('.nm').textContent = n + ' (du)'
@@ -784,30 +970,71 @@ function setName(n) {
     sysMsg(`Du heißt jetzt ${n}`)
   }
 }
-;['#nameInput', '#nameInput2'].forEach(s => {
-  const el = $(s); el.value = myName
+{
+  const el = $('#nameInput2'); el.value = myName
+  el.addEventListener('input', () => { $('#pvIni').textContent = (cleanName(el.value) || myName)[0].toUpperCase() })
   el.addEventListener('change', () => { setName(el.value); el.value = myName })
-  el.addEventListener('keydown', e => { if (e.key === 'Enter') el.blur() })
-})
+  el.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); $('#joinBtn').click() } })
+}
 
-let autoJoin = null
-$('#startCall').addEventListener('click', () => {
+// Freier Raumname: "Familie Müller" -> "familie-mueller"
+const slugify = s => String(s ?? '').toLowerCase()
+  .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss')
+  .normalize('NFKD').replace(/[̀-ͯ]/g, '')
+  .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 48).replace(/-+$/, '')
+let createdSlug = null
+function openCall(slug) {
   ensureAudioCtx()
-  const slug = newCallSlug()
-  autoJoin = slug
+  createdSlug = slug
   location.hash = slug
+}
+$('#startCall').addEventListener('click', () => {
+  const custom = slugify($('#roomInput').value)
+  if (!$('#roomForm').hidden && custom) { $('#roomForm').requestSubmit(); return }
+  openCall(newCallSlug())
+})
+$('#customBtn').addEventListener('click', () => {
+  $('#customBtn').hidden = true; $('#roomForm').hidden = false; $('#roomHint').hidden = false
+  $('#customBtn').setAttribute('aria-expanded', 'true')
+  $('#roomInput').focus()
+})
+$('#roomInput').addEventListener('input', () => {
+  const s = slugify($('#roomInput').value)
+  $('#roomHint').textContent = s && s !== $('#roomInput').value.trim() ? `Wird zu: anruf.org/#${s}` : 'Wer denselben Namen eingibt, landet im selben Raum.'
+})
+$('#roomForm').addEventListener('submit', e => {
+  e.preventDefault()
+  const s = slugify($('#roomInput').value)
+  if (!s) { openCall(newCallSlug()); return }
+  if (s.length < 3) { toast('Bitte mindestens 3 Zeichen.'); return }
+  openCall(s)
 })
 
-/* =================== Einladungs-Ansicht =================== */
+/* =================== Vorschau-Ansicht =================== */
 let joinTarget = null
 function showJoin(slug) {
   joinTarget = slug
+  const mine = createdSlug === slug
   $('#joinTitle').textContent = slug
+  $('#pjEyebrow').textContent = mine ? 'Dein Anruf ist bereit' : 'Einladung zum Anruf'
+  $('#pjText').textContent = mine
+    ? 'Schau kurz, ob Bild und Ton passen. Den Link zum Teilen bekommst du gleich im Anruf.'
+    : 'Jemand hat dir diesen Link geschickt. Schau kurz, ob Bild und Ton passen, dann tipp auf „Beitreten“.'
+  $('#joinBtn').lastChild.textContent = mine ? 'Anruf starten' : 'Beitreten'
+  $('#nameInput2').value = myName
+  $('#pvIni').textContent = myName[0].toUpperCase()
+  $('#pv').style.setProperty('--c', colorFor(selfId))
+  avPlace('pj')
   show('join')
-  document.title = 'Einladung · anruf.org'
+  document.title = (mine ? 'Bereit? · ' : 'Einladung · ') + 'anruf.org'
   ;[...$('#joinBox').children].forEach(c => { c.style.animation = 'none'; c.offsetWidth; c.style.animation = '' })
+  pjStart()
 }
-$('#joinBtn').addEventListener('click', () => { if (!joinTarget) return; ensureAudioCtx(); enterRoom(joinTarget) })
+$('#joinBtn').addEventListener('click', () => {
+  if (!joinTarget) return
+  setName($('#nameInput2').value); $('#nameInput2').value = myName
+  ensureAudioCtx(); enterRoom(joinTarget)
+})
 
 /* =================== Medien =================== */
 let iceCache = null
@@ -827,10 +1054,17 @@ async function getTurn() {
 }
 const AUDIO_C = {echoCancellation: true, noiseSuppression: true, autoGainControl: true}
 const VIDEO_C = {width: {ideal: 1280}, height: {ideal: 720}, frameRate: {ideal: 30, max: 30}, facingMode: 'user'}
+// Gewählte Geräte (leer = Standard des Browsers)
+const DEV = {mic: store.get('mic', ''), cam: store.get('cam', ''), spk: store.get('spk', '')}
+const audioC = () => DEV.mic ? {...AUDIO_C, deviceId: {ideal: DEV.mic}} : AUDIO_C
+const videoC = () => DEV.cam ? {...VIDEO_C, deviceId: {ideal: DEV.cam}} : VIDEO_C
 async function getMedia(video) {
   if (!navigator.mediaDevices?.getUserMedia) throw Object.assign(new Error('unsupported'), {name: 'Unsupported'})
   try {
-    return await navigator.mediaDevices.getUserMedia({audio: AUDIO_C, video: video ? VIDEO_C : false})
+    const s = await navigator.mediaDevices.getUserMedia({audio: audioC(), video: video ? videoC() : false})
+    const raw = s.getVideoTracks()[0]
+    if (raw) { const t = await withFx(raw); if (t !== raw) { s.removeTrack(raw); s.addTrack(t) } }
+    return s
   } catch (err) {
     if (video && err.name !== 'NotAllowedError') {
       toast('Kamera nicht verfügbar. Du bist nur mit Audio dabei.')
@@ -843,6 +1077,435 @@ async function getMedia(video) {
     throw err
   }
 }
+// Kamera öffnen (mit gewähltem Gerät und ggf. Hintergrund-Effekt)
+async function openCam() {
+  const raw = (await navigator.mediaDevices.getUserMedia({video: videoC()})).getVideoTracks()[0]
+  return withFx(raw)
+}
+async function withFx(raw) {
+  if (fxKind === 'none' || !FX.ok) return raw
+  fxBusy(true)
+  try { return await FX.wrap(raw) }
+  catch (e) { console.warn('anruf.org: Hintergrund-Effekt', e); toast('Der Hintergrund-Effekt konnte nicht gestartet werden.', 3500); return raw }
+  finally { fxBusy(false) }
+}
+// Video-Track beenden. Beim Effekt-Track auch die echte Kamera dahinter.
+function stopVideo(t) { if (!t) return; if (FX.out === t) FX.stop(); else t.stop() }
+function stopTracks(s) { s?.getTracks().forEach(t => t.kind === 'video' ? stopVideo(t) : t.stop()) }
+const liveVideo = s => s?.getVideoTracks().find(t => t.readyState === 'live') || null
+const curStream = () => R?.stream ?? PJ.stream
+// Video-Track im Stream tauschen, im Anruf ohne Neuverhandlung (replaceTrack)
+function swapVideo(s, oldT, newT) {
+  if (R && R.stream === s && oldT) { try { R.room.replaceTrack(oldT, newT)?.catch?.(() => {}) } catch {} }
+  if (oldT) s.removeTrack(oldT)
+  s.addTrack(newT)
+  if (R && R.stream === s) refreshVideo(R.self); else pjBind()
+}
+
+/* =================== Hintergrund: unscharf oder Bild =================== */
+// MediaPipe-Selfie-Segmentierung (lokal in vendor/mediapipe, wird erst beim ersten Einschalten geladen).
+// Kamera -> verstecktes <video> -> Maske (256 px breit) -> Canvas -> captureStream() -> gesendeter Track.
+const FX = {
+  ok: !!HTMLCanvasElement.prototype.captureStream && typeof WebAssembly === 'object',
+  kind: 'none', seg: null, loading: null, raw: null, out: null, running: false, custom: null,
+  load() {
+    return this.loading ??= (async () => {
+      const base = new URL('vendor/mediapipe/', location.href).href
+      const {FilesetResolver, ImageSegmenter} = await import('./vendor/mediapipe/vision_bundle.mjs')
+      const files = await FilesetResolver.forVisionTasks(base.replace(/\/$/, ''))
+      const opts = delegate => ({baseOptions: {modelAssetPath: base + 'selfie_segmenter.tflite', delegate},
+        runningMode: 'VIDEO', outputCategoryMask: false, outputConfidenceMasks: true})
+      try { this.seg = await ImageSegmenter.createFromOptions(files, opts('GPU')) }
+      catch { this.seg = await ImageSegmenter.createFromOptions(files, opts('CPU')) }
+    })().catch(e => { this.loading = null; throw e })
+  },
+  canvas(w, h) { const c = document.createElement('canvas'); c.width = w; c.height = h; return c },
+  async wrap(raw) {
+    await this.load()
+    if (this.out) this.stop()
+    this.raw = raw
+    if (!this.vid) {
+      // Safari spielt Videos außerhalb des DOM nicht zuverlässig ab, daher unsichtbar einhängen.
+      const v = this.vid = document.createElement('video')
+      v.muted = true; v.playsInline = true; v.autoplay = true; v.setAttribute('playsinline', '')
+      v.style.cssText = 'position:fixed;left:0;top:0;width:2px;height:2px;opacity:0;pointer-events:none'
+      document.body.append(v)
+    }
+    this.vid.srcObject = new MediaStream([raw])
+    await this.vid.play().catch(() => {})
+    const st = raw.getSettings()
+    this.cv ??= this.canvas(st.width || 1280, st.height || 720)
+    this.cx = this.cv.getContext('2d')
+    this.prev = null
+    this.out = this.cv.captureStream(30).getVideoTracks()[0]
+    this.running = true
+    this.tick()
+    return this.out
+  },
+  // Andere Kamera, gleicher Ausgangs-Track: Die Gegenseite merkt nichts.
+  swapRaw(raw) {
+    const old = this.raw; this.raw = raw
+    this.vid.srcObject = new MediaStream([raw]); this.vid.play().catch(() => {})
+    old?.stop()
+  },
+  unwrap() {
+    this.running = false; this.tick()
+    const res = {raw: this.raw, out: this.out}
+    this.raw = this.out = null
+    if (this.vid) this.vid.srcObject = null
+    return res
+  },
+  stop() { const {raw, out} = this.unwrap(); raw?.stop(); out?.stop() },
+  setKind(k) { this.kind = k; this.bg = null },
+  // Taktgeber im Worker: läuft auch weiter, wenn der Tab im Hintergrund ist (rAF würde pausieren).
+  tick() {
+    if (!this.worker && !this.running) return
+    if (!this.worker) {
+      this.worker = new Worker(URL.createObjectURL(new Blob(['let t;onmessage=e=>{clearInterval(t);if(e.data)t=setInterval(()=>postMessage(0),e.data)}'], {type: 'text/javascript'})))
+      this.worker.onmessage = () => this.render()
+    }
+    this.worker.postMessage(this.running ? 33 : 0)
+  },
+  render() {
+    const v = this.vid
+    if (!this.running || !v || v.readyState < 2 || !v.videoWidth) return
+    const W = v.videoWidth, H = v.videoHeight
+    if (this.cv.width !== W || this.cv.height !== H) { this.cv.width = W; this.cv.height = H; this.bg = null }
+    const sw = 256, sh = Math.max(16, Math.round(sw * H / W))
+    if (!this.sm || this.sm.height !== sh) {
+      this.sm = this.canvas(sw, sh); this.smx = this.sm.getContext('2d', {willReadFrequently: false})
+      this.prev = null
+    }
+    this.smx.drawImage(v, 0, 0, sw, sh)
+    try {
+      this.seg.segmentForVideo(this.sm, performance.now(), res => {
+        const m = res.confidenceMasks?.[0]; if (!m) return
+        const mw = m.width, mh = m.height, a = m.getAsFloat32Array()
+        if (!this.mk || this.mk.width !== mw || this.mk.height !== mh) {
+          this.mk = this.canvas(mw, mh); this.mkx = this.mk.getContext('2d')
+          this.mkd = this.mkx.createImageData(mw, mh); this.prev = null
+        }
+        if (!this.prev || this.prev.length !== a.length) this.prev = Float32Array.from(a)
+        const d = this.mkd.data, prev = this.prev
+        for (let i = 0; i < a.length; i++) {
+          const c = prev[i] = prev[i] * .35 + a[i] * .65          // leicht glätten gegen Flackern
+          const x = Math.min(1, Math.max(0, (c - .3) / .45))      // Kante etwas schärfen
+          d[i * 4 + 3] = x * x * (3 - 2 * x) * 255
+        }
+        this.mkx.putImageData(this.mkd, 0, 0)
+      })
+    } catch (e) { if (!this.warned) { this.warned = true; console.warn('anruf.org: Segmentierung', e) } }
+    const cx = this.cx
+    if (!this.mk) { cx.drawImage(v, 0, 0, W, H); return }
+    // 1) Hintergrund
+    if (this.kind === 'blur') {
+      const bw = Math.max(24, Math.round(W / 12)), bh = Math.max(14, Math.round(bw * H / W))
+      if (!this.bl || this.bl.width !== bw || this.bl.height !== bh) { this.bl = this.canvas(bw, bh); this.blx = this.bl.getContext('2d') }
+      this.blx.drawImage(v, 0, 0, bw, bh)
+      cx.imageSmoothingEnabled = true; cx.imageSmoothingQuality = 'high'
+      if ('filter' in cx) cx.filter = `blur(${Math.round(W / 220)}px)`
+      cx.drawImage(this.bl, -W * .03, -H * .03, W * 1.06, H * 1.06)
+      if ('filter' in cx) cx.filter = 'none'
+    } else {
+      if (!this.bg || this.bg.width !== W || this.bg.height !== H) this.bg = bgCanvas(this.kind, W, H)
+      cx.drawImage(this.bg, 0, 0)
+    }
+    // 2) Person: Maske hochskalieren (weiche Kante), Kamerabild hineinzeichnen
+    if (!this.pc || this.pc.width !== W || this.pc.height !== H) { this.pc = this.canvas(W, H); this.pcx = this.pc.getContext('2d') }
+    const px = this.pcx
+    px.globalCompositeOperation = 'copy'; px.imageSmoothingEnabled = true; px.imageSmoothingQuality = 'high'
+    px.drawImage(this.mk, 0, 0, W, H)
+    px.globalCompositeOperation = 'source-in'
+    px.drawImage(v, 0, 0, W, H)
+    cx.drawImage(this.pc, 0, 0)
+  }
+}
+
+// Mitgelieferte Hintergründe: werden gezeichnet statt geladen (keine Bilddateien, keine Fremdquellen).
+const BG_PRESETS = {
+  studio: {label: 'Studio', draw(c, w, h, s) {
+    c.fillStyle = '#EEECE6'; c.fillRect(0, 0, w, h)
+    const g = c.createRadialGradient(w * .78, h * .2, 0, w * .78, h * .2, w * .6)
+    g.addColorStop(0, 'rgba(255,79,26,.55)'); g.addColorStop(1, 'rgba(255,79,26,0)')
+    c.fillStyle = g; c.fillRect(0, 0, w, h)
+    c.fillStyle = 'rgba(20,20,18,.13)'
+    const step = Math.max(6, 22 * s)
+    for (let y = step / 2; y < h; y += step) for (let x = step / 2; x < w; x += step) { c.beginPath(); c.arc(x, y, Math.max(.6, 1.4 * s), 0, TAU); c.fill() }
+  }},
+  abend: {label: 'Abend', draw(c, w, h) {
+    const g = c.createLinearGradient(0, 0, 0, h)
+    g.addColorStop(0, '#1E1B33'); g.addColorStop(.55, '#5B2E4F'); g.addColorStop(1, '#F07A3A')
+    c.fillStyle = g; c.fillRect(0, 0, w, h)
+    const r = c.createRadialGradient(w * .3, h * .72, 0, w * .3, h * .72, w * .35)
+    r.addColorStop(0, 'rgba(255,200,120,.55)'); r.addColorStop(1, 'rgba(255,200,120,0)')
+    c.fillStyle = r; c.fillRect(0, 0, w, h)
+  }},
+  wald: {label: 'Wald', draw(c, w, h) {
+    const g = c.createLinearGradient(0, 0, w, h)
+    g.addColorStop(0, '#C9DDB0'); g.addColorStop(.5, '#6E9A6A'); g.addColorStop(1, '#23402F')
+    c.fillStyle = g; c.fillRect(0, 0, w, h)
+    for (let i = 0; i < 9; i++) {
+      const x = w * (i / 8), rr = w * (.12 + (i % 3) * .05)
+      const r = c.createRadialGradient(x, h * (.25 + (i % 2) * .3), 0, x, h * (.25 + (i % 2) * .3), rr)
+      r.addColorStop(0, 'rgba(255,255,220,.22)'); r.addColorStop(1, 'rgba(255,255,220,0)')
+      c.fillStyle = r; c.fillRect(0, 0, w, h)
+    }
+  }},
+  meer: {label: 'Meer', draw(c, w, h) {
+    const g = c.createLinearGradient(0, 0, 0, h)
+    g.addColorStop(0, '#E9F2F3'); g.addColorStop(.48, '#A8D3E0'); g.addColorStop(.5, '#5E9DB8'); g.addColorStop(1, '#1F4E6B')
+    c.fillStyle = g; c.fillRect(0, 0, w, h)
+    const r = c.createRadialGradient(w * .7, h * .42, 0, w * .7, h * .42, w * .3)
+    r.addColorStop(0, 'rgba(255,255,255,.7)'); r.addColorStop(1, 'rgba(255,255,255,0)')
+    c.fillStyle = r; c.fillRect(0, 0, w, h)
+  }}
+}
+function bgCanvas(kind, w, h) {
+  const cv = FX.canvas(w, h), c = cv.getContext('2d')
+  if (kind === 'custom' && FX.custom) {
+    const im = FX.custom, sc = Math.max(w / im.width, h / im.height)
+    c.drawImage(im, (w - im.width * sc) / 2, (h - im.height * sc) / 2, im.width * sc, im.height * sc)
+  } else (BG_PRESETS[kind] || BG_PRESETS.studio).draw(c, w, h, w / 1280)
+  return cv
+}
+
+let fxKind = store.get('fx', 'none')
+if (!FX.ok || !(fxKind in BG_PRESETS || ['none', 'blur', 'custom'].includes(fxKind))) fxKind = 'none'
+FX.setKind(fxKind)
+const FX_IC = {
+  none: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><path d="m6.5 6.5 11 11"/></svg>',
+  blur: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="9" r="3.2"/><path d="M6 19c.8-3 3.2-4.6 6-4.6s5.2 1.6 6 4.6"/><circle cx="4" cy="6" r=".9" fill="currentColor"/><circle cx="20" cy="6" r=".9" fill="currentColor"/><circle cx="3.5" cy="12" r=".9" fill="currentColor"/><circle cx="20.5" cy="12" r=".9" fill="currentColor"/><circle cx="6" cy="3" r=".7" fill="currentColor"/><circle cx="18" cy="3" r=".7" fill="currentColor"/></svg>',
+  add: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="14" rx="3"/><path d="m3.5 15 4.5-4 4 3.5 3-2.5 5.5 4.5"/><circle cx="15.5" cy="9.5" r="1.4"/></svg>'
+}
+function loadCustomBg() {
+  const url = store.get('fxbg', '')
+  if (!url) return Promise.resolve(null)
+  return new Promise(res => { const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null); im.src = url })
+}
+function renderFxRow() {
+  const row = $('#fxRow'); row.replaceChildren()
+  const opts = [['none', 'Kein Effekt'], ['blur', 'Hintergrund unscharf'], ...Object.entries(BG_PRESETS).map(([k, p]) => [k, 'Hintergrund: ' + p.label]), ['custom', FX.custom ? 'Eigenes Bild (nochmal tippen zum Ändern)' : 'Eigenes Bild wählen']]
+  for (const [k, label] of opts) {
+    const b = document.createElement('button')
+    b.type = 'button'; b.className = 'fxo'; b.setAttribute('role', 'radio'); b.dataset.fx = k
+    b.setAttribute('aria-checked', fxKind === k); b.setAttribute('aria-label', label); b.title = label
+    if (k === 'none' || k === 'blur') b.innerHTML = FX_IC[k]
+    else if (k === 'custom' && !FX.custom) b.innerHTML = FX_IC.add
+    else b.style.backgroundImage = `url(${bgThumb(k)})`
+    b.disabled = !!FX.busy
+    row.append(b)
+  }
+  const s = curStream()
+  $('#fxBox').classList.toggle('nocam', !liveVideo(s))
+}
+const thumbs = {}
+function bgThumb(k) {
+  if (k !== 'custom' && thumbs[k]) return thumbs[k]
+  const url = bgCanvas(k, 124, 88).toDataURL('image/jpeg', .8)
+  return k === 'custom' ? url : (thumbs[k] = url)
+}
+function fxBusy(on) {
+  FX.busy = on
+  $('#pvBusy').hidden = !on
+  $$('#fxRow .fxo').forEach(b => { b.disabled = on })
+}
+$('#fxRow').addEventListener('click', e => {
+  const b = e.target.closest('.fxo'); if (!b || FX.busy) return
+  const k = b.dataset.fx
+  if (k === 'custom' && (!FX.custom || fxKind === 'custom')) { $('#fxFile').click(); return }
+  applyFx(k)
+})
+$('#fxFile').addEventListener('change', async e => {
+  const f = e.target.files?.[0]; e.target.value = ''
+  if (!f || !/^image\//.test(f.type)) return
+  try {
+    const bmp = await createImageBitmap(f)
+    const sc = Math.min(1, 1280 / Math.max(bmp.width, bmp.height))
+    const cv = FX.canvas(Math.round(bmp.width * sc), Math.round(bmp.height * sc))
+    cv.getContext('2d').drawImage(bmp, 0, 0, cv.width, cv.height)
+    const url = cv.toDataURL('image/jpeg', .85)
+    store.set('fxbg', url)   // bleibt nur in diesem Browser
+    FX.custom = await loadCustomBg() || cv
+    if (!FX.custom.width) FX.custom = cv
+    applyFx('custom', true)
+  } catch { toast('Dieses Bild kann ich nicht verwenden.') }
+})
+async function applyFx(kind, force) {
+  if (!FX.ok) return
+  if (kind === fxKind && !force) return
+  fxKind = kind; store.set('fx', kind); FX.setKind(kind); renderFxRow()
+  const s = curStream(), cur = liveVideo(s)
+  if (!s || !cur) return
+  if (kind !== 'none' && FX.out !== cur) {
+    const out = await withFx(cur)
+    if (out === cur) { fxKind = 'none'; store.set('fx', 'none'); FX.setKind('none'); renderFxRow(); return }
+    if (curStream() !== s || !s.getTracks().includes(cur)) { FX.stop(); return }
+    swapVideo(s, cur, out)
+  } else if (kind === 'none' && FX.out === cur) {
+    const {raw, out} = FX.unwrap()
+    swapVideo(s, cur, raw); out.stop()
+  }
+}
+
+/* =================== Geräte =================== */
+const sinkOk = 'setSinkId' in HTMLMediaElement.prototype
+async function fillDevices() {
+  let list; try { list = await navigator.mediaDevices.enumerateDevices() } catch { return }
+  const s = curStream()
+  const active = {
+    audioinput: s?.getAudioTracks()[0]?.getSettings?.().deviceId,
+    videoinput: (FX.out && liveVideo(s) === FX.out ? FX.raw : liveVideo(s))?.getSettings?.().deviceId,
+    audiooutput: DEV.spk
+  }
+  const fill = (sel, kind, nm) => {
+    const items = list.filter(d => d.kind === kind && d.deviceId)
+    sel.replaceChildren(...items.map((d, i) => new Option(d.label || `${nm} ${i + 1}`, d.deviceId)))
+    const want = active[kind] || (kind === 'audioinput' ? DEV.mic : kind === 'videoinput' ? DEV.cam : DEV.spk)
+    if (items.some(d => d.deviceId === want)) sel.value = want
+    sel.closest('label').hidden = items.length === 0
+    return items.length
+  }
+  fill($('#selMic'), 'audioinput', 'Mikrofon')
+  fill($('#selCam'), 'videoinput', 'Kamera')
+  const spk = sinkOk ? fill($('#selSpk'), 'audiooutput', 'Lautsprecher') : 0
+  $('#spkRow').hidden = !spk
+}
+navigator.mediaDevices?.addEventListener?.('devicechange', () => { if (curStream()) fillDevices() })
+$('#selMic').addEventListener('change', async e => {
+  DEV.mic = e.target.value; store.set('mic', DEV.mic)
+  const s = curStream(); if (!s) return
+  let nt; try { nt = (await navigator.mediaDevices.getUserMedia({audio: audioC()})).getAudioTracks()[0] } catch { toast('Dieses Mikrofon lässt sich nicht öffnen.'); return }
+  if (curStream() !== s) { nt.stop(); return }
+  const old = s.getAudioTracks()[0]
+  if (old) { nt.enabled = old.enabled; if (R?.stream === s) { try { R.room.replaceTrack(old, nt)?.catch?.(() => {}) } catch {} } s.removeTrack(old); old.stop() }
+  else if (R?.stream === s && R.peers.size) { try { R.room.addTrack(nt, s) } catch {} }
+  s.addTrack(nt)
+  if (R?.stream === s) { R.self.analysedTrack = null; attachAnalyser(R.self, s); syncControls(); sendMeta() } else pjBind()
+})
+$('#selCam').addEventListener('change', async e => {
+  DEV.cam = e.target.value; store.set('cam', DEV.cam)
+  const s = curStream(), cur = liveVideo(s); if (!s || !cur) return
+  let raw; try { raw = (await navigator.mediaDevices.getUserMedia({video: videoC()})).getVideoTracks()[0] } catch { toast('Diese Kamera lässt sich nicht öffnen.'); return }
+  if (curStream() !== s || !s.getTracks().includes(cur)) { raw.stop(); return }
+  if (FX.out === cur) { FX.swapRaw(raw); return }
+  swapVideo(s, cur, raw); cur.stop()
+})
+function applySink() {
+  if (!sinkOk || !DEV.spk) return
+  const els = R ? [...R.peers.values()].flatMap(p => [p.audio, p.screen?.audio]).filter(Boolean) : []
+  els.forEach(a => a.setSinkId?.(DEV.spk).catch(() => {}))
+  try { actx?.setSinkId?.(DEV.spk)?.catch?.(() => {}) } catch {}
+}
+$('#selSpk').addEventListener('change', e => { DEV.spk = e.target.value; store.set('spk', DEV.spk); applySink(); ensureAudioCtx(); chime('join') })
+$('#spkTest').addEventListener('click', () => { ensureAudioCtx(); applySink(); chime('enter') })
+
+// Das Einstellungs-Panel wandert zwischen Vorschau-Seite und Dialog im Anruf hin und her.
+function avPlace(where) {
+  const host = where === 'dlg' ? $('#avSlot') : $('#avHome')
+  if ($('#av').parentElement !== host) host.append($('#av'))
+  $('#fxBox').hidden = !FX.ok
+  renderFxRow(); fillDevices()
+}
+function openAvDlg() {
+  avPlace('dlg'); $('#devBox').open = true
+  $('#avDlg').showModal()
+}
+$('#avClose').addEventListener('click', () => $('#avDlg').close())
+
+/* =================== Vorschau: Kamera & Mikro vor dem Beitreten =================== */
+const PJ = {stream: null, token: 0, an: null, buf: null, track: null, raf: 0}
+async function pjStart() {
+  const tok = ++PJ.token
+  if (PJ.stream) { pjBind(); return }
+  $('#pvMsg').textContent = mode === 'video' ? 'Kamera startet…' : 'Mikrofon startet…'
+  $('#pvRetry').hidden = true; $('#pv').classList.remove('err')
+  $('#joinBtn').disabled = true
+  let s
+  try { s = await getMedia(mode === 'video') }
+  catch (err) {
+    if (tok !== PJ.token) return
+    $('#joinBtn').disabled = false
+    $('#pvRetry').hidden = false; $('#pv').classList.add('err')
+    $('#pvMsg').textContent = err.name === 'NotAllowedError'
+      ? 'Kein Zugriff auf Mikrofon und Kamera. Bitte in der Adressleiste erlauben.'
+      : err.name === 'Unsupported' ? 'Dein Browser unterstützt keine Anrufe. Probier einen aktuellen Browser über https.'
+      : 'Mikrofon konnte nicht gestartet werden.'
+    pjBind(); return
+  }
+  $('#joinBtn').disabled = false
+  if (tok !== PJ.token || viewWanted !== 'join') { stopTracks(s); return }
+  PJ.stream = s
+  pjBind(); fillDevices()
+}
+function pjBind() {
+  const s = PJ.stream, vt = liveVideo(s), at = s?.getAudioTracks()[0]
+  const v = $('#pvVideo')
+  if (vt) { if (v.srcObject?.getVideoTracks()[0] !== vt) { v.srcObject = new MediaStream([vt]); v.play().catch(() => {}) } }
+  else v.srcObject = null
+  $('#pv').classList.toggle('cam', !!vt)
+  if (s && !vt) $('#pvMsg').textContent = 'Kamera ist aus'
+  const mb = $('#pvMic'), micOff = !at || !at.enabled
+  mb.classList.toggle('off', micOff); mb.setAttribute('aria-pressed', micOff)
+  mb.setAttribute('aria-label', micOff ? 'Mikrofon einschalten' : 'Mikrofon stummschalten')
+  const cb = $('#pvCam'); cb.classList.toggle('off', !vt); cb.setAttribute('aria-pressed', !vt)
+  cb.setAttribute('aria-label', vt ? 'Kamera ausschalten' : 'Kamera einschalten')
+  $('#pvMeter').classList.toggle('off', micOff)
+  // Pegel-Anzeige
+  if (at && PJ.track !== at) {
+    ensureAudioCtx()
+    try { PJ.src?.disconnect() } catch {}
+    try {
+      PJ.src = actx.createMediaStreamSource(new MediaStream([at]))
+      PJ.an = actx.createAnalyser(); PJ.an.fftSize = 512; PJ.buf = new Float32Array(512)
+      PJ.src.connect(PJ.an); PJ.track = at
+    } catch { PJ.an = null }
+  }
+  if (!PJ.raf && s) PJ.raf = requestAnimationFrame(pjMeter)
+  renderFxRow()
+}
+function pjMeter() {
+  PJ.raf = 0
+  if (viewWanted !== 'join' || !PJ.stream) return
+  const at = PJ.stream.getAudioTracks()[0]
+  let lv = 0
+  if (PJ.an && at?.enabled) lv = levelOf(PJ)
+  PJ.level = (PJ.level || 0) + (lv - (PJ.level || 0)) * (lv > (PJ.level || 0) ? .5 : .12)
+  $$('#pvMeter i').forEach((b, i) => b.classList.toggle('on', PJ.level > i * .18 + .04))
+  $('#pvIni').style.boxShadow = `0 0 0 ${Math.round(PJ.level * 22)}px color-mix(in oklab, var(--c, var(--accent)) 30%, transparent)`
+  PJ.raf = requestAnimationFrame(pjMeter)
+}
+function pjStop() {
+  PJ.token++
+  cancelAnimationFrame(PJ.raf); PJ.raf = 0
+  try { PJ.src?.disconnect() } catch {}
+  PJ.src = PJ.an = PJ.track = null
+  stopTracks(PJ.stream); PJ.stream = null
+  $('#pvVideo').srcObject = null; $('#pv').classList.remove('cam')
+}
+$('#pvRetry').addEventListener('click', () => { ensureAudioCtx(); pjStart() })
+$('#pv').addEventListener('pointerdown', () => ensureAudioCtx(), {passive: true})
+$('#pvMic').addEventListener('click', () => {
+  ensureAudioCtx()
+  const at = PJ.stream?.getAudioTracks()[0]
+  if (!at) { pjStop(); pjStart(); return }
+  at.enabled = !at.enabled; pjBind()
+})
+$('#pvCam').addEventListener('click', async () => {
+  ensureAudioCtx()
+  const s = PJ.stream
+  if (!s) { setMode('video'); pjStart(); return }
+  const cur = liveVideo(s)
+  if (cur) { s.removeTrack(cur); stopVideo(cur); setMode('audio'); pjBind(); return }
+  const cb = $('#pvCam'); cb.disabled = true
+  try {
+    const t = await openCam()
+    if (PJ.stream !== s) { stopVideo(t); return }
+    s.getVideoTracks().forEach(o => s.removeTrack(o))
+    s.addTrack(t); setMode('video'); pjBind(); fillDevices()
+  } catch { toast('Kamera konnte nicht gestartet werden.') }
+  finally { cb.disabled = false }
+})
+
 // iOS/Android: Video-Elemente müssen explizit stumm & inline sein, sonst blockiert Autoplay.
 function prepVideo(v, p) {
   v.muted = true; v.defaultMuted = true; v.playsInline = true; v.autoplay = true
@@ -866,18 +1529,19 @@ function makeTile(p, self) {
     const lb = t.querySelector('.label'); lb.tabIndex = 0
     lb.setAttribute('aria-label', 'Namen ändern')
     lb.addEventListener('click', openNameDlg)
+    t.querySelector('.fxbtn').addEventListener('click', openAvDlg)
   }
   t.querySelector('.initial').textContent = (p.name || '?')[0].toUpperCase()
   t.querySelector('.nm').textContent = self ? p.name + ' (du)' : p.name
   p.body = t.querySelector('.body'); p.halo = t.querySelector('.halo'); p.video = t.querySelector('video')
   prepVideo(p.video, p)
   p.seed = (hash(p.id) % 1000) / 100
-  $('#strip').append(t)
+  STRIP.append(t)
   return t
 }
 function layout() {
   if (!R) return
-  const stage = $('#stage'), n = R.peers.size + 1
+  const stage = STAGE, n = R.peers.size + 1
   const w = stage.clientWidth || innerWidth
   const wide = w >= 700
   const cols = n === 1 ? 1 : wide ? (n <= 4 ? 2 : 3) : (n <= 2 ? 1 : 2)
@@ -899,7 +1563,10 @@ function attachAnalyser(p, stream) {
   if (p.analysedTrack === at) return
   try {
     p.src?.disconnect()
-    p.src = actx.createMediaStreamSource(new MediaStream([at]))
+    // Eigenes Mikro über eine Kopie messen, die nie stumm ist: So merken wir, wenn jemand stumm redet.
+    let src = at
+    if (p === R?.self) { p.mon?.stop(); p.mon = at.clone(); p.mon.enabled = true; src = p.mon }
+    p.src = actx.createMediaStreamSource(new MediaStream([src]))
     p.an = actx.createAnalyser(); p.an.fftSize = 512; p.an.smoothingTimeConstant = .5
     p.buf = new Float32Array(p.an.fftSize)
     p.src.connect(p.an); p.analysedTrack = at
@@ -913,7 +1580,8 @@ function refreshVideo(p) {
   const want = !!vt && p.cam !== false
   if (vt && p.videoTrack !== vt) {
     p.videoTrack = vt; p.vTries = 0
-    p.video.srcObject = s
+    // Eigenes Bild: eigener Stream pro Track, damit ein Wechsel (z. B. Effekt an/aus) sicher neu rendert
+    p.video.srcObject = p === R?.self ? new MediaStream([vt]) : s
     vt.addEventListener('unmute', () => { playSafe(p.video); refreshVideo(p) })
     vt.addEventListener('mute', () => refreshVideo(p))
     vt.addEventListener('ended', () => refreshVideo(p))
@@ -959,6 +1627,7 @@ function attachStream(p, stream) {
   if (!p.audio) { p.audio = new Audio(); p.audio.autoplay = true; p.audio.setAttribute('playsinline', '') }
   if (stream.getAudioTracks().length && p.audio.srcObject !== stream) {
     p.audio.srcObject = stream
+    if (sinkOk && DEV.spk) p.audio.setSinkId(DEV.spk).catch(() => {})
     playSafe(p.audio)
   }
   attachAnalyser(p, stream)
@@ -971,7 +1640,7 @@ $('#room').addEventListener('pointerdown', resumeMedia, {passive: true})
 
 function myMeta() {
   const a = R.stream.getAudioTracks()[0]
-  return {n: myName, cam: R.cam, mic: !!a && a.enabled, nomic: !a}
+  return {n: myName, cam: R.cam, mic: !!a && a.enabled, nomic: !a, h: !!R.hand}
 }
 function sendMeta(target) {
   if (!R?.meta) return
@@ -980,14 +1649,21 @@ function sendMeta(target) {
 
 async function enterRoom(slug) {
   const btn = $('#joinBtn'); btn.disabled = true
-  let stream
-  try { stream = await getMedia(mode === 'video') }
+  let stream = PJ.stream
+  if (stream) {   // Stream aus der Vorschau übernehmen (inkl. Stummschaltung und Effekt)
+    PJ.stream = null; PJ.token++
+    cancelAnimationFrame(PJ.raf); PJ.raf = 0
+    try { PJ.src?.disconnect() } catch {}
+    PJ.src = PJ.an = PJ.track = null
+    $('#pvVideo').srcObject = null
+  }
+  if (!stream) try { stream = await getMedia(mode === 'video') }
   catch (err) {
     btn.disabled = false
     if (err.name === 'NotAllowedError') toast('Mikrofon-Zugriff wurde blockiert. Bitte in den Browser-Einstellungen erlauben.', 5000)
     else if (err.name === 'Unsupported') toast('Dein Browser unterstützt keine Anrufe. Probier einen aktuellen Browser über https.', 5000)
     else toast('Mikrofon konnte nicht gestartet werden.', 4000)
-    if (document.body.dataset.view !== 'join') showJoin(slug)
+    if (viewWanted !== 'join') showJoin(slug)
     return
   }
   btn.disabled = false
@@ -1003,12 +1679,14 @@ async function enterRoom(slug) {
   })
   R = {slug, room, stream, peers: new Map(), joinedAt: Date.now(), startedAt: 0, cam: stream.getVideoTracks().length > 0, unread: 0}
   R.self = {id: selfId, name: myName, color: colorFor(selfId), level: 0}
+  R.known = new Set(); R.blocked = new Map(); R.locked = false; R.hand = false
   R.net = {peers: new Map(), t: performance.now(), sent: 0, recv: 0, up: 0, down: 0, hUp: [], hDown: [], relayAsked: false}
   setInfo(false); pinnedInfo = false; paintInfoDot()
-  $('#stage').querySelectorAll('.tile').forEach(t => t.remove())
+  STAGE.querySelectorAll('.tile').forEach(t => t.remove())
   $('#msgs').replaceChildren()
   sysMsg('Nachrichten gehen direkt an alle im Anruf und werden nirgends gespeichert.')
   setChat(false); setBadge(0)
+  createdSlug = null
   R.self.tile = makeTile(R.self, true)
   R.self.stream = stream
   refreshVideo(R.self)
@@ -1024,6 +1702,8 @@ async function enterRoom(slug) {
   R.meta = room.makeAction('meta')
   R.meta.onMessage = (d, {peerId}) => {
     if (!R || R.room !== room || !d || typeof d !== 'object') return
+    const bl = R.blocked.get(peerId)
+    if (bl) { bl.meta = d; knockCard(peerId); return }
     const p = peerOf(peerId)
     p.tile.classList.remove('connecting')
     const n = cleanName(d.n) || 'Gast'
@@ -1036,23 +1716,35 @@ async function enterRoom(slug) {
       else { toast(`${old} heißt jetzt ${n}`); sysMsg(`${old} heißt jetzt ${n}`) }
     }
     p.cam = !!d.cam; p.tile.classList.toggle('muted', !d.mic)
+    const hadHand = !!p.hand; p.hand = !!d.h
+    p.tile.classList.toggle('hand-up', p.hand)
+    if (p.hand && !hadHand) { toast(`${p.name} hebt die Hand ✋`, 3500); sysMsg(`${p.name} hebt die Hand`); chime('msg') }
     refreshVideo(p)
   }
+  R.react = room.makeAction('react')
+  R.react.onMessage = (d, {peerId}) => {
+    if (!R || R.room !== room || R.blocked.has(peerId) || !d || !REACTS.includes(d.e)) return
+    const p = peerOf(peerId), now = Date.now()
+    if (now - (p.lastReact || 0) < 250) return
+    p.lastReact = now; flyEmoji(p, d.e)
+  }
+  R.lockA = room.makeAction('lock')
+  R.lockA.onMessage = (d, {peerId}) => onLockMsg(d, peerId)
   R.scr = room.makeAction('screen')
   R.scr.onMessage = (d, {peerId}) => {
-    if (!R || R.room !== room || !d || typeof d !== 'object') return
+    if (!R || R.room !== room || !d || typeof d !== 'object' || R.blocked.has(peerId)) return
     const p = peerOf(peerId)
     if (d.on && typeof d.sid === 'string') { p.screenSid = d.sid; p.screenAud = !!d.aud; const s = p.pendingScreen; if (s && s.id === d.sid) addScreen(p, s) }
     else if (!d.on) { removeScreen(p, true); p.screenSid = null }
   }
   R.file = room.makeAction('file')
   R.file.onReceiveProgress = (pr, {peerId, metadata}) => {
-    if (!R || R.room !== room) return
+    if (!R || R.room !== room || R.blocked.has(peerId)) return
     const m = fileMeta(metadata); if (!m) return
     fileBubble(peerOf(peerId), m, false).progress(pr)
   }
   R.file.onMessage = (data, {peerId, metadata}) => {
-    if (!R || R.room !== room) return
+    if (!R || R.room !== room || R.blocked.has(peerId)) return
     const m = fileMeta(metadata); if (!m || !data) return
     const bytes = data instanceof Blob ? data : new Blob([data])
     if (bytes.size > MAX_FILE) return
@@ -1067,24 +1759,20 @@ async function enterRoom(slug) {
   }
   R.chat = room.makeAction('chat')
   R.chat.onMessage = (d, {peerId}) => {
-    if (!R || R.room !== room || !d || typeof d.t !== 'string') return
+    if (!R || R.room !== room || !d || typeof d.t !== 'string' || R.blocked.has(peerId)) return
     const text = d.t.slice(0, 1000).trim(); if (!text) return
     const p = peerOf(peerId)
     addMsg(p, text, false)
   }
   room.onPeerJoin = id => {
     if (!R || R.room !== room) return
-    const fresh = Date.now() - R.joinedAt < 8000
-    peerOf(id)
-    if (fresh && R.peers.size >= LIMIT) { toast('Dieser Anruf ist voll.', 4000); leaveRoom(true); return }
-    if (stream.getTracks().length) room.addStream(stream, {target: id})
-    if (R.screen) shareTo(id)
-    sendMeta(id)
-    if (!R.startedAt) R.startedAt = Date.now()
-    chime('join'); layout()
+    // Abgeschlossen: Neue müssen anklopfen, bis jemand sie reinlässt
+    if (R.locked && !R.known.has(id)) { blockPeer(id); return }
+    joinPeer(id)
   }
   room.onPeerLeave = id => {
     if (!R || R.room !== room) return
+    if (R.blocked.has(id)) { R.blocked.delete(id); knockCard(id, true); return }
     const p = R.peers.get(id); if (!p) return
     R.peers.delete(id)
     if (p.audio) p.audio.srcObject = null
@@ -1101,11 +1789,13 @@ async function enterRoom(slug) {
   }
   room.onPeerStream = (s, id, meta) => {
     if (R?.room !== room) return
+    const bl = R.blocked.get(id); if (bl) { bl.streams.push([s, meta]); return }
     const p = peerOf(id)
     if (meta?.screen || p.screenSid === s.id) { p.screenSid = s.id; addScreen(p, s) } else attachStream(p, s)
   }
   room.onPeerTrack = (t, s, id) => {
     if (R?.room !== room) return
+    const bl = R.blocked.get(id); if (bl) { if (!bl.streams.some(([x]) => x === s)) bl.streams.push([s, null]); return }
     const p = peerOf(id)
     if (p.screenSid === s.id || p.screen?.stream === s) { p.pendingScreen = s; if (p.screenSid === s.id) addScreen(p, s) }
     else attachStream(p, s)
@@ -1113,6 +1803,7 @@ async function enterRoom(slug) {
 
   R.timer = setInterval(layout, 1000)
   R.netTimer = setInterval(netTick, 1000)
+  try { navigator.mediaSession?.setActionHandler?.('enterpictureinpicture', () => openPip()) } catch {}
   try { R.wake = await navigator.wakeLock?.request('screen') } catch {}
   requestAnimationFrame(frame)
 }
@@ -1132,13 +1823,18 @@ function leaveRoom(goHome = true) {
   const r = R; R = null
   chime('end')
   try { r.room.leave() } catch {}
-  r.stream.getTracks().forEach(t => t.stop())
+  stopTracks(r.stream); FX.stop()
   r.screen?.stream.getTracks().forEach(t => { t.onended = null; t.stop() })
   r.peers.forEach(p => { if (p.audio) p.audio.srcObject = null; if (p.video) p.video.srcObject = null; if (p.screen?.audio) p.screen.audio.srcObject = null; try { p.src?.disconnect() } catch {} })
   r.urls?.forEach(u => URL.revokeObjectURL(u))
   $('#shareBar').hidden = true
   setFs(false)
   try { r.self.src?.disconnect() } catch {}
+  r.self.mon?.stop()
+  try { navigator.mediaSession?.setActionHandler?.('enterpictureinpicture', null) } catch {}
+  pipWin?.close()
+  $('#knockWait').hidden = true; $('#lockIco').hidden = true; $('#lockChk').checked = false
+  $('#notes').replaceChildren(); hideHint(); setReact(false)
   clearInterval(r.timer); clearInterval(r.netTimer)
   setInfo(false)
   r.wake?.release?.().catch?.(() => {})
@@ -1159,6 +1855,7 @@ function syncControls() {
   const cb = $('#camBtn'); cb.classList.toggle('off', !R.cam); cb.setAttribute('aria-pressed', !R.cam)
   cb.setAttribute('aria-label', R.cam ? 'Kamera ausschalten' : 'Kamera einschalten')
   R.self.tile.classList.toggle('muted', micOff)
+  pipBar?.querySelectorAll('[data-for]').forEach(b => { b.className = $('#' + b.dataset.for).className })
 }
 $('#micBtn').addEventListener('click', () => {
   if (!R) return
@@ -1169,12 +1866,13 @@ $('#camBtn').addEventListener('click', async () => {
   if (!R) return
   const cur = R.stream.getVideoTracks()[0]
   if (R.cam) {
-    cur?.stop(); R.cam = false
+    stopVideo(cur); R.cam = false
   } else {
     let track
-    try { track = (await navigator.mediaDevices.getUserMedia({video: VIDEO_C})).getVideoTracks()[0] }
+    R.autoCamOff = false
+    try { track = await openCam() }
     catch { toast('Kamera konnte nicht gestartet werden.'); return }
-    if (!R) { track.stop(); return }
+    if (!R) { stopVideo(track); return }
     if (cur) {
       R.room.replaceTrack(cur, track)
       R.stream.removeTrack(cur); R.stream.addTrack(track)
@@ -1471,7 +2169,7 @@ function addScreen(p, s) {
   v.setAttribute('playsinline', ''); v.setAttribute('webkit-playsinline', '')
   v.srcObject = new MediaStream(s.getVideoTracks())
   t.addEventListener('dblclick', () => setFs(!isFs()))
-  $('#stage').prepend(t)
+  STAGE.prepend(t)
   p.screen = {stream: s, tile: t, audio: null}
   playSafe(v)
   if (s.getAudioTracks().length) startScreenAudio(p)
@@ -1560,6 +2258,257 @@ addEventListener('keydown', e => {
   if ((e.key === 'f' || e.key === 'F') && tag !== 'INPUT' && tag !== 'TEXTAREA' && !$('dialog[open]')) { e.preventDefault(); setFs(!isFs()) }
 })
 
+/* ---- Tastenkürzel: Leertaste halten = sprechen, M = Mikro, V = Kamera, P = Bild-im-Bild ---- */
+const typing = e => { const t = e.target; return !!t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)) }
+addEventListener('keydown', e => {
+  if (!R || e.ctrlKey || e.metaKey || e.altKey || typing(e) || $('dialog[open]') || !$('#knockWait').hidden) return
+  if (e.code === 'Space') {
+    const a = R.stream.getAudioTracks()[0]
+    if (!a || (a.enabled && !R.ptt)) return
+    e.preventDefault()
+    if (e.repeat || R.ptt) return
+    a.enabled = true; R.ptt = true; syncControls(); sendMeta()
+    showHint('Du sprichst. Loslassen schaltet wieder stumm.', null, 0)
+    return
+  }
+  if (e.repeat) return
+  const k = e.key.toLowerCase()
+  if (k === 'm') { e.preventDefault(); $('#micBtn').click() }
+  else if (k === 'v') { e.preventDefault(); $('#camBtn').click() }
+  else if (k === 'p' && pipOk) { e.preventDefault(); pipWin ? pipWin.close() : openPip() }
+})
+function pttRelease(e) {
+  if (!R?.ptt) return
+  e?.preventDefault?.()
+  R.ptt = false
+  const a = R.stream.getAudioTracks()[0]; if (a) a.enabled = false
+  syncControls(); sendMeta(); hideHint()
+}
+addEventListener('keyup', e => { if (e.code === 'Space') pttRelease(e) })
+addEventListener('blur', () => pttRelease())
+// Wer per Klick das Mikro umschaltet, beendet damit auch "Leertaste halten"
+$('#micBtn').addEventListener('click', () => { if (R) R.ptt = false; hideHint() }, true)
+
+/* ---- Hinweise ---- */
+let hintT = 0
+function showHint(text, btn, ms = 5000) {
+  $('#hintTx').textContent = text
+  $('#hintBtn').hidden = !btn
+  if (btn) { $('#hintBtn').textContent = btn.label; $('#hintBtn').onclick = () => { hideHint(); btn.fn() } }
+  const h = $('#hint'); h.hidden = false; h.style.animation = 'none'; h.offsetWidth; h.style.animation = ''
+  clearTimeout(hintT); if (ms) hintT = setTimeout(hideHint, ms)
+}
+function hideHint() { clearTimeout(hintT); $('#hint').hidden = true }
+const finePointer = matchMedia('(pointer: fine)').matches
+function mutedTalk(lv) {
+  if (R.ptt) return
+  R.mt = lv > .2 ? (R.mt || 0) + 1 : Math.max(0, (R.mt || 0) - .5)
+  if (R.mt < 30) return
+  R.mt = 0
+  const now = Date.now(); if (now - (R.mtAt || 0) < 15000) return
+  R.mtAt = now
+  showHint(finePointer ? 'Du bist stumm. Leertaste halten zum Sprechen.' : 'Du bist stummgeschaltet.', {label: 'Mikro an', fn: () => { const a = R?.stream.getAudioTracks()[0]; if (a && !a.enabled) $('#micBtn').click() }}, 6000)
+}
+// Karten oben rechts (mobil über dem Dock): Text + Knöpfe
+function card(text, actions = [], ms = 0) {
+  const el = document.createElement('div'); el.className = 'note'
+  const p = document.createElement('p'); p.textContent = text
+  const acts = document.createElement('div'); acts.className = 'acts'
+  let t = 0
+  const close = () => { clearTimeout(t); if (!el.isConnected) return; el.classList.add('bye'); setTimeout(() => el.remove(), 300) }
+  for (const [label, fn, cls] of actions) {
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'btn ' + (cls || 'ghost'); b.textContent = label
+    b.addEventListener('click', () => { close(); fn?.() }); acts.append(b)
+  }
+  el.append(p, acts); $('#notes').append(el)
+  if (ms) t = setTimeout(close, ms)
+  return {el, close, set: tx => { p.textContent = tx }}
+}
+
+/* ---- Reaktionen & Hand heben ---- */
+const REACTS = ['👍', '❤️', '😂', '😮', '👏', '🎉']
+function flyEmoji(p, e) {
+  const el = document.createElement('span'); el.className = 'fly'; el.textContent = e
+  el.style.setProperty('--x', (25 + Math.random() * 50) + '%')
+  el.style.setProperty('--r', (Math.random() * 30 - 15) + 'deg')
+  p.tile.append(el); setTimeout(() => el.remove(), 2900)
+}
+function setReact(open) {
+  $('#reactPop').hidden = !open
+  $('#reactBtn').setAttribute('aria-expanded', open)
+  $('#reactBtn').classList.toggle('on', open || !!R?.hand)
+}
+$('#reactBtn').addEventListener('click', () => setReact($('#reactPop').hidden))
+document.addEventListener('pointerdown', e => { if (!$('#reactPop').hidden && !e.target.closest('#reactPop, #reactBtn')) setReact(false) })
+addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#reactPop').hidden) setReact(false) })
+let lastReact = 0
+$('#reactPop').addEventListener('click', e => {
+  const b = e.target.closest('button[data-e]'); if (!b || !R) return
+  const now = Date.now(); if (now - lastReact < 300) return
+  lastReact = now
+  flyEmoji(R.self, b.dataset.e)
+  try { R.react.send({e: b.dataset.e})?.catch?.(() => {}) } catch {}
+})
+function setHand(on) {
+  if (!R) return
+  R.hand = on
+  R.self.tile.classList.toggle('hand-up', on)
+  $('#handBtn').setAttribute('aria-pressed', on)
+  $('#handBtn span').textContent = on ? 'Hand senken' : 'Hand heben'
+  setReact(false); sendMeta()
+}
+$('#handBtn').addEventListener('click', () => setHand(!R?.hand))
+
+/* ---- Anruf abschließen & Anklopfen ---- */
+// Ohne Server: Alle im Anruf halten sich an die Sperre. Neue bekommen dann weder Bild noch Ton,
+// sondern die Nachricht "abgeschlossen" und warten, bis jemand sie reinlässt.
+function sendLock(d, target) { try { R.lockA.send(d, target ? {target} : undefined)?.catch?.(() => {}) } catch {} }
+function joinPeer(id) {
+  const fresh = Date.now() - R.joinedAt < 8000
+  R.known.add(id)
+  peerOf(id)
+  if (fresh && R.peers.size >= LIMIT) { toast('Dieser Anruf ist voll.', 4000); leaveRoom(true); return }
+  if (R.stream.getTracks().length) R.room.addStream(R.stream, {target: id})
+  if (R.screen) shareTo(id)
+  sendMeta(id)
+  if (!R.startedAt) R.startedAt = Date.now()
+  chime('join'); layout()
+}
+function blockPeer(id) {
+  if (R.blocked.has(id)) return
+  R.blocked.set(id, {meta: null, streams: [], card: null})
+  sendLock({locked: true}, id)
+  knockCard(id)
+  chime('knock')
+}
+function knockCard(id, gone) {
+  const bl = R?.blocked.get(id)
+  const kc = (bl || {}).card || knockCards.get(id)
+  if (gone || !bl) { kc?.close(); knockCards.delete(id); return }
+  const nm = cleanName(bl.meta?.n)
+  const tx = `${nm || 'Jemand'} klopft an und möchte in den Anruf.`
+  if (kc) { kc.set(tx); return }
+  bl.card = card(tx, [['Ablehnen', () => denyPeer(id)], ['Reinlassen', () => admitPeer(id), 'accent']])
+  knockCards.set(id, bl.card)
+}
+const knockCards = new Map()
+function acceptPeer(id) {
+  const bl = R.blocked.get(id); if (!bl) return
+  R.blocked.delete(id); knockCard(id, true)
+  joinPeer(id)
+  if (!R) return
+  if (bl.meta) R.meta.onMessage(bl.meta, {peerId: id})
+  bl.streams.forEach(([s, m]) => R.room.onPeerStream(s, id, m))
+}
+function admitPeer(id) {
+  if (!R?.blocked.has(id)) return
+  sendLock({admit: id, lock: R.locked})
+  acceptPeer(id)
+}
+function denyPeer(id) {
+  if (!R?.blocked.has(id)) return
+  sendLock({deny: id})
+  knockCard(id, true)
+}
+function setLock(on, by) {
+  if (!R) return
+  const was = R.locked; R.locked = on
+  $('#lockIco').hidden = !on; $('#lockChk').checked = on
+  if (was === on) return
+  const who = by ? by : 'Du'
+  const tx = on ? `${who} ${by ? 'hat' : 'hast'} den Anruf abgeschlossen. Neue müssen anklopfen.` : `${who} ${by ? 'hat' : 'hast'} den Anruf wieder geöffnet.`
+  sysMsg(tx); if (by) toast(tx, 3500)
+  if (!on) [...R.blocked.keys()].forEach(acceptPeer)   // wer gerade klopft, darf rein
+}
+$('#lockChk').addEventListener('change', e => {
+  if (!R) return
+  const on = e.target.checked
+  if (!on) [...R.blocked.keys()].forEach(id => sendLock({admit: id, lock: false}))
+  setLock(on); sendLock({lock: on})
+  toast(on ? 'Abgeschlossen. Neue müssen anklopfen.' : 'Der Anruf ist wieder offen.')
+})
+$('#lockIco').addEventListener('click', () => $('#inviteBtn').click())
+function onLockMsg(d, peerId) {
+  if (!R || !d || typeof d !== 'object' || R.blocked.has(peerId)) return
+  // Wir selbst klopfen an
+  if (d.locked === true && !R.knocking && !R.admitted) {
+    R.knocking = true; $('#knockWait').hidden = false
+    sysMsg('Der Anruf ist abgeschlossen. Du hast angeklopft.'); chime('knock')
+    return
+  }
+  if (typeof d.admit === 'string') {
+    if (d.admit === selfId) {
+      if (R.knocking) { R.knocking = false; R.admitted = true; $('#knockWait').hidden = true; toast('Du bist drin.'); chime('enter') }
+      if (d.lock) setLock(true)
+    } else if (R.blocked.has(d.admit)) acceptPeer(d.admit)
+    return
+  }
+  if (typeof d.deny === 'string') {
+    if (d.deny === selfId && R.knocking) { leaveRoom(true); toast('Du wurdest leider nicht reingelassen.', 4500) }
+    else knockCard(d.deny, true)
+    return
+  }
+  if (typeof d.lock === 'boolean' && !R.knocking) setLock(d.lock, R.peers.get(peerId)?.name || 'Jemand')
+}
+$('#knockCancel').addEventListener('click', () => leaveRoom(true))
+
+/* ---- Schwache Verbindung: Kamera aus anbieten (und später wieder an) ---- */
+function weakCheck() {
+  const {conn} = netSummary()
+  if (!conn.length) { R.weak = R.good = 0; return }
+  const q = qualityOf(conn)
+  if (q === 'Schlecht') { R.weak = (R.weak || 0) + 1; R.good = 0 }
+  else { R.weak = 0; R.good = q === 'Wackelig' ? 0 : (R.good || 0) + 1 }
+  const now = Date.now()
+  if (R.cam && R.weak >= 8 && now - (R.weakAt || 0) > 300000) {
+    R.weakAt = now
+    card('Die Verbindung ist gerade schwach. Kamera ausschalten, damit der Ton stabil bleibt?',
+      [['Nein', null], ['Kamera aus', () => { if (R?.cam) { $('#camBtn').click(); R.autoCamOff = true } }, 'accent']], 25000)
+  }
+  if (R.autoCamOff && !R.cam && R.good >= 30) {
+    R.autoCamOff = false
+    card('Die Verbindung ist wieder gut. Kamera wieder einschalten?',
+      [['Nein', null], ['Kamera an', () => { if (R && !R.cam) $('#camBtn').click() }, 'accent']], 25000)
+  }
+}
+
+/* ---- Bild-im-Bild: Anruf schwebt weiter, wenn man den Tab wechselt (Chrome/Edge) ---- */
+const pipOk = 'documentPictureInPicture' in window
+let pipWin = null, pipBar = null, pipHome = null
+async function openPip() {
+  if (!pipOk || pipWin || !R || !R.peers.size) return
+  let w
+  try { w = await documentPictureInPicture.requestWindow({width: 440, height: 320}) } catch { return }
+  if (!R) { w.close(); return }
+  pipWin = w
+  const d = w.document
+  document.querySelectorAll('style').forEach(st => d.head.append(st.cloneNode(true)))
+  d.title = 'anruf.org'; d.documentElement.lang = 'de'
+  d.body.className = 'pip'
+  pipHome = {parent: STAGE.parentElement, next: STAGE.nextSibling}
+  d.body.append(STAGE)
+  pipBar = d.createElement('div'); pipBar.className = 'pipbar'
+  for (const id of ['micBtn', 'camBtn', 'hangBtn']) {
+    const b = $('#' + id).cloneNode(true); b.removeAttribute('id'); b.dataset.for = id
+    b.addEventListener('click', () => $('#' + id).click())
+    pipBar.append(b)
+  }
+  d.body.append(pipBar)
+  w.addEventListener('resize', layout)
+  w.addEventListener('pagehide', closePipDom)
+  w.addEventListener('keydown', e => { if (e.key.toLowerCase() === 'm') $('#micBtn').click() })
+  replayVideos(); syncControls(); layout()
+}
+function closePipDom() {
+  if (!pipHome) return
+  pipHome.parent.insertBefore(STAGE, pipHome.next)
+  pipHome = null; pipWin = null; pipBar = null
+  replayVideos(); layout()
+  if (R) requestAnimationFrame(frame)
+}
+function replayVideos() { STAGE.querySelectorAll('video').forEach(v => { if (v.srcObject && v.paused) v.play().catch(() => {}) }) }
+document.addEventListener('visibilitychange', () => { if (!document.hidden) pipWin?.close() })
+
 /* ---- Verbindungs-Monitor: TURN nur als Fallback + Statistik ---- */
 // Ablauf: Jede Verbindung startet nur mit STUN (direkter Weg). Hängt ICE länger als TURN_AFTER_MS
 // im Verbindungsaufbau, werden die TURN-Server nachträglich eingetragen und ICE neu gestartet.
@@ -1640,6 +2589,7 @@ async function netTick() {
     net.hUp.push(up); net.hDown.push(down)
     if (net.hUp.length > HIST) { net.hUp.shift(); net.hDown.shift() }
     paintInfoDot()
+    weakCheck()
     if (!$('#infoBox').hidden) renderInfo()
   } finally { r.netBusy = false }
 }
@@ -1761,6 +2711,7 @@ $('#inviteBtn').addEventListener('click', () => {
   if (!R) return
   const link = linkFor(R.slug)
   $('#dlgLink').textContent = link; $('#dlgQr').innerHTML = qrSvg(link)
+  $('#lockChk').checked = R.locked
   $('#shareDlg').showModal()
 })
 $('#dlgClose').addEventListener('click', () => $('#shareDlg').close())
@@ -1798,7 +2749,11 @@ function frame(ts) {
   const t = reduced ? 0 : ts / 1000
   const all = [R.self, ...R.peers.values()]
   for (const p of all) {
-    const target = p === R.self && !R.stream.getAudioTracks()[0]?.enabled ? 0 : levelOf(p)
+    let target = levelOf(p)
+    if (p === R.self) {
+      const a = R.stream.getAudioTracks()[0]
+      if (!a?.enabled) { if (a) mutedTalk(target); target = 0 }
+    }
     p.level += (target - p.level) * (target > p.level ? .35 : .08)
     if (!p.body) continue
     if (!p.tile.classList.contains('cam')) {
@@ -1808,7 +2763,7 @@ function frame(ts) {
     }
     p.tile.classList.toggle('speaking', p.level > .14)
   }
-  requestAnimationFrame(frame)
+  ;(pipWin || window).requestAnimationFrame(frame)
 }
 
 /* =================== Diagnose (?debug) =================== */
@@ -1836,11 +2791,12 @@ if (qs.has('debug')) setInterval(async () => {
 /* =================== Routing =================== */
 function route() {
   const raw = decodeURIComponent(location.hash.slice(1)).replace(/^\//, '').toLowerCase()
-  if (!raw) { if (R) leaveRoom(false); joinTarget = null; show('home'); document.title = 'anruf.org — einfach anrufen'; return }
-  if (!validSlug(raw)) { toast('Dieser Link ist ungültig.'); history.replaceState(null, '', location.pathname + location.search); show('home'); return }
+  if (!raw) { if (R) leaveRoom(false); pjStop(); joinTarget = null; show('home'); document.title = 'anruf.org — einfach anrufen'; return }
+  if (!validSlug(raw)) { pjStop(); toast('Dieser Link ist ungültig.'); history.replaceState(null, '', location.pathname + location.search); show('home'); return }
   if (R && R.slug === raw) { show('room'); return }
   if (R) leaveRoom(false)
-  if (autoJoin === raw) { autoJoin = null; enterRoom(raw); return }
+  if (joinTarget === raw && viewWanted === 'join') return   // hashchange + popstate feuern beide
+  if (joinTarget !== raw) pjStop()
   showJoin(raw)
 }
 addEventListener('hashchange', route)
@@ -1853,6 +2809,7 @@ if (!window.RTCPeerConnection) {
   document.querySelector('.hero').insertAdjacentHTML('beforeend', '<p class="unsupported">Dein Browser unterstützt leider keine WebRTC-Anrufe. Probier einen aktuellen Chrome, Firefox oder Safari.</p>')
 }
 setMode(mode)
+loadCustomBg().then(im => { if (im) { FX.custom = im; if (fxKind === 'custom') FX.setKind('custom'); renderFxRow() } else if (fxKind === 'custom') { fxKind = 'none'; FX.setKind('none') } })
 route()
 </script>
 </body>

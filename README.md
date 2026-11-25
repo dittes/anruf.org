@@ -11,8 +11,19 @@ Ruf einfach an. Anrufe mit Audio, Video, Text-Chat, Dateien und Bildschirmfreiga
 - **Bildschirm teilen:** Ganzer Bildschirm, einzelnes Fenster oder Tab, wahlweise mit oder ohne Ton. Es präsentiert immer nur eine Person. Die Präsentation wird groß angezeigt, die Teilnehmenden rücken in einen Streifen daneben. Der Button erscheint nur in Browsern mit `getDisplayMedia` (Desktop-Chrome, Edge, Firefox, Safari; Smartphones meist nicht).
 - **Vollbild:** Knopf im Dock, Taste `F` oder Doppelklick auf eine Präsentation. Im Vollbild ist die Kopfzeile (mit dem (i)) ausgeblendet, die Steuerung unten blendet sich nach 3,5 Sekunden aus und kommt bei Bewegung oder Tipp zurück. Wo der Browser kein Element-Vollbild kann (iPhone-Safari), nutzt die Seite ein Vollbild-Layout.
 - **Verbindungsdetails:** Das (i) neben Teilnehmerzahl und Zeit (Hover oder Klick) zeigt, ob der Anruf direkt (P2P) oder über Relay läuft, Ping, eine Live-Grafik der Datenrate, den Gesamtverkehr, Verlust, Jitter und die Video-Auflösung pro Teilnehmer. Die Werte kommen aus `RTCPeerConnection.getStats()` und bleiben im Browser.
+- **Vorschau vor dem Anruf:** Wer einen Anruf startet oder einen Link öffnet, sieht zuerst sich selbst mit Mikrofon-Pegel, kann Kamera/Mikro an- und ausschalten, den Namen ändern und unter „Mikrofon, Kamera, Lautsprecher“ Geräte wählen und den Ton testen. Lautsprecher-Wahl nur, wo der Browser `setSinkId` kann.
+- **Eigener Raumname:** Auf der Startseite unter dem Knopf „Eigenen Raumnamen wählen“. Aus „Familie Müller“ wird `#familie-mueller`. Wer denselben Namen eingibt, landet im selben Raum (also erratbar, für Vertrauliches lieber den Zufallsnamen nehmen).
+- **Hintergrund:** Unscharf, vier gezeichnete Hintergründe oder ein eigenes Bild (wird nur im Browser gespeichert). Wählbar in der Vorschau und im Anruf über den Funkel-Knopf auf dem eigenen Bild. Die Segmentierung macht [MediaPipe Tasks Vision](https://www.npmjs.com/package/@mediapipe/tasks-vision) 1.2.3 (Apache-2.0) mit dem Modell `selfie_segmenter.tflite`, beides liegt in `vendor/mediapipe/` und wird erst geladen, wenn jemand einen Effekt einschaltet (ca. 15 MB, danach im Cache). Die Gegenseite bekommt nur das fertige Bild (Canvas-Stream).
 - **Umbenennen:** Tipp im Anruf auf das eigene Namensschild.
+- **Stumm reden:** Wer stummgeschaltet ist und spricht, bekommt einen Hinweis mit „Mikro an“. Gemessen wird über eine lokale Kopie des Mikro-Tracks, gesendet wird nichts.
+- **Tastenkürzel:** Leertaste halten = sprechen, solange man stumm ist. `M` Mikrofon, `V` Kamera, `F` Vollbild, `P` Bild-im-Bild.
+- **Reaktionen & Hand heben:** Smiley-Knopf im Dock. Emojis fliegen kurz über das eigene Bild, die Hand bleibt sichtbar, bis man sie senkt.
+- **Anruf abschließen:** Im „Einladen“-Dialog. Wer danach den Link öffnet, bekommt weder Bild noch Ton und klopft an. Alle im Anruf sehen eine Karte mit „Reinlassen“ / „Ablehnen“. Ohne Server setzen die Browser der Teilnehmenden das durch, es ist also eine Höflichkeits-Sperre und kein Schutz gegen manipulierte Clients.
+- **Bild-im-Bild:** In Chrome/Edge (Document Picture-in-Picture) schwebt der Anruf automatisch in einem Mini-Fenster weiter, wenn man den Tab wechselt (oder Taste `P`). Mit Mikro, Kamera und Auflegen.
+- **Schwache Verbindung:** Ist die Qualität 8 Sekunden lang „Schlecht“, schlägt die Seite vor, die Kamera auszuschalten, und bietet sie wieder an, sobald es 30 Sekunden lang gut läuft.
+- **Töne:** Ein gut hörbarer Dreiklang, wenn jemand dazukommt, und ein Klopfen beim Anklopfen.
 - **Keine externen Ressourcen:** Es werden keine Web-Fonts geladen (nur Systemschriften), die Libraries liegen im Repo. Das ist gut für die DSGVO.
+  - In `vendor/mediapipe/vision_bundle.mjs` ist die eingebaute Telemetrie von MediaPipe (`odml.pa.googleapis.com/v1/log`) abgeschaltet: `flush()` ist ein No-op. Beim Aktualisieren der Library diesen Patch wiederholen.
 
 ## Links
 
