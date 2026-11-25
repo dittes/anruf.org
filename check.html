@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="de">
+<head>
+<title>Verbindungstest · anruf.org</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Prüft, ob Anrufe mit anruf.org aus deinem Netzwerk funktionieren, und erstellt einen Bericht für die IT.">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+:root{--paper:#EEECE6;--card:#F8F7F3;--ink:#141412;--mute:#6E6B63;--line:rgba(20,20,18,.12);--accent:#FF4F1A;--good:#2FA84F;--warn:#E8A317;--bad:#E3321A;color-scheme:light dark}
+@media (prefers-color-scheme:dark){:root{--paper:#0F0F0E;--card:#191917;--ink:#EFECE4;--mute:#8E8B83;--line:rgba(239,236,228,.12)}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+header{display:flex;justify-content:space-between;align-items:center;padding:18px clamp(16px,5vw,56px)}
+.mark{font-weight:800;font-size:1.3rem;letter-spacing:-.035em;text-decoration:none;color:inherit}
+.mark i{font-style:normal;color:var(--accent)}
+.mono{font-family:ui-monospace, "SF Mono", "Cascadia Mono", "Roboto Mono", Menlo, Consolas, monospace;font-size:.74rem;letter-spacing:.08em;text-transform:uppercase}
+header a.mono{color:var(--mute);text-decoration:none}
+header a.mono:hover{color:var(--ink)}
+main{max-width:760px;padding:clamp(16px,5vh,48px) clamp(16px,5vw,56px) 80px;animation:in .7s cubic-bezier(.22,1,.36,1) both}
+@keyframes in{from{opacity:0;transform:translateY(12px)}}
+h1{font-weight:800;font-size:clamp(2.6rem,10vw,5.2rem);line-height:.92;letter-spacing:-.05em;margin:0 0 18px}
+h1 em{font-style:normal;color:var(--accent)}
+h2{font-size:1.3rem;font-weight:680;letter-spacing:-.02em;margin:40px 0 10px}
+.lede{margin:0 0 26px;color:var(--mute);font-size:1.12rem;max-width:42ch}
+a{color:inherit;text-decoration-color:var(--accent);text-underline-offset:3px}
+.btn{height:50px;padding:0 22px;border-radius:16px;border:1px solid var(--ink);background:var(--ink);color:var(--paper);font:inherit;font-weight:620;cursor:pointer;display:inline-flex;align-items:center;gap:10px;transition:transform .35s cubic-bezier(.34,1.56,.64,1)}
+.btn:hover{transform:translateY(-2px)}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn:disabled{opacity:.5;cursor:wait;transform:none}
+.verdict{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;align-items:center;padding:20px 22px;border-radius:24px;background:var(--card);border:1px solid var(--line);margin:0 0 18px}
+.verdict .big{grid-row:span 2;width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:color-mix(in oklab,var(--mute) 18%,transparent);color:var(--mute)}
+.verdict .big svg{width:28px;height:28px}
+.verdict b{font-size:1.25rem;letter-spacing:-.02em;font-weight:700}
+.verdict span{color:var(--mute);font-size:.98rem}
+.verdict.good .big{background:color-mix(in oklab,var(--good) 18%,transparent);color:var(--good)}
+.verdict.warn .big{background:color-mix(in oklab,var(--warn) 22%,transparent);color:var(--warn)}
+.verdict.bad .big{background:color-mix(in oklab,var(--bad) 18%,transparent);color:var(--bad)}
+.verdict.run .big svg{animation:spin 1.2s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.checks{list-style:none;margin:0;padding:0;border-radius:24px;background:var(--card);border:1px solid var(--line);overflow:hidden}
+.checks li{display:grid;grid-template-columns:auto 1fr auto;gap:2px 14px;align-items:center;padding:14px 18px;border-top:1px solid var(--line)}
+.checks li:first-child{border-top:0}
+.checks .dot{grid-row:span 2;width:12px;height:12px;border-radius:50%;background:var(--line)}
+.checks li.run .dot{background:var(--mute);animation:pulse 1s ease-in-out infinite}
+.checks li.good .dot{background:var(--good)}.checks li.warn .dot{background:var(--warn)}.checks li.bad .dot{background:var(--bad)}.checks li.skip .dot{background:transparent;border:1.5px solid var(--line)}
+@keyframes pulse{50%{opacity:.35}}
+.checks b{font-weight:640;font-size:1rem}
+.checks small{grid-column:2/4;color:var(--mute);font-size:.86rem;line-height:1.4}
+.checks .st{font-family:ui-monospace, "SF Mono", Menlo, Consolas, monospace;font-size:.78rem;color:var(--mute);white-space:nowrap}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 0}
+.it{border-radius:24px;border:1px solid var(--line);padding:6px 22px 18px;background:color-mix(in oklab,var(--card) 60%,transparent)}
+.it table{width:100%;border-collapse:collapse;font-size:.9rem}
+.it th,.it td{text-align:left;padding:8px 8px 8px 0;border-top:1px solid var(--line);vertical-align:top}
+.it th{font-family:ui-monospace, "SF Mono", Menlo, Consolas, monospace;font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);font-weight:500;border-top:0}
+.it code{font-family:ui-monospace, "SF Mono", Menlo, Consolas, monospace;font-size:.84em;overflow-wrap:anywhere}
+.it .need{white-space:nowrap}
+.note{color:var(--mute);font-size:.92rem}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:999px;font-size:.92rem}
+@media (max-width:560px){ .it .opt{display:none} }
+@media (prefers-reduced-motion:reduce){main{animation:none}*{animation-duration:.01ms!important;animation-iteration-count:1!important}}
+</style>
+</head>
+<body>
+<header><a class="mark" href="./">anruf<i>.org</i></a><a class="mono" href="./">← Zur Startseite</a></header>
+<main>
+  <h1>Verbindungs&shy;test<em>.</em></h1>
+  <p class="lede">Prüft, ob Anrufe aus diesem Netzwerk klappen. Dauert etwa 10 Sekunden, ohne Kamera und Mikrofon.</p>
+
+  <div class="verdict run" id="verdict">
+    <span class="big" id="vIcon"></span>
+    <b id="vTitle">Test läuft…</b>
+    <span id="vText">Einen Moment, die einzelnen Wege werden geprüft.</span>
+  </div>
+
+  <ul class="checks" id="checks"></ul>
+
+  <div class="row">
+    <button class="btn" id="again" type="button">Nochmal testen</button>
+    <button class="btn ghost" id="copy" type="button">Bericht kopieren</button>
+  </div>
+
+  <h2>Für die IT</h2>
+  <div class="it">
+    <p class="note">anruf.org verbindet Browser direkt per WebRTC. Ein eigener Server hilft nur beim Verbindungsaufbau; Audio und Video laufen direkt oder, falls das Netz es nicht zulässt, verschlüsselt über einen Relay-Server (TURN). Damit Anrufe aus einem Firmen- oder Behördennetz funktionieren, müssen diese Ziele erreichbar sein. <b>Mindestens nötig</b> sind die ersten vier Zeilen. Beim Relay (TURN) reicht TLS auf Port 443, das ist auch der robusteste Weg.</p>
+    <table>
+      <thead><tr><th>Zweck</th><th>Ziel</th><th>Port</th></tr></thead>
+      <tbody id="itRows"></tbody>
+    </table>
+    <p class="note">Audio und Video sind Ende-zu-Ende verschlüsselt (DTLS-SRTP). Auch über einen TURN-Server laufen nur verschlüsselte Pakete, der Server kann nichts mitlesen.</p>
+  </div>
+  <p class="note">Wenn der Test im Dienstnetz rot ist: Bitte nicht einfach VPN oder Sicherheitssoftware abschalten, sondern den Bericht an eure IT weitergeben.</p>
+</main>
+
+<script type="module">
+import {OWN_RELAYS, PUBLIC_RELAYS, STUN, TURN, TURN_FALLBACK} from './config.mjs'
+
+const $ = s => document.querySelector(s)
+const host = u => u.replace(/^\w+:(\/\/)?/, '').replace(/[/?].*$/, '').replace(/:\d+$/, '')
+const port = (u, d) => (u.replace(/\?.*$/, '').match(/:(\d+)$/) || [])[1] || d
+const sleep = ms => new Promise(r => setTimeout(r, ms))
+const ICON = {
+  run: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 3a9 9 0 1 0 9 9"/></svg>',
+  good: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>',
+  warn: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 7v6M12 17h.01"/></svg>',
+  bad: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M7 7l10 10M17 7 7 17"/></svg>'
+}
+
+/* ---------- einzelne Prüfungen ---------- */
+function wsCheck(url, ms = 6000) {
+  return new Promise(res => {
+    const t0 = performance.now(); let ws, done = false
+    const fin = ok => { if (done) return; done = true; try { ws?.close() } catch {}; res({ok, ms: Math.round(performance.now() - t0)}) }
+    try { ws = new WebSocket(url) } catch { return fin(false) }
+    ws.onopen = () => fin(true); ws.onerror = () => fin(false); ws.onclose = () => fin(false)
+    setTimeout(() => fin(false), ms)
+  })
+}
+// Sammelt ICE-Kandidaten. Bei "relay" nur über den angegebenen TURN-Server.
+async function gather(iceServers, relayOnly, ms = 8000) {
+  const pc = new RTCPeerConnection({iceServers, iceTransportPolicy: relayOnly ? 'relay' : 'all'})
+  const found = new Set(); const t0 = performance.now(); let first = null
+  pc.createDataChannel('check')
+  const done = new Promise(r => {
+    pc.onicecandidate = e => {
+      if (!e.candidate) return r()
+      const typ = (e.candidate.candidate.match(/ typ (\w+)/) || [])[1]
+      if (typ) { found.add(typ); if ((relayOnly ? typ === 'relay' : typ === 'srflx') && first == null) { first = Math.round(performance.now() - t0); r() } }
+    }
+    pc.onicegatheringstatechange = () => { if (pc.iceGatheringState === 'complete') r() }
+    setTimeout(r, ms)
+  })
+  try { await pc.setLocalDescription(await pc.createOffer()) } catch { pc.close(); return {found, ms: null} }
+  await done
+  pc.close()
+  return {found, ms: first}
+}
+async function turnCreds() {
+  try {
+    const r = await fetch(`https://${TURN.domain}/api/v1/turn/credentials?apiKey=${encodeURIComponent(TURN.apiKey)}`, {signal: AbortSignal.timeout?.(5000)})
+    if (!r.ok) throw 0
+    const list = (await r.json()).filter(s => [].concat(s.urls).some(u => /^turns?:/.test(u)))
+    if (list.length) return {ok: true, list}
+  } catch {}
+  return {ok: false, list: TURN_FALLBACK}
+}
+
+/* ---------- Ablauf ---------- */
+const results = []
+function row(title, why) {
+  const li = document.createElement('li'); li.className = 'run'
+  li.innerHTML = '<i class="dot"></i><b></b><span class="st">prüft…</span><small></small>'
+  li.querySelector('b').textContent = title; li.querySelector('small').textContent = why
+  $('#checks').append(li)
+  const r = {title, state: 'run', status: ''}
+  results.push(r)
+  return (state, status, detail) => {
+    li.className = state; li.querySelector('.st').textContent = status
+    if (detail) li.querySelector('small').textContent = detail
+    Object.assign(r, {state, status, detail: detail || why})
+  }
+}
+function verdict(cls, title, text) {
+  const v = $('#verdict'); v.className = 'verdict ' + cls
+  $('#vIcon').innerHTML = ICON[cls]; $('#vTitle').textContent = title; $('#vText').textContent = text
+}
+
+async function run() {
+  $('#again').disabled = true; $('#checks').replaceChildren(); results.length = 0
+  verdict('run', 'Test läuft…', 'Einen Moment, die einzelnen Wege werden geprüft.')
+
+  // 1) Browser
+  const b = row('Browser', 'WebRTC, Kamera-/Mikrofon-Schnittstelle und eine sichere Verbindung (https).')
+  const missing = []
+  if (!window.isSecureContext) missing.push('kein https')
+  if (!window.RTCPeerConnection) missing.push('kein WebRTC')
+  if (!navigator.mediaDevices?.getUserMedia) missing.push('kein Kamera-/Mikrofon-Zugriff')
+  if (!window.WebSocket) missing.push('keine WebSockets')
+  b(missing.length ? 'bad' : 'good', missing.length ? 'fehlt' : 'ok', missing.length ? 'Fehlt: ' + missing.join(', ') + '. Bitte einen aktuellen Chrome, Edge, Firefox oder Safari nutzen.' : null)
+  if (!window.RTCPeerConnection || !window.WebSocket) { finish(); return }
+
+  // 2) Verbindungsaufbau (Signaling): eigener Server, öffentliche Nostr-Relays als Ersatz
+  const so = row('Verbindungsserver von anruf.org', 'Über diesen Server finden sich die Browser (WebSocket über https, Port 443).')
+  const sp = row('Ersatz-Server (öffentlich)', 'Werden zusätzlich genutzt, falls der eigene Server ausfällt. Es reicht, wenn einer erreichbar ist.')
+  const [own, pub] = await Promise.all([OWN_RELAYS, PUBLIC_RELAYS].map(l => Promise.all(l.map(u => wsCheck(u).then(r => ({u, ...r}))))))
+  const ownOk = own.filter(r => r.ok), pubOk = pub.filter(r => r.ok)
+  so(ownOk.length ? 'good' : 'bad', ownOk.length ? `ok · ${ownOk[0].ms} ms` : 'blockiert',
+    ownOk.length ? `${own.map(r => host(r.u)).join(', ')} ist erreichbar.` : `${own.map(r => host(r.u)).join(', ')} ist nicht erreichbar. Wahrscheinlich blockiert eine Firewall oder ein Proxy die WebSocket-Verbindung.`)
+  sp(pubOk.length ? 'good' : ownOk.length ? 'skip' : 'bad', `${pubOk.length}/${pub.length} erreichbar`,
+    pubOk.length ? `Erreichbar: ${pubOk.map(r => host(r.u)).join(', ')}.` + (pubOk.length < pub.length ? ` Blockiert oder offline: ${pub.filter(r => !r.ok).map(r => host(r.u)).join(', ')}.` : '')
+      : ownOk.length ? 'Keiner erreichbar. Nicht schlimm, solange der eigene Server erreichbar ist.' : 'Keiner erreichbar.')
+  const wsOk = [...ownOk, ...pubOk]
+
+  // 3) Direkter Weg (STUN über UDP)
+  const d = row('Direkte Verbindung (UDP)', 'Der schnellste Weg: Browser sprechen direkt miteinander. Braucht ausgehendes UDP.')
+  const st = await gather(STUN.map(u => ({urls: u})), false, 5000)
+  const direct = st.found.has('srflx')
+  d(direct ? 'good' : 'warn', direct ? `ok · ${st.ms} ms` : 'blockiert',
+    direct ? 'Ausgehendes UDP funktioniert. Ob es am Ende direkt klappt, hängt auch vom Netz der Gegenseite ab.' : 'Kein UDP nach draußen. Anrufe laufen dann nur über einen Relay-Server (TURN), siehe unten.')
+
+  // 4) TURN
+  const c = row('Relay-Zugangsdaten', `Kurzlebige Zugangsdaten für den Relay-Server von ${TURN.domain} (https).`)
+  const cr = await turnCreds()
+  c(cr.ok ? 'good' : 'warn', cr.ok ? 'ok' : 'Ersatz', cr.ok ? null : `${TURN.domain} nicht erreichbar. Es werden die fest hinterlegten Ersatz-Zugangsdaten verwendet.`)
+  const ways = [
+    ['Relay über UDP', u => /^turn:/.test(u) && !/transport=tcp/.test(u) && port(u) === '80', 'UDP 80'],
+    ['Relay über UDP 443', u => /^turn:/.test(u) && !/transport=tcp/.test(u) && port(u) === '443', 'UDP 443'],
+    ['Relay über TCP', u => /^turn:/.test(u) && /transport=tcp/.test(u), 'TCP 80'],
+    ['Relay über TLS (wie https)', u => /^turns:/.test(u), 'TLS 443']
+  ]
+  const relay = []
+  const rowsT = ways.map(([t, , p]) => row(t, `TURN, ${p}. Wird nur genutzt, wenn der direkte Weg nicht geht.`))
+  await Promise.all(ways.map(async ([t, match, p], i) => {
+    const srv = cr.list.flatMap(sv => [].concat(sv.urls).filter(match).map(u => ({urls: u, username: sv.username, credential: sv.credential})))[0]
+    if (!srv) { rowsT[i]('skip', '—', 'In der Konfiguration nicht vorhanden.'); return }
+    const g = await gather([srv], true, 9000)
+    const ok = g.found.has('relay')
+    if (ok) relay.push(p)
+    rowsT[i](ok ? 'good' : 'bad', ok ? `ok · ${g.ms} ms` : 'blockiert', `${host(srv.urls)}, ${p}.` + (ok ? '' : ' Keine Antwort.'))
+  }))
+
+  // Gesamturteil
+  if (!wsOk.length) verdict('bad', 'Anrufe sind aus diesem Netz blockiert', 'Der Verbindungsaufbau scheitert: Die Server, über die sich die Browser finden, sind nicht erreichbar. Die IT kann die Adressen unten freigeben.')
+  else if (direct && relay.length) verdict('good', 'Anrufe sollten funktionieren', 'Direkte Verbindung und Relay-Server sind erreichbar.')
+  else if (direct) verdict('good', 'Anrufe sollten meistens funktionieren', 'Direkte Verbindungen klappen. Der Relay-Server als Rückfall ist aber blockiert; wenn auch die Gegenseite hinter einer strengen Firewall sitzt, kann es scheitern.')
+  else if (relay.length) verdict('warn', 'Anrufe funktionieren über den Relay-Server', `Direkte Verbindungen sind blockiert, der Relay-Server ist per ${relay.join(', ')} erreichbar. Der Aufbau dauert ein paar Sekunden länger.`)
+  else verdict('bad', 'Audio und Video sind blockiert', 'Weder direkte Verbindungen (UDP) noch der Relay-Server sind erreichbar. Die IT kann mindestens TURN über TLS auf Port 443 freigeben.')
+  finish(cr.list)
+}
+
+function finish(turnList = TURN_FALLBACK) {
+  $('#again').disabled = false
+  // Freigabe-Liste für die IT
+  const rows = [
+    ['Webseite', location.host || 'anruf.org', 'TCP 443 (https)', 1],
+    ['Verbindungsserver', OWN_RELAYS.map(host).join(', '), 'TCP 443 (WebSocket, wss)', 1],
+    ['Relay-Zugangsdaten', TURN.domain, 'TCP 443 (https)', 1],
+    ['Relay (TURN)', [...new Set(turnList.flatMap(sv => [].concat(sv.urls)).filter(u => /^turns?:/.test(u)).map(host))].join(', '), 'TLS/TCP 443 (empfohlen), UDP 80/443, TCP 80', 1],
+    ['Ersatz-Verbindungsserver', PUBLIC_RELAYS.map(host).join(', '), 'TCP 443 (WebSocket, wss)', 0],
+    ['Adresse ermitteln (STUN)', [...new Set(STUN.map(host))].join(', '), 'UDP 19302, UDP 3478', 0],
+    ['Direkte Verbindung', 'Browser der Gesprächspartner', 'UDP, hohe Ports (ausgehend)', 0]
+  ]
+  $('#itRows').replaceChildren(...rows.map(([a, b, c, need]) => {
+    const tr = document.createElement('tr')
+    tr.innerHTML = '<td></td><td><code></code></td><td class="need"></td>'
+    tr.children[0].textContent = a + (need ? '' : ' (optional)'); tr.querySelector('code').textContent = b; tr.children[2].textContent = c
+    return tr
+  }))
+  window.__report = rows
+}
+
+$('#again').addEventListener('click', run)
+$('#copy').addEventListener('click', async () => {
+  const lines = [`anruf.org Verbindungstest, ${new Date().toLocaleString('de-DE')}`, `Browser: ${navigator.userAgent}`, '',
+    `Ergebnis: ${$('#vTitle').textContent}`, $('#vText').textContent, '',
+    ...results.map(r => `[${{good: 'OK', warn: 'EINGESCHRÄNKT', bad: 'BLOCKIERT', skip: '—', run: '…'}[r.state]}] ${r.title}: ${r.status}${r.detail ? ' – ' + r.detail : ''}`), '',
+    'Benötigte Freigaben:', ...(window.__report || []).map(([a, b, c, n]) => `- ${a}${n ? '' : ' (optional)'}: ${b} · ${c}`)]
+  try { await navigator.clipboard.writeText(lines.join('\n')); toast('Bericht kopiert') } catch { toast('Kopieren nicht möglich') }
+})
+function toast(t) { const e = document.createElement('div'); e.className = 'toast'; e.textContent = t; document.body.append(e); setTimeout(() => e.remove(), 2200) }
+run()
+</script>
+</body>
+</html>

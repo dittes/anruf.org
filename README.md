@@ -5,7 +5,7 @@ Ruf einfach an. Anrufe mit Audio, Video, Text-Chat, Dateien und Bildschirmfreiga
 ## So funktioniert es
 
 - **Medien:** Audio und Video laufen per WebRTC direkt zwischen den Browsern und sind Ende-zu-Ende verschlüsselt (DTLS-SRTP).
-- **Verbindungsaufbau:** [Trystero](https://github.com/dmotz/trystero) 0.25.4 übernimmt das Signaling über öffentliche Nostr-Relays. Die Library liegt gebündelt in `vendor/trystero.mjs`.
+- **Verbindungsaufbau:** [Trystero](https://github.com/dmotz/trystero) 0.25.4 übernimmt das Signaling über Nostr. Die Library liegt gebündelt in `vendor/trystero.mjs`. Erster Server ist der eigene Verbindungsserver (siehe unten), die öffentlichen Nostr-Relays laufen als Ersatz mit.
 - **Chat:** Textnachrichten laufen über den verschlüsselten WebRTC-Datenkanal und werden nicht gespeichert. Pro Anruf sind maximal 8 Personen erlaubt (Mesh-Topologie).
 - **Dateien & Bilder:** Über die Büroklammer im Chat, per Drag & Drop oder per Einfügen (Strg/Cmd+V). Bilder erscheinen als Vorschau, alles andere als Datei zum Speichern. Maximal 25 MB pro Datei, bis zu 5 Dateien auf einmal. Die Übertragung läuft über den Datenkanal, nichts wird zwischengespeichert.
 - **Bildschirm teilen:** Ganzer Bildschirm, einzelnes Fenster oder Tab, wahlweise mit oder ohne Ton. Es präsentiert immer nur eine Person. Die Präsentation wird groß angezeigt, die Teilnehmenden rücken in einen Streifen daneben. Der Button erscheint nur in Browsern mit `getDisplayMedia` (Desktop-Chrome, Edge, Firefox, Safari; Smartphones meist nicht).
@@ -29,12 +29,28 @@ Ruf einfach an. Anrufe mit Audio, Video, Text-Chat, Dateien und Bildschirmfreiga
 
 - Anruf: `https://anruf.org/#blaue-moewe-x7k2p`
 
-## Konfiguration (oben im `<script>` von `index.html`)
+## Eigener Verbindungsserver (`signal/`)
+
+Ein minimaler Nostr-Relay als Cloudflare Worker mit Durable Object (WebSocket-Hibernation), damit Firmen- und Behördennetze nur eine Adresse freigeben müssen. Er nimmt nur flüchtige Events an (kind 20000–29999, so wie Trystero sie sendet), leitet sie an passende Abos weiter und speichert nichts. Schutz: nur Origins `anruf.org` und `localhost`, max. 64 KB pro Nachricht, 20 Abos und 80 Events pro 10 Sekunden je Verbindung, keine Request-Logs.
+
+```sh
+cd signal
+npx wrangler@4 dev       # lokal auf :8787, App dann mit ?relay=ws://127.0.0.1:8787 testen
+npx wrangler@4 deploy    # nach Cloudflare
+```
+
+Die Adresse steht in `OWN_RELAYS` in `config.mjs`. Für `signal.anruf.org` müsste die DNS-Zone von anruf.org zu Cloudflare umziehen; dann in `wrangler.jsonc` eine `routes`-Zeile mit `custom_domain: true` ergänzen und die Adresse in `config.mjs` tauschen.
+
+## Verbindungstest (`/check`)
+
+`check.html` prüft ohne Kamera und Mikrofon, ob Anrufe aus dem aktuellen Netz klappen: WebSocket zu den Nostr-Relays (Verbindungsaufbau), STUN über UDP (direkter Weg), TURN-Zugangsdaten und TURN einzeln über UDP 80, UDP 443, TCP 80 und TLS 443. Am Ende steht ein Urteil, eine Freigabe-Liste für die IT und „Bericht kopieren“. Die App verlinkt den Test im Footer, in der Vorschau und automatisch, wenn eine Verbindung nach 20 Sekunden nicht steht.
+
+## Konfiguration
 
 | Konstante | Zweck |
 |---|---|
-| `DEFAULT_RELAYS` | Nostr-Relays für das Signaling. Bei Änderungen auch `datenschutz.html` anpassen. |
-| `TURN` / `TURN_FALLBACK` | Open Relay / Metered: App-Domain und API-Key sowie statische Zugangsdaten als Fallback. Wird nur im Notfall benutzt. |
+| `DEFAULT_RELAYS` (`config.mjs`) | Nostr-Relays für das Signaling. Bei Änderungen auch `datenschutz.html` anpassen. |
+| `TURN` / `TURN_FALLBACK` / `STUN` (`config.mjs`) | Open Relay / Metered: App-Domain und API-Key sowie statische Zugangsdaten als Fallback. Wird nur im Notfall benutzt. |
 | `TURN_AFTER_MS` | Wie lange der direkte Weg versucht wird, bevor TURN dazukommt. |
 | `LIMIT` | Maximale Teilnehmerzahl pro Anruf. |
 

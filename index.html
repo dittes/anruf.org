@@ -14,6 +14,7 @@
 <meta property="og:url" content="https://anruf.org/">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="modulepreload" href="vendor/trystero.mjs">
+<link rel="modulepreload" href="config.mjs">
 <style>
 :root{
   --paper:#EEECE6; --card:#F8F7F3; --ink:#141412; --mute:#6E6B63; --line:rgba(20,20,18,.12);
@@ -610,7 +611,7 @@ body.pip .stage.duo .tile.self{width:28%;right:6px;top:6px;border-radius:10px}
 
   <footer class="mono">
     <span>P2P über WebRTC · keine Aufzeichnung</span>
-    <nav><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a></nav>
+    <nav><a href="check.html">Verbindung testen</a><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a></nav>
   </footer>
 </main>
 
@@ -650,7 +651,7 @@ body.pip .stage.duo .tile.self{width:28%;right:6px;top:6px;border-radius:10px}
               <label>Mikrofon<select id="selMic"></select></label>
               <label>Kamera<select id="selCam"></select></label>
               <label id="spkRow" hidden>Lautsprecher<select id="selSpk"></select></label>
-              <button class="btn ghost" type="button" id="spkTest">Ton testen</button>
+              <div class="row"><button class="btn ghost" type="button" id="spkTest">Ton testen</button><a class="btn ghost" href="check.html" target="_blank" rel="noopener">Netzwerk testen</a></div>
             </div>
           </details>
         </div>
@@ -838,27 +839,10 @@ body.pip .stage.duo .tile.self{width:28%;right:6px;top:6px;border-radius:10px}
 <script type="module">
 import {joinRoom, selfId} from './vendor/trystero.mjs'
 import qrcode from './vendor/qrcode.mjs'
+import {APP_ID, DEFAULT_RELAYS, TURN, TURN_FALLBACK} from './config.mjs'
 
 /* =================== Konfiguration =================== */
-const APP_ID = 'anruf.org'
-// Öffentliche Nostr-Relays, nur für den Verbindungsaufbau (keine Medien, kein Chat).
-const DEFAULT_RELAYS = [
-  'wss://nos.lol',
-  'wss://relay.mostr.pub',
-  'wss://nostr-01.yakihonne.com',
-  'wss://yabu.me/v2',
-  'wss://nostr-01.uid.ovh',
-  'wss://purplerelay.com'
-]
-// TURN (Open Relay / Metered) für Netze, in denen keine direkte Verbindung möglich ist.
-const TURN = {domain: 'anruf.metered.live', apiKey: 'aa9f1d5405b919c510d0922d31e47b46c542'}
-// Fallback, falls der Credential-Abruf scheitert (statische Open-Relay-Zugangsdaten).
-const TURN_FALLBACK = [
-  {urls: 'turn:standard.relay.metered.ca:80', username: 'e5d3ea1b1eb5062f5be48e74', credential: 'Hcx7wJ4kTNrZjpXI'},
-  {urls: 'turn:standard.relay.metered.ca:80?transport=tcp', username: 'e5d3ea1b1eb5062f5be48e74', credential: 'Hcx7wJ4kTNrZjpXI'},
-  {urls: 'turn:standard.relay.metered.ca:443', username: 'e5d3ea1b1eb5062f5be48e74', credential: 'Hcx7wJ4kTNrZjpXI'},
-  {urls: 'turns:standard.relay.metered.ca:443?transport=tcp', username: 'e5d3ea1b1eb5062f5be48e74', credential: 'Hcx7wJ4kTNrZjpXI'}
-]
+// Relays, STUN und TURN stehen in config.mjs (wird auch von check.html genutzt).
 const LIMIT = 8
 const PALETTE = ['#FF6A3D', '#C6EE62', '#86C8FF', '#FF9FCB', '#BDA8FF', '#FFD34E', '#6FE3C1']
 
@@ -2045,7 +2029,11 @@ function peerOf(id) {
     p = {id, name: '…', color: colorFor(id), level: 0, cam: undefined}
     p.tile = makeTile(p, false)
     R.peers.set(id, p)
-    setTimeout(() => { if (p.tile.classList.contains('connecting')) p.tile.querySelector('.state').textContent = 'keine verbindung' }, 20000)
+    setTimeout(() => {
+      if (!R?.peers.has(id) || !p.tile.classList.contains('connecting')) return
+      p.tile.querySelector('.state').textContent = 'keine verbindung'
+      if (!R.checkHint) { R.checkHint = true; card('Die Verbindung kommt nicht zustande. Oft blockiert ein Firmen- oder Behördennetz den Weg. Der Verbindungstest zeigt, was fehlt, und erstellt einen Bericht für die IT.', [['Später', null], ['Netzwerk testen', () => open('check.html', '_blank', 'noopener'), 'accent']], 30000) }
+    }, 20000)
     layout()
   }
   return p
