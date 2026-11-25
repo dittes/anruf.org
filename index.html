@@ -173,6 +173,16 @@ footer a:hover{color:var(--ink)}
 .pj .go:disabled{opacity:.5;cursor:wait}
 .pj > *{opacity:0;animation:fade .7s var(--ease) forwards}
 .pj > *:nth-child(2){animation-delay:.08s}
+.pj-title{display:flex;align-items:flex-start;gap:12px;min-width:0}
+.pj-title h2{cursor:text;min-width:0}
+.pj-edit{width:42px;height:42px;margin-top:.35em;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);display:grid;place-items:center;flex:none;transition:transform .35s var(--spring),border-color .3s}
+.pj-edit:hover{transform:rotate(-10deg);border-color:var(--ink)}
+.pj-edit svg{width:18px;height:18px}
+.pj-rename{display:grid;gap:10px;animation:fade .35s var(--ease)}
+.pj-rename .rrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pj-rename input{flex:1 1 100%;min-width:0;width:100%;max-width:420px;height:58px;padding:0 18px;border-radius:18px;border:1px solid var(--ink);background:var(--card);outline:0;font-family:var(--mono);font-size:1.1rem}
+.pj-rename .btn{height:50px;border-radius:14px}
+.pj-rename small{color:var(--mute);font-size:.86rem;max-width:42ch}
 .field{display:grid;gap:8px}
 .field .mono{color:var(--mute)}
 .field input{height:58px;padding:0 18px;border-radius:18px;border:1px solid var(--line);background:var(--card);outline:0;font-size:1.15rem;font-weight:550;transition:border-color .3s;width:100%;max-width:420px}
@@ -648,7 +658,18 @@ body.pip .stage.duo .tile.self{width:28%;right:6px;top:6px;border-radius:10px}
     </div>
     <div class="pj-side">
       <span class="mono" id="pjEyebrow">Einladung zum Anruf</span>
-      <h2 id="joinTitle"></h2>
+      <div class="pj-title" id="pjTitle">
+        <h2 id="joinTitle" title="Raumnamen ändern"></h2>
+        <button class="pj-edit" id="roomEdit" type="button" aria-label="Raumnamen ändern" title="Raumnamen ändern"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16v4zM13.5 6.5l4 4"/></svg></button>
+      </div>
+      <form class="pj-rename" id="roomRename" autocomplete="off" hidden>
+        <div class="rrow">
+          <input id="roomRenameInput" maxlength="48" spellcheck="false" autocapitalize="off" aria-label="Neuer Raumname" enterkeyhint="done">
+          <button class="btn" type="submit">Übernehmen</button>
+          <button class="btn ghost" type="button" id="roomRenameCancel">Abbrechen</button>
+        </div>
+        <small id="roomRenameHint"></small>
+      </form>
       <p id="pjText">Schau kurz, ob Bild und Ton passen. Dann tipp auf „Beitreten“.</p>
       <label class="field"><span class="mono">Dein Name</span><input id="nameInput2" maxlength="24" autocomplete="nickname" spellcheck="false" enterkeyhint="go"></label>
       <div class="row">
@@ -1016,6 +1037,7 @@ function showJoin(slug) {
   joinTarget = slug
   const mine = createdSlug === slug
   $('#joinTitle').textContent = slug
+  setRenaming(false)
   $('#pjEyebrow').textContent = mine ? 'Dein Anruf ist bereit' : 'Einladung zum Anruf'
   $('#pjText').textContent = mine
     ? 'Schau kurz, ob Bild und Ton passen. Den Link zum Teilen bekommst du gleich im Anruf.'
@@ -1030,8 +1052,42 @@ function showJoin(slug) {
   ;[...$('#joinBox').children].forEach(c => { c.style.animation = 'none'; c.offsetWidth; c.style.animation = '' })
   pjStart()
 }
+// Raumnamen in der Vorschau ändern: Kamera und Mikro laufen weiter, nur das Ziel wechselt.
+function renameHint() {
+  const raw = $('#roomRenameInput').value, sl = slugify(raw)
+  const parts = []
+  if (sl && sl !== raw.trim()) parts.push(`Wird zu: anruf.org/#${sl}`)
+  parts.push(createdSlug === joinTarget
+    ? 'Wer denselben Namen eingibt, landet im selben Raum.'
+    : 'Achtung: Mit einem anderen Namen landest du in einem anderen Raum als die Person, die dich eingeladen hat.')
+  $('#roomRenameHint').textContent = parts.join(' ')
+}
+function setRenaming(on) {
+  $('#pjTitle').hidden = on; $('#roomRename').hidden = !on
+  if (on) { const i = $('#roomRenameInput'); i.value = joinTarget || ''; renameHint(); i.focus(); i.select() }
+}
+$('#roomEdit').addEventListener('click', () => setRenaming(true))
+$('#joinTitle').addEventListener('click', () => setRenaming(true))
+$('#roomRenameCancel').addEventListener('click', () => setRenaming(false))
+$('#roomRenameInput').addEventListener('input', renameHint)
+$('#roomRenameInput').addEventListener('keydown', e => { if (e.key === 'Escape') { e.preventDefault(); setRenaming(false) } })
+$('#roomRename').addEventListener('submit', e => {
+  e.preventDefault()
+  const sl = slugify($('#roomRenameInput').value)
+  if (sl.length < 3) { toast('Bitte mindestens 3 Zeichen.'); return }
+  if (sl !== joinTarget) {
+    if (createdSlug === joinTarget) createdSlug = sl
+    joinTarget = sl
+    // replaceState löst kein hashchange aus, die Vorschau läuft also ungestört weiter
+    history.replaceState(null, '', `${location.pathname}${location.search}#${sl}`)
+    $('#joinTitle').textContent = sl
+  }
+  setRenaming(false)
+})
+
 $('#joinBtn').addEventListener('click', () => {
   if (!joinTarget) return
+  if (!$('#roomRename').hidden) $('#roomRename').requestSubmit()
   setName($('#nameInput2').value); $('#nameInput2').value = myName
   ensureAudioCtx(); enterRoom(joinTarget)
 })
