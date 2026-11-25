@@ -1,4 +1,4 @@
-// Gemeinsame Netzwerk-Konfiguration für den Anruf (index.html) und den Verbindungstest (check.html).
+// Gemeinsame Netzwerk-Konfiguration für den Anruf (index.html) und den Verbindungstest (check/index.html).
 // Bei Änderungen an Relays oder TURN auch datenschutz.html anpassen.
 
 export const APP_ID = 'anruf.org'

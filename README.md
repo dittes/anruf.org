@@ -43,7 +43,7 @@ Die Adresse steht in `OWN_RELAYS` in `config.mjs`. Für `signal.anruf.org` müss
 
 ## Verbindungstest (`/check`)
 
-`check.html` prüft ohne Kamera und Mikrofon, ob Anrufe aus dem aktuellen Netz klappen: WebSocket zu den Nostr-Relays (Verbindungsaufbau), STUN über UDP (direkter Weg), TURN-Zugangsdaten und TURN einzeln über UDP 80, UDP 443, TCP 80 und TLS 443. Am Ende steht ein Urteil, eine Freigabe-Liste für die IT und „Bericht kopieren“. Die App verlinkt den Test im Footer, in der Vorschau und automatisch, wenn eine Verbindung nach 20 Sekunden nicht steht.
+`check/` (anruf.org/check) prüft ohne Kamera und Mikrofon, ob Anrufe aus dem aktuellen Netz klappen: WebSocket zu den Nostr-Relays (Verbindungsaufbau), STUN über UDP (direkter Weg), TURN-Zugangsdaten und TURN einzeln über UDP 80, UDP 443, TCP 80 und TLS 443. Am Ende steht ein Urteil, eine Freigabe-Liste für die IT und „Bericht kopieren“. Die App verlinkt den Test im Footer, in der Vorschau und automatisch, wenn eine Verbindung nach 20 Sekunden nicht steht.
 
 ## Konfiguration
 

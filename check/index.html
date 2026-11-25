@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="Prüft, ob Anrufe mit anruf.org aus deinem Netzwerk funktionieren, und erstellt einen Bericht für die IT.">
 <meta name="color-scheme" content="light dark">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
 <style>
 :root{--paper:#EEECE6;--card:#F8F7F3;--ink:#141412;--mute:#6E6B63;--line:rgba(20,20,18,.12);--accent:#FF4F1A;--good:#2FA84F;--warn:#E8A317;--bad:#E3321A;color-scheme:light dark}
 @media (prefers-color-scheme:dark){:root{--paper:#0F0F0E;--card:#191917;--ink:#EFECE4;--mute:#8E8B83;--line:rgba(239,236,228,.12)}}
@@ -63,7 +63,7 @@ a{color:inherit;text-decoration-color:var(--accent);text-underline-offset:3px}
 </style>
 </head>
 <body>
-<header><a class="mark" href="./">anruf<i>.org</i></a><a class="mono" href="./">← Zur Startseite</a></header>
+<header><a class="mark" href="../">anruf<i>.org</i></a><a class="mono" href="../">← Zur Startseite</a></header>
 <main>
   <h1>Verbindungs&shy;test<em>.</em></h1>
   <p class="lede">Prüft, ob Anrufe aus diesem Netzwerk klappen. Dauert etwa 10 Sekunden, ohne Kamera und Mikrofon.</p>
@@ -94,7 +94,7 @@ a{color:inherit;text-decoration-color:var(--accent);text-underline-offset:3px}
 </main>
 
 <script type="module">
-import {OWN_RELAYS, PUBLIC_RELAYS, STUN, TURN, TURN_FALLBACK} from './config.mjs'
+import {OWN_RELAYS, PUBLIC_RELAYS, STUN, TURN, TURN_FALLBACK} from '../config.mjs'
 
 const $ = s => document.querySelector(s)
 const host = u => u.replace(/^\w+:(\/\/)?/, '').replace(/[/?].*$/, '').replace(/:\d+$/, '')

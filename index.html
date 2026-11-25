@@ -611,7 +611,7 @@ body.pip .stage.duo .tile.self{width:28%;right:6px;top:6px;border-radius:10px}
 
   <footer class="mono">
     <span>P2P über WebRTC · keine Aufzeichnung</span>
-    <nav><a href="check.html">Verbindung testen</a><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a></nav>
+    <nav><a href="check/">Verbindung testen</a><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a></nav>
   </footer>
 </main>
 
@@ -651,7 +651,7 @@ body.pip .stage.duo .tile.self{width:28%;right:6px;top:6px;border-radius:10px}
               <label>Mikrofon<select id="selMic"></select></label>
               <label>Kamera<select id="selCam"></select></label>
               <label id="spkRow" hidden>Lautsprecher<select id="selSpk"></select></label>
-              <div class="row"><button class="btn ghost" type="button" id="spkTest">Ton testen</button><a class="btn ghost" href="check.html" target="_blank" rel="noopener">Netzwerk testen</a></div>
+              <div class="row"><button class="btn ghost" type="button" id="spkTest">Ton testen</button><a class="btn ghost" href="check/" target="_blank" rel="noopener">Netzwerk testen</a></div>
             </div>
           </details>
         </div>
@@ -842,7 +842,7 @@ import qrcode from './vendor/qrcode.mjs'
 import {APP_ID, DEFAULT_RELAYS, TURN, TURN_FALLBACK} from './config.mjs'
 
 /* =================== Konfiguration =================== */
-// Relays, STUN und TURN stehen in config.mjs (wird auch von check.html genutzt).
+// Relays, STUN und TURN stehen in config.mjs (wird auch von check/index.html genutzt).
 const LIMIT = 8
 const PALETTE = ['#FF6A3D', '#C6EE62', '#86C8FF', '#FF9FCB', '#BDA8FF', '#FFD34E', '#6FE3C1']
 
@@ -2032,7 +2032,7 @@ function peerOf(id) {
     setTimeout(() => {
       if (!R?.peers.has(id) || !p.tile.classList.contains('connecting')) return
       p.tile.querySelector('.state').textContent = 'keine verbindung'
-      if (!R.checkHint) { R.checkHint = true; card('Die Verbindung kommt nicht zustande. Oft blockiert ein Firmen- oder Behördennetz den Weg. Der Verbindungstest zeigt, was fehlt, und erstellt einen Bericht für die IT.', [['Später', null], ['Netzwerk testen', () => open('check.html', '_blank', 'noopener'), 'accent']], 30000) }
+      if (!R.checkHint) { R.checkHint = true; card('Die Verbindung kommt nicht zustande. Oft blockiert ein Firmen- oder Behördennetz den Weg. Der Verbindungstest zeigt, was fehlt, und erstellt einen Bericht für die IT.', [['Später', null], ['Netzwerk testen', () => open('check/', '_blank', 'noopener'), 'accent']], 30000) }
     }, 20000)
     layout()
   }
