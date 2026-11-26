@@ -3,11 +3,10 @@
 
 export const APP_ID = 'anruf.org'
 
-// Eigener Verbindungsserver (Cloudflare Worker, Code in signal/). Für Firmen- und Behördennetze
-// reicht es, diese eine Adresse freizugeben. Die öffentlichen Relays bleiben als Ersatz, falls er ausfällt.
-export const OWN_RELAYS = [
-  'wss://anruf-signal.broken-surf-06ef.workers.dev'
-]
+// Eigener Verbindungsserver (Cloudflare Worker, Code in signal/). Derzeit abgeschaltet: Der Verbindungsaufbau
+// läuft wieder nur über die öffentlichen Relays. Zum Reaktivieren 'wss://anruf-signal.broken-surf-06ef.workers.dev'
+// eintragen und datenschutz.html anpassen.
+export const OWN_RELAYS = []
 // Öffentliche Nostr-Relays, nur für den Verbindungsaufbau (keine Medien, kein Chat).
 export const PUBLIC_RELAYS = [
   'wss://nos.lol',

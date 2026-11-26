@@ -180,16 +180,18 @@ async function run() {
   b(missing.length ? 'bad' : 'good', missing.length ? 'fehlt' : 'ok', missing.length ? 'Fehlt: ' + missing.join(', ') + '. Bitte einen aktuellen Chrome, Edge, Firefox oder Safari nutzen.' : null)
   if (!window.RTCPeerConnection || !window.WebSocket) { finish(); return }
 
-  // 2) Verbindungsaufbau (Signaling): eigener Server, öffentliche Nostr-Relays als Ersatz
-  const so = row('Verbindungsserver von anruf.org', 'Über diesen Server finden sich die Browser (WebSocket über https, Port 443).')
-  const sp = row('Ersatz-Server (öffentlich)', 'Werden zusätzlich genutzt, falls der eigene Server ausfällt. Es reicht, wenn einer erreichbar ist.')
+  // 2) Verbindungsaufbau (Signaling): eigener Server (falls konfiguriert), öffentliche Nostr-Relays
+  const hasOwn = OWN_RELAYS.length > 0
+  const so = hasOwn ? row('Verbindungsserver von anruf.org', 'Über diesen Server finden sich die Browser (WebSocket über https, Port 443).') : null
+  const sp = hasOwn ? row('Ersatz-Server (öffentlich)', 'Werden zusätzlich genutzt, falls der eigene Server ausfällt. Es reicht, wenn einer erreichbar ist.')
+    : row('Verbindungsserver (Nostr-Relays)', 'Über diese öffentlichen Server finden sich die Browser (WebSocket über https, Port 443). Es reicht, wenn einer erreichbar ist.')
   const [own, pub] = await Promise.all([OWN_RELAYS, PUBLIC_RELAYS].map(l => Promise.all(l.map(u => wsCheck(u).then(r => ({u, ...r}))))))
   const ownOk = own.filter(r => r.ok), pubOk = pub.filter(r => r.ok)
-  so(ownOk.length ? 'good' : 'bad', ownOk.length ? `ok · ${ownOk[0].ms} ms` : 'blockiert',
+  if (so) so(ownOk.length ? 'good' : 'bad', ownOk.length ? `ok · ${ownOk[0].ms} ms` : 'blockiert',
     ownOk.length ? `${own.map(r => host(r.u)).join(', ')} ist erreichbar.` : `${own.map(r => host(r.u)).join(', ')} ist nicht erreichbar. Wahrscheinlich blockiert eine Firewall oder ein Proxy die WebSocket-Verbindung.`)
   sp(pubOk.length ? 'good' : ownOk.length ? 'skip' : 'bad', `${pubOk.length}/${pub.length} erreichbar`,
     pubOk.length ? `Erreichbar: ${pubOk.map(r => host(r.u)).join(', ')}.` + (pubOk.length < pub.length ? ` Blockiert oder offline: ${pub.filter(r => !r.ok).map(r => host(r.u)).join(', ')}.` : '')
-      : ownOk.length ? 'Keiner erreichbar. Nicht schlimm, solange der eigene Server erreichbar ist.' : 'Keiner erreichbar.')
+      : ownOk.length ? 'Keiner erreichbar. Nicht schlimm, solange der eigene Server erreichbar ist.' : 'Keiner erreichbar. Wahrscheinlich blockiert eine Firewall oder ein Proxy die WebSocket-Verbindungen.')
   const wsOk = [...ownOk, ...pubOk]
 
   // 3) Direkter Weg (STUN über UDP)
@@ -234,10 +236,10 @@ function finish(turnList = TURN_FALLBACK) {
   // Freigabe-Liste für die IT
   const rows = [
     ['Webseite', location.host || 'anruf.org', 'TCP 443 (https)', 1],
-    ['Verbindungsserver', OWN_RELAYS.map(host).join(', '), 'TCP 443 (WebSocket, wss)', 1],
+    ...(OWN_RELAYS.length ? [['Verbindungsserver', OWN_RELAYS.map(host).join(', '), 'TCP 443 (WebSocket, wss)', 1]] : []),
     ['Relay-Zugangsdaten', TURN.domain, 'TCP 443 (https)', 1],
     ['Relay (TURN)', [...new Set(turnList.flatMap(sv => [].concat(sv.urls)).filter(u => /^turns?:/.test(u)).map(host))].join(', '), 'TLS/TCP 443 (empfohlen), UDP 80/443, TCP 80', 1],
-    ['Ersatz-Verbindungsserver', PUBLIC_RELAYS.map(host).join(', '), 'TCP 443 (WebSocket, wss)', 0],
+    [OWN_RELAYS.length ? 'Ersatz-Verbindungsserver' : 'Verbindungsserver (mind. einer)', PUBLIC_RELAYS.map(host).join(', '), 'TCP 443 (WebSocket, wss)', OWN_RELAYS.length ? 0 : 1],
     ['Adresse ermitteln (STUN)', [...new Set(STUN.map(host))].join(', '), 'UDP 19302, UDP 3478', 0],
     ['Direkte Verbindung', 'Browser der Gesprächspartner', 'UDP, hohe Ports (ausgehend)', 0]
   ]

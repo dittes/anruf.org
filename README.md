@@ -5,7 +5,7 @@ Ruf einfach an. Anrufe mit Audio, Video, Text-Chat, Dateien und Bildschirmfreiga
 ## So funktioniert es
 
 - **Medien:** Audio und Video laufen per WebRTC direkt zwischen den Browsern und sind Ende-zu-Ende verschlüsselt (DTLS-SRTP).
-- **Verbindungsaufbau:** [Trystero](https://github.com/dmotz/trystero) 0.25.4 übernimmt das Signaling über Nostr. Die Library liegt gebündelt in `vendor/trystero.mjs`. Erster Server ist der eigene Verbindungsserver (siehe unten), die öffentlichen Nostr-Relays laufen als Ersatz mit.
+- **Verbindungsaufbau:** [Trystero](https://github.com/dmotz/trystero) 0.25.4 übernimmt das Signaling über Nostr. Die Library liegt gebündelt in `vendor/trystero.mjs`. Derzeit laufen nur öffentliche Nostr-Relays; der eigene Verbindungsserver (siehe unten) ist abgeschaltet.
 - **Chat:** Textnachrichten laufen über den verschlüsselten WebRTC-Datenkanal und werden nicht gespeichert. Pro Anruf sind maximal 8 Personen erlaubt (Mesh-Topologie).
 - **Dateien & Bilder:** Über die Büroklammer im Chat, per Drag & Drop oder per Einfügen (Strg/Cmd+V). Bilder erscheinen als Vorschau, alles andere als Datei zum Speichern. Maximal 25 MB pro Datei, bis zu 5 Dateien auf einmal. Die Übertragung läuft über den Datenkanal, nichts wird zwischengespeichert.
 - **Bildschirm teilen:** Ganzer Bildschirm, einzelnes Fenster oder Tab, wahlweise mit oder ohne Ton. Es präsentiert immer nur eine Person. Die Präsentation wird groß angezeigt, die Teilnehmenden rücken in einen Streifen daneben. Der Button erscheint nur in Browsern mit `getDisplayMedia` (Desktop-Chrome, Edge, Firefox, Safari; Smartphones meist nicht).
@@ -39,7 +39,7 @@ npx wrangler@4 dev       # lokal auf :8787, App dann mit ?relay=ws://127.0.0.1:8
 npx wrangler@4 deploy    # nach Cloudflare
 ```
 
-Die Adresse steht in `OWN_RELAYS` in `config.mjs`. Für `signal.anruf.org` müsste die DNS-Zone von anruf.org zu Cloudflare umziehen; dann in `wrangler.jsonc` eine `routes`-Zeile mit `custom_domain: true` ergänzen und die Adresse in `config.mjs` tauschen.
+Derzeit nicht in Betrieb (`OWN_RELAYS` in `config.mjs` ist leer). Zum Reaktivieren die Worker-Adresse dort eintragen und `datenschutz.html` (Abschnitt 5) wieder um Cloudflare ergänzen. Für `signal.anruf.org` müsste die DNS-Zone von anruf.org zu Cloudflare umziehen; dann in `wrangler.jsonc` eine `routes`-Zeile mit `custom_domain: true` ergänzen und die Adresse in `config.mjs` tauschen.
 
 ## Verbindungstest (`/check`)
 
