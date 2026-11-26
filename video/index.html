@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1920, height=1080" />
+<script src="assets/gsap.min.js"></script>
+<style>
+:root{--ground:#EEECE6;--card:#F8F7F3;--ink:#141412;--mute:#6E6B63;--accent:#FF4F1A;
+  --font:ui-sans-serif,-apple-system,"Helvetica Neue",Arial,sans-serif;--mono:ui-monospace,Menlo,monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1920px;height:1080px;overflow:hidden;background:var(--ground)}
+#root{position:relative;width:1920px;height:1080px;font-family:var(--font);color:var(--ink);overflow:hidden}
+.scene{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:48px}
+.big{font-size:230px;font-weight:800;letter-spacing:-.06em;line-height:.9;text-align:center}
+.big em{font-style:normal;color:var(--accent)}
+.line{font-size:84px;font-weight:700;letter-spacing:-.035em;text-align:center;line-height:1.05}
+.sub{font-size:48px;color:var(--mute);text-align:center;font-weight:500}
+.kicker{font-family:var(--mono);font-size:34px;letter-spacing:.14em;text-transform:uppercase;color:#D93E0B}
+.orb{width:360px;height:360px;border-radius:50%;background:radial-gradient(circle at 32% 28%,#ff9a78,var(--accent) 45%,#c63a0e);
+  box-shadow:0 40px 90px -20px rgba(255,79,26,.6);display:grid;place-items:center}
+.orb svg{width:130px;height:130px}
+.ring{position:absolute;width:360px;height:360px;border-radius:50%;border:5px solid var(--accent)}
+.pill{font-family:var(--mono);font-size:64px;padding:34px 56px;border-radius:999px;background:var(--card);border:3px solid rgba(20,20,18,.14);white-space:nowrap}
+.pill b{color:var(--accent);font-weight:700}
+.dev{position:absolute;width:420px;height:300px;border-radius:30px;background:var(--card);border:3px solid rgba(20,20,18,.14);display:grid;place-items:center;font-size:44px;font-weight:700}
+.dev i{width:130px;height:130px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:70px;font-weight:800;color:var(--ink)}
+.wire{position:absolute;height:8px;border-radius:4px;background:var(--ink);opacity:.18}
+.dot{position:absolute;width:30px;height:30px;border-radius:50%;background:var(--accent)}
+.strike{position:relative;font-size:110px;font-weight:800;letter-spacing:-.04em;color:var(--ink)}
+.strike s{position:absolute;left:-2%;top:54%;height:14px;width:104%;background:var(--accent);border-radius:7px;transform-origin:left;transform:scaleX(0)}
+.srv{position:absolute;width:300px;height:200px;border-radius:24px;background:var(--card);border:3px dashed rgba(20,20,18,.3);display:grid;place-items:center;font-size:38px;color:var(--mute);font-weight:600}
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="38" data-width="1920" data-height="1080">
+
+  <!-- 1 Titel -->
+  <div id="s1" class="scene clip" data-start="0" data-duration="5" data-track-index="1">
+    <div class="big"><span id="s1a" style="display:inline-block">Ruf einfach an<em>.</em></span></div>
+    <div id="s1b" class="sub">Video- und Audioanrufe im Browser</div>
+  </div>
+
+  <!-- 2 Tippen -->
+  <div id="s2" class="scene clip" data-start="5" data-duration="6" data-track-index="1">
+    <div class="kicker" id="s2k">1 · Tippen</div>
+    <div style="position:relative;width:360px;height:360px;display:grid;place-items:center">
+      <div class="ring" id="s2r1"></div><div class="ring" id="s2r2"></div>
+      <div class="orb" id="s2o"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h3.5l2 5-2.5 1.5a11 11 0 0 0 5.5 5.5l1.5-2.5 5 2V19a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></div>
+    </div>
+    <div class="line" id="s2t">Ein Tipp, und dein Anruf ist offen.</div>
+  </div>
+
+  <!-- 3 Link -->
+  <div id="s3" class="scene clip" data-start="11" data-duration="6" data-track-index="1">
+    <div class="kicker" id="s3k">2 · Link schicken</div>
+    <div class="pill" id="s3p">anruf.org/#<b>blaue-moewe</b></div>
+    <div class="line" id="s3t">Per Messenger, Mail oder QR-Code.</div>
+    <div class="sub" id="s3s">Ohne Konto. Ohne App.</div>
+  </div>
+
+  <!-- 4 P2P -->
+  <div id="s4" class="scene clip" data-start="17" data-duration="8" data-track-index="1">
+    <div class="kicker" id="s4k">3 · Sprechen</div>
+    <div style="position:relative;width:1500px;height:420px">
+      <div class="srv" id="s4srv" style="left:600px;top:-40px">Server</div>
+      <div class="dev" id="s4a" style="left:0;top:110px"><i style="background:#FFB020">A</i></div>
+      <div class="dev" id="s4b" style="right:0;top:110px"><i style="background:#6FD3A0">B</i></div>
+      <div class="wire" id="s4w" style="left:420px;width:660px;top:256px"></div>
+      <div class="dot" id="s4d1" style="left:420px;top:245px"></div>
+      <div class="dot" id="s4d2" style="left:420px;top:245px"></div>
+    </div>
+    <div class="line" id="s4t">Direkt von Browser zu Browser.<br>Ende-zu-Ende verschlüsselt.</div>
+  </div>
+
+  <!-- 5 Kein Tracking -->
+  <div id="s5" class="scene clip" data-start="25" data-duration="8" data-track-index="1">
+    <div class="kicker" id="s5k">Und sonst?</div>
+    <div style="display:flex;gap:90px">
+      <div class="strike" id="s5a">Cookies<s></s></div>
+      <div class="strike" id="s5b">Tracking<s></s></div>
+      <div class="strike" id="s5c">Konto<s></s></div>
+    </div>
+    <div class="strike" id="s5d" style="font-size:90px">Aufzeichnung<s></s></div>
+    <div class="line" id="s5t">Kein Tracking. Kein Cookie-Banner.</div>
+  </div>
+
+  <!-- 6 Schluss -->
+  <div id="s6" class="scene clip" data-start="33" data-duration="5" data-track-index="1">
+    <div class="big" id="s6a" style="font-size:200px">anruf<em>.org</em></div>
+    <div class="sub" id="s6b">Ruf einfach an.</div>
+  </div>
+</div>
+
+<script>
+window.__timelines = window.__timelines || {};
+const tl = gsap.timeline({ paused: true });
+const E = "power4.out";
+const inn = (sel, t, y = 40) => tl.fromTo(sel, { opacity: 0, y }, { opacity: 1, y: 0, duration: 0.7, ease: E }, t);
+const out = (sel, t) => tl.to(sel, { opacity: 0, duration: 0.3, ease: "power2.in" }, t);
+
+// 1
+tl.fromTo("#s1a", { y: 80 }, { y: 0, duration: 0.9, ease: E }, 0); inn("#s1b", 1.1, 30); out("#s1", 4.65);
+// 2
+inn("#s2k", 5.2, 20); tl.fromTo("#s2o", { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8, ease: "back.out(1.6)" }, 5.4);
+tl.fromTo("#s2r1", { scale: 1, opacity: 0.7 }, { scale: 1.9, opacity: 0, duration: 1.6, ease: "power1.out" }, 6.8);
+tl.fromTo("#s2r2", { scale: 1, opacity: 0.7 }, { scale: 1.9, opacity: 0, duration: 1.6, ease: "power1.out" }, 7.6);
+tl.fromTo("#s2o", { scale: 1 }, { scale: 0.9, duration: 0.15, yoyo: true, repeat: 1, ease: "power2.inOut", immediateRender: false }, 6.6);
+inn("#s2t", 7.0); out("#s2", 10.65);
+// 3
+inn("#s3k", 11.2, 20); tl.fromTo("#s3p", { opacity: 0, x: -300 }, { opacity: 1, x: 0, duration: 0.9, ease: E }, 11.5);
+inn("#s3t", 13.0); inn("#s3s", 14.4, 30); out("#s3", 16.65);
+// 4
+inn("#s4k", 17.2, 20);
+tl.fromTo(["#s4a", "#s4b"], { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.7, ease: "back.out(1.4)", stagger: 0.15 }, 17.5);
+tl.fromTo("#s4srv", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 18.8);
+tl.fromTo("#s4w", { opacity: 0 }, { opacity: 0.18, duration: 0.4 }, 19.0);
+tl.to("#s4srv", { opacity: 0.12, duration: 0.6 }, 20.2);
+tl.fromTo("#s4d1", { x: 0, opacity: 1 }, { x: 630, duration: 1.4, ease: "power1.inOut" }, 19.6);
+tl.fromTo("#s4d2", { x: 630, opacity: 1 }, { x: 0, duration: 1.4, ease: "power1.inOut" }, 20.3);
+inn("#s4t", 21.0); out("#s4", 24.65);
+// 5
+inn("#s5k", 25.2, 20);
+["#s5a", "#s5b", "#s5c", "#s5d"].forEach((id, i) => {
+  inn(id, 25.6 + i * 0.3, 30);
+  tl.to(id + " s", { scaleX: 1, duration: 0.35, ease: "power3.out" }, 26.6 + i * 0.6);
+});
+inn("#s5t", 29.4); out("#s5", 32.65);
+// 6
+inn("#s6a", 33.2, 60); inn("#s6b", 34.2, 30);
+tl.set("#s6", {}, 37.99);
+window.__timelines["main"] = tl;
+tl.seek(0);
+</script>
+</body>
+</html>

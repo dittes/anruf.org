@@ -13,6 +13,12 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://anruf.org/">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="anruf">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="modulepreload" href="vendor/trystero.mjs">
 <link rel="modulepreload" href="config.mjs">
 <style>
@@ -117,26 +123,22 @@ h1 em{font-style:normal;color:var(--accent);display:inline-block;animation:blink
 .name input:focus{width:14ch}
 .name .mono{color:var(--mute)}
 
-/* Laufband */
-.marquee{overflow:hidden;border-block:1px solid var(--line);padding:14px 0;opacity:0;animation:fade .8s .6s var(--ease) forwards;
-  -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
-.marquee-track{display:flex;width:max-content;animation:marquee 38s linear infinite}
-.marquee span{font-size:clamp(1.05rem,2.6vw,1.35rem);font-weight:650;letter-spacing:-.02em;white-space:nowrap;padding-right:1.6em;display:inline-flex;align-items:center;gap:1.6em}
-.marquee span::after{content:"";width:.42em;height:.42em;border-radius:50%;background:var(--accent)}
-@keyframes marquee{to{transform:translateX(-50%)}}
-
 /* Schritte als Karten */
-.steps{padding:clamp(28px,5vh,56px) var(--gutter) 64px;display:grid;gap:12px;list-style:none;margin:0}
+.steps{padding:clamp(20px,4vh,40px) var(--gutter) 24px;display:grid;gap:12px;list-style:none;margin:0}
 .steps li{position:relative;overflow:hidden;display:grid;gap:10px;padding:22px 22px 24px;border-radius:26px;background:var(--card);border:1px solid var(--line);
   opacity:0;animation:fade .8s var(--ease) forwards;transition:transform .5s var(--spring),box-shadow .4s}
-.steps li:nth-child(1){animation-delay:.7s}.steps li:nth-child(2){animation-delay:.8s}.steps li:nth-child(3){animation-delay:.9s}
+.steps li:nth-child(1){animation-delay:.6s}.steps li:nth-child(2){animation-delay:.7s}.steps li:nth-child(3){animation-delay:.8s}
 .steps li:hover{transform:translateY(-4px) rotate(-.4deg);box-shadow:0 20px 40px -20px rgba(0,0,0,.25)}
 .steps .num{position:absolute;right:-.06em;top:-.2em;font-size:7.5rem;font-weight:800;letter-spacing:-.08em;line-height:1;color:color-mix(in oklab,var(--ink) 6%,transparent);pointer-events:none}
-.steps .si{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:color-mix(in oklab,var(--accent) 14%,transparent);color:var(--accent)}
-.steps .si svg{width:24px;height:24px}
 .steps b{font-size:clamp(1.3rem,3.6vw,1.6rem);font-weight:700;letter-spacing:-.03em;line-height:1.1}
 .steps span{color:var(--mute)}
 
+.explainer{margin:0 var(--gutter) 24px;max-width:760px}
+.explainer video{display:block;width:100%;height:auto;aspect-ratio:16/9;border-radius:26px;border:1px solid var(--line);background:var(--card)}
+.privacy{margin:0 var(--gutter) 56px;padding:26px 26px 24px;border-radius:26px;background:var(--card);border:1px solid var(--line);display:grid;gap:10px;justify-items:start;max-width:760px}
+.privacy h2{margin:0;font-size:clamp(1.4rem,4vw,1.9rem);font-weight:760;letter-spacing:-.04em;line-height:1.05}
+.privacy p{margin:0;color:var(--mute);max-width:56ch}
+.privacy .linkish{padding-left:0}
 .btn{text-decoration:none;height:52px;padding:0 22px;border-radius:16px;border:1px solid var(--ink);background:var(--ink);color:var(--paper);font-weight:600;letter-spacing:-.01em;display:inline-flex;align-items:center;justify-content:center;gap:10px;transition:transform .4s var(--spring),background .3s,color .3s}
 .btn:hover{transform:translateY(-2px)}
 .btn:active{transform:scale(.97)}
@@ -222,6 +224,8 @@ footer a:hover{color:var(--ink)}
 .dev[open] summary svg{transform:rotate(90deg)}
 .dev-grid{display:grid;gap:10px;margin-top:10px}
 .dev label{display:grid;gap:5px;font-size:.84rem;color:var(--mute)}
+.dev label.chk{display:flex;align-items:center;gap:10px;color:var(--ink);font-size:.92rem}
+.dev label.chk input{width:18px;height:18px;margin:0;accent-color:var(--accent,currentColor)}
 .dev select{height:46px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:0 12px;font:inherit;font-size:.95rem;width:100%;min-width:0}
 .dev .btn{height:44px;justify-self:start;border-radius:14px;font-size:.92rem}
 #avDlg .av{margin-top:4px}
@@ -569,7 +573,7 @@ body.pip .stage.duo .tile.self{width:28%;right:6px;top:6px;border-radius:10px}
 <main id="home" class="view">
   <header class="top">
     <a class="mark" href="./" aria-label="anruf.org – Startseite">anruf<i>.org</i></a>
-    <span class="mono">P2P · verschlüsselt</span>
+    <span class="mono">Kein Tracking</span>
   </header>
 
   <section class="hero">
@@ -598,19 +602,24 @@ body.pip .stage.duo .tile.self{width:28%;right:6px;top:6px;border-radius:10px}
     </div>
   </section>
 
-  <div class="marquee" aria-hidden="true"><div class="marquee-track">
-    <span>Kein Konto</span><span>Keine App</span><span>Ende-zu-Ende verschlüsselt</span><span>Audio</span><span>Video</span><span>Chat</span><span>Dateien</span><span>Bildschirm teilen</span><span>Bis zu 8 Personen</span><span>Keine Aufzeichnung</span>
-    <span>Kein Konto</span><span>Keine App</span><span>Ende-zu-Ende verschlüsselt</span><span>Audio</span><span>Video</span><span>Chat</span><span>Dateien</span><span>Bildschirm teilen</span><span>Bis zu 8 Personen</span><span>Keine Aufzeichnung</span>
-  </div></div>
-
   <ol class="steps">
-    <li><span class="num" aria-hidden="true">1</span><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h3.5l2 5-2.5 1.5a11 11 0 0 0 5.5 5.5l1.5-2.5 5 2V19a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></span><b>Tippen</b><span>Ein Tipp auf den großen Knopf, und dein Anruf ist offen.</span></li>
-    <li><span class="num" aria-hidden="true">2</span><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg></span><b>Link schicken</b><span>Per Messenger, Mail oder QR-Code. Bis zu 8 Personen.</span></li>
-    <li><span class="num" aria-hidden="true">3</span><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-9l-5 4v-4H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z"/></svg></span><b>Sprechen &amp; schreiben</b><span>Audio, Video, Chat, Dateien und Bildschirm. Direkt und verschlüsselt, ohne Aufzeichnung.</span></li>
+    <li><span class="num" aria-hidden="true">1</span><b>Tippen</b><span>Ein Tipp auf den großen Knopf, und dein Anruf ist offen.</span></li>
+    <li><span class="num" aria-hidden="true">2</span><b>Link schicken</b><span>Per Messenger, Mail oder QR-Code. Bis zu 8 Personen.</span></li>
+    <li><span class="num" aria-hidden="true">3</span><b>Sprechen</b><span>Audio, Video, Chat, Dateien und Bildschirm. Ohne Konto, ohne App.</span></li>
   </ol>
 
+  <section class="explainer" aria-label="Erklärvideo">
+    <video controls preload="none" playsinline width="1920" height="1080" src="erklaervideo.mp4" aria-label="So funktioniert anruf.org in 38 Sekunden"></video>
+  </section>
+
+  <section class="privacy" aria-labelledby="privH">
+    <h2 id="privH">Kein Tracking. Keine Cookies.</h2>
+    <p>Hier gibt es keine Analyse, keine Werbung und keine Konten. Dein Gespräch läuft direkt zwischen den Browsern und ist verschlüsselt. Wir hören nicht mit, zeichnen nichts auf und speichern nichts. Deshalb brauchst du auch kein Cookie-Banner wegzuklicken.</p>
+    <a class="linkish" href="datenschutz.html">Details in der Datenschutzerklärung</a>
+  </section>
+
   <footer class="mono">
-    <span>P2P über WebRTC · keine Aufzeichnung</span>
+    <span>Keine Cookies · kein Tracking · keine Aufzeichnung</span>
     <nav><a href="check/">Verbindung testen</a><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a></nav>
   </footer>
 </main>
@@ -650,6 +659,7 @@ body.pip .stage.duo .tile.self{width:28%;right:6px;top:6px;border-radius:10px}
             <div class="dev-grid">
               <label>Mikrofon<select id="selMic"></select></label>
               <label>Kamera<select id="selCam"></select></label>
+              <label class="chk"><input type="checkbox" id="optEq"> Stimme klarer machen (Entzerrer)</label>
               <label id="spkRow" hidden>Lautsprecher<select id="selSpk"></select></label>
               <div class="row"><button class="btn ghost" type="button" id="spkTest">Ton testen</button><a class="btn ghost" href="check/" target="_blank" rel="noopener">Netzwerk testen</a></div>
             </div>
@@ -1092,7 +1102,7 @@ async function getTurn() {
   }
   return TURN_FALLBACK.length ? TURN_FALLBACK : null
 }
-const AUDIO_C = {echoCancellation: true, noiseSuppression: true, autoGainControl: true}
+const AUDIO_C = {echoCancellation: true, noiseSuppression: true, autoGainControl: true, channelCount: 1, sampleRate: 48000}
 const VIDEO_C = {width: {ideal: 1280}, height: {ideal: 720}, frameRate: {ideal: 30, max: 30}, facingMode: 'user'}
 // Gewählte Geräte (leer = Standard des Browsers)
 const DEV = {mic: store.get('mic', ''), cam: store.get('cam', ''), spk: store.get('spk', '')}
@@ -1104,6 +1114,8 @@ async function getMedia(video) {
     const s = await navigator.mediaDevices.getUserMedia({audio: audioC(), video: video ? videoC() : false})
     const raw = s.getVideoTracks()[0]
     if (raw) { const t = await withFx(raw); if (t !== raw) { s.removeTrack(raw); s.addTrack(t) } }
+    const ra = s.getAudioTracks()[0]
+    if (ra) { const t = withVoiceEq(ra); if (t !== ra) { s.removeTrack(ra); s.addTrack(t) } }
     return s
   } catch (err) {
     if (video && err.name !== 'NotAllowedError') {
@@ -1121,6 +1133,27 @@ async function getMedia(video) {
 async function openCam() {
   const raw = (await navigator.mediaDevices.getUserMedia({video: videoC()})).getVideoTracks()[0]
   return withFx(raw)
+}
+// Sprach-EQ: Rumpeln weg (Hochpass), etwas Wärme und Präsenz, Härte raus, dann ein sanfter Kompressor.
+// Der Browser-Track dahinter wird beim Stoppen mitgeschlossen, sonst bleibt das Mikrofon an.
+function withVoiceEq(raw) {
+  if (store.get('eq', '1') !== '1') return raw
+  try {
+    const ctx = ensureAudioCtx(); if (!ctx || !ctx.createMediaStreamDestination) return raw
+    const src = ctx.createMediaStreamSource(new MediaStream([raw]))
+    const bq = (type, f, g = 0, q = .7) => { const n = ctx.createBiquadFilter(); n.type = type; n.frequency.value = f; n.gain.value = g; n.Q.value = q; return n }
+    const comp = ctx.createDynamicsCompressor()
+    comp.threshold.value = -24; comp.knee.value = 18; comp.ratio.value = 3; comp.attack.value = .005; comp.release.value = .2
+    const gain = ctx.createGain(); gain.gain.value = 1.1
+    const dest = ctx.createMediaStreamDestination()
+    const chain = [bq('highpass', 90), bq('peaking', 220, 1.5, .9), bq('peaking', 3200, 2.5, .9), bq('highshelf', 7500, -2), comp, gain]
+    chain.reduce((a, b) => (a.connect(b), b), src).connect(dest)
+    const out = dest.stream.getAudioTracks()[0]; if (!out) return raw
+    const stop = out.stop.bind(out)
+    out.stop = () => { stop(); raw.stop(); try { src.disconnect() } catch {} }
+    raw.addEventListener('ended', () => { try { stop(); out.dispatchEvent(new Event('ended')) } catch {} })
+    return out
+  } catch (e) { console.warn('anruf.org: Sprach-EQ', e); return raw }
 }
 async function withFx(raw) {
   if (fxKind === 'none' || !FX.ok) return raw
@@ -1587,17 +1620,19 @@ async function fillDevices() {
   $('#spkRow').hidden = !spk
 }
 navigator.mediaDevices?.addEventListener?.('devicechange', () => { if (curStream()) fillDevices() })
-$('#selMic').addEventListener('change', async e => {
-  DEV.mic = e.target.value; store.set('mic', DEV.mic)
+async function swapMic() {
   const s = curStream(); if (!s) return
-  let nt; try { nt = (await navigator.mediaDevices.getUserMedia({audio: audioC()})).getAudioTracks()[0] } catch { toast('Dieses Mikrofon lässt sich nicht öffnen.'); return }
+  let nt; try { nt = withVoiceEq((await navigator.mediaDevices.getUserMedia({audio: audioC()})).getAudioTracks()[0]) } catch { toast('Dieses Mikrofon lässt sich nicht öffnen.'); return }
   if (curStream() !== s) { nt.stop(); return }
   const old = s.getAudioTracks()[0]
   if (old) { nt.enabled = old.enabled; if (R?.stream === s) { try { R.room.replaceTrack(old, nt)?.catch?.(() => {}) } catch {} } s.removeTrack(old); old.stop() }
   else if (R?.stream === s && R.peers.size) { try { R.room.addTrack(nt, s) } catch {} }
   s.addTrack(nt)
   if (R?.stream === s) { R.self.analysedTrack = null; attachAnalyser(R.self, s); syncControls(); sendMeta() } else pjBind()
-})
+}
+$('#selMic').addEventListener('change', e => { DEV.mic = e.target.value; store.set('mic', DEV.mic); swapMic() })
+$('#optEq').checked = store.get('eq', '1') === '1'
+$('#optEq').addEventListener('change', e => { store.set('eq', e.target.checked ? '1' : '0'); swapMic() })
 $('#selCam').addEventListener('change', async e => {
   DEV.cam = e.target.value; store.set('cam', DEV.cam)
   const s = curStream(), cur = liveVideo(s); if (!s || !cur) return
@@ -2323,6 +2358,32 @@ function shareTo(id) {
   try { R.room.addStream(sc.stream, {target: id, metadata: {screen: true}}) } catch {}
   setTimeout(() => tuneScreen(), 1200)
 }
+// Opus-Sprache höher kodieren (Browser-Standard ca. 32 kbit/s), aber nur pro Verbindung, die direkt (kein Relay),
+// schnell (geringe Laufzeit) und sauber (kaum Paketverlust) ist. Sonst zurück auf den Standard.
+const audioHi = new WeakMap()
+function tuneAudio() {
+  if (!R) return
+  const at = R.stream.getAudioTracks()[0]; if (!at) return
+  for (const [id, pc] of Object.entries(R.room.getPeers())) {
+    const st = R.net.peers.get(id)?.st; if (!st?.sel) continue
+    const relay = st.local?.candidateType === 'relay' || st.remote?.candidateType === 'relay'
+    const hi = !relay && st.rtt != null && st.rtt < 100 && (st.loss ?? 0) < 2
+    const lo = relay || (st.rtt != null && st.rtt > 160) || (st.loss ?? 0) > 4
+    for (const snd of pc.getSenders?.() || []) {
+      if (snd.track !== at) continue
+      const was = !!audioHi.get(snd)
+      if (was ? !lo : !hi) continue
+      const on = !was
+      audioHi.set(snd, on)
+      try {
+        const prm = snd.getParameters(); prm.encodings = prm.encodings?.length ? prm.encodings : [{}]
+        if (on) { prm.encodings[0].maxBitrate = 64_000; prm.encodings[0].priority = 'high'; prm.encodings[0].networkPriority = 'high' }
+        else { delete prm.encodings[0].maxBitrate; prm.encodings[0].priority = 'low'; prm.encodings[0].networkPriority = 'low' }
+        snd.setParameters(prm).catch(() => audioHi.set(snd, !on))
+      } catch { audioHi.set(snd, !on) }
+    }
+  }
+}
 // Bitrate/Bildrate des Screen-Videos erhöhen, damit Text scharf bleibt.
 async function tuneScreen() {
   if (!R?.screen) return
@@ -2817,6 +2878,7 @@ async function netTick() {
     if (net.hUp.length > HIST) { net.hUp.shift(); net.hDown.shift() }
     paintInfoDot()
     weakCheck()
+    tuneAudio()
     if (!$('#infoBox').hidden) renderInfo()
   } finally { r.netBusy = false }
 }
@@ -3038,6 +3100,11 @@ if (!window.RTCPeerConnection) {
 setMode(mode)
 loadCustomBg().then(im => { if (im) { FX.custom = im; if (fxKind === 'custom') FX.setKind('custom'); renderFxRow() } else if (fxKind === 'custom') { fxKind = 'none'; FX.setKind('none') } })
 route()
+</script>
+<script>
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}))
+}
 </script>
 </body>
 </html>

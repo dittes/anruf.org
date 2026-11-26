@@ -1,0 +1,23 @@
+{
+  "name": "anruf.org",
+  "short_name": "anruf",
+  "description": "Ruf einfach an. Audio, Video und Chat direkt im Browser, ohne Konto und ohne Tracking.",
+  "lang": "de",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#EEECE6",
+  "theme_color": "#EEECE6",
+  "categories": ["communication", "social"],
+  "icons": [
+    {"src": "icons/icon-any-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "icons/icon-any-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "icons/icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable"},
+    {"src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ],
+  "shortcuts": [
+    {"name": "Anruf starten", "url": "/", "icons": [{"src": "icons/icon-any-192.png", "sizes": "192x192"}]}
+  ]
+}
