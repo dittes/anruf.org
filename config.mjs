@@ -10,7 +10,6 @@ export const OWN_RELAYS = []
 // Öffentliche Nostr-Relays, nur für den Verbindungsaufbau (keine Medien, kein Chat).
 export const PUBLIC_RELAYS = [
   'wss://nos.lol',
-  'wss://relay.mostr.pub',
   'wss://nostr-01.yakihonne.com',
   'wss://yabu.me/v2',
   'wss://nostr-01.uid.ovh',

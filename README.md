@@ -50,13 +50,13 @@ Derzeit nicht in Betrieb (`OWN_RELAYS` in `config.mjs` ist leer). Zum Reaktivier
 | Konstante | Zweck |
 |---|---|
 | `DEFAULT_RELAYS` (`config.mjs`) | Nostr-Relays für das Signaling. Bei Änderungen auch `datenschutz.html` anpassen. |
-| `TURN` / `TURN_FALLBACK` / `STUN` (`config.mjs`) | Open Relay / Metered: App-Domain und API-Key sowie statische Zugangsdaten als Fallback. Wird nur im Notfall benutzt. |
-| `TURN_AFTER_MS` | Wie lange der direkte Weg versucht wird, bevor TURN dazukommt. |
+| `TURN` / `TURN_FALLBACK` / `STUN` (`config.mjs`) | Open Relay / Metered: App-Domain und API-Key sowie statische Zugangsdaten als Fallback. Werden beim Beitreten abgeholt, der Relay wird aber nur genutzt, wenn direkt nichts geht. |
+| `TURN_AFTER_MS` | Wie lange eine abgerissene Verbindung im Aufbau hängen darf, bevor ICE neu startet. |
 | `LIMIT` | Maximale Teilnehmerzahl pro Anruf. |
 
-### TURN (nur als Fallback)
+### TURN (Relay, wenn direkt nichts geht)
 
-Jede Verbindung startet **ohne** TURN, nur mit STUN, also direkt von Browser zu Browser. Hängt der Verbindungsaufbau länger als `TURN_AFTER_MS` (6 Sekunden) fest, trägt die Seite die TURN-Server nachträglich in die Verbindung ein und startet ICE neu. Erst dann holt sie kurzlebige Zugangsdaten über die Metered-REST-API (Fallback: die statischen Zugangsdaten in `TURN_FALLBACK`). Nur eine Seite (die mit der kleineren ID) startet sofort, die andere erst 6 Sekunden später, damit beide nicht gleichzeitig neu verhandeln. Beides darf öffentlich im Frontend stehen.
+Beim Beitreten holt die Seite kurzlebige Zugangsdaten über die Metered-REST-API (Fallback: die statischen Zugangsdaten in `TURN_FALLBACK`) und gibt sie Trystero als `turnConfig` mit. WebRTC bevorzugt trotzdem den direkten Weg und nutzt den Relay nur, wenn direkt nichts klappt. Nachträglich eintragen reicht nicht: Trystero liefert in `getPeers()` nur schon verbundene Peers, eine hängende Erstverbindung wäre so nie erreichbar. Fällt eine bestehende Verbindung zurück in den Aufbau und hängt länger als `TURN_AFTER_MS` (6 Sekunden), startet ICE einmal neu; nur eine Seite (die mit der kleineren ID) sofort, die andere 6 Sekunden später. Beides darf öffentlich im Frontend stehen.
 
 Ob eine Verbindung direkt oder über Relay läuft, zeigt das (i) oben rechts im Anruf.
 

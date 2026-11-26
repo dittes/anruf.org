@@ -1865,6 +1865,7 @@ function sendMeta(target) {
 
 async function enterRoom(slug) {
   const btn = $('#joinBtn'); btn.disabled = true
+  const turnP = getTurn()   // parallel zu Kamera/Mikrofon, damit das Beitreten nicht länger dauert
   let stream = PJ.stream
   if (stream) {   // Stream aus der Vorschau übernehmen (inkl. Stummschaltung und Effekt)
     PJ.stream = null; PJ.token++
@@ -1882,10 +1883,15 @@ async function enterRoom(slug) {
     if (viewWanted !== 'join') showJoin(slug)
     return
   }
+  const turn = await turnP
+  // Nach dem await: Hat der Nutzer inzwischen abgebrochen?
+  if (viewWanted !== 'join') { stopTracks(stream); btn.disabled = false; return }
   btn.disabled = false
   ensureAudioCtx()
-  // Bewusst ohne TURN: Der Relay-Server kommt erst ins Spiel, wenn der direkte Weg nicht klappt (siehe watchIce).
-  const cfg = {appId: APP_ID, relayConfig: {urls: RELAYS, warnOnRelayFailure: false}}
+  // TURN von Anfang an dabei: WebRTC bevorzugt trotzdem den direkten Weg und nutzt den Relay-Server
+  // nur, wenn direkt nichts klappt. Nachträglich eintragen (watchIce) erreicht hängende Erstverbindungen
+  // nicht, weil Trystero in getPeers() nur schon verbundene Peers liefert.
+  const cfg = {appId: APP_ID, relayConfig: {urls: RELAYS, warnOnRelayFailure: false}, turnConfig: turn || []}
   const errored = new Set()
   const room = joinRoom(cfg, 'anruf/' + slug, {
     onJoinError: d => {
@@ -2729,10 +2735,10 @@ function closePipDom() {
 function replayVideos() { STAGE.querySelectorAll('video').forEach(v => { if (v.srcObject && v.paused) v.play().catch(() => {}) }) }
 document.addEventListener('visibilitychange', () => { if (!document.hidden) pipWin?.close() })
 
-/* ---- Verbindungs-Monitor: TURN nur als Fallback + Statistik ---- */
-// Ablauf: Jede Verbindung startet nur mit STUN (direkter Weg). Hängt ICE länger als TURN_AFTER_MS
-// im Verbindungsaufbau, werden die TURN-Server nachträglich eingetragen und ICE neu gestartet.
-// Erst dann werden Zugangsdaten bei Metered abgeholt.
+/* ---- Verbindungs-Monitor: ICE-Neustart + Statistik ---- */
+// TURN ist seit dem Beitreten in jeder Verbindung eingetragen (siehe enterRoom). Fällt eine schon bestehende
+// Verbindung zurück in den Aufbau und hängt dort länger als TURN_AFTER_MS, startet ICE einmal neu
+// (fehlende TURN-Server werden dabei ergänzt).
 const TURN_AFTER_MS = 6000
 const HIST = 60
 const comma = x => String(x).replace('.', ',')
@@ -2755,7 +2761,8 @@ async function useRelay(pc) {
   if (!R || R !== r || !turn || pc.connectionState === 'closed' || pc.connectionState === 'connected') return
   try {
     const cfg = pc.getConfiguration()
-    cfg.iceServers = [...(cfg.iceServers || []), ...turn]
+    const have = new Set((cfg.iceServers || []).flatMap(sv => [].concat(sv.urls)))
+    cfg.iceServers = [...(cfg.iceServers || []), ...turn.filter(sv => ![].concat(sv.urls).every(u => have.has(u)))]
     pc.setConfiguration(cfg)
     pc.restartIce()
     if (!r.net.relayAsked) { r.net.relayAsked = true; toast('Direkt klappt nicht. Ich versuche es über einen Relay-Server.', 4500) }
