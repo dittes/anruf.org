@@ -1,0 +1,2788 @@
+<!doctype html>
+<html lang="de" data-theme="auto">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<title>anruf.org — Direktes Peer-to-Peer ohne Umwege</title>
+<meta name="description" content="Ruf einfach an. 100 % direktes Browser-zu-Browser Peer-to-Peer ohne Konto, ohne App und ohne TURN-Relay. Mit Audio, HD-Video, 3D-Raumklang, Whiteboard & Datentunnel.">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23FF4F1A'/%3E%3Cpath d='M21 18h6.5l3.5 8.5-4.2 2.6a19 19 0 0 0 9.1 9.1l2.6-4.2L47 37.5V44a3.5 3.5 0 0 1-3.5 3.5A27.5 27.5 0 0 1 17.5 21.5 3.5 3.5 0 0 1 21 18z' fill='none' stroke='%23fff' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+/* ==========================================================================
+   anruf.org v2 — Swiss Industrial Editorial / Tactile Precision
+   Zero External Fonts · Zero CDNs · 100 % DSGVO-konform
+   ========================================================================== */
+:root {
+  --paper: #EEECE6;
+  --paper-elev: #E5E2DA;
+  --card: #F8F7F3;
+  --card-glass: rgba(248, 247, 243, 0.84);
+  --ink: #121210;
+  --ink-soft: #2B2A27;
+  --mute: #6B6860;
+  --line: rgba(18, 18, 16, 0.11);
+  --line-strong: rgba(18, 18, 16, 0.24);
+  --accent: #FF4F1A;
+  --accent-soft: rgba(255, 79, 26, 0.13);
+  --on-accent: #FFFFFF;
+  --p2p: #1FA958;
+  --p2p-soft: rgba(31, 169, 88, 0.14);
+  --warn: #E59915;
+  --warn-soft: rgba(229, 153, 21, 0.15);
+  --danger: #E3321A;
+  --shadow-sm: 0 4px 14px rgba(18, 18, 16, 0.05);
+  --shadow-md: 0 18px 42px -12px rgba(18, 18, 16, 0.14);
+  --shadow-lg: 0 28px 70px -16px rgba(18, 18, 16, 0.26);
+  --grain-op: 0.055;
+  --grain-blend: multiply;
+  --sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", "Cascadia Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  --spring: cubic-bezier(0.32, 1.42, 0.58, 1);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --gutter: clamp(16px, 4.2vw, 48px);
+  --radius-xl: 28px;
+  --radius-lg: 20px;
+  --radius-md: 14px;
+}
+
+@media (prefers-color-scheme: dark) {
+  html[data-theme="auto"] {
+    --paper: #0B0B0A;
+    --paper-elev: #121210;
+    --card: #161614;
+    --card-glass: rgba(22, 22, 20, 0.84);
+    --ink: #F2EFE9;
+    --ink-soft: #D7D3CA;
+    --mute: #8E8B82;
+    --line: rgba(242, 239, 233, 0.11);
+    --line-strong: rgba(242, 239, 233, 0.25);
+    --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 20px 48px -12px rgba(0, 0, 0, 0.55);
+    --shadow-lg: 0 30px 80px -14px rgba(0, 0, 0, 0.72);
+    --grain-op: 0.04;
+    --grain-blend: screen;
+  }
+}
+html[data-theme="dark"] {
+  --paper: #0B0B0A;
+  --paper-elev: #121210;
+  --card: #161614;
+  --card-glass: rgba(22, 22, 20, 0.84);
+  --ink: #F2EFE9;
+  --ink-soft: #D7D3CA;
+  --mute: #8E8B82;
+  --line: rgba(242, 239, 233, 0.11);
+  --line-strong: rgba(242, 239, 233, 0.25);
+  --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 20px 48px -12px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 30px 80px -14px rgba(0, 0, 0, 0.72);
+  --grain-op: 0.04;
+  --grain-blend: screen;
+  color-scheme: dark;
+}
+html[data-theme="light"] { color-scheme: light; }
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.48;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  transition: background-color 0.35s var(--ease), color 0.35s var(--ease);
+}
+
+/* Archival Paper Noise Texture */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: var(--grain-op);
+  mix-blend-mode: var(--grain-blend);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Ambient Warm Aura */
+.aura {
+  position: fixed;
+  z-index: 0;
+  pointer-events: none;
+  width: 68vmax;
+  height: 68vmax;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 79, 26, 0.22), transparent 64%);
+  filter: blur(48px);
+  right: -24vmax;
+  top: -26vmax;
+  animation: auraDrift 24s var(--ease) infinite alternate;
+}
+@keyframes auraDrift { to { transform: translate(-10vmax, 14vmax) scale(1.12); } }
+
+a { color: inherit; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
+.mono { font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.06em; text-transform: uppercase; }
+
+/* Views */
+.view { display: none; position: relative; z-index: 1; }
+body[data-view="home"] #home,
+body[data-view="join"] #join,
+body[data-view="room"] #room { display: flex; }
+
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: 0.38s; animation-timing-function: var(--ease); }
+
+/* ==========================================================================
+   TOP NAVIGATION & SHARED CONTROLS
+   ========================================================================== */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px var(--gutter);
+  width: 100%;
+}
+.brand {
+  font-weight: 850;
+  font-size: 1.32rem;
+  letter-spacing: -0.04em;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+.brand i { font-style: normal; color: var(--accent); }
+.brand-tag {
+  font-family: var(--mono);
+  font-size: 0.63rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.top-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+.pill-btn {
+  height: 36px;
+  padding: 0 13px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 0.71rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.3s var(--spring), border-color 0.25s, background 0.25s;
+}
+.pill-btn:hover { transform: translateY(-1px); border-color: var(--line-strong); }
+.pill-btn svg { width: 15px; height: 15px; flex: none; }
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--mute);
+  box-shadow: 0 0 0 0 rgba(31, 169, 88, 0.4);
+  transition: background 0.3s;
+}
+.status-dot.online { background: var(--p2p); animation: pulseGreen 2.4s infinite; }
+.status-dot.warn { background: var(--warn); }
+@keyframes pulseGreen {
+  0% { box-shadow: 0 0 0 0 rgba(31, 169, 88, 0.55); }
+  70% { box-shadow: 0 0 0 7px rgba(31, 169, 88, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(31, 169, 88, 0); }
+}
+
+.icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--card);
+  display: grid;
+  place-items: center;
+  color: var(--ink);
+  transition: transform 0.3s var(--spring), border-color 0.25s;
+}
+.icon-btn:hover { transform: translateY(-1px) rotate(8deg); border-color: var(--line-strong); }
+.icon-btn svg { width: 17px; height: 17px; }
+
+/* Buttons */
+.btn {
+  height: 48px;
+  padding: 0 20px;
+  border-radius: 14px;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+  font-weight: 650;
+  font-size: 0.95rem;
+  letter-spacing: -0.01em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  text-decoration: none;
+  transition: transform 0.35s var(--spring), background 0.25s, border-color 0.25s, opacity 0.25s;
+  white-space: nowrap;
+}
+.btn:hover:not(:disabled) { transform: translateY(-2px); }
+.btn:active:not(:disabled) { transform: scale(0.97); }
+.btn:disabled { opacity: 0.48; cursor: not-allowed; }
+.btn svg { width: 18px; height: 18px; flex: none; }
+.btn.ghost { background: transparent; color: var(--ink); border-color: var(--line-strong); }
+.btn.ghost:hover:not(:disabled) { background: var(--card); }
+.btn.accent { background: var(--accent); border-color: var(--accent); color: var(--on-accent); box-shadow: 0 10px 26px -8px rgba(255, 79, 26, 0.65); }
+.btn.p2p { background: var(--p2p); border-color: var(--p2p); color: #fff; }
+.btn.sm { height: 38px; padding: 0 14px; border-radius: 11px; font-size: 0.86rem; }
+
+/* ==========================================================================
+   HOME VIEW (#home)
+   ========================================================================== */
+#home {
+  flex-direction: column;
+  min-height: 100dvh;
+}
+#home::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: radial-gradient(color-mix(in srgb, var(--ink) 15%, transparent) 1px, transparent 1.4px);
+  background-size: 24px 24px;
+  -webkit-mask-image: radial-gradient(ellipse 68% 54% at 68% 28%, #000 12%, transparent 74%);
+  mask-image: radial-gradient(ellipse 68% 54% at 68% 28%, #000 12%, transparent 74%);
+}
+
+.hero {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: clamp(18px, 4vh, 52px) var(--gutter) clamp(28px, 5vh, 56px);
+  display: grid;
+  gap: 36px;
+  align-items: center;
+}
+
+.hero-copy { display: grid; gap: 22px; justify-items: start; }
+.eyebrow-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--p2p-soft);
+  color: var(--p2p);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  margin: 0;
+  font-weight: 850;
+  font-size: clamp(3.3rem, 11vw, 7.6rem);
+  line-height: 0.88;
+  letter-spacing: -0.055em;
+}
+.hero h1 .ln { display: block; overflow: hidden; padding-bottom: 0.06em; }
+.hero h1 .ln > span {
+  display: inline-block;
+  animation: slideUp 0.75s var(--ease) both;
+}
+.hero h1 .ln:nth-child(2) > span { animation-delay: 0.07s; }
+.hero h1 .ln:nth-child(3) > span { animation-delay: 0.14s; }
+.hero h1 em { font-style: normal; color: var(--accent); }
+@keyframes slideUp { from { transform: translateY(108%); opacity: 0; } to { transform: none; opacity: 1; } }
+
+.lede {
+  margin: 0;
+  max-width: 44ch;
+  font-size: clamp(1.06rem, 2.1vw, 1.28rem);
+  color: var(--mute);
+  line-height: 1.5;
+}
+.lede strong { color: var(--ink); font-weight: 650; }
+
+/* Quick Room Composer Bar */
+.quick-composer {
+  width: 100%;
+  max-width: 520px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 14px;
+  display: grid;
+  gap: 10px;
+  box-shadow: var(--shadow-md);
+}
+.qc-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 6px 8px 6px 14px;
+  transition: border-color 0.25s;
+}
+.qc-row:focus-within { border-color: var(--accent); }
+.qc-prefix { font-family: var(--mono); font-size: 0.8rem; color: var(--mute); white-space: nowrap; user-select: none; }
+.qc-row input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  outline: 0;
+  font-family: var(--mono);
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 6px 0;
+}
+.qc-dice {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  display: grid;
+  place-items: center;
+  color: var(--mute);
+  flex: none;
+  transition: transform 0.35s var(--spring), color 0.2s;
+}
+.qc-dice:hover { color: var(--ink); transform: rotate(90deg); }
+.qc-dice svg { width: 16px; height: 16px; }
+
+.qc-subrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.pin-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 11px;
+  border-radius: 10px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  font-size: 0.82rem;
+  flex: 1;
+  min-width: 190px;
+}
+.pin-pill svg { width: 14px; height: 14px; color: var(--accent); flex: none; }
+.pin-pill input {
+  border: 0;
+  background: transparent;
+  outline: 0;
+  width: 100%;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+}
+
+/* Tactile Rotary Sonar Call Orb */
+.dial-col {
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+}
+.orb {
+  position: relative;
+  width: clamp(240px, 64vw, 356px);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+}
+.orb::before {
+  content: "";
+  position: absolute;
+  inset: 7%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 79, 26, 0.26) 0%, transparent 68%);
+  filter: blur(20px);
+  animation: orbGlow 4s ease-in-out infinite alternate;
+}
+@keyframes orbGlow { to { transform: scale(1.12); opacity: 0.75; } }
+
+.orb-ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  animation: spinRing 28s linear infinite;
+  color: var(--ink);
+  opacity: 0.78;
+  pointer-events: none;
+}
+.orb:hover .orb-ring { animation-duration: 10s; }
+.orb-ring text {
+  font-family: var(--mono);
+  font-size: 9.6px;
+  letter-spacing: 0.19em;
+  fill: currentColor;
+  text-transform: uppercase;
+}
+@keyframes spinRing { to { transform: rotate(360deg); } }
+
+.call-btn {
+  position: relative;
+  width: 63%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 0;
+  color: var(--on-accent);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: radial-gradient(circle at 32% 26%, #FF7E55 0%, var(--accent) 46%, #CC3205 100%);
+  box-shadow: 0 24px 54px -12px rgba(255, 79, 26, 0.65),
+              inset 0 -8px 20px rgba(120, 20, 0, 0.55),
+              inset 0 5px 12px rgba(255, 255, 255, 0.34);
+  transition: transform 0.5s var(--spring), box-shadow 0.35s;
+}
+.call-btn::before, .call-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.8px solid var(--accent);
+  animation: sonarWave 3.2s cubic-bezier(0.2, 0.6, 0.3, 1) infinite;
+  pointer-events: none;
+}
+.call-btn::after { animation-delay: 1.6s; }
+@keyframes sonarWave { from { transform: scale(1); opacity: 0.68; } to { transform: scale(1.72); opacity: 0; } }
+
+.call-btn svg { width: 34%; height: 34%; animation: phoneWiggle 3.6s 1.2s ease-in-out infinite; }
+@keyframes phoneWiggle {
+  0%, 74%, 100% { transform: rotate(0); }
+  78% { transform: rotate(-13deg); }
+  82% { transform: rotate(11deg); }
+  86% { transform: rotate(-8deg); }
+  90% { transform: rotate(5deg); }
+}
+.call-btn .cta { font-weight: 750; font-size: clamp(0.88rem, 2.5vw, 1.02rem); letter-spacing: -0.01em; }
+.call-btn:hover { transform: scale(1.055); }
+.call-btn:active { transform: scale(0.94); }
+
+.orb-caption {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--mute);
+  text-align: center;
+}
+
+/* Bento Feature Grid */
+.bento-sec {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 18px var(--gutter) 56px;
+  display: grid;
+  gap: 18px;
+}
+.sec-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.sec-head h2 { margin: 0; font-size: clamp(1.45rem, 3.2vw, 2.1rem); letter-spacing: -0.035em; font-weight: 800; }
+
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(275px, 1fr));
+  gap: 14px;
+}
+.bento-card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 22px;
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  transition: transform 0.4s var(--spring), border-color 0.3s, box-shadow 0.3s;
+}
+.bento-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--line-strong);
+  box-shadow: var(--shadow-md);
+}
+.bento-ic {
+  width: 42px;
+  height: 42px;
+  border-radius: 13px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  display: grid;
+  place-items: center;
+}
+.bento-card.green .bento-ic { background: var(--p2p-soft); color: var(--p2p); }
+.bento-ic svg { width: 21px; height: 21px; }
+.bento-card h3 { margin: 2px 0 0; font-size: 1.14rem; letter-spacing: -0.02em; font-weight: 750; }
+.bento-card p { margin: 0; color: var(--mute); font-size: 0.93rem; line-height: 1.48; }
+
+.home-footer {
+  margin-top: auto;
+  padding: 22px var(--gutter) calc(22px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--mute);
+}
+.home-footer nav { display: flex; gap: 18px; flex-wrap: wrap; }
+.home-footer button.link-btn, .home-footer a {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: var(--mute);
+  text-decoration: none;
+  font-family: var(--mono);
+  font-size: 0.73rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.home-footer button.link-btn:hover, .home-footer a:hover { color: var(--ink); }
+
+@media (min-width: 880px) {
+  .hero { grid-template-columns: 1.15fr 0.85fr; min-height: min(74vh, 690px); }
+}
+
+/* ==========================================================================
+   JOIN / STUDIO LOBBY VIEW (#join)
+   ========================================================================== */
+#join { flex-direction: column; min-height: 100dvh; }
+.lobby-wrap {
+  flex: 1;
+  width: 100%;
+  max-width: 1220px;
+  margin: 0 auto;
+  padding: 8px var(--gutter) 44px;
+  display: grid;
+  gap: 28px;
+  align-content: center;
+}
+@media (min-width: 920px) {
+  .lobby-wrap { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 44px; align-items: start; }
+}
+
+/* Video Preview Stage */
+.pv-card {
+  display: grid;
+  gap: 14px;
+}
+.pv-stage {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  min-height: 270px;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background: #10100F;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-md);
+  display: grid;
+  place-items: center;
+}
+.pv-stage video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1);
+  opacity: 0;
+  transition: opacity 0.35s;
+}
+.pv-stage.cam-on video { opacity: 1; }
+.pv-stage.cam-on .pv-avatar-wrap { opacity: 0; pointer-events: none; }
+
+.pv-avatar-wrap {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  text-align: center;
+  color: #EAE7DF;
+  padding: 20px;
+  transition: opacity 0.3s;
+}
+.pv-avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #121210;
+  font-weight: 850;
+  font-size: 2.5rem;
+  display: grid;
+  place-items: center;
+  transition: box-shadow 0.08s linear, transform 0.08s linear;
+}
+.pv-status-pill {
+  position: absolute;
+  z-index: 3;
+  top: 14px;
+  left: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(16, 16, 15, 0.72);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #F4F1EA;
+  font-family: var(--mono);
+  font-size: 0.69rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+.pv-spectrum {
+  position: absolute;
+  z-index: 3;
+  top: 14px;
+  right: 14px;
+  height: 30px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(16, 16, 15, 0.72);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.pv-spectrum canvas { width: 68px; height: 18px; display: block; }
+
+.pv-controls {
+  position: absolute;
+  z-index: 3;
+  left: 14px;
+  right: 14px;
+  bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.pv-ctl-group { display: flex; gap: 8px; align-items: center; }
+
+.round-ctl {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(22, 22, 20, 0.76);
+  backdrop-filter: blur(12px);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  transition: transform 0.35s var(--spring), background 0.25s, border-color 0.25s;
+}
+.round-ctl:hover { transform: translateY(-2px); }
+.round-ctl svg { width: 21px; height: 21px; }
+.round-ctl.off { background: var(--danger); border-color: var(--danger); color: #fff; }
+.round-ctl .ic-off { display: none; }
+.round-ctl.off .ic-on { display: none; }
+.round-ctl.off .ic-off { display: block; }
+
+.mic-check-btn {
+  height: 40px;
+  padding: 0 13px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(22, 22, 20, 0.76);
+  backdrop-filter: blur(12px);
+  color: #fff;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.mic-check-btn.rec { background: var(--accent); border-color: var(--accent); }
+
+/* Filter & Studio Panel */
+.studio-box {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 14px 16px;
+  display: grid;
+  gap: 12px;
+}
+.filter-strip {
+  display: flex;
+  gap: 7px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  scrollbar-width: none;
+}
+.filter-strip::-webkit-scrollbar { display: none; }
+.flt-chip {
+  flex: none;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  transition: all 0.25s;
+}
+.flt-chip[aria-checked="true"] {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+
+.dev-details summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--mute);
+  padding: 4px 0;
+}
+.dev-details summary::-webkit-details-marker { display: none; }
+.dev-grid {
+  display: grid;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  margin-top: 8px;
+}
+.dev-grid label {
+  display: grid;
+  gap: 4px;
+  font-size: 0.82rem;
+  color: var(--mute);
+}
+.dev-grid select, .dev-grid input[type="text"], .dev-grid input[type="password"] {
+  height: 40px;
+  border-radius: 11px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  padding: 0 11px;
+  font-size: 0.9rem;
+  color: var(--ink);
+}
+.chk-row {
+  display: flex !important;
+  align-items: center;
+  gap: 9px !important;
+  color: var(--ink) !important;
+  font-size: 0.88rem !important;
+  cursor: pointer;
+}
+.chk-row input { width: 17px; height: 17px; accent-color: var(--accent); margin: 0; }
+
+/* Lobby Right Side */
+.lobby-info {
+  display: grid;
+  gap: 18px;
+  align-content: start;
+}
+.lobby-slug-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.lobby-slug {
+  margin: 0;
+  font-size: clamp(1.9rem, 5vw, 3.2rem);
+  font-weight: 850;
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+  word-break: break-word;
+}
+.field-stack { display: grid; gap: 12px; }
+.field-lbl { display: grid; gap: 6px; }
+.field-lbl input {
+  height: 52px;
+  padding: 0 16px;
+  border-radius: 15px;
+  border: 1px solid var(--line-strong);
+  background: var(--card);
+  font-size: 1.04rem;
+  font-weight: 600;
+  outline: 0;
+  transition: border-color 0.25s;
+}
+.field-lbl input:focus { border-color: var(--accent); }
+
+.lobby-cta-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
+.lobby-cta-row .go-btn { height: 56px; padding: 0 28px; border-radius: 999px; font-size: 1.05rem; flex: 1; min-width: 200px; }
+
+/* ==========================================================================
+   ROOM / IN-CALL VIEW (#room)
+   ========================================================================== */
+#room {
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.room-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px var(--gutter);
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+  z-index: 15;
+}
+.rb-left, .rb-right { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.rb-slug {
+  font-weight: 700;
+  font-size: 0.98rem;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 24ch;
+}
+.sas-badge {
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  title: "Ende-zu-Ende Sicherheitscode prüfen";
+}
+.sas-badge .mono { font-size: 0.64rem; color: var(--mute); }
+
+.radar-wrap { position: relative; }
+.radar-popover {
+  position: absolute;
+  z-index: 40;
+  top: calc(100% + 10px);
+  right: 0;
+  width: min(370px, calc(100vw - 24px));
+  max-height: calc(100dvh - 86px);
+  overflow-y: auto;
+  background: var(--card);
+  border: 1px solid var(--line-strong);
+  border-radius: 24px;
+  padding: 16px;
+  box-shadow: var(--shadow-lg);
+  display: grid;
+  gap: 13px;
+  animation: popIn 0.3s var(--spring);
+}
+@keyframes popIn { from { opacity: 0; transform: translateY(-8px) scale(0.96); } }
+
+.mesh-svg {
+  width: 100%;
+  height: 126px;
+  border-radius: 16px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  display: block;
+}
+.spark-svg {
+  width: 100%;
+  height: 62px;
+  border-radius: 12px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  display: block;
+}
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 7px;
+}
+.stat-cell {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 8px 10px;
+}
+.stat-cell .k { font-family: var(--mono); font-size: 0.61rem; color: var(--mute); text-transform: uppercase; letter-spacing: 0.06em; }
+.stat-cell .v { font-weight: 750; font-size: 0.96rem; margin-top: 1px; font-family: var(--mono); }
+
+.peer-stat-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
+.peer-stat-list li {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  padding: 8px 10px;
+  border-radius: 11px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  display: grid;
+  gap: 3px;
+}
+
+/* Main Stage + Workspace + Chat */
+.room-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  gap: 12px;
+  padding: 10px var(--gutter);
+  position: relative;
+}
+
+.stage-wrap {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  gap: 12px;
+  position: relative;
+}
+
+/* Collaborative Whiteboard / Presentation Primary Pane */
+.work-pane {
+  flex: 1.65;
+  min-width: 0;
+  min-height: 0;
+  position: relative;
+  border-radius: 24px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-sm);
+}
+.wb-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+  flex-wrap: wrap;
+}
+.wb-tools { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+.wb-btn {
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 9px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.wb-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.wb-swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  padding: 0;
+}
+.wb-swatch.active { border-color: var(--ink); transform: scale(1.14); }
+.wb-canvas-wrap {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  background: #FAF9F5;
+  cursor: crosshair;
+  touch-action: none;
+}
+html[data-theme="dark"] .wb-canvas-wrap { background: #141412; }
+.wb-canvas-wrap canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Video Tiles Grid */
+.tiles-grid {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(var(--cols, 1), minmax(0, 1fr));
+  grid-auto-rows: minmax(0, 1fr);
+  position: relative;
+}
+.stage-wrap.has-work .tiles-grid {
+  flex: 0 0 clamp(170px, 21vw, 250px);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+.stage-wrap.has-work .tiles-grid .tile {
+  flex: none;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+}
+
+.tile {
+  position: relative;
+  border-radius: 24px;
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  min-height: 0;
+  container-type: size;
+  transition: border-color 0.25s, box-shadow 0.25s;
+  animation: tileEnter 0.45s var(--spring) both;
+}
+@keyframes tileEnter { from { opacity: 0; transform: scale(0.9); } }
+.tile.speaking {
+  border-color: var(--c, var(--p2p));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--c, var(--p2p)) 30%, transparent);
+}
+.tile video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.35s;
+  background: #0D0D0C;
+  pointer-events: none;
+}
+.tile.cam video { opacity: 1; }
+.tile.self:not(.screen-tile) video { transform: scaleX(-1); }
+.tile.screen-tile video { object-fit: contain; opacity: 1; background: #070707; }
+.tile.cam .blob-box { opacity: 0; pointer-events: none; }
+
+/* Laser / Annotation Overlay on Screen Tile */
+.annot-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 4;
+  touch-action: none;
+  cursor: crosshair;
+}
+
+.blob-box {
+  position: relative;
+  width: min(56%, 56cqh, 240px);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  transition: opacity 0.35s;
+}
+.blob-box svg { position: absolute; inset: -18%; width: 136%; height: 136%; overflow: visible; }
+.blob-box .halo { fill: var(--c, var(--accent)); opacity: 0.2; }
+.blob-box .body { fill: var(--c, var(--accent)); }
+.blob-ini {
+  position: relative;
+  font-weight: 850;
+  font-size: clamp(1.5rem, 20cqmin, 4.2rem);
+  color: #121210;
+  user-select: none;
+}
+
+.tile-meta {
+  position: absolute;
+  z-index: 5;
+  left: 12px;
+  bottom: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: var(--card-glass);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  max-width: calc(100% - 24px);
+}
+.tile-meta .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+.tile-meta .mute-ic { width: 14px; height: 14px; color: var(--danger); display: none; flex: none; }
+.tile.muted .tile-meta .mute-ic { display: block; }
+
+.tile-badges {
+  position: absolute;
+  z-index: 5;
+  top: 12px;
+  left: 12px;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.p2p-tag {
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: rgba(16, 16, 15, 0.72);
+  color: #67F09D;
+  font-family: var(--mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.05em;
+  backdrop-filter: blur(8px);
+}
+.hand-tag {
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: #FFD34E;
+  color: #121210;
+  font-size: 0.95rem;
+  display: none;
+}
+.tile.hand-up .hand-tag { display: inline-block; animation: waveHand 1.4s ease-in-out 2; }
+@keyframes waveHand { 25% { transform: rotate(15deg); } 55% { transform: rotate(-10deg); } }
+
+/* Waiting Card when alone */
+.wait-card {
+  position: absolute;
+  z-index: 8;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  width: min(560px, calc(100% - 28px));
+  background: var(--card-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--line-strong);
+  border-radius: 24px;
+  padding: 16px 18px;
+  box-shadow: var(--shadow-lg);
+  display: none;
+  gap: 14px;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+}
+.tiles-grid.alone .wait-card { display: grid; }
+.wait-card h3 { margin: 0 0 4px; font-size: 1.08rem; font-weight: 750; }
+.wait-card p { margin: 0; font-size: 0.88rem; color: var(--mute); }
+.qr-mini { width: 84px; height: 84px; background: #fff; padding: 6px; border-radius: 12px; }
+.qr-mini svg { width: 100%; height: 100%; display: block; }
+.wait-link-row {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.wait-link-row code {
+  flex: 1;
+  min-width: 160px;
+  padding: 10px 12px;
+  border-radius: 11px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Floating Live Subtitles (CC) */
+.cc-overlay {
+  position: absolute;
+  z-index: 12;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  max-width: min(680px, 90%);
+  display: grid;
+  gap: 6px;
+  justify-items: center;
+  pointer-events: none;
+}
+.cc-line {
+  background: rgba(14, 14, 13, 0.84);
+  color: #F7F5F0;
+  padding: 7px 14px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  backdrop-filter: blur(8px);
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+.cc-line b { color: #FF8762; margin-right: 6px; }
+
+/* Flying Emoji */
+.fly-emoji {
+  position: absolute;
+  z-index: 10;
+  bottom: 16%;
+  left: var(--x, 50%);
+  font-size: clamp(2rem, 6vw, 3.4rem);
+  pointer-events: none;
+  animation: flyUp 2.6s var(--ease) forwards;
+}
+@keyframes flyUp {
+  0% { opacity: 0; transform: translate(-50%, 24px) scale(0.4); }
+  16% { opacity: 1; transform: translate(-50%, 0) scale(1.15); }
+  100% { opacity: 0; transform: translate(-50%, -220px) rotate(var(--r, 8deg)); }
+}
+
+/* Side Chat & Data Tunnel */
+.chat-pane {
+  width: 364px;
+  flex: none;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  display: none;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  position: relative;
+}
+#room.chat-open .chat-pane { display: flex; animation: chatSlide 0.35s var(--spring); }
+@keyframes chatSlide { from { opacity: 0; transform: translateX(18px); } }
+
+.chat-top {
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.chat-top h3 { margin: 0; font-size: 1.02rem; font-weight: 750; }
+.chat-msgs {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  list-style: none;
+  margin: 0;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.c-msg { display: grid; gap: 3px; max-width: 88%; align-self: flex-start; }
+.c-msg.me { align-self: flex-end; }
+.c-who { font-family: var(--mono); font-size: 0.65rem; color: var(--mute); padding: 0 4px; }
+.c-msg.me .c-who { text-align: right; }
+.c-bub {
+  padding: 9px 13px;
+  border-radius: 16px 16px 16px 5px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  font-size: 0.92rem;
+  line-height: 1.42;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+.c-msg.me .c-bub {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  border-radius: 16px 16px 5px 16px;
+}
+.c-sys {
+  align-self: center;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  color: var(--mute);
+  padding: 3px 10px;
+}
+
+/* Poll Card in Chat */
+.poll-box {
+  display: grid;
+  gap: 7px;
+  min-width: 210px;
+}
+.poll-q { font-weight: 750; font-size: 0.94rem; }
+.poll-opt {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  border: 1px solid currentColor;
+  background: transparent;
+  color: inherit;
+  padding: 7px 10px;
+  text-align: left;
+  font-size: 0.84rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+.poll-opt .fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: currentColor;
+  opacity: 0.16;
+  transition: width 0.3s var(--ease);
+}
+.poll-opt span { position: relative; z-index: 1; }
+
+/* File Transfer Bubble */
+.file-bub img {
+  max-width: 100%;
+  max-height: 210px;
+  border-radius: 11px;
+  display: block;
+  margin-bottom: 6px;
+  cursor: zoom-in;
+}
+.file-meta-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 0.84rem; }
+.file-prog { height: 4px; border-radius: 99px; background: rgba(128,128,128,0.25); overflow: hidden; margin-top: 6px; }
+.file-prog i { display: block; height: 100%; width: 0%; background: currentColor; transition: width 0.15s; }
+
+.chat-form {
+  padding: 10px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.chat-form input[type="text"] {
+  flex: 1;
+  min-width: 0;
+  height: 42px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  padding: 0 14px;
+  font-size: 0.92rem;
+  outline: 0;
+}
+.chat-form input[type="text"]:focus { border-color: var(--ink); }
+
+.drop-mask {
+  position: absolute;
+  inset: 6px;
+  z-index: 10;
+  border-radius: 20px;
+  border: 2px dashed var(--accent);
+  background: var(--card-glass);
+  backdrop-filter: blur(8px);
+  display: none;
+  place-items: center;
+  font-weight: 750;
+  pointer-events: none;
+}
+.chat-pane.drag .drop-mask { display: grid; }
+
+/* Floating Control Dock */
+.dock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 8px var(--gutter) calc(14px + env(safe-area-inset-bottom));
+  flex-wrap: wrap;
+  z-index: 15;
+}
+.dock-btn {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  display: grid;
+  place-items: center;
+  position: relative;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.35s var(--spring), background 0.25s, color 0.25s, border-color 0.25s;
+}
+.dock-btn:hover { transform: translateY(-3px); border-color: var(--line-strong); }
+.dock-btn:active { transform: scale(0.93); }
+.dock-btn svg { width: 22px; height: 22px; }
+.dock-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.dock-btn.live { background: var(--accent); color: #fff; border-color: var(--accent); }
+.dock-btn.off { background: var(--danger); color: #fff; border-color: var(--danger); }
+.dock-btn .ic-off { display: none; }
+.dock-btn.off .ic-on { display: none; }
+.dock-btn.off .ic-off { display: block; }
+
+.unread-dot {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--paper);
+}
+
+.hangup-btn {
+  height: 52px;
+  padding: 0 22px;
+  border-radius: 999px;
+  border: 0;
+  background: var(--danger);
+  color: #fff;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 10px 24px -6px rgba(227, 50, 26, 0.55);
+  transition: transform 0.35s var(--spring);
+}
+.hangup-btn:hover { transform: translateY(-3px); }
+.hangup-btn svg { width: 22px; height: 22px; transform: rotate(135deg); }
+
+/* Reaction Bar Popover */
+.react-bar {
+  position: fixed;
+  z-index: 32;
+  left: 50%;
+  bottom: calc(82px + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  background: var(--card);
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  padding: 6px 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: var(--shadow-lg);
+}
+.react-bar button {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 0;
+  background: transparent;
+  font-size: 1.42rem;
+  display: grid;
+  place-items: center;
+  transition: transform 0.25s var(--spring);
+}
+.react-bar button:hover { transform: scale(1.22) translateY(-2px); }
+.react-bar .hand-toggle {
+  width: auto;
+  padding: 0 12px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 650;
+  gap: 5px;
+  display: inline-flex;
+}
+.react-bar .hand-toggle.active { background: #FFD34E; color: #121210; }
+
+/* ==========================================================================
+   MODALS / DIALOGS & TOASTS
+   ========================================================================== */
+dialog {
+  border: 1px solid var(--line-strong);
+  border-radius: 26px;
+  background: var(--card);
+  color: var(--ink);
+  padding: 24px;
+  width: min(520px, calc(100vw - 28px));
+  max-height: calc(100dvh - 36px);
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+}
+dialog::backdrop {
+  background: rgba(10, 10, 9, 0.5);
+  backdrop-filter: blur(5px);
+}
+dialog h3 { margin: 0 0 6px; font-size: 1.38rem; letter-spacing: -0.03em; font-weight: 800; }
+dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
+
+.tabs-bar {
+  display: flex;
+  gap: 6px;
+  padding: 4px;
+  border-radius: 13px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  margin-bottom: 16px;
+}
+.tab-btn {
+  flex: 1;
+  height: 36px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  font-size: 0.84rem;
+  font-weight: 650;
+  color: var(--mute);
+}
+.tab-btn.active { background: var(--card); color: var(--ink); box-shadow: var(--shadow-sm); }
+
+.diag-list { display: grid; gap: 8px; margin: 14px 0; }
+.diag-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 11px 14px;
+  border-radius: 14px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  font-size: 0.9rem;
+}
+.diag-badge {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-weight: 700;
+}
+.diag-badge.ok { background: var(--p2p-soft); color: var(--p2p); }
+.diag-badge.warn { background: var(--warn-soft); color: var(--warn); }
+.diag-badge.wait { background: var(--line); color: var(--mute); }
+
+.qr-large {
+  width: 176px;
+  height: 176px;
+  margin: 8px auto 14px;
+  background: #fff;
+  padding: 11px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+}
+.qr-large svg { width: 100%; height: 100%; display: block; }
+
+.airgap-area {
+  width: 100%;
+  min-height: 78px;
+  border-radius: 12px;
+  border: 1px solid var(--line-strong);
+  background: var(--paper);
+  padding: 10px;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  resize: vertical;
+}
+
+/* Toasts & Floating Knock Cards */
+.toasts {
+  position: fixed;
+  z-index: 90;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  pointer-events: none;
+  width: max-content;
+  max-width: calc(100vw - 28px);
+}
+.toast {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  box-shadow: var(--shadow-md);
+  animation: popIn 0.3s var(--spring);
+}
+
+.knock-stack {
+  position: fixed;
+  z-index: 80;
+  top: 66px;
+  right: 16px;
+  display: grid;
+  gap: 10px;
+  width: min(340px, calc(100vw - 32px));
+}
+.knock-card {
+  background: var(--card);
+  border: 1px solid var(--line-strong);
+  border-radius: 18px;
+  padding: 14px;
+  box-shadow: var(--shadow-lg);
+  display: grid;
+  gap: 10px;
+}
+
+/* Mobile Responsive Refinements */
+@media (max-width: 780px) {
+  .stage-wrap { flex-direction: column; }
+  .stage-wrap.has-work .tiles-grid {
+    flex: 0 0 112px;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  .stage-wrap.has-work .tiles-grid .tile { width: 150px; height: 100%; aspect-ratio: auto; }
+  .chat-pane {
+    position: fixed;
+    z-index: 35;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: auto;
+    height: min(74dvh, 560px);
+    border-radius: 26px 26px 0 0;
+    box-shadow: var(--shadow-lg);
+  }
+  .tiles-grid.duo .tile.self {
+    position: absolute;
+    z-index: 6;
+    top: 10px;
+    right: 10px;
+    width: 31%;
+    aspect-ratio: 3 / 4;
+    border-radius: 16px;
+    box-shadow: var(--shadow-md);
+  }
+  .dock-btn { width: 46px; height: 46px; }
+  .dock-btn svg { width: 20px; height: 20px; }
+  .hangup-btn span { display: none; }
+  .hangup-btn { width: 54px; padding: 0; justify-content: center; }
+  .rb-slug { max-width: 13ch; }
+}
+</style>
+</head>
+<body data-view="home">
+<div class="aura" aria-hidden="true"></div>
+
+<!-- =====================================================================
+     VIEW 1: STARTSEITE (#home)
+     ===================================================================== -->
+<main id="home" class="view">
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="anruf.org Startseite">
+      <span>anruf<i>.org</i></span>
+      <span class="brand-tag">Direct P2P</span>
+    </a>
+    <div class="top-actions">
+      <button class="pill-btn" id="openDiagBtn" type="button" title="NAT-Typ & direkte Peer-to-Peer Erreichbarkeit prüfen">
+        <i class="status-dot" id="homeNetDot"></i>
+        <span id="homeNetLabel">P2P-Netzwerk prüfen</span>
+      </button>
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="Farbschema wechseln" title="Hell / Dunkel wechseln">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-copy">
+      <span class="eyebrow-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Zero-TURN · 100 % Direktes Peer-to-Peer
+      </span>
+      <h1>
+        <span class="ln"><span>Ruf</span></span>
+        <span class="ln"><span>einfach</span></span>
+        <span class="ln"><span>an<em>.</em></span></span>
+      </h1>
+      <p class="lede">
+        Kein Konto, keine App, <strong>kein Medien-Server dazwischen</strong>. Ein Link genügt — Audio, HD-Video, Whiteboard und Dateien fließen Ende-zu-Ende verschlüsselt direkt von Browser zu Browser.
+      </p>
+
+      <form class="quick-composer" id="quickRoomForm" autocomplete="off">
+        <div class="qc-row">
+          <span class="qc-prefix">anruf.org/#</span>
+          <input id="homeSlugInput" type="text" maxlength="48" spellcheck="false" autocapitalize="off" aria-label="Wunsch-Raumname">
+          <button class="qc-dice" id="rollSlugBtn" type="button" title="Neuen Zufallsnamen würfeln" aria-label="Neuen Raumnamen würfeln">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.2" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/></svg>
+          </button>
+        </div>
+        <div class="qc-subrow">
+          <label class="pin-pill" title="Optionaler Ende-zu-Ende Raumschlüssel: Verschlüsselt bereits den Verbindungsaufbau (SDP & IP-Kandidaten) per AES-256-GCM">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+            <input id="homePinInput" type="password" maxlength="32" placeholder="Optional: Raum-PIN (E2E)">
+          </label>
+          <button class="btn sm" type="submit">Raum öffnen →</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="dial-col">
+      <div class="orb">
+        <svg class="orb-ring" viewBox="0 0 200 200" aria-hidden="true">
+          <defs><path id="orbPath" d="M100,100 m-88,0 a88,88 0 1,1 176,0 a88,88 0 1,1 -176,0"/></defs>
+          <text><textPath href="#orbPath" textLength="550" lengthAdjust="spacing">DIREKT P2P · ZERO TURN · ENDE-ZU-ENDE · </textPath></text>
+        </svg>
+        <button class="call-btn" id="heroStartBtn" type="button" aria-label="Sofort neuen Anruf starten">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h3.5l2 5-2.5 1.5a11 11 0 0 0 5.5 5.5l1.5-2.5 5 2V19a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>
+          <span class="cta">Anruf starten</span>
+        </button>
+      </div>
+      <span class="orb-caption" id="orbHintText">Bis zu 8 Personen · Mesh-Topologie · Keine Cookies</span>
+    </div>
+  </section>
+
+  <section class="bento-sec" aria-label="Funktionen">
+    <div class="sec-head">
+      <h2>Gebaut für echte Direktverbindungen.</h2>
+      <span class="mono" style="color:var(--mute)">WebRTC · BIP-340 Nostr · AES-256-GCM</span>
+    </div>
+    <div class="bento-grid">
+      <article class="bento-card green">
+        <div class="bento-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+        <h3>Zero-TURN Hole-Punching</h3>
+        <p>Vorgewärmter ICE-Pool, simultanes Trickle-ICE über Port 443/3478 &amp; IPv6 sowie Airgap-QR-Kopplung verbinden direkt ohne fremde Relay-Server.</p>
+      </article>
+      <article class="bento-card">
+        <div class="bento-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 18.5a6.5 6.5 0 1 0 0-13 6.5 6.5 0 0 0 0 13z"/><path d="M19 12h3M2 12h3M12 2v3M12 19v3"/></svg></div>
+        <h3>3D-Raumklang &amp; Studio-EQ</h3>
+        <p>Stimmen werden automatisch im Stereobild nach Sitzplatz geortet. Ein mehrstufiger Sprach-Kompressor sorgt für warme, klare Verständlichkeit.</p>
+      </article>
+      <article class="bento-card">
+        <div class="bento-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/></svg></div>
+        <h3>Whiteboard &amp; Screen-Laser</h3>
+        <p>Zeichnet gemeinsam auf dem Echtzeit-Whiteboard oder markiert Details direkt mit dem leuchtenden Laser-Pointer auf geteilten Bildschirmen.</p>
+      </article>
+      <article class="bento-card green">
+        <div class="bento-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+        <h3>High-Speed Datentunnel</h3>
+        <p>Verschicke Dateien &amp; Bilder bis 100 MB mit Live-Durchsatzanzeige, Zwischenablage-Paste und Schnell-Abstimmungen ohne Cloud-Speicher.</p>
+      </article>
+    </div>
+  </section>
+
+  <footer class="home-footer">
+    <span class="mono">100 % Statisch · GitHub Pages Ready · DSGVO-konform ohne Dritt-CDNs</span>
+    <nav>
+      <button class="link-btn" type="button" id="footerDiagBtn">NAT-Diagnose</button>
+      <button class="link-btn" type="button" id="footerAirgapInfo">Airgap-Modus</button>
+      <a href="datenschutz.html" onClick="if(!location.hostname.includes('anruf')){event.preventDefault();document.getElementById('privacyDlg').showModal()}">Datenschutz</a>
+    </nav>
+  </footer>
+</main>
+
+<!-- =====================================================================
+     VIEW 2: STUDIO-VORSCHAU / LOBBY (#join)
+     ===================================================================== -->
+<main id="join" class="view">
+  <header class="topbar">
+    <a class="brand" href="./" id="lobbyBackBrand"><span>anruf<i>.org</i></span></a>
+    <div class="top-actions">
+      <span class="pill-btn" id="prewarmBadge">
+        <i class="status-dot online"></i>
+        <span id="prewarmText">ICE-Pool wird vorgewärmt…</span>
+      </span>
+    </div>
+  </header>
+
+  <section class="lobby-wrap">
+    <!-- Left: Camera & Studio Rack -->
+    <div class="pv-card">
+      <div class="pv-stage" id="pvStage">
+        <video id="pvVideo" playsinline autoplay muted></video>
+        <div class="pv-avatar-wrap">
+          <div class="pv-avatar" id="pvAvatar">F</div>
+          <span id="pvHintMsg" style="font-size:0.9rem;opacity:0.8">Kamera ist ausgeschaltet</span>
+        </div>
+
+        <div class="pv-status-pill">
+          <i class="status-dot online" id="pvRelayDot"></i>
+          <span id="pvRelayStat">Direkt-Signaling bereit</span>
+        </div>
+
+        <div class="pv-spectrum" title="Live Mikrofon-Spektrum">
+          <canvas id="pvSpecCanvas" width="136" height="36"></canvas>
+        </div>
+
+        <div class="pv-controls">
+          <div class="pv-ctl-group">
+            <button class="round-ctl" id="pvMicBtn" type="button" aria-label="Mikrofon umschalten">
+              <svg class="ic-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+              <svg class="ic-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M15 9.5V6a3 3 0 0 0-5.8-1M9 9v2a3 3 0 0 0 4.6 2.5M5 11a7 7 0 0 0 11.3 5.5M12 18v3M3 3l18 18"/></svg>
+            </button>
+            <button class="round-ctl" id="pvCamBtn" type="button" aria-label="Kamera umschalten">
+              <svg class="ic-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><rect x="3" y="6" width="13" height="12" rx="3"/><path d="m16 10 5-3v10l-5-3z"/></svg>
+              <svg class="ic-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round"><path d="M16 12.5V9a3 3 0 0 0-3-3H9M5.5 6.2A3 3 0 0 0 3 9v6a3 3 0 0 0 3 3h7M3 3l18 18"/></svg>
+            </button>
+          </div>
+          <button class="mic-check-btn" id="micCheckBtn" type="button" title="Nimmt 3 Sekunden lokal im RAM auf und spielt deine Stimme ab">
+            <span>●</span> <span id="micCheckLabel">3s Stimm-Check</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="studio-box" id="studioRack">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span class="mono" style="color:var(--mute)">Kamera-Look (Zero-Download Echtzeit)</span>
+          <span class="mono" id="fltActiveLabel" style="color:var(--accent)">Natürlich</span>
+        </div>
+        <div class="filter-strip" id="filterStrip" role="radiogroup" aria-label="Videofilter"></div>
+
+        <details class="dev-details" id="devDetails">
+          <summary>
+            <span>⚙ Studio-Audio, Geräte &amp; Experten-Netzwerk</span>
+            <span>▾</span>
+          </summary>
+          <div class="dev-grid">
+            <label class="chk-row">
+              <input type="checkbox" id="chkVoiceStudio" checked>
+              <span>Studio-Sprachklang (85 Hz Hochpass + Präsenz-EQ + Kompressor)</span>
+            </label>
+            <label class="chk-row">
+              <input type="checkbox" id="chkSpatialAudio" checked>
+              <span>3D-Raumklang (Gesprächspartner im Stereobild verorten)</span>
+            </label>
+            <label>Mikrofon <select id="selMic"></select></label>
+            <label>Kamera <select id="selCam"></select></label>
+            <label id="lblSpk" hidden>Lautsprecher <select id="selSpk"></select></label>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn ghost sm" type="button" id="testToneBtn">Klang testen</button>
+              <button class="btn ghost sm" type="button" id="lobbyDiagBtn">NAT-Scanner öffnen</button>
+            </div>
+            <details style="margin-top:4px">
+              <summary class="mono" style="cursor:pointer;color:var(--mute);font-size:0.68rem">Experten: Eigenen TURN-Notfallserver (standardmäßig AUS)</summary>
+              <div style="display:grid;gap:6px;margin-top:8px">
+                <input type="text" id="customTurnUrl" placeholder="turn:dein-server.de:3478 (leer = 100 % Zero-TURN)">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+                  <input type="text" id="customTurnUser" placeholder="Benutzername">
+                  <input type="password" id="customTurnPass" placeholder="Passwort">
+                </div>
+              </div>
+            </details>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <!-- Right: Room & Identity -->
+    <div class="lobby-info">
+      <span class="mono" style="color:var(--accent)" id="lobbyEyebrow">Studio-Vorschau · Direktverbindung</span>
+      <div class="lobby-slug-row">
+        <h2 class="lobby-slug" id="lobbySlugTitle">raum</h2>
+        <button class="icon-btn" id="editSlugBtn" type="button" title="Raumnamen ändern" aria-label="Raumnamen ändern">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16v4zM13.5 6.5l4 4"/></svg>
+        </button>
+      </div>
+
+      <p style="margin:0;color:var(--mute);font-size:0.98rem">
+        Prüfe kurz Bild und Ton. Sobald eine zweite Person denselben Raum öffnet (auch in einem zweiten Browser-Tab!), verbindet euch <strong>DirectPulse P2P</strong> ohne Medienserver.
+      </p>
+
+      <div class="field-stack">
+        <label class="field-lbl">
+          <span class="mono" style="color:var(--mute)">Dein Anzeigename</span>
+          <input id="lobbyNameInput" type="text" maxlength="24" autocomplete="nickname" spellcheck="false">
+        </label>
+        <label class="field-lbl">
+          <span class="mono" style="color:var(--mute)">Optional: Raum-PIN (Ende-zu-Ende Signaling-Schlüssel)</span>
+          <input id="lobbyPinInput" type="password" maxlength="32" placeholder="Leer lassen für Standard-Verschlüsselung">
+        </label>
+      </div>
+
+      <div class="lobby-cta-row">
+        <button class="btn accent go-btn" id="joinCallBtn" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h3.5l2 5-2.5 1.5a11 11 0 0 0 5.5 5.5l1.5-2.5 5 2V19a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>
+          <span>Jetzt beitreten</span>
+        </button>
+        <a class="btn ghost" href="./" id="lobbyCancelBtn" style="height:56px;border-radius:999px">Zurück</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- =====================================================================
+     VIEW 3: IM ANRUF (#room)
+     ===================================================================== -->
+<main id="room" class="view">
+  <header class="room-bar">
+    <div class="rb-left">
+      <a class="brand" href="./" id="roomBrandExit" title="Auflegen & zur Startseite"><span>anruf<i>.org</i></span></a>
+      <span style="color:var(--line-strong)">/</span>
+      <span class="rb-slug" id="roomSlugLabel"></span>
+      <span class="diag-badge warn" id="roomLockBadge" hidden title="Raum ist abgeschlossen">🔒 Gesperrt</span>
+    </div>
+
+    <div class="rb-right">
+      <span class="mono" id="roomTimer" style="color:var(--mute)">00:00</span>
+      <button class="sas-badge" id="sasBtn" type="button" hidden title="Ende-zu-Ende Sicherheitscode: Stimmen diese 4 Symbole auf beiden Geräten überein, ist kein Angreifer dazwischen.">
+        <span class="mono">SAS</span>
+        <span id="sasEmojis">🛡️</span>
+      </button>
+      <button class="pill-btn" id="inviteTopBtn" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        <span>Einladen</span>
+      </button>
+
+      <!-- Live P2P Radar Button & Popover -->
+      <div class="radar-wrap" id="radarWrap">
+        <button class="pill-btn" id="radarBtn" type="button" aria-expanded="false" title="Live P2P-Topologie & Telemetrie">
+          <i class="status-dot online" id="roomP2pDot"></i>
+          <span id="roomP2pSummary">Wartet</span>
+        </button>
+
+        <div class="radar-popover" id="radarPopover" hidden>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <strong style="font-size:0.96rem">Live P2P-Mesh Radar</strong>
+            <span class="diag-badge ok" id="radarModeChip">Zero-TURN Direkt</span>
+          </div>
+          <svg class="mesh-svg" id="meshSvg" viewBox="0 0 320 126" aria-label="Peer-to-Peer Topologie"></svg>
+
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px" class="mono">
+              <span style="color:var(--accent)">↓ <b id="statDownRate">0 kbit/s</b></span>
+              <span>↑ <b id="statUpRate">0 kbit/s</b></span>
+            </div>
+            <svg class="spark-svg" id="sparkSvg" viewBox="0 0 280 62" preserveAspectRatio="none">
+              <path id="sparkDownArea" fill="rgba(255,79,26,0.18)"/>
+              <path id="sparkDownLine" fill="none" stroke="#FF4F1A" stroke-width="1.8"/>
+              <path id="sparkUpLine" fill="none" stroke="currentColor" stroke-dasharray="3 3" stroke-width="1.4" opacity="0.7"/>
+            </svg>
+          </div>
+
+          <div class="stat-grid">
+            <div class="stat-cell"><div class="k">Ping (RTT)</div><div class="v" id="statRtt">—</div></div>
+            <div class="stat-cell"><div class="k">Paketverlust</div><div class="v" id="statLoss">0,0 %</div></div>
+            <div class="stat-cell"><div class="k">Gesendet</div><div class="v" id="statSent">0 KB</div></div>
+            <div class="stat-cell"><div class="k">Empfangen</div><div class="v" id="statRecv">0 KB</div></div>
+          </div>
+
+          <ul class="peer-stat-list" id="peerStatList"></ul>
+          <span class="mono" style="font-size:0.63rem;color:var(--mute)">DTLS-SRTP Medien · AES-256-GCM Signaling</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="room-body">
+    <div class="stage-wrap" id="stageWrap">
+      <!-- Collaborative Live Whiteboard -->
+      <section class="work-pane" id="whiteboardPane" hidden aria-label="Gemeinsames Whiteboard">
+        <div class="wb-toolbar">
+          <div class="wb-tools">
+            <button class="wb-btn active" type="button" data-wbtool="pen">✎ Stift</button>
+            <button class="wb-btn" type="button" data-wbtool="hl">🖍 Marker</button>
+            <button class="wb-btn" type="button" data-wbtool="arrow">↗ Pfeil</button>
+            <button class="wb-btn" type="button" data-wbtool="rect">▭ Box</button>
+            <button class="wb-btn" type="button" data-wbtool="eraser">⌫ Radierer</button>
+            <span style="width:1px;height:20px;background:var(--line);margin:0 4px"></span>
+            <button class="wb-swatch active" type="button" data-wbcol="#FF4F1A" style="background:#FF4F1A" aria-label="Orange"></button>
+            <button class="wb-swatch" type="button" data-wbcol="#121210" style="background:#121210" aria-label="Schwarz"></button>
+            <button class="wb-swatch" type="button" data-wbcol="#1FA958" style="background:#1FA958" aria-label="Grün"></button>
+            <button class="wb-swatch" type="button" data-wbcol="#2B6CB0" style="background:#2B6CB0" aria-label="Blau"></button>
+          </div>
+          <div class="wb-tools">
+            <button class="wb-btn" type="button" id="wbSaveBtn">⬇ PNG</button>
+            <button class="wb-btn" type="button" id="wbClearBtn">Leeren</button>
+            <button class="wb-btn" type="button" id="wbCloseBtn">✕</button>
+          </div>
+        </div>
+        <div class="wb-canvas-wrap" id="wbWrap">
+          <canvas id="wbCanvas"></canvas>
+        </div>
+      </section>
+
+      <!-- Adaptive Video Tiles Grid -->
+      <section class="tiles-grid alone" id="tilesGrid" aria-live="polite">
+        <div class="wait-card" id="waitCard">
+          <div>
+            <h3>Bereit für direkte Verbindung…</h3>
+            <p>Teile diesen Link (oder öffne ihn zum Sofort-Test in einem zweiten Tab!). Keine Server-Speicherung.</p>
+          </div>
+          <div class="qr-mini" id="waitQr"></div>
+          <div class="wait-link-row">
+            <code id="waitLinkCode"></code>
+            <button class="btn sm accent" type="button" id="waitCopyBtn">Link kopieren</button>
+            <button class="btn sm ghost" type="button" id="waitAirgapBtn">Airgap-Kopplung</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Live Subtitles Overlay -->
+      <div class="cc-overlay" id="ccOverlay"></div>
+    </div>
+
+    <!-- Chat, Polls & Chunked File Tunnel -->
+    <aside class="chat-pane" id="chatPane" aria-label="Direkt-Chat & Datentunnel">
+      <div class="chat-top">
+        <div>
+          <h3>P2P-Chat &amp; Tunnel</h3>
+          <span class="mono" style="font-size:0.63rem;color:var(--mute)">RTCDataChannel · ungespeichert</span>
+        </div>
+        <div style="display:flex;gap:6px">
+          <button class="btn ghost sm" type="button" id="openPollBtn" title="Schnell-Abstimmung starten">📊 Umfrage</button>
+          <button class="icon-btn" type="button" id="closeChatBtn" aria-label="Chat schließen">✕</button>
+        </div>
+      </div>
+      <div class="drop-mask">Datei loslassen für Direkt-Transfer</div>
+      <ol class="chat-msgs" id="chatMsgs"></ol>
+      <form class="chat-form" id="chatForm" autocomplete="off">
+        <button class="icon-btn" type="button" id="attachFileBtn" title="Datei oder Bild direkt senden (bis 100 MB)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+        </button>
+        <input type="file" id="chatFileInput" multiple hidden>
+        <input type="text" id="chatTextInput" maxlength="1200" placeholder="Nachricht oder Bild einfügen…">
+        <button class="icon-btn" type="submit" style="background:var(--accent);color:#fff;border-color:var(--accent)" aria-label="Senden">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+      </form>
+    </aside>
+  </div>
+
+  <!-- Control Dock -->
+  <nav class="dock" id="roomDock" aria-label="Anrufsteuerung">
+    <button class="dock-btn" id="dockMicBtn" type="button" title="Mikrofon (M) · Leertaste gedrückt halten zum Sprechen">
+      <svg class="ic-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+      <svg class="ic-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M15 9.5V6a3 3 0 0 0-5.8-1M9 9v2a3 3 0 0 0 4.6 2.5M5 11a7 7 0 0 0 11.3 5.5M12 18v3M3 3l18 18"/></svg>
+    </button>
+    <button class="dock-btn" id="dockCamBtn" type="button" title="Kamera umschalten (V)">
+      <svg class="ic-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><rect x="3" y="6" width="13" height="12" rx="3"/><path d="m16 10 5-3v10l-5-3z"/></svg>
+      <svg class="ic-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round"><path d="M16 12.5V9a3 3 0 0 0-3-3H9M5.5 6.2A3 3 0 0 0 3 9v6a3 3 0 0 0 3 3h7M3 3l18 18"/></svg>
+    </button>
+    <button class="dock-btn" id="dockScreenBtn" type="button" title="Bildschirm teilen inkl. Live-Laserpointer (S)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="13" rx="2.5"/><path d="M8 21h8M12 17v4"/></svg>
+    </button>
+    <button class="dock-btn" id="dockWbBtn" type="button" title="Gemeinsames Live-Whiteboard (W)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/></svg>
+    </button>
+    <button class="dock-btn" id="dockCcBtn" type="button" title="Live-Untertitel (C)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="3"/><path d="M10 10.5a2 2 0 1 0 0 3M16.5 10.5a2 2 0 1 0 0 3"/></svg>
+    </button>
+    <button class="dock-btn" id="dockReactBtn" type="button" title="Reaktionen & Hand heben (R)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5a4.5 4.5 0 0 0 7 0"/><circle cx="9" cy="9.5" r="1" fill="currentColor"/><circle cx="15" cy="9.5" r="1" fill="currentColor"/></svg>
+    </button>
+    <button class="dock-btn" id="dockChatBtn" type="button" title="Chat & Datentunnel">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-9l-5 4v-4H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z"/></svg>
+      <span class="unread-dot" id="chatUnreadDot" hidden>0</span>
+    </button>
+    <button class="dock-btn" id="dockStudioBtn" type="button" title="Filter, Audio & Geräte anpassen">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+    </button>
+    <button class="dock-btn" id="dockFsBtn" type="button" title="Vollbild (F)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V5a1 1 0 0 1 1-1h4M20 9V5a1 1 0 0 0-1-1h-4M4 15v4a1 1 0 0 0 1 1h4M20 15v4a1 1 0 0 1-1 1h-4"/></svg>
+    </button>
+    <button class="hangup-btn" id="dockHangupBtn" type="button" aria-label="Auflegen">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h3.5l2 5-2.5 1.5a11 11 0 0 0 5.5 5.5l1.5-2.5 5 2V19a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>
+      <span>Auflegen</span>
+    </button>
+  </nav>
+
+  <!-- Reaction Bar -->
+  <div class="react-bar" id="reactBar" hidden>
+    <button type="button" data-emo="👍">👍</button>
+    <button type="button" data-emo="❤️">❤️</button>
+    <button type="button" data-emo="😂">😂</button>
+    <button type="button" data-emo="🔥">🔥</button>
+    <button type="button" data-emo="👏">👏</button>
+    <button type="button" data-emo="🎉">🎉</button>
+    <button type="button" class="hand-toggle" id="handRaiseBtn">✋ <span>Hand</span></button>
+  </div>
+</main>
+
+<!-- =====================================================================
+     DIALOGS: INVITE / AIRGAP, NAT SCANNER, STUDIO, POLL, LIGHTBOX
+     ===================================================================== -->
+<dialog id="inviteDlg">
+  <h3>Jemanden dazuholen</h3>
+  <p class="sub">Direkte Browser-zu-Browser Verbindung ohne Konto.</p>
+
+  <div class="tabs-bar">
+    <button class="tab-btn active" type="button" data-invtab="link">Link &amp; QR-Code</button>
+    <button class="tab-btn" type="button" data-invtab="airgap">Airgap Direkt-Kopplung</button>
+  </div>
+
+  <div id="invTabLink">
+    <div class="qr-large" id="dlgQrBox"></div>
+    <div class="wait-link-row" style="margin-bottom:12px">
+      <code id="dlgLinkCode"></code>
+      <button class="btn sm accent" type="button" id="dlgCopyBtn">Kopieren</button>
+    </div>
+    <label class="chk-row" style="padding:12px;border-radius:14px;background:var(--paper);border:1px solid var(--line)">
+      <input type="checkbox" id="lockRoomChk">
+      <span><strong>Raum abschließen (Anklopfen)</strong> — Neue Gäste müssen erst bestätigt werden.</span>
+    </label>
+  </div>
+
+  <div id="invTabAirgap" hidden>
+    <p style="font-size:0.86rem;color:var(--mute);margin-top:0">
+      <strong>100 % Offline-LAN / Firewall-Modus:</strong> Falls alle WebSockets blockiert sind, tauscht diesen kompakten Verbindungs-Token per Messenger, Mail oder lokalem Netz aus:
+    </p>
+    <div style="display:grid;gap:10px">
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn sm accent" type="button" id="genOfferBtn">1. Einladungs-Paket erzeugen</button>
+        <button class="btn sm ghost" type="button" id="copyAirgapOutBtn">Paket kopieren</button>
+      </div>
+      <textarea class="airgap-area" id="airgapOut" readonly placeholder="Hier erscheint dein komprimiertes Direkt-Paket (SDP + lokale/STUN Kandidaten)…"></textarea>
+      <label class="mono" style="color:var(--mute);font-size:0.68rem">2. Paket der Gegenseite hier einfügen (Angebot oder Antwort):</label>
+      <textarea class="airgap-area" id="airgapIn" placeholder="Paket der anderen Person einfügen…"></textarea>
+      <button class="btn sm p2p" type="button" id="applyAirgapBtn">Paket verarbeiten &amp; direkt koppeln</button>
+    </div>
+  </div>
+
+  <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
+    <button class="btn ghost sm" type="button" onClick="this.closest('dialog').close()">Schließen</button>
+  </div>
+</dialog>
+
+<!-- NAT & Direct P2P Scanner Dialog -->
+<dialog id="diagDlg">
+  <h3>NAT- &amp; Direkt-P2P Diagnose</h3>
+  <p class="sub">Prüft ohne Kamera/Mikrofon, ob dein Netzwerk direktes UDP Hole-Punching ohne TURN-Server unterstützt.</p>
+
+  <div class="diag-list" id="diagList">
+    <div class="diag-row"><span>1. Lokaler Instant-Mesh (BroadcastChannel)</span><span class="diag-badge wait" id="dgLocal">Prüfe…</span></div>
+    <div class="diag-row"><span>2. Verschlüsselte Nostr-Relays (WebSocket)</span><span class="diag-badge wait" id="dgRelay">Prüfe…</span></div>
+    <div class="diag-row"><span>3. Öffentliche UDP-Adresse (STUN 3478/443)</span><span class="diag-badge wait" id="dgStun">Prüfe…</span></div>
+    <div class="diag-row"><span>4. IPv6 Direkt-Routing</span><span class="diag-badge wait" id="dgIpv6">Prüfe…</span></div>
+    <div class="diag-row"><span>5. NAT-Mapping (Hole-Punching Prognose)</span><span class="diag-badge wait" id="dgNat">Prüfe…</span></div>
+  </div>
+
+  <p id="diagVerdict" style="font-size:0.9rem;padding:12px;border-radius:14px;background:var(--paper);border:1px solid var(--line);margin:0"></p>
+
+  <div style="display:flex;justify-content:space-between;gap:8px;margin-top:16px;flex-wrap:wrap">
+    <div style="display:flex;gap:8px">
+      <button class="btn sm ghost" type="button" id="rerunDiagBtn">Neu messen</button>
+      <button class="btn sm ghost" type="button" id="copyDiagBtn">IT-Bericht kopieren</button>
+    </div>
+    <button class="btn sm" type="button" onClick="this.closest('dialog').close()">Fertig</button>
+  </div>
+</dialog>
+
+<!-- Rename / Edit Slug Dialog -->
+<dialog id="slugDlg">
+  <form id="slugEditForm">
+    <h3>Raumnamen anpassen</h3>
+    <p class="sub">Wer denselben Raumnamen öffnet, landet direkt bei dir.</p>
+    <input type="text" id="slugEditInput" maxlength="48" style="width:100%;height:48px;border-radius:12px;border:1px solid var(--line-strong);background:var(--paper);padding:0 14px;font-family:var(--mono)">
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
+      <button class="btn ghost sm" type="button" onClick="this.closest('dialog').close()">Abbrechen</button>
+      <button class="btn accent sm" type="submit">Übernehmen</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Studio Settings Modal inside Call -->
+<dialog id="inCallStudioDlg">
+  <h3>Studio-Einstellungen</h3>
+  <p class="sub">Filter, Sprachklang und Geräte live im Gespräch wechseln.</p>
+  <div id="inCallStudioSlot"></div>
+  <div style="display:flex;justify-content:flex-end;margin-top:16px">
+    <button class="btn sm" type="button" onClick="this.closest('dialog').close()">Fertig</button>
+  </div>
+</dialog>
+
+<!-- Quick Poll Creator Dialog -->
+<dialog id="pollDlg">
+  <form id="pollForm">
+    <h3>Schnell-Abstimmung starten</h3>
+    <p class="sub">Läuft live über den verschlüsselten P2P-Datenkanal.</p>
+    <div style="display:grid;gap:8px">
+      <input type="text" id="pollQ" required maxlength="120" placeholder="Frage (z. B. Wann machen wir Pause?)" style="height:44px;border-radius:11px;border:1px solid var(--line-strong);background:var(--paper);padding:0 12px">
+      <input type="text" id="pollO1" required maxlength="60" placeholder="Option 1" style="height:40px;border-radius:11px;border:1px solid var(--line);background:var(--paper);padding:0 12px">
+      <input type="text" id="pollO2" required maxlength="60" placeholder="Option 2" style="height:40px;border-radius:11px;border:1px solid var(--line);background:var(--paper);padding:0 12px">
+      <input type="text" id="pollO3" maxlength="60" placeholder="Option 3 (optional)" style="height:40px;border-radius:11px;border:1px solid var(--line);background:var(--paper);padding:0 12px">
+    </div>
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
+      <button class="btn ghost sm" type="button" onClick="this.closest('dialog').close()">Abbrechen</button>
+      <button class="btn accent sm" type="submit">Senden</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Image Lightbox -->
+<dialog id="lightboxDlg" style="width:auto;max-width:94vw;padding:12px;text-align:center">
+  <img id="lbImg" alt="" style="max-width:90vw;max-height:80dvh;border-radius:14px;display:block;margin:0 auto">
+  <div style="display:flex;justify-content:center;gap:8px;margin-top:10px">
+    <a class="btn sm accent" id="lbDownload" download>Speichern</a>
+    <button class="btn sm ghost" type="button" onClick="this.closest('dialog').close()">Schließen</button>
+  </div>
+</dialog>
+
+<!-- Privacy Info Fallback Dialog -->
+<dialog id="privacyDlg">
+  <h3>Datenschutz &amp; Architektur</h3>
+  <p class="sub">So schützt anruf.org deine Gespräche technisch statt nur durch Versprechen:</p>
+  <ul style="padding-left:18px;font-size:0.9rem;color:var(--ink-soft);display:grid;gap:8px">
+    <li><strong>Kein Medien-Server (Zero-TURN Standard):</strong> Audio, Video, Chat, Whiteboard und Dateien fließen per DTLS-SRTP direkt von Browser zu Browser.</li>
+    <li><strong>AES-256-GCM Signaling:</strong> Selbst die Verbindungsdaten (SDP &amp; ICE-Kandidaten) werden vor dem Versand an öffentliche Nostr-Relays mit einem aus Raumnamen + optionaler PIN abgeleiteten Schlüssel verschlüsselt.</li>
+    <li><strong>Keine externen Ressourcen:</strong> Keine Google Fonts, keine Analytics, keine Cookies, kein Tracking.</li>
+  </ul>
+  <div style="display:flex;justify-content:flex-end;margin-top:14px">
+    <button class="btn sm" type="button" onClick="this.closest('dialog').close()">Verstanden</button>
+  </div>
+</dialog>
+
+<div class="knock-stack" id="knockStack" aria-live="polite"></div>
+<div class="toasts" id="toastBox" role="status" aria-live="polite"></div>
+
+<template id="tileTemplate">
+  <div class="tile">
+    <div class="blob-box">
+      <svg viewBox="-100 -100 200 200" aria-hidden="true"><path class="halo"/><path class="body"/></svg>
+      <span class="blob-ini"></span>
+    </div>
+    <video playsinline autoplay muted></video>
+    <div class="tile-badges">
+      <span class="p2p-tag">P2P</span>
+      <span class="hand-tag" title="Hand gehoben">✋</span>
+    </div>
+    <div class="tile-meta">
+      <svg class="mute-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M15 9.5V6a3 3 0 0 0-5.8-1M9 9v2a3 3 0 0 0 4.6 2.5M5 11a7 7 0 0 0 11.3 5.5M12 18v3M3 3l18 18"/></svg>
+      <span class="nm"></span>
+    </div>
+  </div>
+</template>
+
+<script type="module">
+/* ==========================================================================
+   anruf.org — DirectPulse Zero-TURN P2P Engine & Studio UI
+   100 % Vanilla ES Module · No External Dependencies
+   ========================================================================== */
+
+const $ = (s, root = document) => root.querySelector(s);
+const $$ = (s, root = document) => [...root.querySelectorAll(s)];
+
+/* ---------- Default Network Config (+ optional repo config.mjs merge) ---------- */
+let RELAY_URLS = [
+  'wss://nos.lol',
+  'wss://purplerelay.com',
+  'wss://nostr-01.yakihonne.com',
+  'wss://offchain.pub'
+];
+let STUN_URLS = [
+  'stun:stun.cloudflare.com:3478',
+  'stun:stun.nextcloud.com:443',
+  'stun:stun.sipgate.net:3478',
+  'stun:stun.l.google.com:19302'
+];
+
+// Falls im bestehenden anruf.org-Repository gehostet, Relays/STUN nahtlos übernehmen (TURN ignorieren wir bewusst für Zero-TURN!)
+try {
+  const repoCfg = await import('./config.mjs').catch(() => null);
+  if (repoCfg?.PUBLIC_RELAYS?.length) RELAY_URLS = [...new Set([...RELAY_URLS, ...repoCfg.PUBLIC_RELAYS])].slice(0, 6);
+  if (repoCfg?.STUN?.length) STUN_URLS = [...new Set([...STUN_URLS, ...repoCfg.STUN])];
+} catch {}
+
+const qs = new URLSearchParams(location.search);
+if (qs.get('relay')) RELAY_URLS = [qs.get('relay')];
+
+const MAX_PEERS = 8;
+const MAX_FILE_BYTES = 100 * 1024 * 1024; // 100 MB Direct Tunnel
+const CHUNK_SIZE = 64 * 1024;             // 64 KB WebRTC chunks
+const PALETTE = ['#FF5A26', '#25B865', '#4DA3FF', '#F59E0B', '#A87FFB', '#EC4899', '#14B8A6'];
+
+/* ---------- Safe Local Preferences ---------- */
+const store = {
+  get(k, d = '') { try { return localStorage.getItem('anruf2:' + k) ?? d; } catch { return d; } },
+  set(k, v) { try { localStorage.setItem('anruf2:' + k, v); } catch {} }
+};
+
+/* ---------- Helper Utilities ---------- */
+const enc = new TextEncoder();
+const dec = new TextDecoder();
+const toHex = bytes => Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
+const fromHex = hex => new Uint8Array(hex.match(/.{1,2}/g).map(b => parseInt(b, 16)));
+const b64uEnc = bytes => btoa(String.fromCharCode(...bytes)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+const b64uDec = str => {
+  const b64 = str.replace(/-/g, '+').replace(/_/g, '/') + '==='.slice((str.length + 3) % 4);
+  const bin = atob(b64);
+  const out = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+  return out;
+};
+
+function copyText(text, msg = 'In die Zwischenablage kopiert') {
+  if (navigator.clipboard?.writeText) {
+    navigator.clipboard.writeText(text).then(() => toast(msg)).catch(() => fallbackCopy(text, msg));
+  } else fallbackCopy(text, msg);
+}
+function fallbackCopy(text, msg) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;opacity:0;pointer-events:none';
+  document.body.append(ta);
+  ta.select();
+  try { document.execCommand('copy'); toast(msg); } catch { toast('Bitte manuell markieren & kopieren'); }
+  ta.remove();
+}
+
+function toast(text, ms = 2800) {
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.textContent = text;
+  $('#toastBox').append(el);
+  setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity .3s'; setTimeout(() => el.remove(), 320); }, ms);
+}
+
+const hashStr = s => [...String(s)].reduce((h, c) => ((h * 31) + c.charCodeAt(0)) >>> 0, 17);
+const colorFor = id => PALETTE[hashStr(id) % PALETTE.length];
+const cleanName = s => String(s ?? '').replace(/[\u0000-\u001f<>]/g, '').trim().slice(0, 24);
+const slugify = s => String(s ?? '').toLowerCase()
+  .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss')
+  .normalize('NFKD').replace(/[\u0300-\u036f]/g, '')
+  .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 46);
+
+const ADJ = ['blaue','stille','flinke','helle','kluge','sanfte','goldene','mutige','frische','warme','klare','freie'];
+const NOUN = ['moewe','eule','welle','wolke','kiefer','lerche','birke','insel','feder','libelle','meise','robbe'];
+const ANIMALS = ['Fuchs','Otter','Eule','Luchs','Dachs','Kranich','Robbe','Falke','Igel','Biber'];
+const rnd = arr => arr[Math.floor(Math.random() * arr.length)];
+function randomSlug() {
+  const chars = 'abcdefghjkmnpqrstuvwxyz23456789';
+  const r = crypto.getRandomValues(new Uint8Array(4));
+  return `${rnd(ADJ)}-${rnd(NOUN)}-${Array.from(r, b => chars[b % chars.length]).join('')}`;
+}
+
+/* ==========================================================================
+   PURE VANILLA JS BIP-340 SECP256K1 SCHNORR (FOR NOSTR NIP-01 EPHEMERAL)
+   ========================================================================== */
+const SECP_P = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2Fn;
+const SECP_N = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141n;
+const SECP_GX = 0x79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798n;
+const SECP_GY = 0x483ADA7726A3C4655DA4FBFC0E1108A8FD17B448A68554199C47D08FFB10D4B8n;
+
+const mod = (a, m = SECP_P) => { const r = a % m; return r >= 0n ? r : r + m; };
+function modPow(base, exp, m = SECP_P) {
+  let res = 1n, b = mod(base, m), e = exp;
+  while (e > 0n) {
+    if (e & 1n) res = (res * b) % m;
+    b = (b * b) % m;
+    e >>= 1n;
+  }
+  return res;
+}
+const modInv = (a, m = SECP_P) => modPow(a, m - 2n, m);
+
+function ptAdd(p1, p2) {
+  if (!p1) return p2;
+  if (!p2) return p1;
+  if (p1.x === p2.x && p1.y !== p2.y) return null;
+  const lam = p1.x === p2.x
+    ? mod(3n * p1.x * p1.x * modInv(2n * p1.y))
+    : mod((p2.y - p1.y) * modInv(p2.x - p1.x));
+  const x3 = mod(lam * lam - p1.x - p2.x);
+  const y3 = mod(lam * (p1.x - x3) - p1.y);
+  return { x: x3, y: y3 };
+}
+function ptMul(k, pt = { x: SECP_GX, y: SECP_GY }) {
+  let res = null, add = pt, n = k;
+  while (n > 0n) {
+    if (n & 1n) res = ptAdd(res, add);
+    add = ptAdd(add, add);
+    n >>= 1n;
+  }
+  return res;
+}
+const bytesToBig = b => BigInt('0x' + toHex(b));
+function bigTo32Bytes(num) {
+  return fromHex(num.toString(16).padStart(64, '0'));
+}
+async function sha256(uint8) {
+  return new Uint8Array(await crypto.subtle.digest('SHA-256', uint8));
+}
+const tagCache = new Map();
+async function bip340Hash(tag, ...parts) {
+  let th = tagCache.get(tag);
+  if (!th) { th = await sha256(enc.encode(tag)); tagCache.set(tag, th); }
+  const len = th.length * 2 + parts.reduce((s, p) => s + p.length, 0);
+  const buf = new Uint8Array(len);
+  buf.set(th, 0); buf.set(th, th.length);
+  let off = th.length * 2;
+  for (const p of parts) { buf.set(p, off); off += p.length; }
+  return sha256(buf);
+}
+
+function generateNostrKeypair() {
+  const priv = crypto.getRandomValues(new Uint8Array(32));
+  const d0 = mod(bytesToBig(priv), SECP_N - 1n) + 1n;
+  const privBytes = bigTo32Bytes(d0);
+  const P = ptMul(d0);
+  return { privBytes, pubHex: toHex(bigTo32Bytes(P.x)) };
+}
+
+async function signNostrEvent(ev, privBytes) {
+  const serialized = JSON.stringify([0, ev.pubkey, ev.created_at, ev.kind, ev.tags, ev.content]);
+  const idBytes = await sha256(enc.encode(serialized));
+  ev.id = toHex(idBytes);
+
+  const d0 = bytesToBig(privBytes);
+  const P = ptMul(d0);
+  const d = (P.y & 1n) === 0n ? d0 : SECP_N - d0;
+  const aux = crypto.getRandomValues(new Uint8Array(32));
+  const t = d ^ bytesToBig(await bip340Hash('BIP0340/aux', aux));
+  const pxBytes = bigTo32Bytes(P.x);
+  const rand = await bip340Hash('BIP0340/nonce', bigTo32Bytes(t), pxBytes, idBytes);
+  const k0 = mod(bytesToBig(rand), SECP_N);
+  const R = ptMul(k0);
+  const k = (R.y & 1n) === 0n ? k0 : SECP_N - k0;
+  const rxBytes = bigTo32Bytes(R.x);
+  const e = mod(bytesToBig(await bip340Hash('BIP0340/challenge', rxBytes, pxBytes, idBytes)), SECP_N);
+  const s = mod(k + e * d, SECP_N);
+  const sigBytes = new Uint8Array(64);
+  sigBytes.set(rxBytes, 0);
+  sigBytes.set(bigTo32Bytes(s), 32);
+  ev.sig = toHex(sigBytes);
+  return ev;
+}
+
+/* ---------- WebCrypto AES-256-GCM Room Key Derivation ---------- */
+async function deriveRoomCrypto(slug, pin = '') {
+  const rawTag = await sha256(enc.encode('anruf-room-v2:' + slug));
+  const roomTag = toHex(rawTag).slice(0, 32);
+  const baseKey = await crypto.subtle.importKey('raw', enc.encode(`anruf.org:${slug}:${pin}`), 'PBKDF2', false, ['deriveKey']);
+  const aesKey = await crypto.subtle.deriveKey(
+    { name: 'PBKDF2', salt: rawTag, iterations: 12000, hash: 'SHA-256' },
+    baseKey,
+    { name: 'AES-GCM', length: 256 },
+    false,
+    ['encrypt', 'decrypt']
+  );
+  return {
+    roomTag,
+    async encrypt(obj) {
+      const iv = crypto.getRandomValues(new Uint8Array(12));
+      const ct = new Uint8Array(await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, aesKey, enc.encode(JSON.stringify(obj))));
+      const out = new Uint8Array(12 + ct.length);
+      out.set(iv, 0); out.set(ct, 12);
+      return b64uEnc(out);
+    },
+    async decrypt(str) {
+      const raw = b64uDec(str);
+      const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: raw.slice(0, 12) }, aesKey, raw.slice(12));
+      return JSON.parse(dec.decode(pt));
+    }
+  };
+}
+
+/* ==========================================================================
+   PURE-JS INLINE QR CODE GENERATOR (VERSIONS 1–10, ECC LEVEL L, BYTE MODE)
+   ========================================================================== */
+const QR_CAP = [0, 17, 32, 53, 78, 106, 134, 154, 192, 230, 271];
+const QR_EC  = [0, 7, 10, 15, 20, 26, 18, 20, 24, 30, 18];
+const QR_BLK = [0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 4];
+const QR_ALIGN = [[], [], [6,18], [6,22], [6,26], [6,30], [6,34], [6,22,38], [6,24,42], [6,26,46], [6,28,50]];
+
+const GF_EXP = new Uint8Array(512), GF_LOG = new Uint8Array(256);
+{
+  let x = 1;
+  for (let i = 0; i < 255; i++) { GF_EXP[i] = x; GF_LOG[x] = i; x <<= 1; if (x & 256) x ^= 0x11d; }
+  for (let i = 255; i < 512; i++) GF_EXP[i] = GF_EXP[i - 255];
+}
+const gfMul = (a, b) => (a && b) ? GF_EXP[GF_LOG[a] + GF_LOG[b]] : 0;
+function rsEncode(data, ecLen) {
+  let gen = [1];
+  for (let i = 0; i < ecLen; i++) {
+    const nxt = new Array(gen.length + 1).fill(0);
+    for (let j = 0; j < gen.length; j++) { nxt[j] ^= gen[j]; nxt[j + 1] ^= gfMul(gen[j], GF_EXP[i]); }
+    gen = nxt;
+  }
+  const rem = new Uint8Array(ecLen);
+  for (const b of data) {
+    const f = b ^ rem[0];
+    rem.copyWithin(0, 1); rem[ecLen - 1] = 0;
+    for (let j = 0; j < ecLen; j++) rem[j] ^= gfMul(gen[j + 1], f);
+  }
+  return rem;
+}
+
+function renderQrSvg(text) {
+  const bytes = enc.encode(text);
+  let ver = 1;
+  while (ver <= 10 && bytes.length > QR_CAP[ver]) ver++;
+  if (ver > 10) return `<svg viewBox="0 0 40 40"><rect width="40" height="40" fill="#fff"/><text x="20" y="22" text-anchor="middle" font-size="5" fill="#111">Link</text></svg>`;
+
+  const size = ver * 4 + 17;
+  const totalCodewords = (() => {
+    let bits = size * size - 3 * 64 - 2 * (size - 16) - 1 - 31;
+    const al = QR_ALIGN[ver].length;
+    if (al) bits -= (al * al - 3) * 25 - (al - 2) * 10;
+    if (ver >= 7) bits -= 36;
+    return bits >> 3;
+  })();
+  const blocks = QR_BLK[ver], ecPerBlk = QR_EC[ver];
+  const dataBytesTotal = totalCodewords - blocks * ecPerBlk;
+
+  // Bitstream
+  const bits = [];
+  const pushBits = (val, n) => { for (let i = n - 1; i >= 0; i--) bits.push((val >> i) & 1); };
+  pushBits(0b0100, 4);
+  pushBits(bytes.length, ver >= 10 ? 16 : 8);
+  for (const b of bytes) pushBits(b, 8);
+  for (let i = 0; i < 4 && bits.length < dataBytesTotal * 8; i++) bits.push(0);
+  while (bits.length % 8) bits.push(0);
+  const data = new Uint8Array(dataBytesTotal);
+  for (let i = 0; i < bits.length >> 3; i++) {
+    let v = 0; for (let b = 0; b < 8; b++) v = (v << 1) | bits[i * 8 + b];
+    data[i] = v;
+  }
+  for (let i = bits.length >> 3, p = 0; i < dataBytesTotal; i++, p ^= 1) data[i] = p ? 0x11 : 0xEC;
+
+  // Blocks & interleaving
+  const shortLen = Math.floor(dataBytesTotal / blocks), extra = dataBytesTotal % blocks;
+  const dBlocks = [], eBlocks = [];
+  let off = 0;
+  for (let b = 0; b < blocks; b++) {
+    const ln = shortLen + (b >= blocks - extra ? 1 : 0);
+    const slice = data.slice(off, off + ln); off += ln;
+    dBlocks.push(slice); eBlocks.push(rsEncode(slice, ecPerBlk));
+  }
+  const final = [];
+  for (let i = 0; i <= shortLen; i++) for (let b = 0; b < blocks; b++) if (i < dBlocks[b].length) final.push(dBlocks[b][i]);
+  for (let i = 0; i < ecPerBlk; i++) for (let b = 0; b < blocks; b++) final.push(eBlocks[b][i]);
+
+  // Matrix construction
+  const grid = Array.from({ length: size }, () => new Int8Array(size));
+  const used = Array.from({ length: size }, () => new Uint8Array(size));
+  const setMod = (r, c, v) => { if (r >= 0 && r < size && c >= 0 && c < size) { grid[r][c] = v ? 1 : 0; used[r][c] = 1; } };
+  const finder = (R, C) => {
+    for (let r = -1; r <= 7; r++) for (let c = -1; c <= 7; c++)
+      setMod(R + r, C + c, (r >= 0 && r <= 6 && (c === 0 || c === 6)) || (c >= 0 && c <= 6 && (r === 0 || r === 6)) || (r >= 2 && r <= 4 && c >= 2 && c <= 4));
+  };
+  finder(0, 0); finder(0, size - 7); finder(size - 7, 0);
+  for (let i = 8; i < size - 8; i++) { setMod(6, i, i % 2 === 0); setMod(i, 6, i % 2 === 0); }
+  const ap = QR_ALIGN[ver];
+  for (const r of ap) for (const c of ap) {
+    if (used[r][c]) continue;
+    for (let dr = -2; dr <= 2; dr++) for (let dc = -2; dc <= 2; dc++)
+      setMod(r + dr, c + dc, Math.max(Math.abs(dr), Math.abs(dc)) !== 1);
+  }
+  for (let i = 0; i < 9; i++) { if (i !== 6) { used[8][i] = 1; used[i][8] = 1; } }
+  for (let i = 0; i < 8; i++) { used[8][size - 1 - i] = 1; used[size - 1 - i][8] = 1; }
+  setMod(size - 8, 8, 1);
+
+  // Place data bits with mask 0 ((r + c) % 2 === 0)
+  let bitIdx = 0;
+  for (let col = size - 1; col >= 1; col -= 2) {
+    if (col === 6) col--;
+    const upward = ((size - 1 - col) >> 1) % 2 === 0;
+    for (let s = 0; s < size; s++) {
+      const r = upward ? size - 1 - s : s;
+      for (const c of [col, col - 1]) {
+        if (used[r][c]) continue;
+        const bit = bitIdx < final.length * 8 ? ((final[bitIdx >> 3] >> (7 - (bitIdx & 7))) & 1) : 0;
+        bitIdx++;
+        grid[r][c] = bit ^ ((r + c) % 2 === 0 ? 1 : 0);
+      }
+    }
+  }
+  // Format info for ECC Level L (01) + Mask 0 (000) -> precomputed BCH = 0x77C4
+  const fmt = 0x77C4;
+  const fPos1 = [[8,0],[8,1],[8,2],[8,3],[8,4],[8,5],[8,7],[8,8],[7,8],[5,8],[4,8],[3,8],[2,8],[1,8],[0,8]];
+  const fPos2 = [[size-1,8],[size-2,8],[size-3,8],[size-4,8],[size-5,8],[size-6,8],[size-7,8],[8,size-8],[8,size-7],[8,size-6],[8,size-5],[8,size-4],[8,size-3],[8,size-2],[8,size-1]];
+  for (let i = 0; i < 15; i++) {
+    const b = (fmt >> (14 - i)) & 1;
+    grid[fPos1[i][0]][fPos1[i][1]] = b;
+    grid[fPos2[i][0]][fPos2[i][1]] = b;
+  }
+
+  let path = '';
+  for (let r = 0; r < size; r++) for (let c = 0; c < size; c++) if (grid[r][c]) path += `M${c} ${r}h1v1h-1z`;
+  return `<svg viewBox="0 0 ${size} ${size}" shape-rendering="crispEdges"><rect width="${size}" height="${size}" fill="#fff"/><path d="${path}" fill="#121210"/></svg>`;
+}
+
+/* ==========================================================================
+   AUDIO SYNTHESIZER, STUDIO VOICE EQ & 3D SPATIAL ENGINE
+   ========================================================================== */
+let actx = null;
+function getAudioCtx() {
+  if (!actx) {
+    try { actx = new (window.AudioContext || window.webkitAudioContext)(); } catch {}
+  }
+  if (actx?.state === 'suspended') actx.resume().catch(() => {});
+  return actx;
+}
+
+function playChime(type = 'join') {
+  const ctx = getAudioCtx();
+  if (!ctx) return;
+  const notes = {
+    enter: [[523.25, 0], [659.25, 0.08], [783.99, 0.16], [1046.5, 0.25]],
+    join:  [[587.33, 0], [880, 0.11], [1174.66, 0.22]],
+    leave: [[783.99, 0], [523.25, 0.12]],
+    knock: [[330, 0], [330, 0.15], [440, 0.42]],
+    msg:   [[1174.66, 0]]
+  }[type] || [[660, 0]];
+  const t0 = ctx.currentTime + 0.02;
+  for (const [freq, delay] of notes) {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.0001, t0 + delay);
+    gain.gain.linearRampToValueAtTime(0.08, t0 + delay + 0.015);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t0 + delay + 0.65);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(t0 + delay);
+    osc.stop(t0 + delay + 0.7);
+  }
+}
+
+function buildVoiceStudioTrack(rawAudioTrack) {
+  if (!rawAudioTrack || !$('#chkVoiceStudio').checked) return rawAudioTrack;
+  const ctx = getAudioCtx();
+  if (!ctx?.createMediaStreamDestination) return rawAudioTrack;
+  try {
+    const src = ctx.createMediaStreamSource(new MediaStream([rawAudioTrack]));
+    const hp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 85;
+    const warm = ctx.createBiquadFilter(); warm.type = 'peaking'; warm.frequency.value = 210; warm.gain.value = 1.6;
+    const pres = ctx.createBiquadFilter(); pres.type = 'peaking'; pres.frequency.value = 3200; pres.gain.value = 2.8;
+    const comp = ctx.createDynamicsCompressor();
+    comp.threshold.value = -24; comp.knee.value = 16; comp.ratio.value = 3.2;
+    const dest = ctx.createMediaStreamDestination();
+    src.connect(hp); hp.connect(warm); warm.connect(pres); pres.connect(comp); comp.connect(dest);
+    const out = dest.stream.getAudioTracks()[0];
+    const origStop = out.stop.bind(out);
+    out.stop = () => { origStop(); rawAudioTrack.stop(); try { src.disconnect(); } catch {} };
+    return out;
+  } catch { return rawAudioTrack; }
+}
+
+/* ==========================================================================
+   ZERO-DOWNLOAD REALTIME VIDEO FILTER PIPELINE
+   ========================================================================== */
+const FILTERS = [
+  { id: 'none',    label: 'Natürlich',       css: 'none' },
+  { id: 'studio',  label: 'Studio-Kontrast', css: 'contrast(1.12) saturate(1.1) brightness(1.03)' },
+  { id: 'warm',    label: 'Warmes Licht',    css: 'sepia(0.22) saturate(1.25) contrast(1.05)' },
+  { id: 'mono',    label: 'Schwarz-Weiß',    css: 'grayscale(1) contrast(1.18)' },
+  { id: 'soft',    label: 'Sanfter Fokus',   css: 'contrast(1.04) saturate(1.08) brightness(1.05)' },
+  { id: 'pixel',   label: 'Inkognito-Pixel', css: 'none' }
+];
+let currentFilter = store.get('filter', 'none');
+
+const videoFx = {
+  rawTrack: null,
+  outTrack: null,
+  canvas: null,
+  ctx: null,
+  vid: null,
+  timer: 0,
+  wrap(rawTrack) {
+    this.stopOutOnly();
+    this.rawTrack = rawTrack;
+    if (currentFilter === 'none') return rawTrack;
+    if (!HTMLCanvasElement.prototype.captureStream) return rawTrack;
+
+    if (!this.vid) {
+      this.vid = document.createElement('video');
+      this.vid.muted = true; this.vid.playsInline = true; this.vid.autoplay = true;
+    }
+    this.vid.srcObject = new MediaStream([rawTrack]);
+    this.vid.play().catch(() => {});
+
+    const settings = rawTrack.getSettings?.() || {};
+    const w = settings.width || 960, h = settings.height || 540;
+    this.canvas = document.createElement('canvas');
+    this.canvas.width = w; this.canvas.height = h;
+    this.ctx = this.canvas.getContext('2d');
+    const small = document.createElement('canvas'); small.width = 48; small.height = 28;
+    const sctx = small.getContext('2d');
+
+    clearInterval(this.timer);
+    this.timer = setInterval(() => {
+      if (!this.vid || this.vid.readyState < 2) return;
+      const W = this.canvas.width, H = this.canvas.height;
+      if (currentFilter === 'pixel') {
+        sctx.drawImage(this.vid, 0, 0, small.width, small.height);
+        this.ctx.imageSmoothingEnabled = false;
+        this.ctx.drawImage(small, 0, 0, small.width, small.height, 0, 0, W, H);
+      } else {
+        const f = FILTERS.find(x => x.id === currentFilter);
+        this.ctx.filter = f?.css || 'none';
+        this.ctx.drawImage(this.vid, 0, 0, W, H);
+      }
+    }, 34);
+
+    this.outTrack = this.canvas.captureStream(30).getVideoTracks()[0];
+    return this.outTrack;
+  },
+  stopOutOnly() {
+    clearInterval(this.timer); this.timer = 0;
+    if (this.outTrack) { this.outTrack.stop(); this.outTrack = null; }
+  },
+  stopAll() {
+    this.stopOutOnly();
+    if (this.rawTrack) { this.rawTrack.stop(); this.rawTrack = null; }
+  }
+};
+
+function renderFilterStrip() {
+  const strip = $('#filterStrip');
+  strip.replaceChildren();
+  for (const f of FILTERS) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'flt-chip';
+    b.textContent = f.label;
+    b.setAttribute('role', 'radio');
+    b.setAttribute('aria-checked', String(currentFilter === f.id));
+    b.addEventListener('click', () => setVideoFilter(f.id));
+    strip.append(b);
+  }
+  const active = FILTERS.find(x => x.id === currentFilter) || FILTERS[0];
+  $('#fltActiveLabel').textContent = active.label;
+}
+
+function setVideoFilter(id) {
+  currentFilter = id;
+  store.set('filter', id);
+  renderFilterStrip();
+  if (!videoFx.rawTrack || videoFx.rawTrack.readyState !== 'live') return;
+  const activeStream = CALL?.localStream || LOBBY.stream;
+  if (!activeStream) return;
+  const prevTrack = activeStream.getVideoTracks()[0];
+  const nextTrack = videoFx.wrap(videoFx.rawTrack);
+  if (prevTrack && prevTrack !== nextTrack) {
+    activeStream.removeTrack(prevTrack);
+    activeStream.addTrack(nextTrack);
+    if (CALL) {
+      for (const peer of CALL.peers.values()) {
+        const sender = peer.pc.getSenders().find(s => s.track?.kind === 'video' && !peer.screenSender?.includes?.(s));
+        sender?.replaceTrack(nextTrack).catch(() => {});
+      }
+      bindSelfTileVideo();
+    } else {
+      updateLobbyUI();
+    }
+  }
+}
+
+/* ==========================================================================
+   IDENTITY, THEME & PRE-WARMED ICE POOL

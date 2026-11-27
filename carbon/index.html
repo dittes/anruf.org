@@ -98,7 +98,6 @@ body {
   transition: background-color 0.35s var(--ease), color 0.35s var(--ease);
 }
 
-/* Archival Paper Noise Texture */
 body::before {
   content: "";
   position: fixed;
@@ -110,7 +109,6 @@ body::before {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* Ambient Warm Aura */
 .aura {
   position: fixed;
   z-index: 0;
@@ -132,7 +130,6 @@ button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
 .mono { font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.06em; text-transform: uppercase; }
 
-/* Views */
 .view { display: none; position: relative; z-index: 1; }
 body[data-view="home"] #home,
 body[data-view="join"] #join,
@@ -226,7 +223,6 @@ body[data-view="room"] #room { display: flex; }
 .icon-btn:hover { transform: translateY(-1px) rotate(8deg); border-color: var(--line-strong); }
 .icon-btn svg { width: 17px; height: 17px; }
 
-/* Buttons */
 .btn {
   height: 48px;
   padding: 0 20px;
@@ -258,10 +254,7 @@ body[data-view="room"] #room { display: flex; }
 /* ==========================================================================
    HOME VIEW (#home)
    ========================================================================== */
-#home {
-  flex-direction: column;
-  min-height: 100dvh;
-}
+#home { flex-direction: column; min-height: 100dvh; }
 #home::before {
   content: "";
   position: absolute;
@@ -308,10 +301,7 @@ body[data-view="room"] #room { display: flex; }
   letter-spacing: -0.055em;
 }
 .hero h1 .ln { display: block; overflow: hidden; padding-bottom: 0.06em; }
-.hero h1 .ln > span {
-  display: inline-block;
-  animation: slideUp 0.75s var(--ease) both;
-}
+.hero h1 .ln > span { display: inline-block; animation: slideUp 0.75s var(--ease) both; }
 .hero h1 .ln:nth-child(2) > span { animation-delay: 0.07s; }
 .hero h1 .ln:nth-child(3) > span { animation-delay: 0.14s; }
 .hero h1 em { font-style: normal; color: var(--accent); }
@@ -326,7 +316,6 @@ body[data-view="room"] #room { display: flex; }
 }
 .lede strong { color: var(--ink); font-weight: 650; }
 
-/* Quick Room Composer Bar */
 .quick-composer {
   width: 100%;
   max-width: 520px;
@@ -405,12 +394,7 @@ body[data-view="room"] #room { display: flex; }
   font-size: 0.78rem;
 }
 
-/* Tactile Rotary Sonar Call Orb */
-.dial-col {
-  display: grid;
-  justify-items: center;
-  gap: 18px;
-}
+.dial-col { display: grid; justify-items: center; gap: 18px; }
 .orb {
   position: relative;
   width: clamp(240px, 64vw, 356px);
@@ -491,14 +475,8 @@ body[data-view="room"] #room { display: flex; }
 .call-btn:hover { transform: scale(1.055); }
 .call-btn:active { transform: scale(0.94); }
 
-.orb-caption {
-  font-family: var(--mono);
-  font-size: 0.72rem;
-  color: var(--mute);
-  text-align: center;
-}
+.orb-caption { font-family: var(--mono); font-size: 0.72rem; color: var(--mute); text-align: center; }
 
-/* Bento Feature Grid */
 .bento-sec {
   width: 100%;
   max-width: 1280px;
@@ -507,20 +485,10 @@ body[data-view="room"] #room { display: flex; }
   display: grid;
   gap: 18px;
 }
-.sec-head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
-}
+.sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .sec-head h2 { margin: 0; font-size: clamp(1.45rem, 3.2vw, 2.1rem); letter-spacing: -0.035em; font-weight: 800; }
 
-.bento-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(275px, 1fr));
-  gap: 14px;
-}
+.bento-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(275px, 1fr)); gap: 14px; }
 .bento-card {
   position: relative;
   background: var(--card);
@@ -532,11 +500,7 @@ body[data-view="room"] #room { display: flex; }
   align-content: start;
   transition: transform 0.4s var(--spring), border-color 0.3s, box-shadow 0.3s;
 }
-.bento-card:hover {
-  transform: translateY(-4px);
-  border-color: var(--line-strong);
-  box-shadow: var(--shadow-md);
-}
+.bento-card:hover { transform: translateY(-4px); border-color: var(--line-strong); box-shadow: var(--shadow-md); }
 .bento-ic {
   width: 42px;
   height: 42px;
@@ -598,11 +562,7 @@ body[data-view="room"] #room { display: flex; }
   .lobby-wrap { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 44px; align-items: start; }
 }
 
-/* Video Preview Stage */
-.pv-card {
-  display: grid;
-  gap: 14px;
-}
+.pv-card { display: grid; gap: 14px; }
 .pv-stage {
   position: relative;
   aspect-ratio: 16 / 10;
@@ -735,7 +695,6 @@ body[data-view="room"] #room { display: flex; }
 }
 .mic-check-btn.rec { background: var(--accent); border-color: var(--accent); }
 
-/* Filter & Studio Panel */
 .studio-box {
   background: var(--card);
   border: 1px solid var(--line);
@@ -744,13 +703,7 @@ body[data-view="room"] #room { display: flex; }
   display: grid;
   gap: 12px;
 }
-.filter-strip {
-  display: flex;
-  gap: 7px;
-  overflow-x: auto;
-  padding-bottom: 2px;
-  scrollbar-width: none;
-}
+.filter-strip { display: flex; gap: 7px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
 .filter-strip::-webkit-scrollbar { display: none; }
 .flt-chip {
   flex: none;
@@ -764,11 +717,7 @@ body[data-view="room"] #room { display: flex; }
   color: var(--ink-soft);
   transition: all 0.25s;
 }
-.flt-chip[aria-checked="true"] {
-  background: var(--ink);
-  color: var(--paper);
-  border-color: var(--ink);
-}
+.flt-chip[aria-checked="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 
 .dev-details summary {
   cursor: pointer;
@@ -784,19 +733,8 @@ body[data-view="room"] #room { display: flex; }
   padding: 4px 0;
 }
 .dev-details summary::-webkit-details-marker { display: none; }
-.dev-grid {
-  display: grid;
-  gap: 10px;
-  padding-top: 12px;
-  border-top: 1px solid var(--line);
-  margin-top: 8px;
-}
-.dev-grid label {
-  display: grid;
-  gap: 4px;
-  font-size: 0.82rem;
-  color: var(--mute);
-}
+.dev-grid { display: grid; gap: 10px; padding-top: 12px; border-top: 1px solid var(--line); margin-top: 8px; }
+.dev-grid label { display: grid; gap: 4px; font-size: 0.82rem; color: var(--mute); }
 .dev-grid select, .dev-grid input[type="text"], .dev-grid input[type="password"] {
   height: 40px;
   border-radius: 11px;
@@ -816,18 +754,8 @@ body[data-view="room"] #room { display: flex; }
 }
 .chk-row input { width: 17px; height: 17px; accent-color: var(--accent); margin: 0; }
 
-/* Lobby Right Side */
-.lobby-info {
-  display: grid;
-  gap: 18px;
-  align-content: start;
-}
-.lobby-slug-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
+.lobby-info { display: grid; gap: 18px; align-content: start; }
+.lobby-slug-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .lobby-slug {
   margin: 0;
   font-size: clamp(1.9rem, 5vw, 3.2rem);
@@ -857,11 +785,7 @@ body[data-view="room"] #room { display: flex; }
 /* ==========================================================================
    ROOM / IN-CALL VIEW (#room)
    ========================================================================== */
-#room {
-  flex-direction: column;
-  height: 100dvh;
-  overflow: hidden;
-}
+#room { flex-direction: column; height: 100dvh; overflow: hidden; }
 
 .room-bar {
   display: flex;
@@ -894,7 +818,6 @@ body[data-view="room"] #room { display: flex; }
   align-items: center;
   gap: 6px;
   cursor: pointer;
-  title: "Ende-zu-Ende Sicherheitscode prüfen";
 }
 .sas-badge .mono { font-size: 0.64rem; color: var(--mute); }
 
@@ -918,33 +841,10 @@ body[data-view="room"] #room { display: flex; }
 }
 @keyframes popIn { from { opacity: 0; transform: translateY(-8px) scale(0.96); } }
 
-.mesh-svg {
-  width: 100%;
-  height: 126px;
-  border-radius: 16px;
-  background: var(--paper);
-  border: 1px solid var(--line);
-  display: block;
-}
-.spark-svg {
-  width: 100%;
-  height: 62px;
-  border-radius: 12px;
-  background: var(--paper);
-  border: 1px solid var(--line);
-  display: block;
-}
-.stat-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 7px;
-}
-.stat-cell {
-  background: var(--paper);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 8px 10px;
-}
+.mesh-svg { width: 100%; height: 126px; border-radius: 16px; background: var(--paper); border: 1px solid var(--line); display: block; }
+.spark-svg { width: 100%; height: 62px; border-radius: 12px; background: var(--paper); border: 1px solid var(--line); display: block; }
+.stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 7px; }
+.stat-cell { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; }
 .stat-cell .k { font-family: var(--mono); font-size: 0.61rem; color: var(--mute); text-transform: uppercase; letter-spacing: 0.06em; }
 .stat-cell .v { font-weight: 750; font-size: 0.96rem; margin-top: 1px; font-family: var(--mono); }
 
@@ -960,7 +860,6 @@ body[data-view="room"] #room { display: flex; }
   gap: 3px;
 }
 
-/* Main Stage + Workspace + Chat */
 .room-body {
   flex: 1;
   min-height: 0;
@@ -979,7 +878,6 @@ body[data-view="room"] #room { display: flex; }
   position: relative;
 }
 
-/* Collaborative Whiteboard / Presentation Primary Pane */
 .work-pane {
   flex: 1.65;
   min-width: 0;
@@ -1017,13 +915,7 @@ body[data-view="room"] #room { display: flex; }
   gap: 5px;
 }
 .wb-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-.wb-swatch {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  border: 2px solid transparent;
-  padding: 0;
-}
+.wb-swatch { width: 24px; height: 24px; border-radius: 50%; border: 2px solid transparent; padding: 0; }
 .wb-swatch.active { border-color: var(--ink); transform: scale(1.14); }
 .wb-canvas-wrap {
   flex: 1;
@@ -1034,15 +926,8 @@ body[data-view="room"] #room { display: flex; }
   touch-action: none;
 }
 html[data-theme="dark"] .wb-canvas-wrap { background: #141412; }
-.wb-canvas-wrap canvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  display: block;
-}
+.wb-canvas-wrap canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 
-/* Video Tiles Grid */
 .tiles-grid {
   flex: 1;
   min-width: 0;
@@ -1059,11 +944,7 @@ html[data-theme="dark"] .wb-canvas-wrap { background: #141412; }
   flex-direction: column;
   overflow-y: auto;
 }
-.stage-wrap.has-work .tiles-grid .tile {
-  flex: none;
-  width: 100%;
-  aspect-ratio: 16 / 10;
-}
+.stage-wrap.has-work .tiles-grid .tile { flex: none; width: 100%; aspect-ratio: 16 / 10; }
 
 .tile {
   position: relative;
@@ -1099,7 +980,6 @@ html[data-theme="dark"] .wb-canvas-wrap { background: #141412; }
 .tile.screen-tile video { object-fit: contain; opacity: 1; background: #070707; }
 .tile.cam .blob-box { opacity: 0; pointer-events: none; }
 
-/* Laser / Annotation Overlay on Screen Tile */
 .annot-layer {
   position: absolute;
   inset: 0;
@@ -1151,15 +1031,7 @@ html[data-theme="dark"] .wb-canvas-wrap { background: #141412; }
 .tile-meta .mute-ic { width: 14px; height: 14px; color: var(--danger); display: none; flex: none; }
 .tile.muted .tile-meta .mute-ic { display: block; }
 
-.tile-badges {
-  position: absolute;
-  z-index: 5;
-  top: 12px;
-  left: 12px;
-  display: flex;
-  gap: 6px;
-  align-items: center;
-}
+.tile-badges { position: absolute; z-index: 5; top: 12px; left: 12px; display: flex; gap: 6px; align-items: center; }
 .p2p-tag {
   padding: 4px 9px;
   border-radius: 999px;
@@ -1170,18 +1042,10 @@ html[data-theme="dark"] .wb-canvas-wrap { background: #141412; }
   letter-spacing: 0.05em;
   backdrop-filter: blur(8px);
 }
-.hand-tag {
-  padding: 4px 9px;
-  border-radius: 999px;
-  background: #FFD34E;
-  color: #121210;
-  font-size: 0.95rem;
-  display: none;
-}
+.hand-tag { padding: 4px 9px; border-radius: 999px; background: #FFD34E; color: #121210; font-size: 0.95rem; display: none; }
 .tile.hand-up .hand-tag { display: inline-block; animation: waveHand 1.4s ease-in-out 2; }
 @keyframes waveHand { 25% { transform: rotate(15deg); } 55% { transform: rotate(-10deg); } }
 
-/* Waiting Card when alone */
 .wait-card {
   position: absolute;
   z-index: 8;
@@ -1206,13 +1070,7 @@ html[data-theme="dark"] .wb-canvas-wrap { background: #141412; }
 .wait-card p { margin: 0; font-size: 0.88rem; color: var(--mute); }
 .qr-mini { width: 84px; height: 84px; background: #fff; padding: 6px; border-radius: 12px; }
 .qr-mini svg { width: 100%; height: 100%; display: block; }
-.wait-link-row {
-  grid-column: 1 / -1;
-  display: flex;
-  gap: 7px;
-  align-items: center;
-  flex-wrap: wrap;
-}
+.wait-link-row { grid-column: 1 / -1; display: flex; gap: 7px; align-items: center; flex-wrap: wrap; }
 .wait-link-row code {
   flex: 1;
   min-width: 160px;
@@ -1227,7 +1085,6 @@ html[data-theme="dark"] .wb-canvas-wrap { background: #141412; }
   white-space: nowrap;
 }
 
-/* Floating Live Subtitles (CC) */
 .cc-overlay {
   position: absolute;
   z-index: 12;
@@ -1252,7 +1109,6 @@ html[data-theme="dark"] .wb-canvas-wrap { background: #141412; }
 }
 .cc-line b { color: #FF8762; margin-right: 6px; }
 
-/* Flying Emoji */
 .fly-emoji {
   position: absolute;
   z-index: 10;
@@ -1268,7 +1124,6 @@ html[data-theme="dark"] .wb-canvas-wrap { background: #141412; }
   100% { opacity: 0; transform: translate(-50%, -220px) rotate(var(--r, 8deg)); }
 }
 
-/* Side Chat & Data Tunnel */
 .chat-pane {
   width: 364px;
   flex: none;
@@ -1324,21 +1179,9 @@ html[data-theme="dark"] .wb-canvas-wrap { background: #141412; }
   color: #fff;
   border-radius: 16px 16px 5px 16px;
 }
-.c-sys {
-  align-self: center;
-  text-align: center;
-  font-family: var(--mono);
-  font-size: 0.66rem;
-  color: var(--mute);
-  padding: 3px 10px;
-}
+.c-sys { align-self: center; text-align: center; font-family: var(--mono); font-size: 0.66rem; color: var(--mute); padding: 3px 10px; }
 
-/* Poll Card in Chat */
-.poll-box {
-  display: grid;
-  gap: 7px;
-  min-width: 210px;
-}
+.poll-box { display: grid; gap: 7px; min-width: 210px; }
 .poll-q { font-weight: 750; font-size: 0.94rem; }
 .poll-opt {
   position: relative;
@@ -1354,35 +1197,15 @@ html[data-theme="dark"] .wb-canvas-wrap { background: #141412; }
   justify-content: space-between;
   gap: 8px;
 }
-.poll-opt .fill {
-  position: absolute;
-  inset: 0 auto 0 0;
-  background: currentColor;
-  opacity: 0.16;
-  transition: width 0.3s var(--ease);
-}
+.poll-opt .fill { position: absolute; inset: 0 auto 0 0; background: currentColor; opacity: 0.16; transition: width 0.3s var(--ease); }
 .poll-opt span { position: relative; z-index: 1; }
 
-/* File Transfer Bubble */
-.file-bub img {
-  max-width: 100%;
-  max-height: 210px;
-  border-radius: 11px;
-  display: block;
-  margin-bottom: 6px;
-  cursor: zoom-in;
-}
+.file-bub img { max-width: 100%; max-height: 210px; border-radius: 11px; display: block; margin-bottom: 6px; cursor: zoom-in; }
 .file-meta-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 0.84rem; }
 .file-prog { height: 4px; border-radius: 99px; background: rgba(128,128,128,0.25); overflow: hidden; margin-top: 6px; }
 .file-prog i { display: block; height: 100%; width: 0%; background: currentColor; transition: width 0.15s; }
 
-.chat-form {
-  padding: 10px;
-  border-top: 1px solid var(--line);
-  display: flex;
-  gap: 6px;
-  align-items: center;
-}
+.chat-form { padding: 10px; border-top: 1px solid var(--line); display: flex; gap: 6px; align-items: center; }
 .chat-form input[type="text"] {
   flex: 1;
   min-width: 0;
@@ -1411,7 +1234,6 @@ html[data-theme="dark"] .wb-canvas-wrap { background: #141412; }
 }
 .chat-pane.drag .drop-mask { display: grid; }
 
-/* Floating Control Dock */
 .dock {
   display: flex;
   align-items: center;
@@ -1479,7 +1301,6 @@ html[data-theme="dark"] .wb-canvas-wrap { background: #141412; }
 .hangup-btn:hover { transform: translateY(-3px); }
 .hangup-btn svg { width: 22px; height: 22px; transform: rotate(135deg); }
 
-/* Reaction Bar Popover */
 .react-bar {
   position: fixed;
   z-index: 32;
@@ -1507,15 +1328,7 @@ html[data-theme="dark"] .wb-canvas-wrap { background: #141412; }
   transition: transform 0.25s var(--spring);
 }
 .react-bar button:hover { transform: scale(1.22) translateY(-2px); }
-.react-bar .hand-toggle {
-  width: auto;
-  padding: 0 12px;
-  border-radius: 999px;
-  font-size: 0.85rem;
-  font-weight: 650;
-  gap: 5px;
-  display: inline-flex;
-}
+.react-bar .hand-toggle { width: auto; padding: 0 12px; border-radius: 999px; font-size: 0.85rem; font-weight: 650; gap: 5px; display: inline-flex; }
 .react-bar .hand-toggle.active { background: #FFD34E; color: #121210; }
 
 /* ==========================================================================
@@ -1532,32 +1345,12 @@ dialog {
   overflow-y: auto;
   box-shadow: var(--shadow-lg);
 }
-dialog::backdrop {
-  background: rgba(10, 10, 9, 0.5);
-  backdrop-filter: blur(5px);
-}
+dialog::backdrop { background: rgba(10, 10, 9, 0.5); backdrop-filter: blur(5px); }
 dialog h3 { margin: 0 0 6px; font-size: 1.38rem; letter-spacing: -0.03em; font-weight: 800; }
 dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
 
-.tabs-bar {
-  display: flex;
-  gap: 6px;
-  padding: 4px;
-  border-radius: 13px;
-  background: var(--paper);
-  border: 1px solid var(--line);
-  margin-bottom: 16px;
-}
-.tab-btn {
-  flex: 1;
-  height: 36px;
-  border: 0;
-  border-radius: 9px;
-  background: transparent;
-  font-size: 0.84rem;
-  font-weight: 650;
-  color: var(--mute);
-}
+.tabs-bar { display: flex; gap: 6px; padding: 4px; border-radius: 13px; background: var(--paper); border: 1px solid var(--line); margin-bottom: 16px; }
+.tab-btn { flex: 1; height: 36px; border: 0; border-radius: 9px; background: transparent; font-size: 0.84rem; font-weight: 650; color: var(--mute); }
 .tab-btn.active { background: var(--card); color: var(--ink); box-shadow: var(--shadow-sm); }
 
 .diag-list { display: grid; gap: 8px; margin: 14px 0; }
@@ -1572,26 +1365,12 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
   border: 1px solid var(--line);
   font-size: 0.9rem;
 }
-.diag-badge {
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  padding: 3px 9px;
-  border-radius: 999px;
-  font-weight: 700;
-}
+.diag-badge { font-family: var(--mono); font-size: 0.7rem; padding: 3px 9px; border-radius: 999px; font-weight: 700; }
 .diag-badge.ok { background: var(--p2p-soft); color: var(--p2p); }
 .diag-badge.warn { background: var(--warn-soft); color: var(--warn); }
 .diag-badge.wait { background: var(--line); color: var(--mute); }
 
-.qr-large {
-  width: 176px;
-  height: 176px;
-  margin: 8px auto 14px;
-  background: #fff;
-  padding: 11px;
-  border-radius: 18px;
-  border: 1px solid var(--line);
-}
+.qr-large { width: 176px; height: 176px; margin: 8px auto 14px; background: #fff; padding: 11px; border-radius: 18px; border: 1px solid var(--line); }
 .qr-large svg { width: 100%; height: 100%; display: block; }
 
 .airgap-area {
@@ -1606,7 +1385,6 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
   resize: vertical;
 }
 
-/* Toasts & Floating Knock Cards */
 .toasts {
   position: fixed;
   z-index: 90;
@@ -1631,34 +1409,12 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
   animation: popIn 0.3s var(--spring);
 }
 
-.knock-stack {
-  position: fixed;
-  z-index: 80;
-  top: 66px;
-  right: 16px;
-  display: grid;
-  gap: 10px;
-  width: min(340px, calc(100vw - 32px));
-}
-.knock-card {
-  background: var(--card);
-  border: 1px solid var(--line-strong);
-  border-radius: 18px;
-  padding: 14px;
-  box-shadow: var(--shadow-lg);
-  display: grid;
-  gap: 10px;
-}
+.knock-stack { position: fixed; z-index: 80; top: 66px; right: 16px; display: grid; gap: 10px; width: min(340px, calc(100vw - 32px)); }
+.knock-card { background: var(--card); border: 1px solid var(--line-strong); border-radius: 18px; padding: 14px; box-shadow: var(--shadow-lg); display: grid; gap: 10px; }
 
-/* Mobile Responsive Refinements */
 @media (max-width: 780px) {
   .stage-wrap { flex-direction: column; }
-  .stage-wrap.has-work .tiles-grid {
-    flex: 0 0 112px;
-    flex-direction: row;
-    overflow-x: auto;
-    overflow-y: hidden;
-  }
+  .stage-wrap.has-work .tiles-grid { flex: 0 0 112px; flex-direction: row; overflow-x: auto; overflow-y: hidden; }
   .stage-wrap.has-work .tiles-grid .tile { width: 150px; height: 100%; aspect-ratio: auto; }
   .chat-pane {
     position: fixed;
@@ -1697,7 +1453,7 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
      ===================================================================== -->
 <main id="home" class="view">
   <header class="topbar">
-    <a class="brand" href="./" aria-label="anruf.org Startseite">
+    <a class="brand" href="#" id="homeBrandLink" aria-label="anruf.org Startseite">
       <span>anruf<i>.org</i></span>
       <span class="brand-tag">Direct P2P</span>
     </a>
@@ -1794,7 +1550,7 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
     <nav>
       <button class="link-btn" type="button" id="footerDiagBtn">NAT-Diagnose</button>
       <button class="link-btn" type="button" id="footerAirgapInfo">Airgap-Modus</button>
-      <a href="datenschutz.html" onClick="if(!location.hostname.includes('anruf')){event.preventDefault();document.getElementById('privacyDlg').showModal()}">Datenschutz</a>
+      <a href="#datenschutz" id="footerPrivacyLink">Datenschutz</a>
     </nav>
   </footer>
 </main>
@@ -1804,7 +1560,7 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
      ===================================================================== -->
 <main id="join" class="view">
   <header class="topbar">
-    <a class="brand" href="./" id="lobbyBackBrand"><span>anruf<i>.org</i></span></a>
+    <a class="brand" href="#" id="lobbyBackBrand"><span>anruf<i>.org</i></span></a>
     <div class="top-actions">
       <span class="pill-btn" id="prewarmBadge">
         <i class="status-dot online"></i>
@@ -1814,13 +1570,12 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
   </header>
 
   <section class="lobby-wrap">
-    <!-- Left: Camera & Studio Rack -->
-    <div class="pv-card">
+    <div class="pv-card" id="lobbyPvCard">
       <div class="pv-stage" id="pvStage">
         <video id="pvVideo" playsinline autoplay muted></video>
         <div class="pv-avatar-wrap">
           <div class="pv-avatar" id="pvAvatar">F</div>
-          <span id="pvHintMsg" style="font-size:0.9rem;opacity:0.8">Kamera ist ausgeschaltet</span>
+          <span id="pvHintMsg" style="font-size:0.9rem;opacity:0.8">Kamera &amp; Mikrofon werden vorbereitet…</span>
         </div>
 
         <div class="pv-status-pill">
@@ -1892,7 +1647,6 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
       </div>
     </div>
 
-    <!-- Right: Room & Identity -->
     <div class="lobby-info">
       <span class="mono" style="color:var(--accent)" id="lobbyEyebrow">Studio-Vorschau · Direktverbindung</span>
       <div class="lobby-slug-row">
@@ -1922,7 +1676,7 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h3.5l2 5-2.5 1.5a11 11 0 0 0 5.5 5.5l1.5-2.5 5 2V19a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>
           <span>Jetzt beitreten</span>
         </button>
-        <a class="btn ghost" href="./" id="lobbyCancelBtn" style="height:56px;border-radius:999px">Zurück</a>
+        <a class="btn ghost" href="#" id="lobbyCancelBtn" style="height:56px;border-radius:999px">Zurück</a>
       </div>
     </div>
   </section>
@@ -1934,7 +1688,7 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
 <main id="room" class="view">
   <header class="room-bar">
     <div class="rb-left">
-      <a class="brand" href="./" id="roomBrandExit" title="Auflegen & zur Startseite"><span>anruf<i>.org</i></span></a>
+      <a class="brand" href="#" id="roomBrandExit" title="Auflegen & zur Startseite"><span>anruf<i>.org</i></span></a>
       <span style="color:var(--line-strong)">/</span>
       <span class="rb-slug" id="roomSlugLabel"></span>
       <span class="diag-badge warn" id="roomLockBadge" hidden title="Raum ist abgeschlossen">🔒 Gesperrt</span>
@@ -1951,7 +1705,6 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
         <span>Einladen</span>
       </button>
 
-      <!-- Live P2P Radar Button & Popover -->
       <div class="radar-wrap" id="radarWrap">
         <button class="pill-btn" id="radarBtn" type="button" aria-expanded="false" title="Live P2P-Topologie & Telemetrie">
           <i class="status-dot online" id="roomP2pDot"></i>
@@ -1993,7 +1746,6 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
 
   <div class="room-body">
     <div class="stage-wrap" id="stageWrap">
-      <!-- Collaborative Live Whiteboard -->
       <section class="work-pane" id="whiteboardPane" hidden aria-label="Gemeinsames Whiteboard">
         <div class="wb-toolbar">
           <div class="wb-tools">
@@ -2006,7 +1758,7 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
             <button class="wb-swatch active" type="button" data-wbcol="#FF4F1A" style="background:#FF4F1A" aria-label="Orange"></button>
             <button class="wb-swatch" type="button" data-wbcol="#121210" style="background:#121210" aria-label="Schwarz"></button>
             <button class="wb-swatch" type="button" data-wbcol="#1FA958" style="background:#1FA958" aria-label="Grün"></button>
-            <button class="wb-swatch" type="button" data-wbcol="#2B6CB0" style="background:#2B6CB0" aria-label="Blau"></button>
+            <button class="wb-swatch" type="button" data-wbcol="#2B6CB0" style="background:#2B6CB0" style="background:#2B6CB0" aria-label="Blau"></button>
           </div>
           <div class="wb-tools">
             <button class="wb-btn" type="button" id="wbSaveBtn">⬇ PNG</button>
@@ -2019,7 +1771,6 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
         </div>
       </section>
 
-      <!-- Adaptive Video Tiles Grid -->
       <section class="tiles-grid alone" id="tilesGrid" aria-live="polite">
         <div class="wait-card" id="waitCard">
           <div>
@@ -2035,11 +1786,9 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
         </div>
       </section>
 
-      <!-- Live Subtitles Overlay -->
       <div class="cc-overlay" id="ccOverlay"></div>
     </div>
 
-    <!-- Chat, Polls & Chunked File Tunnel -->
     <aside class="chat-pane" id="chatPane" aria-label="Direkt-Chat & Datentunnel">
       <div class="chat-top">
         <div>
@@ -2066,7 +1815,6 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
     </aside>
   </div>
 
-  <!-- Control Dock -->
   <nav class="dock" id="roomDock" aria-label="Anrufsteuerung">
     <button class="dock-btn" id="dockMicBtn" type="button" title="Mikrofon (M) · Leertaste gedrückt halten zum Sprechen">
       <svg class="ic-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
@@ -2096,7 +1844,7 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
     </button>
     <button class="dock-btn" id="dockFsBtn" type="button" title="Vollbild (F)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V5a1 1 0 0 1 1-1h4M20 9V5a1 1 0 0 0-1-1h-4M4 15v4a1 1 0 0 0 1 1h4M20 15v4a1 1 0 0 1-1 1h-4"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V5a1 1 0 0 1 1-1h4M20 9V5a1 1 0 0 0-1-1h-4M4 15v4a1 1 0 0 0 1 1h4M20 15v4a1 1 0 0 1-1-1h-4"/></svg>
     </button>
     <button class="hangup-btn" id="dockHangupBtn" type="button" aria-label="Auflegen">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h3.5l2 5-2.5 1.5a11 11 0 0 0 5.5 5.5l1.5-2.5 5 2V19a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>
@@ -2104,7 +1852,6 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
     </button>
   </nav>
 
-  <!-- Reaction Bar -->
   <div class="react-bar" id="reactBar" hidden>
     <button type="button" data-emo="👍">👍</button>
     <button type="button" data-emo="❤️">❤️</button>
@@ -2157,11 +1904,10 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
   </div>
 
   <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
-    <button class="btn ghost sm" type="button" onClick="this.closest('dialog').close()">Schließen</button>
+    <button class="btn ghost sm" type="button" data-close-dlg>Schließen</button>
   </div>
 </dialog>
 
-<!-- NAT & Direct P2P Scanner Dialog -->
 <dialog id="diagDlg">
   <h3>NAT- &amp; Direkt-P2P Diagnose</h3>
   <p class="sub">Prüft ohne Kamera/Mikrofon, ob dein Netzwerk direktes UDP Hole-Punching ohne TURN-Server unterstützt.</p>
@@ -2174,68 +1920,63 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
     <div class="diag-row"><span>5. NAT-Mapping (Hole-Punching Prognose)</span><span class="diag-badge wait" id="dgNat">Prüfe…</span></div>
   </div>
 
-  <p id="diagVerdict" style="font-size:0.9rem;padding:12px;border-radius:14px;background:var(--paper);border:1px solid var(--line);margin:0"></p>
+  <p id="diagVerdict" style="font-size:0.9rem;padding:12px;border-radius:14px;background:var(--paper);border:1px solid var(--line);margin:0">Starte Messung…</p>
 
   <div style="display:flex;justify-content:space-between;gap:8px;margin-top:16px;flex-wrap:wrap">
     <div style="display:flex;gap:8px">
       <button class="btn sm ghost" type="button" id="rerunDiagBtn">Neu messen</button>
       <button class="btn sm ghost" type="button" id="copyDiagBtn">IT-Bericht kopieren</button>
     </div>
-    <button class="btn sm" type="button" onClick="this.closest('dialog').close()">Fertig</button>
+    <button class="btn sm" type="button" data-close-dlg>Fertig</button>
   </div>
 </dialog>
 
-<!-- Rename / Edit Slug Dialog -->
 <dialog id="slugDlg">
   <form id="slugEditForm">
     <h3>Raumnamen anpassen</h3>
     <p class="sub">Wer denselben Raumnamen öffnet, landet direkt bei dir.</p>
     <input type="text" id="slugEditInput" maxlength="48" style="width:100%;height:48px;border-radius:12px;border:1px solid var(--line-strong);background:var(--paper);padding:0 14px;font-family:var(--mono)">
     <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
-      <button class="btn ghost sm" type="button" onClick="this.closest('dialog').close()">Abbrechen</button>
+      <button class="btn ghost sm" type="button" data-close-dlg>Abbrechen</button>
       <button class="btn accent sm" type="submit">Übernehmen</button>
     </div>
   </form>
 </dialog>
 
-<!-- Studio Settings Modal inside Call -->
 <dialog id="inCallStudioDlg">
   <h3>Studio-Einstellungen</h3>
   <p class="sub">Filter, Sprachklang und Geräte live im Gespräch wechseln.</p>
   <div id="inCallStudioSlot"></div>
   <div style="display:flex;justify-content:flex-end;margin-top:16px">
-    <button class="btn sm" type="button" onClick="this.closest('dialog').close()">Fertig</button>
+    <button class="btn sm" type="button" data-close-dlg>Fertig</button>
   </div>
 </dialog>
 
-<!-- Quick Poll Creator Dialog -->
 <dialog id="pollDlg">
   <form id="pollForm">
     <h3>Schnell-Abstimmung starten</h3>
     <p class="sub">Läuft live über den verschlüsselten P2P-Datenkanal.</p>
     <div style="display:grid;gap:8px">
       <input type="text" id="pollQ" required maxlength="120" placeholder="Frage (z. B. Wann machen wir Pause?)" style="height:44px;border-radius:11px;border:1px solid var(--line-strong);background:var(--paper);padding:0 12px">
-      <input type="text" id="pollO1" required maxlength="60" placeholder="Option 1" style="height:40px;border-radius:11px;border:1px solid var(--line);background:var(--paper);padding:0 12px">
+      <input type="text" id="pollO1" required maxlength="60" placeholder="Option 1" style="height:40px;border-radius:11px;border:1px solid var(--line);background:var(--paper);background:var(--paper);padding:0 12px">
       <input type="text" id="pollO2" required maxlength="60" placeholder="Option 2" style="height:40px;border-radius:11px;border:1px solid var(--line);background:var(--paper);padding:0 12px">
       <input type="text" id="pollO3" maxlength="60" placeholder="Option 3 (optional)" style="height:40px;border-radius:11px;border:1px solid var(--line);background:var(--paper);padding:0 12px">
     </div>
     <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
-      <button class="btn ghost sm" type="button" onClick="this.closest('dialog').close()">Abbrechen</button>
+      <button class="btn ghost sm" type="button" data-close-dlg>Abbrechen</button>
       <button class="btn accent sm" type="submit">Senden</button>
     </div>
   </form>
 </dialog>
 
-<!-- Image Lightbox -->
 <dialog id="lightboxDlg" style="width:auto;max-width:94vw;padding:12px;text-align:center">
   <img id="lbImg" alt="" style="max-width:90vw;max-height:80dvh;border-radius:14px;display:block;margin:0 auto">
   <div style="display:flex;justify-content:center;gap:8px;margin-top:10px">
     <a class="btn sm accent" id="lbDownload" download>Speichern</a>
-    <button class="btn sm ghost" type="button" onClick="this.closest('dialog').close()">Schließen</button>
+    <button class="btn sm ghost" type="button" data-close-dlg>Schließen</button>
   </div>
 </dialog>
 
-<!-- Privacy Info Fallback Dialog -->
 <dialog id="privacyDlg">
   <h3>Datenschutz &amp; Architektur</h3>
   <p class="sub">So schützt anruf.org deine Gespräche technisch statt nur durch Versprechen:</p>
@@ -2245,7 +1986,7 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
     <li><strong>Keine externen Ressourcen:</strong> Keine Google Fonts, keine Analytics, keine Cookies, kein Tracking.</li>
   </ul>
   <div style="display:flex;justify-content:flex-end;margin-top:14px">
-    <button class="btn sm" type="button" onClick="this.closest('dialog').close()">Verstanden</button>
+    <button class="btn sm" type="button" data-close-dlg>Verstanden</button>
   </div>
 </dialog>
 
@@ -2270,519 +2011,138 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
   </div>
 </template>
 
-<script type="module">
-/* ==========================================================================
-   anruf.org — DirectPulse Zero-TURN P2P Engine & Studio UI
-   100 % Vanilla ES Module · No External Dependencies
-   ========================================================================== */
+<script>
+(() => {
+  'use strict';
 
-const $ = (s, root = document) => root.querySelector(s);
-const $$ = (s, root = document) => [...root.querySelectorAll(s)];
+  const $ = (s, root = document) => root.querySelector(s);
+  const $$ = (s, root = document) => Array.from(root.querySelectorAll(s));
 
-/* ---------- Default Network Config (+ optional repo config.mjs merge) ---------- */
-let RELAY_URLS = [
-  'wss://nos.lol',
-  'wss://purplerelay.com',
-  'wss://nostr-01.yakihonne.com',
-  'wss://offchain.pub'
-];
-let STUN_URLS = [
-  'stun:stun.cloudflare.com:3478',
-  'stun:stun.nextcloud.com:443',
-  'stun:stun.sipgate.net:3478',
-  'stun:stun.l.google.com:19302'
-];
+  let RELAY_URLS = [
+    'wss://nos.lol',
+    'wss://purplerelay.com',
+    'wss://nostr-01.yakihonne.com',
+    'wss://offchain.pub'
+  ];
+  let STUN_URLS = [
+    'stun:stun.cloudflare.com:3478',
+    'stun:stun.nextcloud.com:443',
+    'stun:stun.sipgate.net:3478',
+    'stun:stun.l.google.com:19302'
+  ];
 
-// Falls im bestehenden anruf.org-Repository gehostet, Relays/STUN nahtlos übernehmen (TURN ignorieren wir bewusst für Zero-TURN!)
-try {
-  const repoCfg = await import('./config.mjs').catch(() => null);
-  if (repoCfg?.PUBLIC_RELAYS?.length) RELAY_URLS = [...new Set([...RELAY_URLS, ...repoCfg.PUBLIC_RELAYS])].slice(0, 6);
-  if (repoCfg?.STUN?.length) STUN_URLS = [...new Set([...STUN_URLS, ...repoCfg.STUN])];
-} catch {}
+  const qs = new URLSearchParams(location.search);
+  if (qs.get('relay')) RELAY_URLS = [qs.get('relay')];
 
-const qs = new URLSearchParams(location.search);
-if (qs.get('relay')) RELAY_URLS = [qs.get('relay')];
+  const MAX_PEERS = 8;
+  const MAX_FILE_BYTES = 100 * 1024 * 1024;
+  const CHUNK_SIZE = 64 * 1024;
+  const PALETTE = ['#FF5A26', '#25B865', '#4DA3FF', '#F59E0B', '#A87FFB', '#EC4899', '#14B8A6'];
+  const SAS_ICONS = ['🦊','🦉','🐙','🦋','🌿','🔥','⚡','💎','🌙','☀️','🍀','🎯','🛸','🧭','🔑','🌊'];
 
-const MAX_PEERS = 8;
-const MAX_FILE_BYTES = 100 * 1024 * 1024; // 100 MB Direct Tunnel
-const CHUNK_SIZE = 64 * 1024;             // 64 KB WebRTC chunks
-const PALETTE = ['#FF5A26', '#25B865', '#4DA3FF', '#F59E0B', '#A87FFB', '#EC4899', '#14B8A6'];
-
-/* ---------- Safe Local Preferences ---------- */
-const store = {
-  get(k, d = '') { try { return localStorage.getItem('anruf2:' + k) ?? d; } catch { return d; } },
-  set(k, v) { try { localStorage.setItem('anruf2:' + k, v); } catch {} }
-};
-
-/* ---------- Helper Utilities ---------- */
-const enc = new TextEncoder();
-const dec = new TextDecoder();
-const toHex = bytes => Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
-const fromHex = hex => new Uint8Array(hex.match(/.{1,2}/g).map(b => parseInt(b, 16)));
-const b64uEnc = bytes => btoa(String.fromCharCode(...bytes)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-const b64uDec = str => {
-  const b64 = str.replace(/-/g, '+').replace(/_/g, '/') + '==='.slice((str.length + 3) % 4);
-  const bin = atob(b64);
-  const out = new Uint8Array(bin.length);
-  for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
-  return out;
-};
-
-function copyText(text, msg = 'In die Zwischenablage kopiert') {
-  if (navigator.clipboard?.writeText) {
-    navigator.clipboard.writeText(text).then(() => toast(msg)).catch(() => fallbackCopy(text, msg));
-  } else fallbackCopy(text, msg);
-}
-function fallbackCopy(text, msg) {
-  const ta = document.createElement('textarea');
-  ta.value = text;
-  ta.style.cssText = 'position:fixed;opacity:0;pointer-events:none';
-  document.body.append(ta);
-  ta.select();
-  try { document.execCommand('copy'); toast(msg); } catch { toast('Bitte manuell markieren & kopieren'); }
-  ta.remove();
-}
-
-function toast(text, ms = 2800) {
-  const el = document.createElement('div');
-  el.className = 'toast';
-  el.textContent = text;
-  $('#toastBox').append(el);
-  setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity .3s'; setTimeout(() => el.remove(), 320); }, ms);
-}
-
-const hashStr = s => [...String(s)].reduce((h, c) => ((h * 31) + c.charCodeAt(0)) >>> 0, 17);
-const colorFor = id => PALETTE[hashStr(id) % PALETTE.length];
-const cleanName = s => String(s ?? '').replace(/[\u0000-\u001f<>]/g, '').trim().slice(0, 24);
-const slugify = s => String(s ?? '').toLowerCase()
-  .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss')
-  .normalize('NFKD').replace(/[\u0300-\u036f]/g, '')
-  .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 46);
-
-const ADJ = ['blaue','stille','flinke','helle','kluge','sanfte','goldene','mutige','frische','warme','klare','freie'];
-const NOUN = ['moewe','eule','welle','wolke','kiefer','lerche','birke','insel','feder','libelle','meise','robbe'];
-const ANIMALS = ['Fuchs','Otter','Eule','Luchs','Dachs','Kranich','Robbe','Falke','Igel','Biber'];
-const rnd = arr => arr[Math.floor(Math.random() * arr.length)];
-function randomSlug() {
-  const chars = 'abcdefghjkmnpqrstuvwxyz23456789';
-  const r = crypto.getRandomValues(new Uint8Array(4));
-  return `${rnd(ADJ)}-${rnd(NOUN)}-${Array.from(r, b => chars[b % chars.length]).join('')}`;
-}
-
-/* ==========================================================================
-   PURE VANILLA JS BIP-340 SECP256K1 SCHNORR (FOR NOSTR NIP-01 EPHEMERAL)
-   ========================================================================== */
-const SECP_P = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2Fn;
-const SECP_N = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141n;
-const SECP_GX = 0x79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798n;
-const SECP_GY = 0x483ADA7726A3C4655DA4FBFC0E1108A8FD17B448A68554199C47D08FFB10D4B8n;
-
-const mod = (a, m = SECP_P) => { const r = a % m; return r >= 0n ? r : r + m; };
-function modPow(base, exp, m = SECP_P) {
-  let res = 1n, b = mod(base, m), e = exp;
-  while (e > 0n) {
-    if (e & 1n) res = (res * b) % m;
-    b = (b * b) % m;
-    e >>= 1n;
-  }
-  return res;
-}
-const modInv = (a, m = SECP_P) => modPow(a, m - 2n, m);
-
-function ptAdd(p1, p2) {
-  if (!p1) return p2;
-  if (!p2) return p1;
-  if (p1.x === p2.x && p1.y !== p2.y) return null;
-  const lam = p1.x === p2.x
-    ? mod(3n * p1.x * p1.x * modInv(2n * p1.y))
-    : mod((p2.y - p1.y) * modInv(p2.x - p1.x));
-  const x3 = mod(lam * lam - p1.x - p2.x);
-  const y3 = mod(lam * (p1.x - x3) - p1.y);
-  return { x: x3, y: y3 };
-}
-function ptMul(k, pt = { x: SECP_GX, y: SECP_GY }) {
-  let res = null, add = pt, n = k;
-  while (n > 0n) {
-    if (n & 1n) res = ptAdd(res, add);
-    add = ptAdd(add, add);
-    n >>= 1n;
-  }
-  return res;
-}
-const bytesToBig = b => BigInt('0x' + toHex(b));
-function bigTo32Bytes(num) {
-  return fromHex(num.toString(16).padStart(64, '0'));
-}
-async function sha256(uint8) {
-  return new Uint8Array(await crypto.subtle.digest('SHA-256', uint8));
-}
-const tagCache = new Map();
-async function bip340Hash(tag, ...parts) {
-  let th = tagCache.get(tag);
-  if (!th) { th = await sha256(enc.encode(tag)); tagCache.set(tag, th); }
-  const len = th.length * 2 + parts.reduce((s, p) => s + p.length, 0);
-  const buf = new Uint8Array(len);
-  buf.set(th, 0); buf.set(th, th.length);
-  let off = th.length * 2;
-  for (const p of parts) { buf.set(p, off); off += p.length; }
-  return sha256(buf);
-}
-
-function generateNostrKeypair() {
-  const priv = crypto.getRandomValues(new Uint8Array(32));
-  const d0 = mod(bytesToBig(priv), SECP_N - 1n) + 1n;
-  const privBytes = bigTo32Bytes(d0);
-  const P = ptMul(d0);
-  return { privBytes, pubHex: toHex(bigTo32Bytes(P.x)) };
-}
-
-async function signNostrEvent(ev, privBytes) {
-  const serialized = JSON.stringify([0, ev.pubkey, ev.created_at, ev.kind, ev.tags, ev.content]);
-  const idBytes = await sha256(enc.encode(serialized));
-  ev.id = toHex(idBytes);
-
-  const d0 = bytesToBig(privBytes);
-  const P = ptMul(d0);
-  const d = (P.y & 1n) === 0n ? d0 : SECP_N - d0;
-  const aux = crypto.getRandomValues(new Uint8Array(32));
-  const t = d ^ bytesToBig(await bip340Hash('BIP0340/aux', aux));
-  const pxBytes = bigTo32Bytes(P.x);
-  const rand = await bip340Hash('BIP0340/nonce', bigTo32Bytes(t), pxBytes, idBytes);
-  const k0 = mod(bytesToBig(rand), SECP_N);
-  const R = ptMul(k0);
-  const k = (R.y & 1n) === 0n ? k0 : SECP_N - k0;
-  const rxBytes = bigTo32Bytes(R.x);
-  const e = mod(bytesToBig(await bip340Hash('BIP0340/challenge', rxBytes, pxBytes, idBytes)), SECP_N);
-  const s = mod(k + e * d, SECP_N);
-  const sigBytes = new Uint8Array(64);
-  sigBytes.set(rxBytes, 0);
-  sigBytes.set(bigTo32Bytes(s), 32);
-  ev.sig = toHex(sigBytes);
-  return ev;
-}
-
-/* ---------- WebCrypto AES-256-GCM Room Key Derivation ---------- */
-async function deriveRoomCrypto(slug, pin = '') {
-  const rawTag = await sha256(enc.encode('anruf-room-v2:' + slug));
-  const roomTag = toHex(rawTag).slice(0, 32);
-  const baseKey = await crypto.subtle.importKey('raw', enc.encode(`anruf.org:${slug}:${pin}`), 'PBKDF2', false, ['deriveKey']);
-  const aesKey = await crypto.subtle.deriveKey(
-    { name: 'PBKDF2', salt: rawTag, iterations: 12000, hash: 'SHA-256' },
-    baseKey,
-    { name: 'AES-GCM', length: 256 },
-    false,
-    ['encrypt', 'decrypt']
-  );
-  return {
-    roomTag,
-    async encrypt(obj) {
-      const iv = crypto.getRandomValues(new Uint8Array(12));
-      const ct = new Uint8Array(await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, aesKey, enc.encode(JSON.stringify(obj))));
-      const out = new Uint8Array(12 + ct.length);
-      out.set(iv, 0); out.set(ct, 12);
-      return b64uEnc(out);
-    },
-    async decrypt(str) {
-      const raw = b64uDec(str);
-      const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: raw.slice(0, 12) }, aesKey, raw.slice(12));
-      return JSON.parse(dec.decode(pt));
-    }
+  const store = {
+    get(k, d = '') { try { return localStorage.getItem('anruf2:' + k) ?? d; } catch { return d; } },
+    set(k, v) { try { localStorage.setItem('anruf2:' + k, v); } catch {} }
   };
-}
 
-/* ==========================================================================
-   PURE-JS INLINE QR CODE GENERATOR (VERSIONS 1–10, ECC LEVEL L, BYTE MODE)
-   ========================================================================== */
-const QR_CAP = [0, 17, 32, 53, 78, 106, 134, 154, 192, 230, 271];
-const QR_EC  = [0, 7, 10, 15, 20, 26, 18, 20, 24, 30, 18];
-const QR_BLK = [0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 4];
-const QR_ALIGN = [[], [], [6,18], [6,22], [6,26], [6,30], [6,34], [6,22,38], [6,24,42], [6,26,46], [6,28,50]];
-
-const GF_EXP = new Uint8Array(512), GF_LOG = new Uint8Array(256);
-{
-  let x = 1;
-  for (let i = 0; i < 255; i++) { GF_EXP[i] = x; GF_LOG[x] = i; x <<= 1; if (x & 256) x ^= 0x11d; }
-  for (let i = 255; i < 512; i++) GF_EXP[i] = GF_EXP[i - 255];
-}
-const gfMul = (a, b) => (a && b) ? GF_EXP[GF_LOG[a] + GF_LOG[b]] : 0;
-function rsEncode(data, ecLen) {
-  let gen = [1];
-  for (let i = 0; i < ecLen; i++) {
-    const nxt = new Array(gen.length + 1).fill(0);
-    for (let j = 0; j < gen.length; j++) { nxt[j] ^= gen[j]; nxt[j + 1] ^= gfMul(gen[j], GF_EXP[i]); }
-    gen = nxt;
-  }
-  const rem = new Uint8Array(ecLen);
-  for (const b of data) {
-    const f = b ^ rem[0];
-    rem.copyWithin(0, 1); rem[ecLen - 1] = 0;
-    for (let j = 0; j < ecLen; j++) rem[j] ^= gfMul(gen[j + 1], f);
-  }
-  return rem;
-}
-
-function renderQrSvg(text) {
-  const bytes = enc.encode(text);
-  let ver = 1;
-  while (ver <= 10 && bytes.length > QR_CAP[ver]) ver++;
-  if (ver > 10) return `<svg viewBox="0 0 40 40"><rect width="40" height="40" fill="#fff"/><text x="20" y="22" text-anchor="middle" font-size="5" fill="#111">Link</text></svg>`;
-
-  const size = ver * 4 + 17;
-  const totalCodewords = (() => {
-    let bits = size * size - 3 * 64 - 2 * (size - 16) - 1 - 31;
-    const al = QR_ALIGN[ver].length;
-    if (al) bits -= (al * al - 3) * 25 - (al - 2) * 10;
-    if (ver >= 7) bits -= 36;
-    return bits >> 3;
-  })();
-  const blocks = QR_BLK[ver], ecPerBlk = QR_EC[ver];
-  const dataBytesTotal = totalCodewords - blocks * ecPerBlk;
-
-  // Bitstream
-  const bits = [];
-  const pushBits = (val, n) => { for (let i = n - 1; i >= 0; i--) bits.push((val >> i) & 1); };
-  pushBits(0b0100, 4);
-  pushBits(bytes.length, ver >= 10 ? 16 : 8);
-  for (const b of bytes) pushBits(b, 8);
-  for (let i = 0; i < 4 && bits.length < dataBytesTotal * 8; i++) bits.push(0);
-  while (bits.length % 8) bits.push(0);
-  const data = new Uint8Array(dataBytesTotal);
-  for (let i = 0; i < bits.length >> 3; i++) {
-    let v = 0; for (let b = 0; b < 8; b++) v = (v << 1) | bits[i * 8 + b];
-    data[i] = v;
-  }
-  for (let i = bits.length >> 3, p = 0; i < dataBytesTotal; i++, p ^= 1) data[i] = p ? 0x11 : 0xEC;
-
-  // Blocks & interleaving
-  const shortLen = Math.floor(dataBytesTotal / blocks), extra = dataBytesTotal % blocks;
-  const dBlocks = [], eBlocks = [];
-  let off = 0;
-  for (let b = 0; b < blocks; b++) {
-    const ln = shortLen + (b >= blocks - extra ? 1 : 0);
-    const slice = data.slice(off, off + ln); off += ln;
-    dBlocks.push(slice); eBlocks.push(rsEncode(slice, ecPerBlk));
-  }
-  const final = [];
-  for (let i = 0; i <= shortLen; i++) for (let b = 0; b < blocks; b++) if (i < dBlocks[b].length) final.push(dBlocks[b][i]);
-  for (let i = 0; i < ecPerBlk; i++) for (let b = 0; b < blocks; b++) final.push(eBlocks[b][i]);
-
-  // Matrix construction
-  const grid = Array.from({ length: size }, () => new Int8Array(size));
-  const used = Array.from({ length: size }, () => new Uint8Array(size));
-  const setMod = (r, c, v) => { if (r >= 0 && r < size && c >= 0 && c < size) { grid[r][c] = v ? 1 : 0; used[r][c] = 1; } };
-  const finder = (R, C) => {
-    for (let r = -1; r <= 7; r++) for (let c = -1; c <= 7; c++)
-      setMod(R + r, C + c, (r >= 0 && r <= 6 && (c === 0 || c === 6)) || (c >= 0 && c <= 6 && (r === 0 || r === 6)) || (r >= 2 && r <= 4 && c >= 2 && c <= 4));
+  /* ---------- Encoding & Helpers ---------- */
+  const enc = new TextEncoder();
+  const dec = new TextDecoder();
+  const toHex = bytes => Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
+  const fromHex = hex => {
+    if (!hex) return new Uint8Array(0);
+    const m = hex.match(/.{1,2}/g);
+    return m ? new Uint8Array(m.map(b => parseInt(b, 16))) : new Uint8Array(0);
   };
-  finder(0, 0); finder(0, size - 7); finder(size - 7, 0);
-  for (let i = 8; i < size - 8; i++) { setMod(6, i, i % 2 === 0); setMod(i, 6, i % 2 === 0); }
-  const ap = QR_ALIGN[ver];
-  for (const r of ap) for (const c of ap) {
-    if (used[r][c]) continue;
-    for (let dr = -2; dr <= 2; dr++) for (let dc = -2; dc <= 2; dc++)
-      setMod(r + dr, c + dc, Math.max(Math.abs(dr), Math.abs(dc)) !== 1);
-  }
-  for (let i = 0; i < 9; i++) { if (i !== 6) { used[8][i] = 1; used[i][8] = 1; } }
-  for (let i = 0; i < 8; i++) { used[8][size - 1 - i] = 1; used[size - 1 - i][8] = 1; }
-  setMod(size - 8, 8, 1);
-
-  // Place data bits with mask 0 ((r + c) % 2 === 0)
-  let bitIdx = 0;
-  for (let col = size - 1; col >= 1; col -= 2) {
-    if (col === 6) col--;
-    const upward = ((size - 1 - col) >> 1) % 2 === 0;
-    for (let s = 0; s < size; s++) {
-      const r = upward ? size - 1 - s : s;
-      for (const c of [col, col - 1]) {
-        if (used[r][c]) continue;
-        const bit = bitIdx < final.length * 8 ? ((final[bitIdx >> 3] >> (7 - (bitIdx & 7))) & 1) : 0;
-        bitIdx++;
-        grid[r][c] = bit ^ ((r + c) % 2 === 0 ? 1 : 0);
-      }
-    }
-  }
-  // Format info for ECC Level L (01) + Mask 0 (000) -> precomputed BCH = 0x77C4
-  const fmt = 0x77C4;
-  const fPos1 = [[8,0],[8,1],[8,2],[8,3],[8,4],[8,5],[8,7],[8,8],[7,8],[5,8],[4,8],[3,8],[2,8],[1,8],[0,8]];
-  const fPos2 = [[size-1,8],[size-2,8],[size-3,8],[size-4,8],[size-5,8],[size-6,8],[size-7,8],[8,size-8],[8,size-7],[8,size-6],[8,size-5],[8,size-4],[8,size-3],[8,size-2],[8,size-1]];
-  for (let i = 0; i < 15; i++) {
-    const b = (fmt >> (14 - i)) & 1;
-    grid[fPos1[i][0]][fPos1[i][1]] = b;
-    grid[fPos2[i][0]][fPos2[i][1]] = b;
-  }
-
-  let path = '';
-  for (let r = 0; r < size; r++) for (let c = 0; c < size; c++) if (grid[r][c]) path += `M${c} ${r}h1v1h-1z`;
-  return `<svg viewBox="0 0 ${size} ${size}" shape-rendering="crispEdges"><rect width="${size}" height="${size}" fill="#fff"/><path d="${path}" fill="#121210"/></svg>`;
-}
-
-/* ==========================================================================
-   AUDIO SYNTHESIZER, STUDIO VOICE EQ & 3D SPATIAL ENGINE
-   ========================================================================== */
-let actx = null;
-function getAudioCtx() {
-  if (!actx) {
-    try { actx = new (window.AudioContext || window.webkitAudioContext)(); } catch {}
-  }
-  if (actx?.state === 'suspended') actx.resume().catch(() => {});
-  return actx;
-}
-
-function playChime(type = 'join') {
-  const ctx = getAudioCtx();
-  if (!ctx) return;
-  const notes = {
-    enter: [[523.25, 0], [659.25, 0.08], [783.99, 0.16], [1046.5, 0.25]],
-    join:  [[587.33, 0], [880, 0.11], [1174.66, 0.22]],
-    leave: [[783.99, 0], [523.25, 0.12]],
-    knock: [[330, 0], [330, 0.15], [440, 0.42]],
-    msg:   [[1174.66, 0]]
-  }[type] || [[660, 0]];
-  const t0 = ctx.currentTime + 0.02;
-  for (const [freq, delay] of notes) {
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = 'sine';
-    osc.frequency.value = freq;
-    gain.gain.setValueAtTime(0.0001, t0 + delay);
-    gain.gain.linearRampToValueAtTime(0.08, t0 + delay + 0.015);
-    gain.gain.exponentialRampToValueAtTime(0.0001, t0 + delay + 0.65);
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.start(t0 + delay);
-    osc.stop(t0 + delay + 0.7);
-  }
-}
-
-function buildVoiceStudioTrack(rawAudioTrack) {
-  if (!rawAudioTrack || !$('#chkVoiceStudio').checked) return rawAudioTrack;
-  const ctx = getAudioCtx();
-  if (!ctx?.createMediaStreamDestination) return rawAudioTrack;
-  try {
-    const src = ctx.createMediaStreamSource(new MediaStream([rawAudioTrack]));
-    const hp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 85;
-    const warm = ctx.createBiquadFilter(); warm.type = 'peaking'; warm.frequency.value = 210; warm.gain.value = 1.6;
-    const pres = ctx.createBiquadFilter(); pres.type = 'peaking'; pres.frequency.value = 3200; pres.gain.value = 2.8;
-    const comp = ctx.createDynamicsCompressor();
-    comp.threshold.value = -24; comp.knee.value = 16; comp.ratio.value = 3.2;
-    const dest = ctx.createMediaStreamDestination();
-    src.connect(hp); hp.connect(warm); warm.connect(pres); pres.connect(comp); comp.connect(dest);
-    const out = dest.stream.getAudioTracks()[0];
-    const origStop = out.stop.bind(out);
-    out.stop = () => { origStop(); rawAudioTrack.stop(); try { src.disconnect(); } catch {} };
+  const b64uEnc = bytes => {
+    let bin = '';
+    for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+    return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  };
+  const b64uDec = str => {
+    const clean = str.trim();
+    const b64 = clean.replace(/-/g, '+').replace(/_/g, '/') + '==='.slice((clean.length + 3) % 4);
+    const bin = atob(b64);
+    const out = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
     return out;
-  } catch { return rawAudioTrack; }
-}
+  };
 
-/* ==========================================================================
-   ZERO-DOWNLOAD REALTIME VIDEO FILTER PIPELINE
-   ========================================================================== */
-const FILTERS = [
-  { id: 'none',    label: 'Natürlich',       css: 'none' },
-  { id: 'studio',  label: 'Studio-Kontrast', css: 'contrast(1.12) saturate(1.1) brightness(1.03)' },
-  { id: 'warm',    label: 'Warmes Licht',    css: 'sepia(0.22) saturate(1.25) contrast(1.05)' },
-  { id: 'mono',    label: 'Schwarz-Weiß',    css: 'grayscale(1) contrast(1.18)' },
-  { id: 'soft',    label: 'Sanfter Fokus',   css: 'contrast(1.04) saturate(1.08) brightness(1.05)' },
-  { id: 'pixel',   label: 'Inkognito-Pixel', css: 'none' }
-];
-let currentFilter = store.get('filter', 'none');
-
-const videoFx = {
-  rawTrack: null,
-  outTrack: null,
-  canvas: null,
-  ctx: null,
-  vid: null,
-  timer: 0,
-  wrap(rawTrack) {
-    this.stopOutOnly();
-    this.rawTrack = rawTrack;
-    if (currentFilter === 'none') return rawTrack;
-    if (!HTMLCanvasElement.prototype.captureStream) return rawTrack;
-
-    if (!this.vid) {
-      this.vid = document.createElement('video');
-      this.vid.muted = true; this.vid.playsInline = true; this.vid.autoplay = true;
-    }
-    this.vid.srcObject = new MediaStream([rawTrack]);
-    this.vid.play().catch(() => {});
-
-    const settings = rawTrack.getSettings?.() || {};
-    const w = settings.width || 960, h = settings.height || 540;
-    this.canvas = document.createElement('canvas');
-    this.canvas.width = w; this.canvas.height = h;
-    this.ctx = this.canvas.getContext('2d');
-    const small = document.createElement('canvas'); small.width = 48; small.height = 28;
-    const sctx = small.getContext('2d');
-
-    clearInterval(this.timer);
-    this.timer = setInterval(() => {
-      if (!this.vid || this.vid.readyState < 2) return;
-      const W = this.canvas.width, H = this.canvas.height;
-      if (currentFilter === 'pixel') {
-        sctx.drawImage(this.vid, 0, 0, small.width, small.height);
-        this.ctx.imageSmoothingEnabled = false;
-        this.ctx.drawImage(small, 0, 0, small.width, small.height, 0, 0, W, H);
-      } else {
-        const f = FILTERS.find(x => x.id === currentFilter);
-        this.ctx.filter = f?.css || 'none';
-        this.ctx.drawImage(this.vid, 0, 0, W, H);
-      }
-    }, 34);
-
-    this.outTrack = this.canvas.captureStream(30).getVideoTracks()[0];
-    return this.outTrack;
-  },
-  stopOutOnly() {
-    clearInterval(this.timer); this.timer = 0;
-    if (this.outTrack) { this.outTrack.stop(); this.outTrack = null; }
-  },
-  stopAll() {
-    this.stopOutOnly();
-    if (this.rawTrack) { this.rawTrack.stop(); this.rawTrack = null; }
+  function copyText(text, msg = 'In die Zwischenablage kopiert') {
+    if (navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(text).then(() => toast(msg)).catch(() => fallbackCopy(text, msg));
+    } else fallbackCopy(text, msg);
   }
-};
-
-function renderFilterStrip() {
-  const strip = $('#filterStrip');
-  strip.replaceChildren();
-  for (const f of FILTERS) {
-    const b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'flt-chip';
-    b.textContent = f.label;
-    b.setAttribute('role', 'radio');
-    b.setAttribute('aria-checked', String(currentFilter === f.id));
-    b.addEventListener('click', () => setVideoFilter(f.id));
-    strip.append(b);
+  function fallbackCopy(text, msg) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;opacity:0;pointer-events:none';
+    document.body.append(ta);
+    ta.select();
+    try { document.execCommand('copy'); toast(msg); } catch { toast('Bitte manuell markieren & kopieren'); }
+    ta.remove();
   }
-  const active = FILTERS.find(x => x.id === currentFilter) || FILTERS[0];
-  $('#fltActiveLabel').textContent = active.label;
-}
 
-function setVideoFilter(id) {
-  currentFilter = id;
-  store.set('filter', id);
-  renderFilterStrip();
-  if (!videoFx.rawTrack || videoFx.rawTrack.readyState !== 'live') return;
-  const activeStream = CALL?.localStream || LOBBY.stream;
-  if (!activeStream) return;
-  const prevTrack = activeStream.getVideoTracks()[0];
-  const nextTrack = videoFx.wrap(videoFx.rawTrack);
-  if (prevTrack && prevTrack !== nextTrack) {
-    activeStream.removeTrack(prevTrack);
-    activeStream.addTrack(nextTrack);
-    if (CALL) {
-      for (const peer of CALL.peers.values()) {
-        const sender = peer.pc.getSenders().find(s => s.track?.kind === 'video' && !peer.screenSender?.includes?.(s));
-        sender?.replaceTrack(nextTrack).catch(() => {});
-      }
-      bindSelfTileVideo();
-    } else {
-      updateLobbyUI();
-    }
+  function toast(text, ms = 2800) {
+    const el = document.createElement('div');
+    el.className = 'toast';
+    el.textContent = text;
+    $('#toastBox').append(el);
+    setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity .3s'; setTimeout(() => el.remove(), 320); }, ms);
   }
-}
 
-/* ==========================================================================
-   IDENTITY, THEME & PRE-WARMED ICE POOL
+  const hashStr = s => Array.from(String(s)).reduce((h, c) => ((h * 31) + c.charCodeAt(0)) >>> 0, 17);
+  const colorFor = id => PALETTE[hashStr(id) % PALETTE.length];
+  const cleanName = s => String(s ?? '').replace(/[\u0000-\u001f<>]/g, '').trim().slice(0, 24);
+  const slugify = s => String(s ?? '').toLowerCase()
+    .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss')
+    .normalize('NFKD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 46);
+  const fmtBytes = n => n < 1024 ? `${n} B` : n < 1048576 ? `${(n / 1024).toFixed(1)} KB` : `${(n / 1048576).toFixed(1)} MB`;
+
+  const ADJ = ['blaue','stille','flinke','helle','kluge','sanfte','goldene','mutige','frische','warme','klare','freie'];
+  const NOUN = ['moewe','eule','welle','wolke','kiefer','lerche','birke','insel','feder','libelle','meise','robbe'];
+  const ANIMALS = ['Fuchs','Otter','Eule','Luchs','Dachs','Kranich','Robbe','Falke','Igel','Biber'];
+  const rnd = arr => arr[Math.floor(Math.random() * arr.length)];
+  function randomSlug() {
+    const chars = 'abcdefghjkmnpqrstuvwxyz23456789';
+    const r = crypto.getRandomValues(new Uint8Array(4));
+    return `${rnd(ADJ)}-${rnd(NOUN)}-${Array.from(r, b => chars[b % chars.length]).join('')}`;
+  }
+  function randId(bytes = 8) {
+    return toHex(crypto.getRandomValues(new Uint8Array(bytes)));
+  }
+
+  /* ==========================================================================
+     BIP-340 SECP256K1 SCHNORR (NOSTR NIP-01 EPHEMERAL SIGNALING)
+     ========================================================================== */
+  const SECP_P = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2Fn;
+  const SECP_N = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141n;
+  const SECP_GX = 0x79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798n;
+  const SECP_GY = 0x483ADA7726A3C4655DA4FBFC0E1108A8FD17B448A68554199C47D08FFB10D4B8n;
+
+  const mod = (a, m = SECP_P) => { const r = a % m; return r >= 0n ? r : r + m; };
+  function modPow(base, exp, m = SECP_P) {
+    let res = 1n, b = mod(base, m), e = exp;
+    while (e > 0n) { if (e & 1n) res = (res * b) % m; b = (b * b) % m; e >>= 1n; }
+    return res;
+  }
+  const modInv = (a, m = SECP_P) => modPow(a, m - 2n, m);
+  function ptAdd(p1, p2) {
+    if (!p1) return p2;
+    if (!p2) return p1;
+    if (p1.x === p2.x && p1.y !== p2.y) return null;
+    const lam = p1.x === p2.x
+      ? mod(3n * p1.x * p1.x * modInv(2n * p1.y))
+      : mod((p2.y - p1.y) * modInv(p2.x - p1.x));
+    const x3 = mod(lam * lam - p1.x - p2.x);
+    const y3 = mod(lam * (p1.x - x3) - p1.y);
+    return { x: x3, y: y3 };
+  }
+  function ptMul(k, pt = { x: SECP_GX, y: SECP_GY }) {
+    let res = null, add = pt, n = k;
+    while (n > 0n) { if (n & 1n) res = ptAdd(res, add); add = ptAdd(add, add); n >>= 1n; }
+    return res;
+  }
+  const bytesToBig = b => BigInt('0x' + toHex(b));
+  const bigTo32Bytes = num => fromHex(
