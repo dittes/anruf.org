@@ -41,6 +41,11 @@ body[data-view=home] #home{display:block}
 body[data-view=room] #room{display:grid}
 #home{overflow:auto;padding:32px 16px 48px;background:radial-gradient(ellipse at 50% 0%,rgba(255,178,63,.08),transparent 55%)}
 .wrap{max-width:1040px;margin:0 auto}
+.langsw{position:fixed;top:14px;right:16px;z-index:60;display:flex;gap:2px;padding:3px;border-radius:999px;border:1px solid var(--line);background:rgba(20,22,26,.82);backdrop-filter:blur(8px)}
+.langsw button{font:600 .74rem var(--mono);letter-spacing:.08em;padding:.45em .85em;border-radius:999px;border:0;background:transparent;color:var(--mute);cursor:pointer}
+.langsw button[aria-pressed=true]{background:var(--amber);color:#16130b}
+.langsw button:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+body:not([data-view=home]) .langsw,body[data-invited="1"] .langsw{display:none}
 .hero{text-align:center;margin-bottom:28px}
 .hero h1{font-size:clamp(2.6rem,8vw,4.4rem);line-height:.95;margin:.25em 0 .25em;letter-spacing:-.03em}
 .hero h1 em{font-style:normal;color:var(--red);text-shadow:0 0 24px rgba(255,59,48,.45)}
@@ -483,31 +488,32 @@ body.dark #stage .lamp{z-index:10}
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="rgb"><feOffset in="SourceGraphic" dx="5" result="r"/><feColorMatrix in="r" type="matrix" values="1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0" result="rr"/><feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0" result="gb"/><feBlend in="rr" in2="gb" mode="screen"/></filter></svg>
 
 <main id="home" class="view">
+  <div class="langsw" role="group" aria-label="Sprache / Language"><button type="button" data-lang="de" lang="de" aria-pressed="true" title="Deutsch">DE</button><button type="button" data-lang="en" lang="en" aria-pressed="false" title="English">EN</button></div>
   <div class="wrap">
     <div class="hero">
-      <div class="mono">Akte 0 · Exit-Games im Videoanruf</div>
-      <h1>Wer ist <em>noch</em><br>in der Leitung?</h1>
+      <div class="mono" data-t="home.kicker">Akte 0 · Exit-Games im Videoanruf</div>
+      <h1 data-th="home.title">Wer ist <em>noch</em><br>in der Leitung?</h1>
       <p id="homeLead"></p>
     </div>
     <div id="cases"></div>
     <div class="start">
-      <label class="mono" for="nameIn">Dein Name</label>
-      <p class="namehint">So heißt du im Anruf. Die Figuren sprechen dich damit an.</p>
+      <label class="mono" for="nameIn" data-t="home.nameLabel">Dein Name</label>
+      <p class="namehint" data-t="home.nameHint">So heißt du im Anruf. Die Figuren sprechen dich damit an.</p>
       <div class="namebox">
-        <input id="nameIn" maxlength="24" autocomplete="given-name" placeholder="Vorname" required>
+        <input id="nameIn" maxlength="24" autocomplete="given-name" placeholder="Vorname" data-tp="home.namePh" required>
         <button class="btn primary" id="goBtn">Fall eröffnen</button>
       </div>
       <div id="saves" hidden>
-        <div class="mono">Angefangene Fälle</div>
+        <div class="mono" data-t="home.saves">Angefangene Fälle</div>
         <ul id="saveList"></ul>
       </div>
       <details class="code">
-        <summary>Code aus einer Akte?</summary>
-        <form id="codeForm"><input id="codeIn" placeholder="N9-…" maxlength="24" aria-label="Freigabecode"><button class="btn">Öffnen</button></form>
+        <summary data-t="home.codeSummary">Code aus einer Akte?</summary>
+        <form id="codeForm"><input id="codeIn" placeholder="N9-…" maxlength="24" aria-label="Freigabecode" data-ta="home.codeLabel"><button class="btn" data-t="home.codeOpen">Öffnen</button></form>
         <p id="codeOut"></p>
       </details>
     </div>
-    <p class="fine">
+    <p class="fine" data-th="home.fine">
       Kamera und Mikrofon laufen direkt zwischen euren Browsern, wie bei <a href="../">anruf.org</a>. Nichts wird gespeichert, kein Bild verlässt dein Gerät.<br>
       Stimmen: Piper (lokale Sprachsynthese), Stimmen von Thorsten Müller u. a., siehe <a href="CREDITS.md">CREDITS</a>.<br>
       Alle Personen, Firmen und Behörden sind frei erfunden. · <a href="../datenschutz.html">Datenschutz</a> · <a href="../impressum.html">Impressum</a>
@@ -518,15 +524,15 @@ body.dark #stage .lamp{z-index:10}
 <main id="room" class="view">
   <header>
     <span class="rec" aria-hidden="true"></span>
-    <span class="t"><span id="caseTitle">Dezernat 0</span> <small class="mono" id="caseSub"></small></span>
+    <span class="t"><span id="caseTitle" data-t="room.title">Dezernat 0</span> <small class="mono" id="caseSub"></small></span>
     <span class="sp"></span>
     <span id="timer" hidden></span>
     <span id="clock">00:00</span>
     <span class="chip" id="chapterChip"></span>
-    <span class="chip" id="roleChip">Lobby</span>
-    <button class="iconbtn" id="helpBtn" title="So spielt ihr" aria-label="Hilfe">?</button>
+    <span class="chip" id="roleChip" data-t="room.lobbyChip">Lobby</span>
+    <button class="iconbtn" id="helpBtn" title="So spielt ihr" aria-label="Hilfe" data-tt="room.help" data-ta="room.helpAria">?</button>
   </header>
-  <div id="goal" hidden><span class="mono">Ziel</span><span id="goalText"></span><div id="frags" hidden></div></div>
+  <div id="goal" hidden><span class="mono" data-t="room.goal">Ziel</span><span id="goalText"></span><div id="frags" hidden></div></div>
   <section id="stage" aria-label="Anruf"></section>
   <div>
     <div id="ask" hidden>
@@ -536,31 +542,31 @@ body.dark #stage .lamp{z-index:10}
     <div id="subs" aria-live="polite"></div>
   </div>
   <nav class="dock">
-    <button id="micBtn" aria-pressed="false">🎙<span class="lb">Mikro an</span></button>
-    <button id="camBtn" aria-pressed="false">📷<span class="lb">Kamera an</span></button>
-    <button id="akteBtn">🗂<span class="lb">Akte</span></button>
-    <button id="chatBtn">💬<span class="lb">Chat</span></button>
-    <button id="screenBtn" hidden title="Bildschirm für alle teilen">🖥<span class="lb">Bildschirm</span></button>
-    <button id="voiceBtn" aria-pressed="false">🔊<span class="lb">Stimmen an</span></button>
-    <label class="vol" title="Lautstärke der Figuren"><input id="volIn" type="range" min="0" max="1" step="0.05" aria-label="Lautstärke"></label>
-    <button id="pauseBtn" hidden>⏸<span class="lb">Pause</span></button>
-    <button id="leaveBtn" class="hang">✕<span class="lb">Auflegen</span></button>
+    <button id="micBtn" aria-pressed="false">🎙<span class="lb" data-t="dock.mic">Mikro an</span></button>
+    <button id="camBtn" aria-pressed="false">📷<span class="lb" data-t="dock.cam">Kamera an</span></button>
+    <button id="akteBtn">🗂<span class="lb" data-t="dock.file">Akte</span></button>
+    <button id="chatBtn">💬<span class="lb" data-t="dock.chat">Chat</span></button>
+    <button id="screenBtn" hidden title="Bildschirm für alle teilen" data-tt="dock.screenTitle">🖥<span class="lb" data-t="dock.screen">Bildschirm</span></button>
+    <button id="voiceBtn" aria-pressed="false">🔊<span class="lb" data-t="dock.voice">Stimmen an</span></button>
+    <label class="vol" title="Lautstärke der Figuren" data-tt="dock.volTitle"><input id="volIn" type="range" min="0" max="1" step="0.05" aria-label="Lautstärke" data-ta="dock.volAria"></label>
+    <button id="pauseBtn" hidden>⏸<span class="lb" data-t="dock.pause">Pause</span></button>
+    <button id="leaveBtn" class="hang">✕<span class="lb" data-t="dock.hang">Auflegen</span></button>
   </nav>
 
   <aside class="side" id="akte" aria-label="Akte" data-seg="akte">
     <div class="hd">
       <div id="akteSeg" role="tablist">
-        <button data-seg="akte" aria-selected="true">Akte</button>
-        <button data-seg="notes">Notizen</button>
-        <button data-seg="log">Protokoll</button>
+        <button data-seg="akte" aria-selected="true" data-t="side.file">Akte</button>
+        <button data-seg="notes" data-t="side.notes">Notizen</button>
+        <button data-seg="log" data-t="side.log">Protokoll</button>
       </div>
-      <button class="close" aria-label="Schließen">×</button>
+      <button class="close" aria-label="Schließen" data-ta="side.close">×</button>
     </div>
     <div class="seg seg-akte">
       <div id="puzzle" hidden>
-        <div class="mono" style="color:var(--amber)">Aufgabe fürs Team</div>
+        <div class="mono" style="color:var(--amber)" data-t="puz.kicker">Aufgabe fürs Team</div>
         <p id="pq"></p>
-        <form id="puzzleForm"><input id="pa" autocomplete="off" aria-label="Lösung"><button class="btn primary">Prüfen</button></form>
+        <form id="puzzleForm"><input id="pa" autocomplete="off" aria-label="Lösung" data-ta="puz.answerAria"><button class="btn primary" data-t="puz.check">Prüfen</button></form>
         <div id="keypad" hidden>
           <button type="button" data-k="1">1</button><button type="button" data-k="2">2</button><button type="button" data-k="3">3</button>
           <button type="button" data-k="4">4</button><button type="button" data-k="5">5</button><button type="button" data-k="6">6</button>
@@ -571,14 +577,14 @@ body.dark #stage .lamp{z-index:10}
         <p id="pby" class="pby" hidden></p>
         <ul id="tries"></ul>
         <ul id="hints"></ul>
-        <button id="hintBtn" type="button">Hinweis anfordern</button>
+        <button id="hintBtn" type="button" data-t="puz.hint">Hinweis anfordern</button>
       </div>
-      <details id="doneBox" hidden><summary>Bisher geschafft</summary><ol id="doneList"></ol></details>
+      <details id="doneBox" hidden><summary data-t="puz.done">Bisher geschafft</summary><ol id="doneList"></ol></details>
       <div id="tabs"></div>
       <div class="scroll"><div id="page"></div></div>
     </div>
     <div class="seg seg-notes">
-      <textarea id="notesIn" placeholder="Gemeinsame Notizen: Zahlen, Namen, Verdachte …" aria-label="Gemeinsame Notizen"></textarea>
+      <textarea id="notesIn" placeholder="Gemeinsame Notizen: Zahlen, Namen, Verdachte …" aria-label="Gemeinsame Notizen" data-tp="notes.ph" data-ta="notes.aria"></textarea>
       <p id="notesBy"></p>
     </div>
     <div class="seg seg-log">
@@ -586,21 +592,21 @@ body.dark #stage .lamp{z-index:10}
     </div>
   </aside>
   <aside class="side" id="chat" aria-label="Chat">
-    <div class="hd"><b>Chat</b><button class="close" aria-label="Schließen">×</button></div>
+    <div class="hd"><b data-t="chat.title">Chat</b><button class="close" aria-label="Schließen">×</button></div>
     <div class="scroll"><div id="msgs"></div></div>
-    <form id="chatForm"><input id="chatIn" placeholder="Nachricht an alle" autocomplete="off" maxlength="500"><button class="btn">Senden</button></form>
+    <form id="chatForm"><input id="chatIn" placeholder="Nachricht an alle" data-tp="chat.ph" autocomplete="off" maxlength="500"><button class="btn" data-t="chat.send">Senden</button></form>
   </aside>
 
   <div class="overlay" id="lobby">
     <div class="card">
-      <div class="mono">Lobby</div>
+      <div class="mono" data-t="lobby.kicker">Lobby</div>
       <h2 id="lobbyTitle"></h2>
       <p id="lobbyIntro"></p>
       <div id="lobbyQr"></div>
       <span id="lobbyLink"></span>
       <div class="row2">
-        <button class="btn" id="copyLink">Link kopieren</button>
-        <button class="btn" id="inviteBtn">Geheime Einladung</button>
+        <button class="btn" id="copyLink" data-t="lobby.copy">Link kopieren</button>
+        <button class="btn" id="inviteBtn" data-t="lobby.invite">Geheime Einladung</button>
       </div>
       <ul id="lobbyPlayers"></ul>
       <p id="lobbyWait"></p>
@@ -613,41 +619,41 @@ body.dark #stage .lamp{z-index:10}
 
   <div class="overlay" id="knock" hidden>
     <div class="card">
-      <div class="mono">Anklopfen</div>
-      <h2 id="knockText">Jemand klopft an.</h2>
-      <p>Diese Person ist nicht eingeladen.</p>
-      <div class="row2"><button class="btn" id="denyBtn">Ablehnen</button><button class="btn primary" id="admitBtn">Reinlassen</button></div>
+      <div class="mono" data-t="knock.kicker">Anklopfen</div>
+      <h2 id="knockText" data-t="knock.default">Jemand klopft an.</h2>
+      <p data-t="knock.note">Diese Person ist nicht eingeladen.</p>
+      <div class="row2"><button class="btn" id="denyBtn" data-t="knock.deny">Ablehnen</button><button class="btn primary" id="admitBtn" data-t="knock.admit">Reinlassen</button></div>
     </div>
   </div>
 
   <div class="overlay" id="call" hidden>
     <div class="card">
-      <div class="mono">Eingehender Anruf</div>
+      <div class="mono" data-t="call.kicker">Eingehender Anruf</div>
       <div id="callPic"></div>
       <h2 id="callName"></h2>
       <p id="callSub"></p>
       <p id="callNote"></p>
-      <div class="row2"><button class="btn decline" id="declineBtn">Ablehnen</button><button class="btn accept" id="acceptBtn">Annehmen</button></div>
+      <div class="row2"><button class="btn decline" id="declineBtn" data-t="call.decline">Ablehnen</button><button class="btn accept" id="acceptBtn" data-t="call.accept">Annehmen</button></div>
     </div>
   </div>
 
   <div class="overlay" id="hold" hidden>
     <div class="card">
-      <div class="mono">Alle zusammen</div>
+      <div class="mono" data-t="hold.kicker">Alle zusammen</div>
       <h2 id="holdLabel"></h2>
-      <p>Haltet den Knopf <b>gleichzeitig</b> gedrückt (oder die Leertaste), bis es klappt. Wer loslässt, fängt für alle von vorn an.</p>
-      <button id="holdBtn" type="button">HALTEN</button>
+      <p data-th="hold.text">Haltet den Knopf <b>gleichzeitig</b> gedrückt (oder die Leertaste), bis es klappt. Wer loslässt, fängt für alle von vorn an.</p>
+      <button id="holdBtn" type="button" data-t="hold.btn">HALTEN</button>
       <p id="holdCount" class="mono"></p>
     </div>
   </div>
 
   <div class="overlay" id="clap" hidden>
     <div class="card">
-      <div class="mono">Alle zusammen</div>
+      <div class="mono" data-t="clap.kicker">Alle zusammen</div>
       <h2 id="clapLabel"></h2>
       <p id="clapText"></p>
       <div class="meter"><i id="clapBar"></i></div>
-      <p id="clapMic" class="note" hidden>Dein Mikro ist aus. Schalte es an, sonst hört man dich nicht.</p>
+      <p id="clapMic" class="note" hidden data-t="clap.mic">Dein Mikro ist aus. Schalte es an, sonst hört man dich nicht.</p>
       <p id="clapCount" class="mono"></p>
     </div>
   </div>
@@ -656,7 +662,7 @@ body.dark #stage .lamp{z-index:10}
 
   <div class="overlay" id="vote" hidden>
     <div class="card">
-      <div class="mono">Entscheidung</div>
+      <div class="mono" data-t="vote.kicker">Entscheidung</div>
       <h2 id="voteTitle"></h2>
       <p id="voteText"></p>
       <div id="voteOpts"></div>
@@ -666,48 +672,48 @@ body.dark #stage .lamp{z-index:10}
 
   <div class="overlay" id="paused" hidden>
     <div class="card">
-      <div class="mono">Pause</div>
-      <h2>Der Fall ist angehalten</h2>
+      <div class="mono" data-t="pause.kicker">Pause</div>
+      <h2 data-t="pause.title">Der Fall ist angehalten</h2>
       <p id="pausedBy"></p>
-      <p>Der Stand wird gespeichert. Wer leitet, kann später über denselben Link weitermachen.</p>
-      <div class="row2"><button class="btn primary" id="resumeBtn">Weiter</button></div>
+      <p data-t="pause.text">Der Stand wird gespeichert. Wer leitet, kann später über denselben Link weitermachen.</p>
+      <div class="row2"><button class="btn primary" id="resumeBtn" data-t="pause.resume">Weiter</button></div>
     </div>
   </div>
 
   <div class="overlay" id="help" hidden>
     <div class="card">
-      <div class="mono">So spielt ihr</div>
-      <h2>Redet. Viel.</h2>
+      <div class="mono" data-t="help.kicker">So spielt ihr</div>
+      <h2 data-t="help.title">Redet. Viel.</h2>
       <ul>
-        <li><b>🗂 Akte:</b> Jede Person hat andere Unterlagen. Gestrichelte Reiter sieht nur ihr. Lest euch gegenseitig vor.</li>
-        <li><b>Aufgaben</b> stehen oben in der Akte. Jede Person kann eine Lösung eingeben. Hinweise sehen alle.</li>
-        <li><b>Figuren</b> rufen an, klopfen an und stellen Bedingungen. Achtet auf das, was sie verlangen.</li>
-        <li><b>Notizen</b> (in der Akte) teilt ihr. Das <b>Protokoll</b> zeigt alles Gesagte, mit ▶ hört ihr es noch mal.</li>
-        <li><b>⏸ Pause</b> speichert den Fall. Über denselben Link geht es später weiter.</li>
+        <li data-th="help.li1"><b>🗂 Akte:</b> Jede Person hat andere Unterlagen. Gestrichelte Reiter sieht nur ihr. Lest euch gegenseitig vor.</li>
+        <li data-th="help.li2"><b>Aufgaben</b> stehen oben in der Akte. Jede Person kann eine Lösung eingeben. Hinweise sehen alle.</li>
+        <li data-th="help.li3"><b>Figuren</b> rufen an, klopfen an und stellen Bedingungen. Achtet auf das, was sie verlangen.</li>
+        <li data-th="help.li4"><b>Notizen</b> (in der Akte) teilt ihr. Das <b>Protokoll</b> zeigt alles Gesagte, mit ▶ hört ihr es noch mal.</li>
+        <li data-th="help.li5"><b>⏸ Pause</b> speichert den Fall. Über denselben Link geht es später weiter.</li>
       </ul>
-      <div class="row2"><button class="btn primary" id="helpOk">Verstanden</button></div>
+      <div class="row2"><button class="btn primary" id="helpOk" data-t="help.ok">Verstanden</button></div>
     </div>
   </div>
 
   <div class="overlay" id="end" hidden>
     <div class="card">
-      <div class="mono">Akte geschlossen</div>
+      <div class="mono" data-t="end.kicker">Akte geschlossen</div>
       <h2 id="endTitle"></h2>
       <p id="endText"></p>
       <p id="endStats"></p>
-      <img id="endImg" alt="Geschwärzte Akte zum Teilen">
-      <p>Teilt die Akte. Sie verrät nichts, aber der Freigabecode öffnet auf der Startseite den Epilog.</p>
+      <img id="endImg" alt="Geschwärzte Akte zum Teilen" data-ta="end.imgAlt">
+      <p data-t="end.text">Teilt die Akte. Sie verrät nichts, aber der Freigabecode öffnet auf der Startseite den Epilog.</p>
       <div class="row2">
-        <button class="btn primary" id="shareBtn">Akte teilen</button>
-        <button class="btn" id="saveBtn">Bild speichern</button>
-        <button class="btn" id="copyBtn">Text kopieren</button>
+        <button class="btn primary" id="shareBtn" data-t="end.share">Akte teilen</button>
+        <button class="btn" id="saveBtn" data-t="end.save">Bild speichern</button>
+        <button class="btn" id="copyBtn" data-t="end.copy">Text kopieren</button>
       </div>
-      <div class="row2"><button class="btn" id="againBtn">Noch mal spielen</button><button class="btn" id="homeBtn">Anderer Fall</button></div>
+      <div class="row2"><button class="btn" id="againBtn" data-t="end.again">Noch mal spielen</button><button class="btn" id="homeBtn" data-t="end.home">Anderer Fall</button></div>
     </div>
   </div>
 
   <div id="chapterCard" hidden><div><div id="chNum"></div><div id="chTitle"></div></div></div>
-  <div id="crash" hidden><div><div class="spin"></div><b>Verbindung unterbrochen</b><p class="mono">Neu verbinden …</p></div></div>
+  <div id="crash" hidden><div><div class="spin"></div><b data-t="crash.title">Verbindung unterbrochen</b><p class="mono" data-t="crash.text">Neu verbinden …</p></div></div>
   <div class="toastzone" id="toasts" aria-live="polite"></div>
 </main>
 

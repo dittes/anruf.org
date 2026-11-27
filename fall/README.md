@@ -5,7 +5,12 @@ Mehrere Fälle zum gemeinsamen Lösen im Videoanruf, auf Basis von anruf.org (gl
 | Datei | Inhalt |
 |---|---|
 | `index.html` | Startseite (Fallauswahl, eigener Name, Fortsetzen, Epilog-Codes) und Anruf-Oberfläche |
-| `app.mjs` | Anruf + Spiel-Engine (Host arbeitet das Skript ab, schickt den ganzen Spielstand an alle) |
+| `app.mjs` | Einstieg: Startseite (Fall, Name, Fortsetzen, Codes), Bedienknöpfe, Start |
+| `core.mjs` | Kleine Helfer für alle Module: DOM (`$`, `h`), Speicher, Hinweise, URL-Schalter (`?fast`, `?test`, `?debug`) |
+| `sound.mjs` | Töne, Stimmen (Aufnahmen oder Sprachausgabe), Mundbewegung, Atmosphäre |
+| `call.mjs` | Anruf: Verbindung (Trystero), Kacheln, Dock, Chat, Bildschirm teilen |
+| `game.mjs` | Spiel-Engine `G` (Host arbeitet das Skript ab, schickt den ganzen Spielstand an alle), Signale, Akte, Arbeitstisch, Overlays, Sensoren |
+| `widgets.mjs` | Werkzeuge in der Akte (Tonband, Empfänger, Chiffre, Foto, Aktenvernichter, Morsetafel) und Rätsel-Eingaben |
 | `portrait.mjs` | Fotoporträts aus `portraits/` mit Blinzeln, zeitlich an die deutsche Aufnahme angepassten Mundformen und szenischen Reaktionen. Figuren ohne Foto nutzen die SVG-Zeichnung. |
 | `lib.mjs` | Gemeinsame Helfer (Audio-Schlüssel, Normalisierung, Hash) |
 | `cases/index.mjs` | Liste der Fälle |

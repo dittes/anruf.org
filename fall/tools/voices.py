@@ -20,7 +20,16 @@ VOICES = Path(os.environ.get('PIPER_VOICES', Path.home() / '.cache' / 'piper'))
 MODELS = {
     'thorsten-high': 'de_DE-thorsten-high', 'thorsten_emotional': 'de_DE-thorsten_emotional-medium',
     'kerstin': 'de_DE-kerstin-low', 'eva_k': 'de_DE-eva_k-x_low',
+    'mls': 'de_DE-mls-medium', 'ramona': 'de_DE-ramona-low', 'pavoque': 'de_DE-pavoque-low', 'karlsson': 'de_DE-karlsson-low',
+    # Englische Fassung (FALL_LANG=en): rhasspy/piper-voices, alle CC0 bzw. frei (siehe CREDITS.md)
+    'en_ryan': 'en_US-ryan-high', 'en_lessac': 'en_US-lessac-medium', 'en_amy': 'en_US-amy-medium',
+    'en_hfc_f': 'en_US-hfc_female-medium', 'en_hfc_m': 'en_US-hfc_male-medium', 'en_joe': 'en_US-joe-medium',
+    'en_kristin': 'en_US-kristin-medium', 'en_alan': 'en_GB-alan-medium', 'en_alba': 'en_GB-alba-medium',
+    'en_cori': 'en_GB-cori-high', 'en_jenny': 'en_GB-jenny_dioco-medium', 'en_nem': 'en_GB-northern_english_male-medium',
+    'en_norman': 'en_US-norman-medium', 'en_bryce': 'en_US-bryce-medium',
 }
+LANG = os.environ.get('FALL_LANG', 'de')
+AUDIO_DIR = 'audio-en' if LANG == 'en' else 'audio'
 _loaded = {}
 
 
@@ -99,7 +108,7 @@ def normalize(path, target=TARGET_LUFS):
 
 
 def normalize_all():
-    for mf in sorted((ROOT / 'cases').glob('*/audio/manifest.json')):
+    for mf in sorted((ROOT / 'cases').glob(f'*/{AUDIO_DIR}/manifest.json')):
         manifest = json.loads(mf.read_text())
         changed = 0
         for k, v in manifest.items():
@@ -195,7 +204,7 @@ def main_jobs(path, force):
     for j in jobs:
         by_case.setdefault(j['case'], []).append(j)
     for cid, js in by_case.items():
-        d = ROOT / 'cases' / cid / 'audio'
+        d = ROOT / 'cases' / cid / AUDIO_DIR
         d.mkdir(parents=True, exist_ok=True)
         mf = d / 'manifest.json'
         manifest = json.loads(mf.read_text()) if mf.exists() and not force else {}

@@ -9,10 +9,10 @@ export function akey(npc, text) {
 }
 
 // Was tatsächlich gesprochen wird: Den echten Namen ({me}) kennt nur der Untertitel, {time} wird „schon spät“
-export function audioText(text) {
+export function audioText(text, lang = 'de') {
   return String(text)
     .replace(/,?\s*\{me\}/g, '')
-    .replace(/\{time\}/g, 'schon spät')
+    .replace(/\{time\}/g, lang === 'en' ? 'already late' : 'schon spät')
     .replace(/^,\s*/, '')
 }
 

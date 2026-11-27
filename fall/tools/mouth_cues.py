@@ -1,5 +1,6 @@
 """Build local German lip-sync timing from the final voiced M4As (ffmpeg + Rhubarb Lip Sync)."""
 import argparse
+import os
 from concurrent.futures import ThreadPoolExecutor
 import json
 from pathlib import Path
@@ -34,7 +35,7 @@ def main():
     for case in sorted({j['case'] for j in jobs}):
         if args.cases and case not in args.cases:
             continue
-        directory = ROOT / 'cases' / case / 'audio'
+        directory = ROOT / 'cases' / case / ('audio-en' if os.environ.get('FALL_LANG') == 'en' else 'audio')
         manifest = json.loads((directory / 'manifest.json').read_text())
         filenames = sorted({manifest[j['key']]['f'] for j in jobs if j['case'] == case
                             and not j['npc'].startswith('clip:') and j['key'] in manifest})

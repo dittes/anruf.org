@@ -8,8 +8,12 @@ import {norm} from '../lib.mjs'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', 'cases')
 for (const id of readdirSync(root, {withFileTypes: true}).filter(d => d.isDirectory()).map(d => d.name)) {
-  const f = join(root, id, 'story.mjs')
-  let src = readFileSync(f, 'utf8'), n = 0
-  src = src.replace(/'@@([^']+)'/g, (_, w) => { n++; return `'${createHash('sha256').update(id + ':' + norm(w)).digest('hex')}'` })
-  if (n) { writeFileSync(f, src); console.log(`${id}: ${n} Lösungen versiegelt`) }
+  for (const name of ['story.mjs', 'story.en.mjs']) {
+    const f = join(root, id, name)
+    let src
+    try { src = readFileSync(f, 'utf8') } catch { continue }
+    let n = 0
+    src = src.replace(/'@@([^']+)'/g, (_, w) => { n++; return `'${createHash('sha256').update(id + ':' + norm(w)).digest('hex')}'` })
+    if (n) { writeFileSync(f, src); console.log(`${id}/${name}: ${n} Lösungen versiegelt`) }
+  }
 }
