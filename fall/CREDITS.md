@@ -17,6 +17,7 @@ Stimmmodelle: [rhasspy/piper-voices](https://huggingface.co/rhasspy/piper-voices
 
 - Atmosphäre (`audio/*.m4a`: Brummen, Wind, Sturm, Funkrauschen, Wartemusik) ist mit ffmpeg synthetisch erzeugt, ohne fremde Aufnahmen.
 - Effekte im Spiel (Klingeln, Klopfen, Glitch) erzeugt der Browser per Web Audio.
-- Die Profilbilder der Figuren zeichnet `portrait.mjs` als SVG. Keine Fotos, keine KI-Bilder.
+- Die Profilbilder, Hintergründe und das Beweisfoto sind als SVG im Code gezeichnet (`portrait.mjs`, `photos` in den Fällen). Keine Fotos, keine KI-Bilder.
+- Wähltöne (DTMF) erzeugt `tools/voices.py` als reine Sinustöne.
 
 Alle Personen, Firmen, Orte und Behörden in den Fällen sind frei erfunden.

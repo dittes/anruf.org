@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Figuren-Galerie</title>
+<style>
+:root{color-scheme:dark}
+body{margin:0;background:#0b0c0e;color:#e9e6df;font:14px/1.4 ui-sans-serif,-apple-system,"Segoe UI",Roboto,sans-serif;padding:16px}
+h1{font-size:1.2rem}
+.ctl{display:flex;gap:12px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+figure{margin:0;background:#14161a;border-radius:12px;overflow:hidden}
+.pic{aspect-ratio:4/3}
+.pic svg{width:100%;height:100%;display:block}
+figcaption{padding:8px 10px;font-size:.85rem}
+figcaption small{color:#8c8a84;display:block}
+.portrait .eyes{animation:b 4.5s infinite;transform-box:view-box}
+@keyframes b{0%,95%,100%{transform:scaleY(1)}97%{transform:scaleY(.08)}}
+.portrait .mouth{transform-box:view-box;transform:scaleY(calc(.04 + var(--m,0) * 1.05))}
+.portrait .lowlip{transform:translateY(calc(var(--m,0) * 3.5px))}
+.portrait .head{animation:sway 7s ease-in-out infinite;transform-box:view-box}
+@keyframes sway{0%,100%{transform:rotate(-.6deg)}50%{transform:rotate(.6deg) translateY(-.5px)}}
+</style>
+</head>
+<body>
+<h1>Figuren-Galerie (Entwicklungswerkzeug)</h1>
+<div class="ctl"><label>Mund <input id="m" type="range" min="0" max="1" step=".05" value="0"></label><label><input id="talk" type="checkbox"> sprechen</label></div>
+<div class="grid" id="g"></div>
+<script type="module">
+import {portrait} from '../portrait.mjs'
+import {CASES} from '../cases/index.mjs'
+const g = document.getElementById('g')
+const only = new URLSearchParams(location.search).get('only')
+if (new URLSearchParams(location.search).has('big')) g.style.gridTemplateColumns = 'repeat(auto-fill,minmax(520px,1fr))'
+for (const meta of CASES) {
+  const c = (await import('../cases/' + meta.id + '/story.mjs')).default
+  for (const [id, n] of Object.entries(c.npcs)) {
+    if (only && !only.split(',').includes(id)) continue
+    const f = document.createElement('figure')
+    f.innerHTML = `<div class="pic">${portrait(n.face)}</div><figcaption>${n.name}<small>${c.title} · ${id} · ${n.face.scene || 'plain'}</small></figcaption>`
+    g.append(f)
+  }
+}
+const set = v => document.body.style.setProperty('--m', v)
+document.getElementById('m').oninput = e => set(e.target.value)
+setInterval(() => { if (document.getElementById('talk').checked) set(Math.random() * .9) }, 110)
+</script>
+</body>
+</html>

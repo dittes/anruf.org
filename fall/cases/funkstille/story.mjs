@@ -25,19 +25,25 @@ export default {
   npcs: {
     jannik: {name: 'Jannik Feddersen', sub: 'Leitstelle Küste · Schichtleitung', tts: {pitch: 1, rate: 1.05},
       voice: {model: 'thorsten-high', pitch: 2, fx: 'call', len: .94},
-      face: {skin: '#ebc0a4', hair: {style: 'short', color: '#b5652e'}, beard: 'full', beardColor: '#a85a28', extras: ['headset'], mood: 'neutral', top: {style: 'hoodie', color: '#1f3346', accent: '#ccc'}, bg: ['#24465a', '#081218']}},
+      face: {skin: '#ebc0a4', eyes: '#3a6a8a', hair: {style: 'short', color: '#b5652e'}, beard: 'full', beardColor: '#a85a28', extras: ['headset'], mood: 'smile', jaw: .7, top: {style: 'hoodie', color: '#1f3346', accent: '#ccc'}, scene: 'radio'}},
     marit: {name: 'Dr. Marit Olsen', sub: 'Station Graudel · Satellit', look: 'weak', tts: {pitch: 1.05, rate: 1},
       voice: {model: 'eva_k', fx: 'radio', len: 1},
-      face: {skin: '#efcbb4', hair: {style: 'bob', color: '#cbb896'}, glasses: 'round', age: 2, mood: 'stern', top: {style: 'coat', color: '#8a2e2a'}, extras: ['earring'], bg: ['#3a4a52', '#0b1114']}},
+      face: {skin: '#efcbb4', fem: true, jaw: .3, eyes: '#4a6a7a', hair: {style: 'bob', color: '#cbb896'}, glasses: 'round', age: 2, mood: 'stern', top: {style: 'coat', color: '#8a2e2a'}, extras: ['earring'], scene: 'storm'}},
     tom: {name: 'Unbekannt', sub: 'Station Graudel · Handy', look: 'weak', tts: {pitch: 1.2, rate: 1.1},
       voice: {model: 'thorsten_emotional', speaker: 7, fx: 'radio', len: .98},
-      face: {skin: '#e7b99c', hair: {style: 'curly', color: '#7a4a2a'}, extras: ['freckles'], top: {style: 'hoodie', color: '#d9a21b', accent: '#333'}, mood: 'worried', bg: ['#244a55', '#071418']}},
+      face: {skin: '#e7b99c', age: 0, jaw: .3, eyes: '#4a7a5a', hair: {style: 'curly', color: '#7a4a2a'}, extras: ['freckles'], top: {style: 'hoodie', color: '#d9a21b', accent: '#333'}, mood: 'worried', look: [1, .5], scene: 'storm'}},
     ole: {name: 'Kapitän Ole Jessen', sub: 'Seenotkreuzer „Hinrich“', tts: {pitch: .8, rate: .95},
       voice: {model: 'thorsten_emotional', speaker: 4, fx: 'radio', len: 1.05},
-      face: {skin: '#c98f6c', hair: {style: 'cap', color: '#ddd', hat: '#1b2a3a'}, beard: 'full', beardColor: '#e8e4dc', age: 2, mood: 'stern', top: {style: 'coat', color: '#c8501f'}, bg: ['#2a3e48', '#06090c']}}
+      face: {skin: '#c98f6c', eyes: '#3a5a7a', hair: {style: 'cap', color: '#ddd', hat: '#1b2a3a'}, beard: 'full', beardColor: '#e8e4dc', age: 2, jaw: 1, mood: 'stern', top: {style: 'coat', color: '#c8501f'}, scene: 'storm'}}
+  },
+
+  photos: {
+    keller: `<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="kw" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a3d3a"/><stop offset="1" stop-color="#1c1e1c"/></linearGradient><radialGradient id="kl" cx="50%" cy="10%" r="70%"><stop offset="0" stop-color="#fff3c0" stop-opacity=".35"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient></defs><rect width="400" height="300" fill="url(#kw)"/><path d="M0 40 H400" stroke="#2c2e2c" stroke-width="1"/><path d="M0 62 H400" stroke="#2c2e2c" stroke-width="1"/><path d="M0 84 H400" stroke="#2c2e2c" stroke-width="1"/><path d="M0 106 H400" stroke="#2c2e2c" stroke-width="1"/><path d="M0 128 H400" stroke="#2c2e2c" stroke-width="1"/><path d="M0 150 H400" stroke="#2c2e2c" stroke-width="1"/><path d="M0 172 H400" stroke="#2c2e2c" stroke-width="1"/><rect y="236" width="400" height="64" fill="#161816"/><ellipse cx="200" cy="268" rx="190" ry="14" fill="#1f2a30" opacity=".8"/><path d="M40 262 q30 -4 60 0 t60 0 t60 0 t60 0 t60 0" stroke="#5a7a8a" stroke-width=".8" fill="none" opacity=".6"/><g transform="translate(40 150)"><rect x="0" y="0" width="44" height="92" rx="5" fill="#2f4a3a"/><rect x="0" y="14" width="44" height="3" fill="#1d2e24"/><rect x="0" y="74" width="44" height="3" fill="#1d2e24"/><rect x="7" y="36" width="30" height="16" fill="#e8d84a"/><path d="M22 38 l5 8 h-10 z" fill="#111"/><text x="22" y="50.6" font-size="3.2" font-family="monospace" text-anchor="middle" fill="#111">GK-3317</text><ellipse cx="22" cy="2" rx="22" ry="3" fill="#41604c"/></g><g transform="translate(92 156)"><rect x="0" y="0" width="44" height="92" rx="5" fill="#34503f"/><rect x="0" y="14" width="44" height="3" fill="#1d2e24"/><rect x="0" y="74" width="44" height="3" fill="#1d2e24"/><rect x="7" y="36" width="30" height="16" fill="#e8d84a"/><path d="M22 38 l5 8 h-10 z" fill="#111"/><text x="22" y="50.6" font-size="3.2" font-family="monospace" text-anchor="middle" fill="#111">GK-3317</text><ellipse cx="22" cy="2" rx="22" ry="3" fill="#41604c"/></g><g transform="translate(144 150)"><rect x="0" y="0" width="44" height="92" rx="5" fill="#2b4436"/><rect x="0" y="14" width="44" height="3" fill="#1d2e24"/><rect x="0" y="74" width="44" height="3" fill="#1d2e24"/><rect x="7" y="36" width="30" height="16" fill="#e8d84a"/><path d="M22 38 l5 8 h-10 z" fill="#111"/><text x="22" y="50.6" font-size="3.2" font-family="monospace" text-anchor="middle" fill="#111">GK-3317</text><ellipse cx="22" cy="2" rx="22" ry="3" fill="#41604c"/></g><g transform="translate(196 156)"><rect x="0" y="0" width="44" height="92" rx="5" fill="#2f4a3a"/><rect x="0" y="14" width="44" height="3" fill="#1d2e24"/><rect x="0" y="74" width="44" height="3" fill="#1d2e24"/><rect x="7" y="36" width="30" height="16" fill="#e8d84a"/><path d="M22 38 l5 8 h-10 z" fill="#111"/><text x="22" y="50.6" font-size="3.2" font-family="monospace" text-anchor="middle" fill="#111">GK-3317</text><ellipse cx="22" cy="2" rx="22" ry="3" fill="#41604c"/></g><g transform="translate(248 150)"><rect x="0" y="0" width="44" height="92" rx="5" fill="#34503f"/><rect x="0" y="14" width="44" height="3" fill="#1d2e24"/><rect x="0" y="74" width="44" height="3" fill="#1d2e24"/><rect x="7" y="36" width="30" height="16" fill="#e8d84a"/><path d="M22 38 l5 8 h-10 z" fill="#111"/><text x="22" y="50.6" font-size="3.2" font-family="monospace" text-anchor="middle" fill="#111">GK-3317</text><ellipse cx="22" cy="2" rx="22" ry="3" fill="#41604c"/></g><g transform="translate(300 156)"><rect x="0" y="0" width="44" height="92" rx="5" fill="#2b4436"/><rect x="0" y="14" width="44" height="3" fill="#1d2e24"/><rect x="0" y="74" width="44" height="3" fill="#1d2e24"/><rect x="7" y="36" width="30" height="16" fill="#e8d84a"/><path d="M22 38 l5 8 h-10 z" fill="#111"/><text x="22" y="50.6" font-size="3.2" font-family="monospace" text-anchor="middle" fill="#111">GK-3317</text><ellipse cx="22" cy="2" rx="22" ry="3" fill="#41604c"/></g><path d="M300 246 q8 10 26 12 q-10 6 -30 4 z" fill="#3a3a2a" opacity=".9"/><g transform="translate(330 70)"><circle r="18" fill="#e8e4da" stroke="#333" stroke-width="2"/><path d="M0 0 L0 -12 M0 0 L10 6" stroke="#111" stroke-width="1.6"/><circle r="1.5" fill="#111"/></g><g transform="translate(44 56)"><rect width="88" height="30" fill="#c22"/><rect x="2" y="2" width="84" height="26" fill="none" stroke="#fff" stroke-width="1"/><text x="44" y="13" font-size="6" font-family="sans-serif" fill="#fff" text-anchor="middle" font-weight="700">ZUTRITT NUR</text><text x="44" y="22" font-size="6" font-family="sans-serif" fill="#fff" text-anchor="middle" font-weight="700">MIT GENEHMIGUNG</text></g><g transform="translate(160 92)"><rect width="56" height="40" fill="#8a6a42"/><rect x="4" y="4" width="48" height="10" fill="#efe9d8"/><text x="28" y="11" font-size="3.2" font-family="monospace" text-anchor="middle" fill="#111">GK-1102 · LEER</text></g><g transform="translate(236 104)"><rect width="34" height="22" fill="#efe9d8" transform="rotate(4)"/><text x="4" y="8" font-size="2.6" font-family="monospace" fill="#222" transform="rotate(4)">Lieferschein</text><text x="4" y="13" font-size="2.6" font-family="monospace" fill="#222" transform="rotate(4)">40 Fass · nachts</text><text x="4" y="18" font-size="2.6" font-family="monospace" fill="#222" transform="rotate(4)">Abholung: nie</text></g><rect width="400" height="300" fill="url(#kl)"/><text x="10" y="18" font-size="10" font-family="monospace" fill="#fff" opacity=".85">CAM 2 · KELLER · 22:58:14</text><circle cx="388" cy="14" r="4" fill="#f33"/></svg>`
   },
 
   clips: {
+    notruf: {title: 'Notkanal', npc: 'tom', voice: {model: 'thorsten_emotional', speaker: 7, fx: 'radio', len: .98},
+      text: 'Hier Graudel. Hört mich jemand? Wenn ihr das hört: Das Kennwort für die Leitstelle ist Pricke. Pricke. Ich versuche, zu euch durchzukommen.'},
     funk1: {title: 'Mitschnitt Funkspruch 1 · Station Graudel · 22:31', npc: 'marit', bells: 9,
       voice: {model: 'eva_k', fx: 'radio', len: 1},
       text: 'Hier Station Graudel, Olsen. Alles in Ordnung bei uns. Der Generator macht Ärger, aber wir sind sicher. Schickt niemanden raus bei dem Wetter.'}
@@ -82,6 +88,28 @@ export default {
       <p class="stamp">Funk · Mitschnitt</p>
       <p>Funkspruch 1 kam um 22:31, Funkspruch 2 um 23:14. Wortgleich. Hört genau hin, auch auf den Hintergrund.</p>
       <div data-tape="funk1"></div>`},
+    webcam: {title: 'Kellerkamera', role: FU, html: `
+      <p class="stamp">Funk · Stationsnetz, CAM 2</p>
+      <p>Das letzte Bild der Kellerkamera, bevor sie ausfiel. Es ist klein. Zoomt hinein und lest alles, was ihr findet.</p>
+      <div data-photo="keller"></div>`},
+    gefahrgut: {title: 'Gefahrgut-Liste', role: KA, html: `
+      <p class="stamp">Seekarte · Gefahrgut-Kennzeichnung (Küstenschutz)</p>
+      <table><thead><tr><th>Kennung</th><th>Stoff</th></tr></thead><tbody>
+      <tr><td>GK-1102</td><td>Altöl</td></tr><tr><td>GK-2210</td><td>Kupfersulfat</td></tr>
+      <tr><td>GK-3137</td><td>Kalkmilch</td></tr><tr><td>GK-3317</td><td>Bleischlamm</td></tr>
+      <tr><td>GK-3371</td><td>Arsenschlamm</td></tr><tr><td>GK-4410</td><td>Chlorbleiche</td></tr>
+      <tr><td>GK-7031</td><td>Diesel</td></tr>
+      </tbody></table>`},
+    funkplan: {title: 'Funkplan', role: KA, html: `
+      <div class="paper"><p class="stamp">Station Graudel · Funkplan</p>
+      <p>Kanal 16 (156,800 MHz): Not- und Anrufkanal, <b>derzeit gestört</b></p>
+      <p>Kanal 69 (156,475 MHz): Hafenbetrieb Husum</p>
+      <p>Kanal 72 (156,625 MHz): <b>stationsinterner Notkanal</b></p>
+      <p>Kanal 77 (156,875 MHz): Sportschifffahrt</p></div>`},
+    empfaenger: {title: 'UKW-Empfänger', role: FU, html: `
+      <p class="stamp">Funk · Empfänger</p>
+      <p>Irgendwo auf UKW ruft jemand. Dreh den Empfänger durch, bis die Stimme aus dem Rauschen kommt. Welcher Kanal es ist, weiß die Seekarte.</p>
+      <div data-tuner="notruf" data-target="156.625" data-min="156" data-max="157.4"></div>`},
     tide: {title: 'Tidenkalender', role: KA, html: `
       <p class="stamp">Seekarte · Tidenkalender Graudeltief</p>
       <p>Der <b>Graudelsand</b> liegt <b>0,90 m über Pegelnull Husum</b>. Wasser über der Sandbank = Pegel Husum − 0,90 m.</p>
@@ -120,6 +148,17 @@ export default {
       hash: ['e5d9f8653c92390bfeba1bfc2399b30dd0623ec96709a736e7e45bd2c474d75c', '425c2f010544828fe0b8258ad9a30656c1678c64356cae273ce057771252b38d', '9799c835d7a188ecab2394de821f578c49795a653172dfceec55fb3161cb5393', '240b5aa89a46fbe78af152d4c39a1ef4f1b94fe067e2ff77d7cab0c982fbd329', '220445301034e858a2a5c54d30bdcfec66784851de78d19b01803d62468e73d6', '4d0177804220fe30f483d05751b724743430e926b5c0543fb193f9184cfcfb4c'],
       near: {'4cb67874a0bcb1d84a7c14de3ca8362a11809d6e4125df29deb68c55be03af58': 'Neun Schläge, ja. Aber war vormittags schon jemand auf der Station?', 'c634b5abb7a1e0984ef6670b6bbdcf234cf9cad1d3330b6ddf1c48dc0238e678': 'Neun Schläge, ja. Aber war vormittags schon jemand auf der Station?', '2e0413dd079e03f51fa3fcf2f3ab75e957ae724a79e2f2f5a2e61a74750e99ed': 'Um 22 Uhr hätte keine Glocke geschlagen.', 'fe038700bad0b244b88f829aa2ab6bdad738cec253808c1c6c2742c00e8b55bf': 'So wurde er gesendet. Aufgenommen wurde er früher.'},
       hints: ['Funk: Spiel das Band ab und hör auf den Hintergrund. Zählt mit.', 'Es schlägt neunmal. Seekarte: Was sagt das Stationsbuch über die Glocke und die Besetzung?', 'Neun Schläge, Station erst ab 12:30 besetzt, Glocke nach 22 Uhr aus: 21 Uhr.']
+    },
+    fass: {
+      q: 'Was lagert im Keller der Station?', ph: 'Stoff',
+      hash: ['d5e8c227106125d2247095f3ec5aa8666d1a82f085baefa657a14f29687d06ae'],
+      near: {'5106ed565075c04dcbbe400c5b1ad61e0c88551c1f25bba0f985d2bc289fdace': 'Lest die Kennung auf den Fässern noch einmal Ziffer für Ziffer.', '9bd0a8b5f3f9d499931e96d4c3f1f17af02c169c4531026865cb729005877fb7': 'Lest die Kennung auf den Fässern noch einmal Ziffer für Ziffer.', '82d331993533a442454b76a7fdd668fc900fbd173db03a183f27f4a2b9a10e57': 'Das ist die leere Kiste. Was steht auf den Fässern?', 'ce090863abf17da32868afe1a7cb8a5a55af871251fc9b9f1f12578ebdd955da': 'Das ist die Kennung. Was bedeutet sie?'},
+      hints: ['Funk: Mit ＋ oder dem Mausrad in das Bild zoomen, mit Ziehen verschieben. Die gelben Etiketten auf den Fässern.', 'Auf den Fässern steht GK-3317. Seekarte: Schaut in der Liste nach. Vorsicht, ähnliche Nummern.', 'GK-3317 ist Bleischlamm.']
+    },
+    kanal: {
+      q: 'Welches Kennwort sagt die Stimme auf dem Notkanal?', ph: 'Kennwort',
+      hash: ['552303b9df1ee4999f8cdf518aa85faedd08830e20d6161bf3f0c9820f24a655'],
+      hints: ['Seekarte: Im Funkplan steht der Notkanal der Station. Funk: Empfänger an und hindrehen.', 'Kanal 72 ist 156,625 MHz. Mit − und + fein einstellen.', 'Die Stimme sagt „Pricke“.']
     },
     pegel: {
       q: 'Ab welchem Pegel Husum (in Metern) kommt die „Hinrich“ sicher über den Graudelsand?', ph: 'Meter',
@@ -185,10 +224,20 @@ export default {
     ['goal', 'Findet heraus, wann Funkspruch 1 aufgenommen wurde.'],
     ['solve', 'echo'],
     ['say', 'jannik', 'Einundzwanzig Uhr. Das heißt: Die Nachricht ist über drei Stunden alt. Jemand spielt sie uns vor. Damit wir niemanden rausschicken.'],
+    ['unlock', 'webcam'], ['unlock', 'gefahrgut'],
+    ['say', 'jannik', 'Die Station hat eine Kellerkamera im Netz. Das letzte Bild ist von zweiundzwanzig Uhr achtundfünfzig. Was steht da unten?'],
+    ['goal', 'Findet heraus, was im Keller der Station lagert.'],
+    ['solve', 'fass'],
+    ['say', 'jannik', 'Bleischlamm. Vierzig Fässer. So etwas darf nicht mal in die Nähe einer Hallig. Und die Flut steigt.'],
     ['wait', 2500],
 
     // ---------- Kapitel 3 ----------
     ['chapter', 3, 'Der Fünfte'],
+    ['unlock', 'funkplan'], ['unlock', 'empfaenger'],
+    ['say', 'jannik', 'Auf UKW rauscht seit Minuten etwas. Kanal sechzehn ist gestört. Funk, such den Notkanal der Station.'],
+    ['goal', 'Sucht im Rauschen den Notkanal der Station. Was sagt die Stimme?'],
+    ['solve', 'kanal'],
+    ['say', 'jannik', 'Pricke. Ein Kennwort. Wer immer das ist, er will zu uns durch.'],
     ['goal', 'Jemand klopft an. Von der Station.'],
     ['knock', 'tom'],
     ['join', 'tom'],
@@ -224,7 +273,12 @@ export default {
     ['solve', 'licht', {npc: 'ole', every: 50000, onFail: 'ebbe', taunts: ['Das Fenster wird kleiner.', 'Leitstelle, ich brauche eine Antwort.']}],
     ['timer', null],
     ['morse', null],
-    ['say', 'ole', 'Nur zwei im Boot? Es waren drei. Wo ist der Dritte?'],
+    ['say', 'ole', 'Nur zwei im Boot? Es waren drei. Und sie sehen uns nicht im Regen.'],
+    ['say', 'tom', 'Ich halte das Handy in den Wind. Ruft alle gleichzeitig, so laut ihr könnt. Vielleicht hören sie euch.'],
+    ['goal', 'Gebt dem Schlauchboot ein Zeichen: alle gleichzeitig laut rufen.'],
+    ['clap', {label: 'Alle gleichzeitig „HIER!“ rufen', text: 'Tom hält das Handy über die Warft. Ruft oder klatscht alle im selben Moment. Mikro an!'}],
+    ['say', 'tom', 'Sie haben es gehört! Sie blinken zurück! Sie halten auf die Warft zu.'],
+    ['say', 'ole', 'Gut. Wo ist der Dritte?'],
     ['call', 'marit', {note: 'Satellitentelefon · Station Graudel · live'}],
     ['say', 'marit', 'Hier Olsen. Diesmal wirklich. Ich habe euch belogen. Es tut mir leid.'],
     ['say', 'marit', 'Aksel ist zurückgeschwommen, um mich zu holen. Er ist hier. Er ist verletzt. Und unten im Keller läuft Wasser in die Fässer.'],

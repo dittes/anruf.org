@@ -27,27 +27,40 @@ export default {
   npcs: {
     sommer: {name: 'KHK H. Sommer', sub: 'Dezernat 0 · Leitung', tts: {pitch: .85, rate: 1.04},
       voice: {model: 'thorsten-high', fx: 'call', len: 1.02},
-      face: {skin: '#d6a486', hair: {style: 'short', color: '#8f8b86'}, beard: 'stubble', beardColor: '#8f8b86', glasses: 'square', age: 2, mood: 'stern', top: {style: 'suit', color: '#262c36', accent: '#d9d6cf', tie: '#5a2630'}, bg: ['#3a4150', '#0e1116']}},
+      face: {skin: '#d6a486', hair: {style: 'short', color: '#8f8b86'}, beard: 'stubble', beardColor: '#8f8b86', glasses: 'half', age: 2, mood: 'stern', jaw: .8, top: {style: 'suit', color: '#262c36', accent: '#d9d6cf', tie: '#5a2630'}, scene: 'police'}},
     geist: {name: 'Lena Brandt', sub: 'Konto seit 2023 inaktiv', look: 'ghost',
-      face: {skin: '#e8bea2', hair: {style: 'bob', color: '#2a1d16'}, extras: ['freckles'], mood: 'neutral', top: {style: 'sweater', color: '#3a4a4a'}, bg: ['#2c3a46', '#0a0f14']}},
+      face: {skin: '#e8bea2', fem: true, jaw: .2, hair: {style: 'bob', color: '#2a1d16'}, extras: ['freckles', 'earring'], mood: 'smile', top: {style: 'sweater', color: '#3a4a4a'}, scene: 'night'}},
     moewe: {name: 'Unbekannt', sub: 'Rufnummer unterdrückt', look: 'weak', tts: {pitch: .45, rate: .86},
       voice: {model: 'thorsten_emotional', speaker: 7, fx: 'whisper', len: 1.08},
-      face: {silhouette: true, hair: {style: 'hood'}, bg: ['#1b2a36', '#04070a']}},
+      face: {silhouette: true, hair: {style: 'hood'}, top: {style: 'coat', color: '#111'}, scene: 'storm'}},
     bernd: {name: 'Bernd Ahrens', sub: 'Mobil · München', tts: {pitch: .8, rate: .95},
       voice: {model: 'thorsten_emotional', speaker: 4, pitch: -2.5, fx: 'phone', len: 1.08},
-      face: {skin: '#e3ad90', hair: {style: 'bald', color: '#9a948c'}, beard: 'mustache', beardColor: '#8a8178', age: 2, mood: 'worried', top: {style: 'jacket', color: '#46553a', accent: '#e8e2d6'}, bg: ['#4a3f33', '#120e0a']}},
+      face: {skin: '#e3ad90', hair: {style: 'bald', color: '#9a948c'}, beard: 'mustache', beardColor: '#8a8178', age: 2, jaw: .9, mood: 'worried', look: [-1.2, .4], glasses: 'square', glassColor: '#6a5a3a', top: {style: 'jacket', color: '#46553a', accent: '#e8e2d6'}, scene: 'office'}},
     neun: {name: 'Teilnehmer 9', sub: 'nicht eingeladen', look: 'void glitchy', tts: {pitch: .1, rate: .78}, widget: 'ping',
       voice: {model: 'thorsten-high', fx: 'demon', len: 1.15},
-      face: {silhouette: true, glow: '#ff3b30', hair: {style: 'hood'}, bg: ['#2a0606', '#000000']}},
+      face: {silhouette: true, glow: '#ff3b30', hair: {style: 'hood'}, scene: 'void'}},
     lena: {name: 'Lena Brandt', sub: 'Wetterwarte · Notstrom', look: 'weak', tts: {pitch: 1.1, rate: .96},
       voice: {model: 'kerstin', fx: 'radio', len: 1.0},
-      face: {skin: '#e8bea2', hair: {style: 'beanie', color: '#2a1d16', hat: '#7a3a2a'}, extras: ['freckles', 'scarf'], scarf: '#3a5a6a', mood: 'worried', top: {style: 'coat', color: '#2f3b3a'}, bg: ['#26343e', '#080c10']}}
+      face: {skin: '#e8bea2', fem: true, jaw: .2, age: 1, hair: {style: 'beanie', color: '#2a1d16', hat: '#7a3a2a'}, extras: ['freckles', 'scarf', 'bandage'], scarf: '#3a5a6a', mood: 'worried', top: {style: 'coat', color: '#2f3b3a'}, scene: 'hut'}}
   },
 
   clips: {
+    dtmf: {title: 'Freisprech-Mitschnitt · Handy Ahrens · 14.11.2023 · 21:20', dtmf: '0712289'},
     mailbox: {title: 'Mailbox L. Brandt · 14.11.2023 · 21:41', npc: 'lena', reverse: true,
       voice: {model: 'kerstin', fx: 'mailbox', len: 1.05},
       text: 'Falls mir etwas passiert. Das Schließfach im Bahnhof Lindau, Nummer siebzehn. Der Code ist mein Geburtstag. Tag und Monat. Aber rückwärts.'}
+  },
+
+  shreds: {
+    fax: {n: 8, order: [5, 2, 7, 0, 3, 6, 1, 4], lines: [
+      'VELMONT AG  ·  KONZERNSICHERHEIT',
+      'INTERN  ·  NICHT WEITERGEBEN',
+      '',
+      'LEITUNG: A. KRELL (RUFNAME NEUN)',
+      'BUERO ST. GALLEN  071 228 9',
+      'AUFTRAG 14.11.: QUELLE B. HOEREN',
+      'ZIEL: L. BRANDT  ·  DRINGEND'
+    ]}
   },
 
   pages: {
@@ -136,6 +149,38 @@ export default {
       <tr><td>22:40</td><td>ein</td><td>+41 71 ··· ·· ··</td><td>0:09</td></tr>
       </tbody></table>
       <p class="note">Während des Videoanrufs hat Ahrens nebenher telefoniert.</p>`},
+    waehltoene: {title: 'Tonband: Wähltöne', role: F, html: `
+      <p class="stamp">Forensik · Asservat 11</p>
+      <p>Ahrens' Handy lief am 14.11. im Freisprechmodus mit. Um 21:20 hört man ihn eine Nummer wählen: sieben Tasten.</p>
+      <p>Jede Taste eines Telefons spielt <b>zwei Töne gleichzeitig</b>. Die Frequenzanzeige unter dem Band zeigt sie dir an. Spiel es in normalem Tempo ab: Langsamer verschiebt die Töne.</p>
+      <div data-tape="dtmf" data-spectrum></div>`},
+    dtmf: {title: 'Tastentöne', role: A, html: `
+      <p class="stamp">Archiv · Technik-Handbuch, Tonwahl (DTMF)</p>
+      <p>Jede Taste = ein tiefer Ton (Zeile) + ein hoher Ton (Spalte):</p>
+      <table><thead><tr><th></th><th>1209 Hz</th><th>1336 Hz</th><th>1477 Hz</th></tr></thead><tbody>
+      <tr><td>697 Hz</td><td>1</td><td>2</td><td>3</td></tr>
+      <tr><td>770 Hz</td><td>4</td><td>5</td><td>6</td></tr>
+      <tr><td>852 Hz</td><td>7</td><td>8</td><td>9</td></tr>
+      <tr><td>941 Hz</td><td>✱</td><td>0</td><td>#</td></tr>
+      </tbody></table>
+      <p class="note">Die Forensik liest die Töne ab. Ihr übersetzt.</p>`},
+    fax: {title: 'Fax von Ahrens', role: F, html: `
+      <p class="stamp">Forensik · Fax-Eingang 23:51</p>
+      <p>Ahrens hat euch etwas gefaxt. Vorher hat er es durch den Aktenvernichter gejagt. Gewohnheit, sagt er.</p>
+      <div data-shred="fax"></div>`},
+    sicherungen: {title: 'Sicherungskasten', role: F, html: `
+      <p class="stamp">Forensik · Keller, Notstromverteilung</p>
+      <p>Du stehst vor dem Kasten. Acht Kippschalter, von links nach rechts beschriftet:</p>
+      <div class="grid" style="--n:4"><span>S1 Heizung</span><span>S2 Server</span><span>S3 Aufzug</span><span>S4 Funk</span><span>S5 Licht</span><span>S6 Alarm</span><span>S7 Kamera</span><span>S8 Flur</span></div>
+      <p class="note">Nur du kannst die Schalter umlegen. Was an sein darf, steht im Stromplan des Archivs.</p>`},
+    stromplan: {title: 'Stromplan', role: A, html: `
+      <div class="paper"><p class="stamp">Hausmeisterei · Notstromplan Präsidium</p>
+      <p>1. Der Notstrom trägt <b>höchstens fünf</b> Kreise.</p>
+      <p>2. <b>Funk</b> und <b>Kamera</b> brauchen wir für den Einsatz.</p>
+      <p>3. Ohne <b>Server</b> kein <b>Licht</b>. Ohne Licht arbeitet die <b>Kamera</b> nicht (Restlicht-Sensor).</p>
+      <p>4. <b>Heizung</b> und <b>Aufzug</b> ziehen zu viel: aus.</p>
+      <p>5. Der <b>Alarm</b> startet bei Notstrom alles neu: aus lassen.</p>
+      <p>6. <b>Flur</b> und Licht hängen am selben Kreis: beide gleich.</p></div>`},
     ping: {title: 'Signal orten', role: F, html: `
       <p class="stamp">Forensik · Live-Messung</p>
       <p>Teilnehmer 9 läuft über drei unserer Netzknoten. Öffne die <b>Verbindungsdetails</b> auf seiner Kachel
@@ -211,6 +256,28 @@ export default {
         'Lena sagt: Geburtstag, Tag und Monat, aber rückwärts. Archiv: Der Geburtstag steht in der Personalakte.',
         '17.04. → 1704 → rückwärts gelesen.'
       ]
+    },
+    nummer: {
+      q: 'Welche Nummer hat Ahrens um 21:20 gewählt? (alle sieben Ziffern)', ph: 'Nummer', input: 'digits',
+      hash: ['f927528def5555384a3b287c9ea8b04de40b2b064a0fe0678cec758072e920ac'],
+      near: {'2e63339015bdbc4d7b51dec6553634e1aefef917d2da07d4946be51031b8b7ed': 'Die erste Taste fehlt.', '360e01b9f521e36df2013a3fd6724b879822e087c69413e971aa0d943323a233': 'Da kommt noch mehr. Hört bis zum Ende.'},
+      hints: [
+        'Forensik: Spiel das Band in normalem Tempo und lies bei jeder Taste die zwei Frequenzen vor.',
+        'Archiv: Tiefer Ton = Zeile, hoher Ton = Spalte. 941 + 1336 ist die 0.',
+        '0 · 7 · 1 · 2 · 2 · 8 · 9'
+      ]
+    },
+    krell: {
+      q: 'Wer ist Teilnehmer 9? (Nachname)', ph: 'Name',
+      hash: ['26d4eca60264f65e4b994b4e8920c02d757fbc7b72d55c74dfd303207609f8c6', '44a94e46ab66ed674bf7e9cd73b85673e770346f5193a8c08a38bb1c85a6eb88'],
+      near: {'8ea3b5622f96a92fa5d95867050a7d708c760064fffedfbce185af0e8fa90b91': 'Das ist sein Rufname. Wie heißt er wirklich?', '8f595de60f7d1382634e74a3529a6e6acf7d48b676b90c411812c370b950a85a': 'Die Firma. Gesucht ist der Mann.'},
+      hints: ['Forensik: Tippe zwei Streifen nacheinander an, um sie zu tauschen. Achte darauf, dass Wörter über die Kanten weiterlaufen.', 'Die erste Zeile beginnt mit VELMONT. Sucht den Streifen mit „VE“ und baut von dort weiter.', 'LEITUNG: A. KRELL.']
+    },
+    strom: {
+      q: 'Welche Sicherungen müssen an sein?', input: 'switches', n: 8, by: F,
+      hash: ['f9b3f3b45fa23b2125ed9f58683bef880e3e2dc7ea628c66ba77d5bede1dec6d'],
+      near: {'d6e6edb0a7c8cb80745b41630c387c11b74bd8e2746902dcd0dc6bd831b1d3fd': 'Fast. Wie hängen Flur und Licht zusammen?', '7b5f9394a33a0e367f44a65377fffe160451d0bd9402481b0426a1b860cf7b7d': 'Die Heizung zieht zu viel.', '5e4fd11c7185fff6f2b159609be735f474ce2e3bda8466387443d725ced13068': 'Der Alarm startet alles neu.', '5936c645cda55cb3e8f867e9ad6c4e2997661f9658afda933f415c87c3b5d54e': 'Ohne Licht keine Kamera.', '67c3f75124c65c36ad2558f59a52b9ab5968261e4eccf9c1e749734425ba1a6b': 'Ohne Licht keine Kamera.'},
+      hints: ['Archiv: Lies die Regeln vor. Forensik: Sag, welcher Schalter wofür ist.', 'An: Funk (S4), Kamera (S7). Daraus folgt Licht (S5) und daraus Server (S2).', 'S2, S4, S5, S7, S8 an. Alles andere aus.']
     },
     ping: {
       q: 'Wo sitzt Teilnehmer 9?', ph: 'Ort',
@@ -321,7 +388,10 @@ export default {
     ['chapter', 3, 'Der Informant'],
     ['ambience', 'hum'],
     ['chat', 'sommer', 'Ich habe den Verbindungsnachweis von Bernd Ahrens besorgt. Nur für die Forensik. Er ruft euch gleich zurück. Seid freundlich. Erst mal.', {to: F}],
-    ['unlock', 'telefon'],
+    ['unlock', 'telefon'], ['unlock', 'waehltoene'], ['unlock', 'dtmf'],
+    ['goal', 'Ahrens hat während des Treffens telefoniert. Findet heraus, welche Nummer er gewählt hat.'],
+    ['solve', 'nummer'],
+    ['chat', 'sommer', '0 71 – das ist die Vorwahl von St. Gallen. Und genau jetzt ruft Ahrens zurück.'],
     ['goal', 'Bernd Ahrens ruft an. Geht ran.'],
     ['call', 'bernd', {note: 'Mobil · München · ruft an …', again: 'ruft noch einmal an. Er klingt ungeduldig.'}],
     ['wait', 800],
@@ -333,7 +403,7 @@ export default {
       {id: 'lena', label: 'Wann haben Sie Lena zuletzt gesprochen?', say: ['Am Tag davor. Sie war nervös. Sie hat gesagt, jemand folgt ihr. Ich habe ihr gesagt, sie soll vorsichtig sein.']},
       {id: 'telefon', label: 'Haben Sie während des Treffens telefoniert?', set: {gelogen: true}, say: ['Nein. Ich habe zugehört. Sonst nichts. Wieso fragen Sie das?']},
       {id: 'anklage', label: 'Sie haben Lena entführt.', tag: 'accuse', wrong: true, say: ['Wie bitte? Ich habe sie gewarnt! Noch so ein Satz, und ich lege auf.']},
-      {id: 'beweis', label: 'Ihr Verbindungsnachweis: 21:20 Uhr, 38 Sekunden, eine Nummer in der Schweiz.', tag: 'proof', needs: ['telefon', 'gelogen'], set: {bernd_gestanden: true},
+      {id: 'beweis', label: 'Sie haben um 21:20 Uhr 071 228 9 gewählt. Eine Nummer in St. Gallen.', tag: 'proof', needs: ['nummer', 'gelogen'], set: {bernd_gestanden: true},
         say: ['Woher haben Sie das? … Na gut. Ich habe angerufen.', 'Man hatte mir die Nummer gegeben. Ich sollte nur durchsagen, wann das Treffen läuft. Ich dachte, es geht um Geld. Nicht um Lena.']},
       {id: 'notiz', label: 'Lena wusste von Ihrem Anruf. Es steht in ihrem Notizbuch.', tag: 'proof', needs: ['bernd_gestanden', 'notizbuch'], set: {bernd_zeuge: true}, end: true,
         say: ['Sie wusste es? Und hat mich trotzdem reden lassen.', 'Der Mann am Telefon nannte sich nur Neun. Wenn ihr ihn kriegt, sage ich aus. Vor jedem Gericht.']},
@@ -343,6 +413,13 @@ export default {
     ['say', 'bernd', 'Er wird wissen, dass ich mit euch geredet habe. Er weiß immer alles.'],
     ['leave', 'bernd', 'glitch'],
     ['fragment', '✶', '2'],
+    ['wait', 2500],
+    ['fx', 'ring'],
+    ['chat', 'bernd', 'Ich habe euch ein Fax geschickt. Damit ihr wisst, mit wem ihr es zu tun habt. Ich habe es vorher geschreddert. Gewohnheit.'],
+    ['unlock', 'fax'],
+    ['goal', 'Setzt Ahrens’ zerschreddertes Fax zusammen. Wer ist Neun?'],
+    ['solve', 'krell'],
+    ['chat', 'sommer', 'Andreas Krell, Konzernsicherheit Velmont. Ein Profi. Wenn er sich zeigt, seid vorsichtig.'],
     ['branch', s => s.flags.bernd_zeuge, 'zeuge'],
     ['chat', 'sommer', 'Ahrens hat gestanden. Aber als Zeuge haben wir ihn nicht. Schade. Vielleicht hätte er mehr gesagt, wenn er gewusst hätte, was Lena wusste.'],
     ['goto', 'k4'],
@@ -363,6 +440,9 @@ export default {
     ['say', 'neun', 'Du sahst vorhin anders aus. Kamera an, Kamera aus. Ich habe alles.'],
     ['fx', 'rename', 'SPITZEL {n}'],
     ['say', 'neun', 'Ihr sucht Lena. Ich auch. Danke, dass ihr ihre alte Leitung geöffnet habt.'],
+    ['say', 'neun', 'Und schaltet ruhig eure Kameras aus. Ich sehe trotzdem alles.'],
+    ['goal', 'Teilnehmer 9 sieht euch. Haltet eure Kameras mit der Hand zu. Kamera AN lassen, sonst schaltet er sie selbst ein.'],
+    ['quiet', 'covered', 'neun', 'Dunkel. Wie mutig. Hören kann ich euch trotzdem.', 'Ich sehe dich noch, {me}.'],
     ['unlock', 'ping'], ['unlock', 'knoten'],
     ['goal', 'Ortet Teilnehmer 9. Forensik: das i auf seiner Kachel.'],
     ['solve', 'ping', {npc: 'neun', every: 40000, taunts: [
@@ -383,7 +463,12 @@ export default {
     ['chapter', 5, 'Funkfeuer'],
     ['dark', true],
     ['wait', 1500],
-    ['chat', 'sommer', 'Stromausfall im ganzen Präsidium. Notstrom läuft. Nehmt die Taschenlampe: Zeiger bewegen.'],
+    ['chat', 'sommer', 'Stromausfall im ganzen Präsidium! Nehmt die Taschenlampe: Zeiger bewegen. Forensik, ab in den Keller zum Sicherungskasten.'],
+    ['unlock', 'sicherungen'], ['unlock', 'stromplan'],
+    ['goal', 'Bringt den Notstrom zurück: Forensik am Sicherungskasten, Archiv mit dem Stromplan.'],
+    ['solve', 'strom'],
+    ['fx', 'flash'],
+    ['chat', 'sommer', 'Funk und Kameras laufen. Das Licht lassen wir aus, das spart Notstrom. Moment … da kommt jemand rein.'],
     ['join', 'lena', 'static'],
     ['fx', 'toast', 'Lena Brandt ist dem Anruf beigetreten. Ihr Mikrofon sendet nichts.'],
     ['unlock', 'morse'], ['unlock', 'licht'],

@@ -23,13 +23,15 @@ Mehrere Fälle zum gemeinsamen Lösen im Videoanruf, auf Basis von anruf.org (gl
 | `['say', npc, text]` | Figur spricht (Aufnahme oder lokale Sprachausgabe, immer mit Untertitel) |
 | `['call', npc, {note, timeout}]` | Eingehender Anruf, jemand muss annehmen (sonst klingelt es erneut) |
 | `['knock', npc]` | Anklopfen, jemand muss reinlassen |
-| `['quiet', 'mic'/'cam'/'both'/'camOn', npc, text, warn]` | Figur spricht nur, wenn alle Mikros/Kameras aus (bzw. an) sind |
+| `['quiet', 'mic'/'cam'/'both'/'camOn'/'covered', npc, text, warn]` | Figur spricht nur, wenn alle Mikros/Kameras aus (bzw. an) sind; `covered` = Kamera an, aber mit der Hand zugehalten (Helligkeit wird lokal gemessen) |
 | `['chat', npc, text, {to: rolle}]` | Nachricht im Chat, wahlweise nur für eine Rolle |
 | `['unlock', seite]` | Seite in die Akte (mit `role` nur für eine Rolle) |
 | `['solve', rätsel, {npc, taunts, every, onFail}]` | Rätsel öffnen und warten; Sticheleien; bei abgelaufenem Timer Sprung |
 | `['ask', npc, {prompt, options}]` | Verhör/Gespräch: Team wählt Fragen. Optionen: `say`, `needs`, `set`, `wrong`, `end`, `unlock`, `tag` |
 | `['hold', {label, ms}]` | Alle halten gleichzeitig einen Knopf |
-| `['morse', npc, text, takt]` | Lampe auf der Kachel blinkt Morsecode (bis `['morse', null]`) |
+| `['morse', npc, text, takt, rolle?]` | Lampe auf der Kachel blinkt Morsecode (bis `['morse', null]`), wahlweise nur für eine Rolle sichtbar |
+| `['signal', npc, 'RGBY…', {unit, role}]` | Lampe blinkt eine Farbfolge (R, G, B, Y, W, V), wahlweise nur für eine Rolle |
+| `['clap', {label, text, window}]` | Alle klatschen/rufen gleichzeitig (Lautstärke wird nur im eigenen Browser gemessen; ohne Mikro zählt man automatisch) |
 | `['timer', ms, label]` | Countdown oben |
 | `['dark', true]` | Licht aus, Taschenlampe folgt dem Zeiger |
 | `['lockLeave', true]` | Auflegen klappt beim ersten Versuch nicht (`lockText`) |
@@ -38,6 +40,10 @@ Mehrere Fälle zum gemeinsamen Lösen im Videoanruf, auf Basis von anruf.org (gl
 | `['fragment', symbol, wert]` | Sammelstück oben in der Ziel-Leiste |
 | `['set', flag, wert]` · `['label', x]` · `['goto', x]` · `['branch', s => …, x]` | Verzweigungen |
 | `['vote', {id, prompt, options}]` · `['ending', id oder s => id]` | Abstimmung, Ende |
+
+Rätsel: `{q, ph, hash, near, hints, input, by}`. `input`: Text (Standard), `digits` (Tastenfeld), `switches` (mit `n`: Kippschalter, Lösung als 0/1-Folge), `colors` (mit `colors: [[name, farbe]]`: Farbtasten, Lösung als Namen mit Leerzeichen). `by: rolle` = nur diese Rolle kann eingeben.
+
+Seiten können außerdem enthalten: `<div data-tape="clip" data-spectrum></div>` (Tonband mit Frequenzanzeige, z. B. für Wähltöne: Clip mit `dtmf: '0712289'`), `<div data-tuner="clip" data-target="156.625" data-min data-max></div>` (Funkempfänger: Stimme taucht aus dem Rauschen auf), `<div data-cipher="GEHEIMTEXT"></div>` (Chiffrierscheibe), `<div data-photo="id"></div>` (Beweisfoto aus `photos`, mit Zoom und Verschieben), `<div data-face="id"></div>` (Profilbild aus `faces`, z. B. zum Vergleichen), `<div data-shred="id"></div>` (Aktenvernichter-Streifen aus `shreds` zum Sortieren).
 
 Seiten können enthalten: `<div class="uv">…<div class="ink">verborgen</div></div>` (UV-Lampe), `<div data-tape="clip"></div>` (Tonband mit Tempo und rückwärts), `<div data-widget="name"></div>` (Live-Anzeige aus `widgets` des Falls).
 
@@ -56,4 +62,6 @@ Hilfen für Spielende: geteilte Notizen, Protokoll aller Sätze (mit ▶ nochmal
    ```
    Ohne Aufnahmen läuft der Fall trotzdem: Dann spricht die lokale Sprachausgabe des Browsers.
 
-Testen: `http://localhost:8080/fall/?nomedia&fast` in zwei Tabs (`nomedia` ohne Kamera/Mikro, `fast` verkürzt Wartezeiten).
+Figuren ansehen: `fall/tools/gallery.html` zeigt alle Profilbilder (`?big`, `?only=id1,id2`).
+
+Testen: `http://localhost:8080/fall/?nomedia&fast` in zwei Tabs (`nomedia` ohne Kamera/Mikro, `fast` verkürzt Wartezeiten, `debug` macht `G` in der Konsole verfügbar, `G.jump(schritt)` springt).

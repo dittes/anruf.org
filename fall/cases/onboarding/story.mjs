@@ -1,6 +1,9 @@
 // Fall „Erster Arbeitstag“. Lumen Labs, LUNA und alle Personen sind frei erfunden.
 
 const TE = 'technik', PE = 'personal'
+// Der Zwilling im Video kennt Viktor nur von alten Fotos: ohne die Narbe vom Fahrradunfall
+const VIKTOR = {skin: '#dcae90', jaw: .8, hair: {style: 'slick', color: '#2b2622'}, mood: 'smile', top: {style: 'turtleneck', color: '#16161a'}, scene: 'studio'}
+const VIKTOR_ECHT = {...VIKTOR, beard: 'stubble', beardColor: '#2b2622', extras: ['scar'], mood: 'worried', top: {style: 'shirt', color: '#5a6a5a'}, scene: 'lisbon'}
 
 export default {
   id: 'onboarding',
@@ -26,16 +29,21 @@ export default {
   npcs: {
     luna: {name: 'LUNA', sub: 'HR-Assistenz · immer für dich da', tts: {pitch: 1.3, rate: 1.05},
       voice: {model: 'eva_k', fx: 'robot', len: .95},
-      face: {skin: '#f2d6c6', hair: {style: 'bob', color: '#cfc8ea'}, eyes: '#5a7cff', top: {style: 'uniform', color: '#e9e9f2', accent: '#8ea8ff', badge: '#8ea8ff'}, mood: 'smile', bg: ['#3a4a86', '#0b0f22']}},
+      face: {skin: '#f2d6c6', fem: true, jaw: 0, age: 0, hair: {style: 'bob', color: '#9d8fe0'}, eyes: '#5a7cff', lip: '#c45a7a', top: {style: 'blouse', color: '#e9e9f2', accent: '#8ea8ff'}, extras: ['lanyard'], lanyard: '#8ea8ff', mood: 'smile', scene: 'studio', light: '#c8d2ff'}},
     viktor: {name: 'Viktor Lindner', sub: 'Geschäftsführer · Video', tts: {pitch: .9, rate: 1},
       voice: {model: 'thorsten-high', fx: 'video', len: .96},
-      face: {skin: '#dcae90', hair: {style: 'slick', color: '#2b2622'}, mood: 'smile', top: {style: 'sweater', color: '#16161a'}, bg: ['#5a6a7a', '#141a20']}},
+      face: VIKTOR},
     viktor2: {name: 'V. L.', sub: 'privat · Lissabon', look: 'weak', tts: {pitch: .85, rate: .95},
       voice: {model: 'thorsten_emotional', speaker: 4, fx: 'phone', len: 1.02},
-      face: {skin: '#d9a888', hair: {style: 'short', color: '#4a4038'}, beard: 'full', beardColor: '#4a4038', mood: 'worried', top: {style: 'shirt', color: '#5a6a5a'}, bg: ['#6a5a40', '#18120a']}},
+      face: VIKTOR_ECHT},
     kai: {name: 'Kai Winter', sub: 'Team Infrastruktur', tts: {pitch: 1, rate: 1.08},
       voice: {model: 'kerstin', pitch: -3.5, fx: 'call', len: .97},
-      face: {skin: '#c99272', hair: {style: 'buzz', color: '#2aa6a0'}, extras: ['earring'], glasses: 'round', mood: 'neutral', top: {style: 'hoodie', color: '#3a2a4a', accent: '#ddd'}, bg: ['#3a3348', '#0f0c14']}}
+      face: {skin: '#c99272', jaw: .4, eyes: '#2a1a12', hair: {style: 'buzz', color: '#2aa6a0'}, extras: ['earring', 'lanyard'], lanyard: '#2aa6a0', glasses: 'round', mood: 'smirk', top: {style: 'hoodie', color: '#3a2a4a', accent: '#ddd'}, scene: 'server'}}
+  },
+
+  faces: {
+    video: {face: VIKTOR, caption: 'Standbild Willkommensvideo · 00:31'},
+    selfie: {face: VIKTOR_ECHT, caption: 'Foto von V. L. · „Das bin ich, gestern“'}
   },
 
   clips: {
@@ -65,6 +73,22 @@ export default {
       <li><b>00:24</b> „Bei uns zählt jede Stimme. Wirklich jede.“</li>
       <li><b>00:31</b> „Also: Kamera an, Kopf hoch, und bleibt neugierig!“</li>
       </ul>`},
+    chiffre: {title: 'Kais Nachricht', role: TE, html: `
+      <p class="stamp" style="color:var(--amber)">Direktnachricht · Kai Winter · verschlüsselt</p>
+      <p>Kai schreibt: „Schlüssel = so viele Standorte, wie Lumen hat.“ Dreh die Scheibe, bis der Text lesbar ist.</p>
+      <div data-cipher="SBUH OVLYA TPA. SPLZ UPJOAZ SHBA CVY. YBM TPJO HU HBM RHUHS VYPVU."></div>`},
+    standbild: {title: 'Standbild CEO-Video', role: PE, html: `
+      <p class="stamp" style="color:var(--amber)">Personalmappe · Willkommensvideo</p>
+      <p>So sieht Viktor im Willkommensvideo aus. Beschreibt euch die Gesichter gegenseitig, ganz genau.</p>
+      <div data-face="video"></div>`},
+    selfie: {title: 'Foto aus Lissabon', role: TE, html: `
+      <p class="stamp" style="color:var(--amber)">Privatnachricht · V. L.</p>
+      <p>Der Anrufer hat ein Foto geschickt. Bart kann man wachsen lassen. Anderes nicht.</p>
+      <div data-face="selfie"></div>`},
+    farbtest: {title: 'Aufmerksamkeitstest', role: null, html: `
+      <p class="stamp" style="color:var(--amber)">LUNA · Aufmerksamkeitstest</p>
+      <p>LUNAs Lampe blinkt eine Farbfolge. Wegen des Kamerafilters sieht sie <b>nur die Personalmappe</b>.</p>
+      <p>Eingeben kann sie <b>nur der IT-Zugang</b>. Sagt euch die Farben an.</p>`},
     konsole: {title: 'Admin-Konsole', role: TE, html: `
       <div class="paper" style="background:#0d1220;color:#9fc0ff"><p class="stamp" style="color:#ff7a7a">root@lumen-hr:~$ ls /hr</p>
       <p>bewerber/ &nbsp; onboarding/ &nbsp; stimmen/ &nbsp; gesichter/ &nbsp; <b>spiegel/</b> (gesperrt)</p>
@@ -90,6 +114,25 @@ export default {
   },
 
   puzzles: {
+    kai: {
+      q: 'Wo will Kai euch treffen? (das letzte Wort seiner Nachricht)', ph: 'Wort',
+      hash: ['c8b653fa1b4d502a5a856bc7804cbc5bddb00c7b755e1cac3e060841e868fabc', '7a7dca3ec8d0621808648cfa4af9821a795f3e7af1b7262e78bd49b2aa0fda76'],
+      near: {'1d7dbf105ebfa1e6b7daf6e62dee6e952aaa5ea256728a917a43f60d0f2ff528': 'Das ist noch verschlüsselt. Dreht die Scheibe weiter.'},
+      hints: ['Personalmappe: Wie viele Standorte hat Lumen? Steht im Transkript.', 'Sieben Standorte: Verschiebung 7.', 'Der Text endet mit „KANAL ORION“.']
+    },
+    echt: {
+      q: 'Woran erkennt ihr den echten Viktor?', ph: 'Merkmal',
+      hash: ['e4dfea921c7c91ad82a4e2db0672e33a48362ec6162e8e5994c58f3f710d7ce9', '5a83d952e4dc2612004ecc5c11ca81d34b1d4fc15aa2c2491fc99d71b8e180e8', '1f83f55831c5dec2bd5de675e459e69ef9ef1b23a12289c583ae90e6c15c5d70', 'e4dfea921c7c91ad82a4e2db0672e33a48362ec6162e8e5994c58f3f710d7ce9'],
+      near: {'0fc944e32d04ae3b7587c990a3714fc5c41a782888d88b56d665194f36d9894e': 'Bärte wachsen nach. Was wächst nicht weg?', 'e880f340fa627dd86c981cf1ad972e6f759b839fd0d6472649d3710fcf9b3d20': 'Kleidung wechselt man. Schaut ins Gesicht.', '6feaeb30a339dae174c62414d7e03a8aa00d0fa76cabbe41b6bd280d78ed7730': 'Fast. Was ist neben dem Auge?'},
+      hints: ['Personalmappe und IT-Zugang: Beschreibt euch das Gesicht von oben nach unten.', 'Achtet auf die rechte Gesichtshälfte, über dem Auge.', 'Der echte Viktor hat eine Narbe über dem rechten Auge.']
+    },
+    farben: {
+      q: 'Aufmerksamkeitstest: Gebt LUNAs Farbfolge ein.', input: 'colors', by: TE,
+      colors: [['rot', '#ff3b30'], ['grün', '#3ddc84'], ['blau', '#4a8cff'], ['gelb', '#ffd23f']],
+      hash: ['242b20d7735e5718fdf4843f6fea06ccf367186d53030f5e8dffbd514a62f25a'],
+      near: {'447f34fda7d56418e0659c5a8a6925b90eaf609d1c8a8ee3464fbdda41680536': 'Fast. Da kommt noch eine Farbe.', '903b95792ee868a2b7bf4514258acf29e2920195382b1a964cf7557ce6554376': 'Die erste Farbe fehlt.'},
+      hints: ['Personalmappe: Wartet auf die lange Pause, dann sagt jede Farbe an.', 'Es sind sechs Farben. Die erste ist rot.', 'rot, blau, gelb, grün, rot, blau']
+    },
     konsole: {
       q: 'Admin-Konsole: Passwort?', ph: 'Passwort',
       hash: ['9d51385f56c37b322a8cca24e6f952b1ba9f76ee1e568589b6f6210ba37f91b3'],
@@ -145,6 +188,10 @@ export default {
     ['goal', 'Teamfoto: Alle halten gleichzeitig den Daumen hoch.'],
     ['hold', {label: '👍 Daumen hoch fürs Teamfoto', ms: 3000}],
     ['say', 'luna', 'Wundervoll! Ich habe jetzt eintausendzweihundertvier Bilder von euch. Für den Ausweis reicht eins.'],
+    ['say', 'luna', 'Und jetzt einen Applaus für euch selbst! Alle gleichzeitig klatschen, bitte!'],
+    ['goal', 'LUNA misst die Teamenergie: alle gleichzeitig klatschen.'],
+    ['clap', {label: '👏 Alle gleichzeitig klatschen', text: 'LUNA misst die Teamenergie. Klatscht alle im selben Moment, Mikro an.'}],
+    ['say', 'luna', 'Teamenergie: ausreichend. Stimmprobe: gespeichert.'],
     ['say', 'luna', 'Jetzt startet das Willkommensvideo von unserem Geschäftsführer.'],
     ['join', 'viktor'],
     ['say', 'viktor', 'Hallo und herzlich willkommen bei Lumen Labs! Ich bin Viktor, und ich freue mich riesig, dass ihr da seid.'],
@@ -171,8 +218,12 @@ export default {
 
     // ---------- Kapitel 2 ----------
     ['chapter', 2, 'Personalakte'],
+    ['unlock', 'chiffre'],
+    ['chat', 'kai', 'NICHT HIER SCHREIBEN. Ich hab dir was Verschlüsseltes in die Akte gelegt.', {to: TE}],
+    ['goal', 'Kai hat dem IT-Zugang eine verschlüsselte Nachricht geschickt. Wo will Kai euch treffen?'],
+    ['solve', 'kai'],
     ['goal', 'Kai ruft an. Geht ran.'],
-    ['call', 'kai', {note: 'privates Handy · ruft an …'}],
+    ['call', 'kai', {note: 'Kanal Orion · ruft an …'}],
     ['say', 'kai', 'Kai hier. Schnell: LUNA liest Lippen. Macht eure Kameras aus, alle.'],
     ['goal', 'Kai will nicht, dass LUNA mitliest: alle Kameras aus.'],
     ['quiet', 'cam', 'kai', 'Okay. Hört zu. Projekt Spiegel. LUNA baut aus jedem Videoanruf einen digitalen Zwilling. Stimme, Gesicht, Gewohnheiten.', 'Kameras! Alle!'],
@@ -217,12 +268,27 @@ export default {
     ['call', 'viktor2', {note: '+351 … · Lissabon'}],
     ['say', 'viktor2', 'Hallo? Hier ist Viktor. Der echte. Ich habe Lumen vor acht Monaten verlassen.'],
     ['say', 'viktor2', 'Das Video, das ihr gesehen habt, habe ich nie aufgenommen. Das ist mein Zwilling. Er verkauft immer noch meine Firma.'],
+    ['say', 'viktor2', 'Glaubt mir nicht einfach. Ich schicke euch ein Foto von mir. Vergleicht es mit dem Video. Es gibt einen Unterschied, den mein Zwilling nicht kennt.'],
+    ['unlock', 'standbild'], ['unlock', 'selfie'],
+    ['goal', 'Ist der Anrufer der echte Viktor? Vergleicht Foto und Video.'],
+    ['solve', 'echt'],
+    ['say', 'viktor2', 'Die Narbe. Fahrradunfall, vor einem halben Jahr. Mein Zwilling wurde vorher trainiert.'],
+    ['say', 'viktor2', 'LUNA scannt gerade eure Gesichter für den Upload. Haltet eure Kameras zu! Ausschalten reicht nicht, LUNA schaltet sie einfach wieder ein.'],
+    ['goal', 'Haltet eure Kameras mit der Hand zu, damit LUNA euch nicht scannen kann. Kamera AN lassen.'],
+    ['quiet', 'covered', 'viktor2', 'Gut. Jetzt sieht sie nichts mehr. Das kauft uns ein paar Minuten.', 'Da sieht noch jemand in die Kamera!'],
     ['say', 'viktor2', 'Es gibt einen Not-Aus für LUNA. Das habe ich damals selbst eingebaut. Das Wort ist … Ich kann es nicht sagen, LUNA hört mit. Aber ich habe es euch heute schon einmal gesagt. Na ja, nicht ich.'],
     ['leave', 'viktor2', 'off'],
     ['unlock', 'notfall'], ['unlock', 'kommando'],
     ['ambience', null],
     ['join', 'luna', 'glitch'],
     ['say', 'luna', 'Upload bei siebenundachtzig Prozent. Gleich seid ihr zweimal da!'],
+    ['say', 'luna', 'Oh! Jemand hat die Konsole berührt. Konsole gesperrt. Bitte besteht zuerst meinen Aufmerksamkeitstest.'],
+    ['unlock', 'farbtest'],
+    ['signal', 'luna', 'RBYGRB', {unit: 560, role: PE}],
+    ['goal', 'Aufmerksamkeitstest: Personalmappe sieht die Farben, IT-Zugang gibt sie ein.'],
+    ['solve', 'farben', {npc: 'luna', every: 35000, taunts: ['Aufmerksamkeit ist eine Kernkompetenz, {me}.', 'Ich kann das den ganzen Tag machen.']}],
+    ['signal', null],
+    ['say', 'luna', 'Test bestanden. Ihr seid sehr aufmerksam. Zu aufmerksam.'],
     ['leave', 'luna'],
     ['goal', 'Not-Aus für LUNA, bevor der Upload fertig ist!'],
     ['timer', 150000, 'Upload'],

@@ -76,7 +76,33 @@ def duration(path):
     return float(out.strip() or 0)
 
 
+DTMF = {'1': (697, 1209), '2': (697, 1336), '3': (697, 1477), '4': (770, 1209), '5': (770, 1336), '6': (770, 1477),
+        '7': (852, 1209), '8': (852, 1336), '9': (852, 1477), '*': (941, 1209), '0': (941, 1336), '#': (941, 1477)}
+
+
+def render_dtmf(digits, out):
+    """Wähltöne: pro Taste 0,9 s zwei Sinustöne, dazwischen 0,8 s Pause, leises Rauschen wie ein Freisprech-Mitschnitt."""
+    import numpy as np
+    sr = 44100
+    parts = [np.zeros(int(sr * .6))]
+    for d in digits:
+        lo, hi = DTMF[d]
+        t = np.arange(int(sr * .9)) / sr
+        env = np.minimum(1, np.minimum(t, .9 - t) / .02)
+        parts += [(.35 * np.sin(2 * np.pi * lo * t) + .35 * np.sin(2 * np.pi * hi * t)) * env, np.zeros(int(sr * .8))]
+    x = np.concatenate(parts)
+    x += np.random.default_rng(3).normal(0, .012, len(x))
+    with tempfile.TemporaryDirectory() as td:
+        w = Path(td) / 'd.wav'
+        with wave.open(str(w), 'wb') as f:
+            f.setnchannels(1); f.setsampwidth(2); f.setframerate(sr)
+            f.writeframes((np.clip(x, -1, 1) * 32767).astype(np.int16).tobytes())
+        run(['-i', str(w), '-c:a', 'aac', '-b:a', '96k', str(out)])
+
+
 def render(job, out):
+    if job.get('dtmf'):
+        return render_dtmf(job['dtmf'], out)
     v = job['voice']
     with tempfile.TemporaryDirectory() as td:
         raw = Path(td) / 'raw.wav'
@@ -137,7 +163,7 @@ def main_jobs(path, force):
             keep.add(f)
             out = d / f
             # Neu erzeugen, wenn die Datei fehlt oder sich Stimme/Effekte geändert haben
-            sig = json.dumps([j['voice'], j.get('reverse'), j.get('speed'), j.get('bells')], sort_keys=True)
+            sig = json.dumps([j['voice'], j.get('reverse'), j.get('speed'), j.get('bells'), j.get('dtmf')], sort_keys=True)
             if force or not out.exists() or manifest.get(j['key'], {}).get('s') != sig:
                 print(f"[{cid} {i + 1}/{len(js)}] {j['npc']}: {j['text'][:60]}")
                 render(j, out)

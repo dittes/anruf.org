@@ -19,7 +19,7 @@ for (const meta of CASES) {
     if (text.includes('{me}')) for (const n of CODENAMES) add(npc, audioText(text, n), v)
   }
   for (const [id, clip] of Object.entries(c.clips || {})) {
-    add('clip:' + id, clip.text, clip.voice, {reverse: !!clip.reverse, speed: clip.speed || 0, bells: clip.bells || 0})
+    add('clip:' + id, clip.text || '', clip.voice || null, {reverse: !!clip.reverse, speed: clip.speed || 0, bells: clip.bells || 0, dtmf: clip.dtmf || ''})
   }
 }
 process.stdout.write(JSON.stringify(jobs, null, 1))

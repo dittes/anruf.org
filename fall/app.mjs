@@ -318,7 +318,7 @@ async function enter() {
     const p = peerOf(peerId)
     const n = cleanName(d.n) || 'Gast'
     if (p.name === '…') { toast(`${n} ist in der Leitung`); sysMsg(`${n} ist dazugekommen`) }
-    p.name = n; p.mic = !!d.mic; p.cam = !!d.cam; p.hasCam = d.hc !== false
+    p.name = n; p.mic = !!d.mic; p.cam = !!d.cam; p.hasCam = d.hc !== false; p.hasMic = d.hm !== false; p.covered = !!d.cv
     updateTile(p)
     G.onPeerMeta(p)
     if (G.state) G.render(); else renderLobby()
@@ -347,10 +347,11 @@ async function enter() {
     renderLobby()
   }
   room.onPeerStream = (s, id) => setVideo(peerOf(id), s)
+  startSensors()
   G.init()
 }
 function sendMeta(target) {
-  try { R.meta?.send({n: myName, mic: R.mic, cam: R.cam, hc: R.stream?.getVideoTracks().length > 0}, target ? {target} : undefined)?.catch?.(() => {}) } catch {}
+  try { R.meta?.send({n: myName, mic: R.mic, cam: R.cam, hc: R.stream?.getVideoTracks().length > 0, hm: R.stream?.getAudioTracks().length > 0, cv: !!R.covered}, target ? {target} : undefined)?.catch?.(() => {}) } catch {}
 }
 function players() {
   return [selfId, ...[...R.peers.values()].filter(p => p.name !== '…').map(p => p.id)].sort()
@@ -360,7 +361,11 @@ const micOf = id => id === selfId ? R.mic : !!R.peers.get(id)?.mic
 const camOf = id => id === selfId ? R.cam : !!R.peers.get(id)?.cam
 // Wer gar keine Kamera hat, kann sie nicht anschalten: zählt bei „alle Kameras an“ als erfüllt
 const hasCamOf = id => id === selfId ? R.stream?.getVideoTracks().length > 0 : R.peers.get(id)?.hasCam !== false
-const condOk = (kind, id) => kind === 'mic' ? !micOf(id) : kind === 'cam' ? !camOf(id) : kind === 'camOn' ? camOf(id) || !hasCamOf(id) : !micOf(id) && !camOf(id)
+const hasMicOf = id => id === selfId ? R.stream?.getAudioTracks().length > 0 : R.peers.get(id)?.hasMic !== false
+const coveredOf = id => id === selfId ? !!R.covered : !!R.peers.get(id)?.covered
+// covered: Kamera an, aber mit der Hand zugehalten (Helligkeit wird nur im eigenen Browser gemessen)
+const condOk = (kind, id) => kind === 'mic' ? !micOf(id) : kind === 'cam' ? !camOf(id) : kind === 'camOn' ? camOf(id) || !hasCamOf(id)
+  : kind === 'covered' ? coveredOf(id) || !hasCamOf(id) : !micOf(id) && !camOf(id)
 const roleName = r => !r ? '' : r === 'beide' ? Object.values(G.c.roles).map(x => x.name).join(' + ') : G.c.roles[r]?.name || r
 
 /* ---- Kacheln ---- */
@@ -370,6 +375,7 @@ function makeTile(p) {
     p.npc ? h('div', {class: 'pic', html: portrait(p.face)}) : h('div', {class: 'face'}, h('span', {class: 'ini'}, (p.name || '?').slice(0, 1).toUpperCase())),
     p.npc ? h('canvas', {class: 'static', width: 96, height: 60}) : h('video', {autoplay: true, playsinline: true, muted: !!p.self}),
     p.npc ? h('div', {class: 'lamp'}) : null,
+    p.npc ? h('div', {class: 'signote', hidden: true}) : null,
     h('div', {class: 'label'}, h('span', {class: 'nm'}, p.self ? `${p.name} (du)` : p.name), h('span', {class: 'role'}), h('span', {class: 'mut', title: 'stumm'}, '🔇')),
     p.npc ? h('div', {class: 'sub2'}, h('span', {class: 'camoff'}, 'Kamera aus'), ' · ', p.sub || '') : null
   )
@@ -448,6 +454,7 @@ const G = {
     if (sess.get('host.' + this.room())) {
       if (saved?.state?.phase === 'play') {
         this.state = {...saved.state, host: selfId, paused: true, pausedAt: Date.now(), pausedBy: '', v: saved.state.v + 1}
+        this.assignRoles()   // neue Verbindungs-ID nach dem Neuladen: Rollen neu verteilen
         toast('Gespeicherter Fall geladen. Drückt auf „Weiter“, wenn alle da sind.', 6000)
       } else this.state = this.fresh()
     } else setTimeout(() => { this.waitedLong = true; if (!this.state) renderLobby() }, 6000)
@@ -459,7 +466,7 @@ const G = {
     return {v: 1, caseId, phase: 'lobby', host: selfId, step: 0, stepAt: 0, roles: {}, names: {}, npcs: [], sub: null, subN: 0,
       pages: [], puzzle: null, puzzleAt: 0, solved: [], hints: {}, tries: [], knock: null, call: null, ask: null, vote: null, votes: {},
       results: {}, flags: {}, ending: null, fxN: 0, fxq: [], startedAt: 0, endedAt: 0, quiet: null, chapter: null, goal: '', done: [],
-      hold: null, timer: null, morse: null, dark: false, lockLeave: false, amb: null, paused: false, chats: [], frags: [], notes: {text: '', by: ''}, strikes: 0}
+      hold: null, clap: null, timer: null, morse: null, dark: false, lockLeave: false, amb: null, paused: false, chats: [], frags: [], notes: {text: '', by: ''}, strikes: 0}
   },
   claimHost() {
     this.state = this.state ? {...this.state, host: selfId} : this.fresh()
@@ -521,6 +528,7 @@ const G = {
       this.assignRoles(); this.commit()
     } else if (d.t === 'answer' && s.puzzle && s.puzzle === d.p && typeof d.a === 'string') {
       const a = d.a.slice(0, 60), pz = this.c.puzzles[d.p]
+      if (pz.by && s.roles[from] !== pz.by && s.roles[from] !== 'beide') return
       sha(this.c.id, norm(a)).then(hash => {
         if (this.state.puzzle !== d.p) return
         const ok = pz.hash.includes(hash), near = !ok && pz.near?.[hash]
@@ -551,6 +559,8 @@ const G = {
       this.commit()
     } else if (d.t === 'vote' && s.vote && s.vote.options.some(o => o.id === d.v)) {
       s.votes[from] = d.v; this.commit()
+    } else if (d.t === 'loud' && s.clap) {
+      rt.loud ||= {}; rt.loud[from] = Date.now()
     } else if (d.t === 'hold' && s.hold) {
       rt.holders ||= {}; rt.holders[from] = !!d.on
     } else if (d.t === 'notes' && typeof d.text === 'string') {
@@ -638,7 +648,16 @@ const G = {
       case 'dark': s.dark = !!a; this.fx(a ? 'off' : 'right'); this.next(); break
       case 'lockLeave': s.lockLeave = !!a; this.next(); break
       case 'ambience': s.amb = a || null; this.next(); break
-      case 'morse': s.morse = a && b ? {npc: a, text: b, unit: st[3] || 260} : null; this.next(); break
+      case 'morse': s.morse = a && b ? {npc: a, text: b, unit: st[3] || 260, role: st[4] || null, mode: 'morse'} : null; this.next(); break
+      case 'signal': s.morse = a && b ? {npc: a, text: b, unit: st[3]?.unit || 520, role: st[3]?.role || null, mode: 'colors'} : null; this.next(); break
+      case 'clap': {   // alle gleichzeitig klatschen oder rufen
+        const ids = players()
+        if (!s.clap) { s.clap = {label: a.label, text: a.text || '', window: a.window || 1400, count: 0, need: ids.length}; rt.loud = {} }
+        const ok = ids.filter(id => !hasMicOf(id) || (rt.loud?.[id] && now - rt.loud[id] < s.clap.window))
+        s.clap.count = ok.length; s.clap.need = ids.length
+        if (ok.length >= ids.length) { s.clap = null; this.fx('right'); this.next() }
+        break
+      }
       case 'timer': s.timer = a ? {until: now + a * (SPEED < 1 ? .3 : 1), label: b || 'Zeit'} : null; this.next(); break
       case 'chat': {
         const o = st[3] || {}
@@ -717,7 +736,7 @@ const G = {
       }
       case 'ending': {
         const id = typeof a === 'function' ? a(s) : a
-        s.ending = id; s.phase = 'end'; s.endedAt = now; s.npcs = []; s.puzzle = null; s.timer = null; s.morse = null; s.dark = false; s.amb = null; s.lockLeave = false; s.quiet = null; s.ask = null
+        s.ending = id; s.phase = 'end'; s.endedAt = now; s.clap = null; s.hold = null; s.npcs = []; s.puzzle = null; s.timer = null; s.morse = null; s.dark = false; s.amb = null; s.lockLeave = false; s.quiet = null; s.ask = null
         s.subN++; s.sub = {id: s.subN, npc: null, text: this.c.endings[id].text}
         this.fx('end'); this.next()
         break
@@ -786,7 +805,7 @@ const G = {
     }
     renderDossier(s, role)
     renderPuzzle(s)
-    renderKnock(s); renderCall(s); renderAsk(s); renderVote(s); renderHold(s); renderQuiet(s); renderPause(s); renderNotes(s); renderFrags(s)
+    renderKnock(s); renderCall(s); renderAsk(s); renderVote(s); renderHold(s); renderClap(s); renderQuiet(s); renderPause(s); renderNotes(s); renderFrags(s)
     for (const p of [R.self, ...R.peers.values()]) updateTile(p)
     if (s.phase === 'end') renderEnd(s)
     else { $('#end').hidden = true; $('#end').dataset.done = '' }
@@ -826,9 +845,17 @@ const G = {
       x.putImageData(img, 0, 0)
     }
     // Morse: Lampe auf der Kachel blinkt in Endlosschleife
-    const lamp = s?.morse && $(`.tile[data-npc="${s.morse.npc}"] .lamp`)
+    const sm = s?.morse, myRole = s?.roles?.[selfId]
+    const canSee = sm && (!sm.role || myRole === sm.role || myRole === 'beide')
+    const lamp = canSee && $(`.tile[data-npc="${sm.npc}"] .lamp`)
     $$('.tile .lamp.on').forEach(l => { if (l !== lamp) l.classList.remove('on') })
-    if (lamp) lamp.classList.toggle('on', morseAt(s.morse.text, s.morse.unit, Date.now()))
+    $$('.tile .signote').forEach(n => n.hidden = !(sm && !canSee && n.closest('.tile').dataset.npc === sm.npc))
+    if (sm && !canSee) $$('.tile .signote').forEach(n => n.textContent = `📡 sendet ein Signal. Nur ${roleName(sm.role)} kann es sehen.`)
+    if (lamp) {
+      if (sm.mode === 'colors') { const c = colorAt(sm.text, sm.unit, Date.now()); lamp.classList.add('col'); lamp.style.setProperty('--lc', c || 'transparent'); lamp.classList.toggle('on', !!c) }
+      else { lamp.classList.remove('col'); lamp.classList.toggle('on', morseAt(sm.text, sm.unit, Date.now())) }
+    }
+    renderClapLive()
     if (!this._wAt || Date.now() - this._wAt > 850) {
       this._wAt = Date.now()
       for (const el of $$('[data-widget]')) {
@@ -943,6 +970,7 @@ function renderDossier(s, role) {
     tabs.replaceChildren(...vis.map(id => h('button', {class: 'tab' + (G.c.pages[id].role ? ' own' : ''), 'aria-selected': id === G.activePage,
       onclick: () => { G.activePage = id; renderDossier(G.state, G.state.roles[selfId]) }}, G.c.pages[id].title)))
     const pg = G.c.pages[G.activePage]
+    $$('.tuner', $('#page')).forEach(t => t._cleanup?.())
     $('#page').innerHTML = pg ? (pg.role ? `<p class="ownnote">Nur in deiner Akte (${roleName(pg.role)}). Die anderen sehen das nicht.</p>` : '') + pg.html : '<p class="note">Noch keine Unterlagen.</p>'
     mountPage($('#page'))
   }
@@ -963,10 +991,15 @@ function mountPage(root) {
   })
   // Tonband: abspielen, langsamer/schneller, rückwärts
   $$('[data-tape]', root).forEach(el => mountTape(el, el.dataset.tape))
+  $$('[data-tuner]', root).forEach(mountTuner)
+  $$('[data-cipher]', root).forEach(mountCipher)
+  $$('[data-photo]', root).forEach(mountPhoto)
+  $$('[data-face]', root).forEach(el => { const f = G.c.faces?.[el.dataset.face]; if (f) el.innerHTML = portrait(f.face) + `<div class="facecap">${f.caption || ''}</div>` })
+  $$('[data-shred]', root).forEach(mountShred)
 }
 function mountTape(el, clipId) {
   const clip = G.c.clips?.[clipId]; if (!clip) return
-  const m = AU.manifest[akey('clip:' + clipId, clip.text)]
+  const m = AU.manifest[akey('clip:' + clipId, clip.text || '')]
   el.classList.add('tape')
   el.replaceChildren(
     h('div', {class: 'reels'}, h('i'), h('i')),
@@ -993,6 +1026,7 @@ function mountTape(el, clipId) {
     const g = a.createGain(); g.gain.value = voiceVol
     s.connect(g).connect(master); s.start()
     src = s; el.classList.add('playing'); $('[data-a=play]', el).textContent = '■ Stopp'
+    if (el.dataset.spectrum != null) spectrum(el, s, g)
     s.onended = () => { if (src === s) reset() }
   }
 }
@@ -1021,10 +1055,16 @@ function renderPuzzle(s) {
     box.dataset.id = s.puzzle
     $('#pq').textContent = fill(p.q); $('#pa').placeholder = p.ph || 'Lösung'; $('#pa').value = ''
     $('#pa').inputMode = p.input === 'digits' ? 'numeric' : 'text'
+    $('#pa').readOnly = p.input === 'switches' || p.input === 'colors'
     $('#keypad').hidden = p.input !== 'digits'
+    buildInput(p)
     $('#hintBtn').classList.remove('pulse')
     setSide('akte')
   }
+  const role = s.roles[selfId], locked = p.by && role !== p.by && role !== 'beide'
+  $('#puzzleForm').hidden = locked; $('#keypad').hidden = locked || p.input !== 'digits'; $('#pextra').hidden = locked
+  $('#pby').hidden = !p.by
+  $('#pby').textContent = locked ? `Eingeben kann nur: ${roleName(p.by)}. Ihr helft mit dem, was in eurer Akte steht.` : p.by ? `Nur du (${roleName(p.by)}) kannst hier eingeben.` : ''
   const n = s.hints[s.puzzle] || 0
   $('#hints').replaceChildren(...p.hints.slice(0, n).map((x, i) => h('li', {}, h('b', {}, `Hinweis ${i + 1}: `), x)))
   $('#hintBtn').hidden = n >= p.hints.length
@@ -1091,7 +1131,7 @@ function renderQuiet(s) {
   const q = s.quiet
   $('#quiet').hidden = !q || s.phase !== 'play'
   if (!q) return
-  const what = {mic: 'alle Mikrofone aus', cam: 'alle Kameras aus', both: 'alle Kameras und Mikrofone aus', camOn: 'alle Kameras an'}[q.kind]
+  const what = {mic: 'alle Mikrofone aus', cam: 'alle Kameras aus', both: 'alle Kameras und Mikrofone aus', camOn: 'alle Kameras an', covered: 'alle Kameras mit der Hand zuhalten (Kamera an lassen!)'}[q.kind]
   const ids = players(), ok = ids.filter(id => condOk(q.kind, id)).length
   $('#quietText').textContent = `${G.c.npcs[q.npc]?.name || 'Jemand'} wartet: ${what}`
   $('#quietCount').textContent = `${ok}/${ids.length}`
@@ -1182,6 +1222,200 @@ function drawFile({team, time, code, hints}) {
   return c
 }
 
+
+/* =================== Sensoren (bleiben im Browser) =================== */
+// Helligkeit der eigenen Kamera: „zugehalten“, wenn die Kamera an ist und das Bild fast schwarz.
+// Lautstärke des eigenen Mikros: beim gemeinsamen Klatschen meldet der Browser nur „laut“, keine Töne.
+function startSensors() {
+  const c = document.createElement('canvas'); c.width = 16; c.height = 12
+  const x = c.getContext('2d', {willReadFrequently: true})
+  setInterval(() => {
+    const v = $('video', R.self?.tile || document.body)
+    if (!R.cam || !v?.videoWidth) { if (R.covered) { R.covered = false; sendMeta(); G.render() } return }
+    x.drawImage(v, 0, 0, 16, 12)
+    const d = x.getImageData(0, 0, 16, 12).data
+    let sum = 0; for (let i = 0; i < d.length; i += 4) sum += .2126 * d[i] + .7152 * d[i + 1] + .0722 * d[i + 2]
+    R.lum = sum / (d.length / 4) / 255
+    const cov = R.covered ? R.lum < .16 : R.lum < .1   // mit Hysterese
+    if (cov !== !!R.covered) { R.covered = cov; sendMeta(); G.render() }
+  }, 400)
+  const tr = R.stream?.getAudioTracks()[0]
+  if (!tr) return
+  try {
+    const a = audio(), src = a.createMediaStreamSource(new MediaStream([tr])), an = a.createAnalyser()
+    an.fftSize = 1024; src.connect(an)
+    const buf = new Uint8Array(an.fftSize)
+    let last = 0
+    setInterval(() => {
+      an.getByteTimeDomainData(buf)
+      let peak = 0; for (const v of buf) peak = Math.max(peak, Math.abs(v - 128) / 128)
+      R.level = R.mic ? peak : 0
+      if (G.state?.clap && R.mic && peak > .5 && Date.now() - last > 350) { last = Date.now(); G.send({t: 'loud'}) }
+    }, 50)
+  } catch {}
+}
+function renderClap(s) {
+  $('#clap').hidden = !s.clap
+  if (!s.clap) return
+  $('#clapLabel').textContent = s.clap.label
+  $('#clapText').textContent = s.clap.text || 'Alle gleichzeitig, so laut ihr könnt. Mikro muss an sein.'
+  $('#clapCount').textContent = `${s.clap.count} von ${s.clap.need} gehört`
+  $('#clapMic').hidden = R.mic || !R.stream?.getAudioTracks().length
+}
+function renderClapLive() {
+  if ($('#clap').hidden) return
+  $('#clapBar').style.width = Math.min(100, (R.level || 0) * 200) + '%'
+  $('#clapBar').classList.toggle('hot', (R.level || 0) > .5)
+}
+
+/* =================== Farbsignal =================== */
+const COLORS = {R: '#ff3b30', G: '#3ddc84', B: '#4a8cff', Y: '#ffd23f', W: '#ffffff', V: '#b98cff'}
+function colorAt(text, unit, now) {
+  const seq = []
+  for (const ch of text.toUpperCase()) seq.push([COLORS[ch] || null, 1], [null, .5])
+  seq.push([null, 4])
+  const total = seq.reduce((a, [, d]) => a + d, 0)
+  let t = (now / unit) % total
+  for (const [c, d] of seq) { if (t < d) return c; t -= d }
+  return null
+}
+
+/* =================== Eingaben: Schalter und Farbtasten =================== */
+function buildInput(p) {
+  const box = $('#pextra'); box.replaceChildren(); box.className = ''
+  if (p.input === 'switches') {
+    box.className = 'switches'
+    const st = Array(p.n || 8).fill(0)
+    const sync = () => { $('#pa').value = st.join('') }
+    st.forEach((_, i) => box.append(h('button', {type: 'button', class: 'sw', 'aria-pressed': 'false', onclick: e => {
+      st[i] = st[i] ? 0 : 1; e.currentTarget.setAttribute('aria-pressed', !!st[i]); tone(st[i] ? 520 : 360, 0, .05, 'square', .05); sync()
+    }}, h('i'), h('span', {}, (p.labels?.[i]) || 'S' + (i + 1)))))
+    sync()
+  }
+  if (p.input === 'colors') {
+    box.className = 'colorpad'
+    const seq = []
+    const sync = () => { $('#pa').value = seq.join(' ') }
+    for (const [name, col] of p.colors) box.append(h('button', {type: 'button', class: 'cp', style: `--c:${col}`, onclick: () => { seq.push(name); tone(300 + seq.length * 60, 0, .08, 'sine', .08); sync() }}, name))
+    box.append(h('button', {type: 'button', class: 'cp del', onclick: () => { seq.pop(); sync() }}, '⌫'))
+    sync()
+  }
+}
+
+/* =================== Seiten-Widgets =================== */
+// Frequenzanzeige beim Tonband: zeigt die zwei stärksten Töne (für Wähltöne)
+function spectrum(el, src, g) {
+  const a = audio(), an = a.createAnalyser(); an.fftSize = 8192; g.connect(an)
+  let out = $('.spec', el); if (!out) { out = h('div', {class: 'spec'}); el.append(out) }
+  const bins = new Float32Array(an.frequencyBinCount), hz = a.sampleRate / an.fftSize
+  const loop = () => {
+    if (!el.classList.contains('playing')) { out.textContent = 'Frequenzanzeige: —'; return }
+    an.getFloatFrequencyData(bins)
+    const peaks = []
+    for (let i = Math.floor(500 / hz); i < 1700 / hz; i++) if (bins[i] > -48 && bins[i] >= bins[i - 1] && bins[i] >= bins[i + 1]) peaks.push([bins[i], i * hz])
+    peaks.sort((x, y) => y[0] - x[0])
+    const top = []
+    for (const [, f] of peaks) { if (top.every(t => Math.abs(t - f) > 60)) top.push(f); if (top.length === 2) break }
+    out.textContent = top.length === 2 ? `Frequenzanzeige: ${top.sort((x, y) => x - y).map(f => Math.round(f / 5) * 5 + ' Hz').join(' + ')}` : 'Frequenzanzeige: —'
+    requestAnimationFrame(loop)
+  }
+  loop()
+}
+// Funkempfänger: Frequenz einstellen, bis die Stimme aus dem Rauschen auftaucht
+function mountTuner(el) {
+  const clip = G.c.clips?.[el.dataset.tuner]; if (!clip) return
+  const m = AU.manifest[akey('clip:' + el.dataset.tuner, clip.text || '')]
+  const min = Number(el.dataset.min || 150), max = Number(el.dataset.max || 170), target = Number(el.dataset.target)
+  el.classList.add('tuner')
+  el.replaceChildren(
+    h('div', {class: 'freq'}, h('b', {}, min.toFixed(3).replace('.', ',')), ' MHz'),
+    h('div', {class: 'sig'}, h('i')),
+    h('input', {type: 'range', min, max, step: .005, value: min, 'aria-label': 'Frequenz'}),
+    h('div', {class: 'tctl'}, h('button', {class: 'btn', type: 'button'}, '▶ Empfänger an'), h('button', {class: 'btn fine', type: 'button', 'data-d': -.005}, '−'), h('button', {class: 'btn fine', type: 'button', 'data-d': .005}, '+')))
+  let nodes = null
+  const range = $('input', el)
+  const update = () => {
+    const f = Number(range.value), d = Math.abs(f - target)
+    const v = Math.max(0, 1 - d / .06)
+    $('.freq b', el).textContent = f.toFixed(3).replace('.', ',')
+    $('.sig i', el).style.width = Math.round(Math.max(.04, v) * 100) + '%'
+    if (nodes) { nodes.vg.gain.value = v * voiceVol; nodes.ng.gain.value = (1 - v * .85) * .18 * voiceVol }
+  }
+  range.oninput = update
+  $$('.fine', el).forEach(b => b.onclick = () => { range.value = (Number(range.value) + Number(b.dataset.d)).toFixed(3); update() })
+  $('.tctl .btn', el).onclick = async e => {
+    const a = audio()
+    if (nodes) { nodes.stop(); nodes = null; e.target.textContent = '▶ Empfänger an'; el.classList.remove('playing'); return }
+    const nb = a.createBuffer(1, a.sampleRate * 2, a.sampleRate), nd = nb.getChannelData(0)
+    for (let i = 0; i < nd.length; i++) nd[i] = Math.random() * 2 - 1
+    const ns = a.createBufferSource(); ns.buffer = nb; ns.loop = true
+    const ng = a.createGain(), vg = a.createGain(), bp = a.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 1800; bp.Q.value = .5
+    ns.connect(bp).connect(ng).connect(master); ns.start()
+    let vs = null
+    if (m) { const buf = await a.decodeAudioData(await (await fetch(AU.base + m.f)).arrayBuffer()); vs = a.createBufferSource(); vs.buffer = buf; vs.loop = true; vs.connect(vg).connect(master); vs.start() }
+    nodes = {ng, vg, stop: () => { try { ns.stop(); vs?.stop() } catch {} }}
+    stopVoice(); e.target.textContent = '■ Empfänger aus'; el.classList.add('playing'); update()
+  }
+  el._cleanup = () => nodes?.stop()
+  update()
+}
+// Chiffrierscheibe: verschiebt jeden Buchstaben, bis der Text lesbar wird
+function mountCipher(el) {
+  const text = el.dataset.cipher.toUpperCase(), A = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  let k = 0
+  el.classList.add('cipher')
+  const draw = () => {
+    const dec = text.replace(/[A-Z]/g, ch => A[(A.indexOf(ch) - k + 26) % 26])
+    el.replaceChildren(
+      h('div', {class: 'wheel'}, h('div', {class: 'row'}, ...[...A].map(c => h('span', {}, c))), h('div', {class: 'row sh'}, ...[...A].map((_, i) => h('span', {}, A[(i - k + 26) % 26])))),
+      h('div', {class: 'tctl'}, h('button', {class: 'btn', type: 'button', onclick: () => { k = (k + 25) % 26; draw() }}, '◀'), h('b', {}, `Verschiebung ${k}`), h('button', {class: 'btn', type: 'button', onclick: () => { k = (k + 1) % 26; draw() }}, '▶')),
+      h('div', {class: 'dec'}, dec))
+  }
+  draw()
+}
+// Beweisfoto mit Lupe: zoomen und verschieben
+function mountPhoto(el) {
+  const svg = G.c.photos?.[el.dataset.photo]; if (!svg) return
+  el.classList.add('photo')
+  el.innerHTML = `<div class="vp"><div class="img">${svg}</div></div><div class="tctl"><button class="btn" type="button" data-z="1.6">＋</button><button class="btn" type="button" data-z=".625">－</button><button class="btn" type="button" data-z="0">⟲</button><span class="mono">Ziehen zum Verschieben</span></div>`
+  const vp = $('.vp', el), img = $('.img', el)
+  let z = 1, tx = 0, ty = 0
+  const apply = () => {
+    const w = vp.clientWidth, hh = vp.clientHeight
+    tx = Math.min(0, Math.max(w - w * z, tx)); ty = Math.min(0, Math.max(hh - hh * z, ty))
+    img.style.transform = `translate(${tx}px,${ty}px) scale(${z})`
+  }
+  const zoomAt = (f, cx, cy) => { const nz = Math.min(10, Math.max(1, z * f)); tx = cx - (cx - tx) * nz / z; ty = cy - (cy - ty) * nz / z; z = nz; apply() }
+  $$('[data-z]', el).forEach(b => b.onclick = () => { const f = Number(b.dataset.z); if (!f) { z = 1; tx = ty = 0; apply() } else zoomAt(f, vp.clientWidth / 2, vp.clientHeight / 2) })
+  vp.addEventListener('wheel', e => { e.preventDefault(); const r = vp.getBoundingClientRect(); zoomAt(e.deltaY < 0 ? 1.25 : .8, e.clientX - r.left, e.clientY - r.top) }, {passive: false})
+  let drag = null
+  vp.addEventListener('pointerdown', e => { drag = [e.clientX - tx, e.clientY - ty]; vp.setPointerCapture(e.pointerId) })
+  vp.addEventListener('pointermove', e => { if (!drag) return; tx = e.clientX - drag[0]; ty = e.clientY - drag[1]; apply() })
+  vp.addEventListener('pointerup', () => { drag = null })
+  apply()
+}
+// Aktenvernichter-Streifen: zwei anklicken, um sie zu tauschen, bis der Text lesbar ist
+function mountShred(el) {
+  const sh = G.c.shreds?.[el.dataset.shred]; if (!sh) return
+  const L = Math.max(...sh.lines.map(l => l.length)), n = sh.n || 8, w = Math.ceil(L / n)
+  const lines = sh.lines.map(l => l.padEnd(n * w, ' '))
+  const store = (G.shredOrder ||= {})
+  const order = store[el.dataset.shred] ||= (sh.order || [...Array(n).keys()].reverse()).slice()
+  let sel = null
+  el.classList.add('shred')
+  const draw = () => {
+    const solved = order.every((v, i) => v === i)
+    el.classList.toggle('solved', solved)
+    el.replaceChildren(h('div', {class: 'strips'}, ...order.map((si, pos) => h('button', {type: 'button', class: 'strip' + (sel === pos ? ' sel' : ''), style: `--r:${((si * 37) % 7 - 3) * .4}deg`,
+      onclick: () => {
+        if (sel === null) { sel = pos } else { [order[sel], order[pos]] = [order[pos], order[sel]]; sel = null; tone(400 + pos * 30, 0, .05, 'triangle', .05) }
+        draw()
+      }}, ...lines.map(l => h('span', {}, l.slice(si * w, si * w + w).replace(/ /g, ' ')))))),
+      h('p', {class: 'mono'}, solved ? '✓ Wieder zusammengesetzt' : 'Zwei Streifen nacheinander antippen, um sie zu tauschen.'))
+  }
+  draw()
+}
+
 /* =================== Bedienung =================== */
 function bind() {
   $('#micBtn').onclick = () => setMic(!R.mic)
@@ -1258,3 +1492,6 @@ function bind() {
 
 setupHome()
 bind()
+
+// ?debug: Spielstand in der Konsole erreichbar (zum Testen: G.jump(schritt))
+if (qs.has('debug')) { window.G = G; G.jump = i => { G.state.step = i; G.state.stepAt = Date.now(); G.rt = {}; G.commit() } }
