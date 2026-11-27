@@ -1,3 +1,5 @@
+Hier ist der code den du generiert hast, er funktioniert aber nicht. Fixe das:
+
 <!doctype html>
 <html lang="de" data-theme="auto">
 <head>
@@ -98,6 +100,7 @@ body {
   transition: background-color 0.35s var(--ease), color 0.35s var(--ease);
 }
 
+/* Archival Paper Noise Texture */
 body::before {
   content: "";
   position: fixed;
@@ -109,6 +112,7 @@ body::before {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
+/* Ambient Warm Aura */
 .aura {
   position: fixed;
   z-index: 0;
@@ -130,6 +134,7 @@ button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
 .mono { font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.06em; text-transform: uppercase; }
 
+/* Views */
 .view { display: none; position: relative; z-index: 1; }
 body[data-view="home"] #home,
 body[data-view="join"] #join,
@@ -223,6 +228,7 @@ body[data-view="room"] #room { display: flex; }
 .icon-btn:hover { transform: translateY(-1px) rotate(8deg); border-color: var(--line-strong); }
 .icon-btn svg { width: 17px; height: 17px; }
 
+/* Buttons */
 .btn {
   height: 48px;
   padding: 0 20px;
@@ -254,7 +260,10 @@ body[data-view="room"] #room { display: flex; }
 /* ==========================================================================
    HOME VIEW (#home)
    ========================================================================== */
-#home { flex-direction: column; min-height: 100dvh; }
+#home {
+  flex-direction: column;
+  min-height: 100dvh;
+}
 #home::before {
   content: "";
   position: absolute;
@@ -301,7 +310,10 @@ body[data-view="room"] #room { display: flex; }
   letter-spacing: -0.055em;
 }
 .hero h1 .ln { display: block; overflow: hidden; padding-bottom: 0.06em; }
-.hero h1 .ln > span { display: inline-block; animation: slideUp 0.75s var(--ease) both; }
+.hero h1 .ln > span {
+  display: inline-block;
+  animation: slideUp 0.75s var(--ease) both;
+}
 .hero h1 .ln:nth-child(2) > span { animation-delay: 0.07s; }
 .hero h1 .ln:nth-child(3) > span { animation-delay: 0.14s; }
 .hero h1 em { font-style: normal; color: var(--accent); }
@@ -316,6 +328,7 @@ body[data-view="room"] #room { display: flex; }
 }
 .lede strong { color: var(--ink); font-weight: 650; }
 
+/* Quick Room Composer Bar */
 .quick-composer {
   width: 100%;
   max-width: 520px;
@@ -394,7 +407,12 @@ body[data-view="room"] #room { display: flex; }
   font-size: 0.78rem;
 }
 
-.dial-col { display: grid; justify-items: center; gap: 18px; }
+/* Tactile Rotary Sonar Call Orb */
+.dial-col {
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+}
 .orb {
   position: relative;
   width: clamp(240px, 64vw, 356px);
@@ -475,8 +493,14 @@ body[data-view="room"] #room { display: flex; }
 .call-btn:hover { transform: scale(1.055); }
 .call-btn:active { transform: scale(0.94); }
 
-.orb-caption { font-family: var(--mono); font-size: 0.72rem; color: var(--mute); text-align: center; }
+.orb-caption {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--mute);
+  text-align: center;
+}
 
+/* Bento Feature Grid */
 .bento-sec {
   width: 100%;
   max-width: 1280px;
@@ -485,10 +509,20 @@ body[data-view="room"] #room { display: flex; }
   display: grid;
   gap: 18px;
 }
-.sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.sec-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
 .sec-head h2 { margin: 0; font-size: clamp(1.45rem, 3.2vw, 2.1rem); letter-spacing: -0.035em; font-weight: 800; }
 
-.bento-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(275px, 1fr)); gap: 14px; }
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(275px, 1fr));
+  gap: 14px;
+}
 .bento-card {
   position: relative;
   background: var(--card);
@@ -500,7 +534,11 @@ body[data-view="room"] #room { display: flex; }
   align-content: start;
   transition: transform 0.4s var(--spring), border-color 0.3s, box-shadow 0.3s;
 }
-.bento-card:hover { transform: translateY(-4px); border-color: var(--line-strong); box-shadow: var(--shadow-md); }
+.bento-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--line-strong);
+  box-shadow: var(--shadow-md);
+}
 .bento-ic {
   width: 42px;
   height: 42px;
@@ -562,7 +600,11 @@ body[data-view="room"] #room { display: flex; }
   .lobby-wrap { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 44px; align-items: start; }
 }
 
-.pv-card { display: grid; gap: 14px; }
+/* Video Preview Stage */
+.pv-card {
+  display: grid;
+  gap: 14px;
+}
 .pv-stage {
   position: relative;
   aspect-ratio: 16 / 10;
@@ -695,6 +737,7 @@ body[data-view="room"] #room { display: flex; }
 }
 .mic-check-btn.rec { background: var(--accent); border-color: var(--accent); }
 
+/* Filter & Studio Panel */
 .studio-box {
   background: var(--card);
   border: 1px solid var(--line);
@@ -703,7 +746,13 @@ body[data-view="room"] #room { display: flex; }
   display: grid;
   gap: 12px;
 }
-.filter-strip { display: flex; gap: 7px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+.filter-strip {
+  display: flex;
+  gap: 7px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  scrollbar-width: none;
+}
 .filter-strip::-webkit-scrollbar { display: none; }
 .flt-chip {
   flex: none;
@@ -717,7 +766,11 @@ body[data-view="room"] #room { display: flex; }
   color: var(--ink-soft);
   transition: all 0.25s;
 }
-.flt-chip[aria-checked="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.flt-chip[aria-checked="true"] {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
 
 .dev-details summary {
   cursor: pointer;
@@ -733,8 +786,19 @@ body[data-view="room"] #room { display: flex; }
   padding: 4px 0;
 }
 .dev-details summary::-webkit-details-marker { display: none; }
-.dev-grid { display: grid; gap: 10px; padding-top: 12px; border-top: 1px solid var(--line); margin-top: 8px; }
-.dev-grid label { display: grid; gap: 4px; font-size: 0.82rem; color: var(--mute); }
+.dev-grid {
+  display: grid;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  margin-top: 8px;
+}
+.dev-grid label {
+  display: grid;
+  gap: 4px;
+  font-size: 0.82rem;
+  color: var(--mute);
+}
 .dev-grid select, .dev-grid input[type="text"], .dev-grid input[type="password"] {
   height: 40px;
   border-radius: 11px;
@@ -754,8 +818,18 @@ body[data-view="room"] #room { display: flex; }
 }
 .chk-row input { width: 17px; height: 17px; accent-color: var(--accent); margin: 0; }
 
-.lobby-info { display: grid; gap: 18px; align-content: start; }
-.lobby-slug-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+/* Lobby Right Side */
+.lobby-info {
+  display: grid;
+  gap: 18px;
+  align-content: start;
+}
+.lobby-slug-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
 .lobby-slug {
   margin: 0;
   font-size: clamp(1.9rem, 5vw, 3.2rem);
@@ -785,7 +859,11 @@ body[data-view="room"] #room { display: flex; }
 /* ==========================================================================
    ROOM / IN-CALL VIEW (#room)
    ========================================================================== */
-#room { flex-direction: column; height: 100dvh; overflow: hidden; }
+#room {
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden;
+}
 
 .room-bar {
   display: flex;
@@ -818,6 +896,7 @@ body[data-view="room"] #room { display: flex; }
   align-items: center;
   gap: 6px;
   cursor: pointer;
+  title: "Ende-zu-Ende Sicherheitscode prüfen";
 }
 .sas-badge .mono { font-size: 0.64rem; color: var(--mute); }
 
@@ -841,10 +920,33 @@ body[data-view="room"] #room { display: flex; }
 }
 @keyframes popIn { from { opacity: 0; transform: translateY(-8px) scale(0.96); } }
 
-.mesh-svg { width: 100%; height: 126px; border-radius: 16px; background: var(--paper); border: 1px solid var(--line); display: block; }
-.spark-svg { width: 100%; height: 62px; border-radius: 12px; background: var(--paper); border: 1px solid var(--line); display: block; }
-.stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 7px; }
-.stat-cell { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; }
+.mesh-svg {
+  width: 100%;
+  height: 126px;
+  border-radius: 16px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  display: block;
+}
+.spark-svg {
+  width: 100%;
+  height: 62px;
+  border-radius: 12px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  display: block;
+}
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 7px;
+}
+.stat-cell {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 8px 10px;
+}
 .stat-cell .k { font-family: var(--mono); font-size: 0.61rem; color: var(--mute); text-transform: uppercase; letter-spacing: 0.06em; }
 .stat-cell .v { font-weight: 750; font-size: 0.96rem; margin-top: 1px; font-family: var(--mono); }
 
@@ -860,6 +962,7 @@ body[data-view="room"] #room { display: flex; }
   gap: 3px;
 }
 
+/* Main Stage + Workspace + Chat */
 .room-body {
   flex: 1;
   min-height: 0;
@@ -878,6 +981,7 @@ body[data-view="room"] #room { display: flex; }
   position: relative;
 }
 
+/* Collaborative Whiteboard / Presentation Primary Pane */
 .work-pane {
   flex: 1.65;
   min-width: 0;
@@ -915,7 +1019,13 @@ body[data-view="room"] #room { display: flex; }
   gap: 5px;
 }
 .wb-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-.wb-swatch { width: 24px; height: 24px; border-radius: 50%; border: 2px solid transparent; padding: 0; }
+.wb-swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  padding: 0;
+}
 .wb-swatch.active { border-color: var(--ink); transform: scale(1.14); }
 .wb-canvas-wrap {
   flex: 1;
@@ -926,8 +1036,15 @@ body[data-view="room"] #room { display: flex; }
   touch-action: none;
 }
 html[data-theme="dark"] .wb-canvas-wrap { background: #141412; }
-.wb-canvas-wrap canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.wb-canvas-wrap canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
 
+/* Video Tiles Grid */
 .tiles-grid {
   flex: 1;
   min-width: 0;
@@ -944,7 +1061,11 @@ html[data-theme="dark"] .wb-canvas-wrap { background: #141412; }
   flex-direction: column;
   overflow-y: auto;
 }
-.stage-wrap.has-work .tiles-grid .tile { flex: none; width: 100%; aspect-ratio: 16 / 10; }
+.stage-wrap.has-work .tiles-grid .tile {
+  flex: none;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+}
 
 .tile {
   position: relative;
@@ -980,6 +1101,7 @@ html[data-theme="dark"] .wb-canvas-wrap { background: #141412; }
 .tile.screen-tile video { object-fit: contain; opacity: 1; background: #070707; }
 .tile.cam .blob-box { opacity: 0; pointer-events: none; }
 
+/* Laser / Annotation Overlay on Screen Tile */
 .annot-layer {
   position: absolute;
   inset: 0;
@@ -1031,7 +1153,15 @@ html[data-theme="dark"] .wb-canvas-wrap { background: #141412; }
 .tile-meta .mute-ic { width: 14px; height: 14px; color: var(--danger); display: none; flex: none; }
 .tile.muted .tile-meta .mute-ic { display: block; }
 
-.tile-badges { position: absolute; z-index: 5; top: 12px; left: 12px; display: flex; gap: 6px; align-items: center; }
+.tile-badges {
+  position: absolute;
+  z-index: 5;
+  top: 12px;
+  left: 12px;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
 .p2p-tag {
   padding: 4px 9px;
   border-radius: 999px;
@@ -1042,10 +1172,18 @@ html[data-theme="dark"] .wb-canvas-wrap { background: #141412; }
   letter-spacing: 0.05em;
   backdrop-filter: blur(8px);
 }
-.hand-tag { padding: 4px 9px; border-radius: 999px; background: #FFD34E; color: #121210; font-size: 0.95rem; display: none; }
+.hand-tag {
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: #FFD34E;
+  color: #121210;
+  font-size: 0.95rem;
+  display: none;
+}
 .tile.hand-up .hand-tag { display: inline-block; animation: waveHand 1.4s ease-in-out 2; }
 @keyframes waveHand { 25% { transform: rotate(15deg); } 55% { transform: rotate(-10deg); } }
 
+/* Waiting Card when alone */
 .wait-card {
   position: absolute;
   z-index: 8;
@@ -1070,7 +1208,13 @@ html[data-theme="dark"] .wb-canvas-wrap { background: #141412; }
 .wait-card p { margin: 0; font-size: 0.88rem; color: var(--mute); }
 .qr-mini { width: 84px; height: 84px; background: #fff; padding: 6px; border-radius: 12px; }
 .qr-mini svg { width: 100%; height: 100%; display: block; }
-.wait-link-row { grid-column: 1 / -1; display: flex; gap: 7px; align-items: center; flex-wrap: wrap; }
+.wait-link-row {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  flex-wrap: wrap;
+}
 .wait-link-row code {
   flex: 1;
   min-width: 160px;
@@ -1085,6 +1229,7 @@ html[data-theme="dark"] .wb-canvas-wrap { background: #141412; }
   white-space: nowrap;
 }
 
+/* Floating Live Subtitles (CC) */
 .cc-overlay {
   position: absolute;
   z-index: 12;
@@ -1109,6 +1254,7 @@ html[data-theme="dark"] .wb-canvas-wrap { background: #141412; }
 }
 .cc-line b { color: #FF8762; margin-right: 6px; }
 
+/* Flying Emoji */
 .fly-emoji {
   position: absolute;
   z-index: 10;
@@ -1124,6 +1270,7 @@ html[data-theme="dark"] .wb-canvas-wrap { background: #141412; }
   100% { opacity: 0; transform: translate(-50%, -220px) rotate(var(--r, 8deg)); }
 }
 
+/* Side Chat & Data Tunnel */
 .chat-pane {
   width: 364px;
   flex: none;
@@ -1179,9 +1326,21 @@ html[data-theme="dark"] .wb-canvas-wrap { background: #141412; }
   color: #fff;
   border-radius: 16px 16px 5px 16px;
 }
-.c-sys { align-self: center; text-align: center; font-family: var(--mono); font-size: 0.66rem; color: var(--mute); padding: 3px 10px; }
+.c-sys {
+  align-self: center;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  color: var(--mute);
+  padding: 3px 10px;
+}
 
-.poll-box { display: grid; gap: 7px; min-width: 210px; }
+/* Poll Card in Chat */
+.poll-box {
+  display: grid;
+  gap: 7px;
+  min-width: 210px;
+}
 .poll-q { font-weight: 750; font-size: 0.94rem; }
 .poll-opt {
   position: relative;
@@ -1197,15 +1356,35 @@ html[data-theme="dark"] .wb-canvas-wrap { background: #141412; }
   justify-content: space-between;
   gap: 8px;
 }
-.poll-opt .fill { position: absolute; inset: 0 auto 0 0; background: currentColor; opacity: 0.16; transition: width 0.3s var(--ease); }
+.poll-opt .fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: currentColor;
+  opacity: 0.16;
+  transition: width 0.3s var(--ease);
+}
 .poll-opt span { position: relative; z-index: 1; }
 
-.file-bub img { max-width: 100%; max-height: 210px; border-radius: 11px; display: block; margin-bottom: 6px; cursor: zoom-in; }
+/* File Transfer Bubble */
+.file-bub img {
+  max-width: 100%;
+  max-height: 210px;
+  border-radius: 11px;
+  display: block;
+  margin-bottom: 6px;
+  cursor: zoom-in;
+}
 .file-meta-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 0.84rem; }
 .file-prog { height: 4px; border-radius: 99px; background: rgba(128,128,128,0.25); overflow: hidden; margin-top: 6px; }
 .file-prog i { display: block; height: 100%; width: 0%; background: currentColor; transition: width 0.15s; }
 
-.chat-form { padding: 10px; border-top: 1px solid var(--line); display: flex; gap: 6px; align-items: center; }
+.chat-form {
+  padding: 10px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
 .chat-form input[type="text"] {
   flex: 1;
   min-width: 0;
@@ -1234,6 +1413,7 @@ html[data-theme="dark"] .wb-canvas-wrap { background: #141412; }
 }
 .chat-pane.drag .drop-mask { display: grid; }
 
+/* Floating Control Dock */
 .dock {
   display: flex;
   align-items: center;
@@ -1301,6 +1481,7 @@ html[data-theme="dark"] .wb-canvas-wrap { background: #141412; }
 .hangup-btn:hover { transform: translateY(-3px); }
 .hangup-btn svg { width: 22px; height: 22px; transform: rotate(135deg); }
 
+/* Reaction Bar Popover */
 .react-bar {
   position: fixed;
   z-index: 32;
@@ -1328,7 +1509,15 @@ html[data-theme="dark"] .wb-canvas-wrap { background: #141412; }
   transition: transform 0.25s var(--spring);
 }
 .react-bar button:hover { transform: scale(1.22) translateY(-2px); }
-.react-bar .hand-toggle { width: auto; padding: 0 12px; border-radius: 999px; font-size: 0.85rem; font-weight: 650; gap: 5px; display: inline-flex; }
+.react-bar .hand-toggle {
+  width: auto;
+  padding: 0 12px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 650;
+  gap: 5px;
+  display: inline-flex;
+}
 .react-bar .hand-toggle.active { background: #FFD34E; color: #121210; }
 
 /* ==========================================================================
@@ -1345,12 +1534,32 @@ dialog {
   overflow-y: auto;
   box-shadow: var(--shadow-lg);
 }
-dialog::backdrop { background: rgba(10, 10, 9, 0.5); backdrop-filter: blur(5px); }
+dialog::backdrop {
+  background: rgba(10, 10, 9, 0.5);
+  backdrop-filter: blur(5px);
+}
 dialog h3 { margin: 0 0 6px; font-size: 1.38rem; letter-spacing: -0.03em; font-weight: 800; }
 dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
 
-.tabs-bar { display: flex; gap: 6px; padding: 4px; border-radius: 13px; background: var(--paper); border: 1px solid var(--line); margin-bottom: 16px; }
-.tab-btn { flex: 1; height: 36px; border: 0; border-radius: 9px; background: transparent; font-size: 0.84rem; font-weight: 650; color: var(--mute); }
+.tabs-bar {
+  display: flex;
+  gap: 6px;
+  padding: 4px;
+  border-radius: 13px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  margin-bottom: 16px;
+}
+.tab-btn {
+  flex: 1;
+  height: 36px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  font-size: 0.84rem;
+  font-weight: 650;
+  color: var(--mute);
+}
 .tab-btn.active { background: var(--card); color: var(--ink); box-shadow: var(--shadow-sm); }
 
 .diag-list { display: grid; gap: 8px; margin: 14px 0; }
@@ -1365,12 +1574,26 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
   border: 1px solid var(--line);
   font-size: 0.9rem;
 }
-.diag-badge { font-family: var(--mono); font-size: 0.7rem; padding: 3px 9px; border-radius: 999px; font-weight: 700; }
+.diag-badge {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-weight: 700;
+}
 .diag-badge.ok { background: var(--p2p-soft); color: var(--p2p); }
 .diag-badge.warn { background: var(--warn-soft); color: var(--warn); }
 .diag-badge.wait { background: var(--line); color: var(--mute); }
 
-.qr-large { width: 176px; height: 176px; margin: 8px auto 14px; background: #fff; padding: 11px; border-radius: 18px; border: 1px solid var(--line); }
+.qr-large {
+  width: 176px;
+  height: 176px;
+  margin: 8px auto 14px;
+  background: #fff;
+  padding: 11px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+}
 .qr-large svg { width: 100%; height: 100%; display: block; }
 
 .airgap-area {
@@ -1385,6 +1608,7 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
   resize: vertical;
 }
 
+/* Toasts & Floating Knock Cards */
 .toasts {
   position: fixed;
   z-index: 90;
@@ -1409,12 +1633,34 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
   animation: popIn 0.3s var(--spring);
 }
 
-.knock-stack { position: fixed; z-index: 80; top: 66px; right: 16px; display: grid; gap: 10px; width: min(340px, calc(100vw - 32px)); }
-.knock-card { background: var(--card); border: 1px solid var(--line-strong); border-radius: 18px; padding: 14px; box-shadow: var(--shadow-lg); display: grid; gap: 10px; }
+.knock-stack {
+  position: fixed;
+  z-index: 80;
+  top: 66px;
+  right: 16px;
+  display: grid;
+  gap: 10px;
+  width: min(340px, calc(100vw - 32px));
+}
+.knock-card {
+  background: var(--card);
+  border: 1px solid var(--line-strong);
+  border-radius: 18px;
+  padding: 14px;
+  box-shadow: var(--shadow-lg);
+  display: grid;
+  gap: 10px;
+}
 
+/* Mobile Responsive Refinements */
 @media (max-width: 780px) {
   .stage-wrap { flex-direction: column; }
-  .stage-wrap.has-work .tiles-grid { flex: 0 0 112px; flex-direction: row; overflow-x: auto; overflow-y: hidden; }
+  .stage-wrap.has-work .tiles-grid {
+    flex: 0 0 112px;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
   .stage-wrap.has-work .tiles-grid .tile { width: 150px; height: 100%; aspect-ratio: auto; }
   .chat-pane {
     position: fixed;
@@ -1453,7 +1699,7 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
      ===================================================================== -->
 <main id="home" class="view">
   <header class="topbar">
-    <a class="brand" href="#" id="homeBrandLink" aria-label="anruf.org Startseite">
+    <a class="brand" href="./" aria-label="anruf.org Startseite">
       <span>anruf<i>.org</i></span>
       <span class="brand-tag">Direct P2P</span>
     </a>
@@ -1550,7 +1796,7 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
     <nav>
       <button class="link-btn" type="button" id="footerDiagBtn">NAT-Diagnose</button>
       <button class="link-btn" type="button" id="footerAirgapInfo">Airgap-Modus</button>
-      <a href="#datenschutz" id="footerPrivacyLink">Datenschutz</a>
+      <a href="datenschutz.html" onClick="if(!location.hostname.includes('anruf')){event.preventDefault();document.getElementById('privacyDlg').showModal()}">Datenschutz</a>
     </nav>
   </footer>
 </main>
@@ -1560,7 +1806,7 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
      ===================================================================== -->
 <main id="join" class="view">
   <header class="topbar">
-    <a class="brand" href="#" id="lobbyBackBrand"><span>anruf<i>.org</i></span></a>
+    <a class="brand" href="./" id="lobbyBackBrand"><span>anruf<i>.org</i></span></a>
     <div class="top-actions">
       <span class="pill-btn" id="prewarmBadge">
         <i class="status-dot online"></i>
@@ -1570,12 +1816,13 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
   </header>
 
   <section class="lobby-wrap">
-    <div class="pv-card" id="lobbyPvCard">
+    <!-- Left: Camera & Studio Rack -->
+    <div class="pv-card">
       <div class="pv-stage" id="pvStage">
         <video id="pvVideo" playsinline autoplay muted></video>
         <div class="pv-avatar-wrap">
           <div class="pv-avatar" id="pvAvatar">F</div>
-          <span id="pvHintMsg" style="font-size:0.9rem;opacity:0.8">Kamera &amp; Mikrofon werden vorbereitet…</span>
+          <span id="pvHintMsg" style="font-size:0.9rem;opacity:0.8">Kamera ist ausgeschaltet</span>
         </div>
 
         <div class="pv-status-pill">
@@ -1647,6 +1894,7 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
       </div>
     </div>
 
+    <!-- Right: Room & Identity -->
     <div class="lobby-info">
       <span class="mono" style="color:var(--accent)" id="lobbyEyebrow">Studio-Vorschau · Direktverbindung</span>
       <div class="lobby-slug-row">
@@ -1676,7 +1924,7 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h3.5l2 5-2.5 1.5a11 11 0 0 0 5.5 5.5l1.5-2.5 5 2V19a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>
           <span>Jetzt beitreten</span>
         </button>
-        <a class="btn ghost" href="#" id="lobbyCancelBtn" style="height:56px;border-radius:999px">Zurück</a>
+        <a class="btn ghost" href="./" id="lobbyCancelBtn" style="height:56px;border-radius:999px">Zurück</a>
       </div>
     </div>
   </section>
@@ -1688,7 +1936,7 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
 <main id="room" class="view">
   <header class="room-bar">
     <div class="rb-left">
-      <a class="brand" href="#" id="roomBrandExit" title="Auflegen & zur Startseite"><span>anruf<i>.org</i></span></a>
+      <a class="brand" href="./" id="roomBrandExit" title="Auflegen & zur Startseite"><span>anruf<i>.org</i></span></a>
       <span style="color:var(--line-strong)">/</span>
       <span class="rb-slug" id="roomSlugLabel"></span>
       <span class="diag-badge warn" id="roomLockBadge" hidden title="Raum ist abgeschlossen">🔒 Gesperrt</span>
@@ -1705,6 +1953,7 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
         <span>Einladen</span>
       </button>
 
+      <!-- Live P2P Radar Button & Popover -->
       <div class="radar-wrap" id="radarWrap">
         <button class="pill-btn" id="radarBtn" type="button" aria-expanded="false" title="Live P2P-Topologie & Telemetrie">
           <i class="status-dot online" id="roomP2pDot"></i>
@@ -1746,6 +1995,7 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
 
   <div class="room-body">
     <div class="stage-wrap" id="stageWrap">
+      <!-- Collaborative Live Whiteboard -->
       <section class="work-pane" id="whiteboardPane" hidden aria-label="Gemeinsames Whiteboard">
         <div class="wb-toolbar">
           <div class="wb-tools">
@@ -1758,7 +2008,7 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
             <button class="wb-swatch active" type="button" data-wbcol="#FF4F1A" style="background:#FF4F1A" aria-label="Orange"></button>
             <button class="wb-swatch" type="button" data-wbcol="#121210" style="background:#121210" aria-label="Schwarz"></button>
             <button class="wb-swatch" type="button" data-wbcol="#1FA958" style="background:#1FA958" aria-label="Grün"></button>
-            <button class="wb-swatch" type="button" data-wbcol="#2B6CB0" style="background:#2B6CB0" style="background:#2B6CB0" aria-label="Blau"></button>
+            <button class="wb-swatch" type="button" data-wbcol="#2B6CB0" style="background:#2B6CB0" aria-label="Blau"></button>
           </div>
           <div class="wb-tools">
             <button class="wb-btn" type="button" id="wbSaveBtn">⬇ PNG</button>
@@ -1771,6 +2021,7 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
         </div>
       </section>
 
+      <!-- Adaptive Video Tiles Grid -->
       <section class="tiles-grid alone" id="tilesGrid" aria-live="polite">
         <div class="wait-card" id="waitCard">
           <div>
@@ -1786,9 +2037,11 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
         </div>
       </section>
 
+      <!-- Live Subtitles Overlay -->
       <div class="cc-overlay" id="ccOverlay"></div>
     </div>
 
+    <!-- Chat, Polls & Chunked File Tunnel -->
     <aside class="chat-pane" id="chatPane" aria-label="Direkt-Chat & Datentunnel">
       <div class="chat-top">
         <div>
@@ -1815,6 +2068,7 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
     </aside>
   </div>
 
+  <!-- Control Dock -->
   <nav class="dock" id="roomDock" aria-label="Anrufsteuerung">
     <button class="dock-btn" id="dockMicBtn" type="button" title="Mikrofon (M) · Leertaste gedrückt halten zum Sprechen">
       <svg class="ic-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
@@ -1844,7 +2098,7 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
     </button>
     <button class="dock-btn" id="dockFsBtn" type="button" title="Vollbild (F)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V5a1 1 0 0 1 1-1h4M20 9V5a1 1 0 0 0-1-1h-4M4 15v4a1 1 0 0 0 1 1h4M20 15v4a1 1 0 0 1-1-1h-4"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V5a1 1 0 0 1 1-1h4M20 9V5a1 1 0 0 0-1-1h-4M4 15v4a1 1 0 0 0 1 1h4M20 15v4a1 1 0 0 1-1 1h-4"/></svg>
     </button>
     <button class="hangup-btn" id="dockHangupBtn" type="button" aria-label="Auflegen">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h3.5l2 5-2.5 1.5a11 11 0 0 0 5.5 5.5l1.5-2.5 5 2V19a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>
@@ -1852,6 +2106,7 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
     </button>
   </nav>
 
+  <!-- Reaction Bar -->
   <div class="react-bar" id="reactBar" hidden>
     <button type="button" data-emo="👍">👍</button>
     <button type="button" data-emo="❤️">❤️</button>
@@ -1904,10 +2159,11 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
   </div>
 
   <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
-    <button class="btn ghost sm" type="button" data-close-dlg>Schließen</button>
+    <button class="btn ghost sm" type="button" onClick="this.closest('dialog').close()">Schließen</button>
   </div>
 </dialog>
 
+<!-- NAT & Direct P2P Scanner Dialog -->
 <dialog id="diagDlg">
   <h3>NAT- &amp; Direkt-P2P Diagnose</h3>
   <p class="sub">Prüft ohne Kamera/Mikrofon, ob dein Netzwerk direktes UDP Hole-Punching ohne TURN-Server unterstützt.</p>
@@ -1920,63 +2176,68 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
     <div class="diag-row"><span>5. NAT-Mapping (Hole-Punching Prognose)</span><span class="diag-badge wait" id="dgNat">Prüfe…</span></div>
   </div>
 
-  <p id="diagVerdict" style="font-size:0.9rem;padding:12px;border-radius:14px;background:var(--paper);border:1px solid var(--line);margin:0">Starte Messung…</p>
+  <p id="diagVerdict" style="font-size:0.9rem;padding:12px;border-radius:14px;background:var(--paper);border:1px solid var(--line);margin:0"></p>
 
   <div style="display:flex;justify-content:space-between;gap:8px;margin-top:16px;flex-wrap:wrap">
     <div style="display:flex;gap:8px">
       <button class="btn sm ghost" type="button" id="rerunDiagBtn">Neu messen</button>
       <button class="btn sm ghost" type="button" id="copyDiagBtn">IT-Bericht kopieren</button>
     </div>
-    <button class="btn sm" type="button" data-close-dlg>Fertig</button>
+    <button class="btn sm" type="button" onClick="this.closest('dialog').close()">Fertig</button>
   </div>
 </dialog>
 
+<!-- Rename / Edit Slug Dialog -->
 <dialog id="slugDlg">
   <form id="slugEditForm">
     <h3>Raumnamen anpassen</h3>
     <p class="sub">Wer denselben Raumnamen öffnet, landet direkt bei dir.</p>
     <input type="text" id="slugEditInput" maxlength="48" style="width:100%;height:48px;border-radius:12px;border:1px solid var(--line-strong);background:var(--paper);padding:0 14px;font-family:var(--mono)">
     <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
-      <button class="btn ghost sm" type="button" data-close-dlg>Abbrechen</button>
+      <button class="btn ghost sm" type="button" onClick="this.closest('dialog').close()">Abbrechen</button>
       <button class="btn accent sm" type="submit">Übernehmen</button>
     </div>
   </form>
 </dialog>
 
+<!-- Studio Settings Modal inside Call -->
 <dialog id="inCallStudioDlg">
   <h3>Studio-Einstellungen</h3>
   <p class="sub">Filter, Sprachklang und Geräte live im Gespräch wechseln.</p>
   <div id="inCallStudioSlot"></div>
   <div style="display:flex;justify-content:flex-end;margin-top:16px">
-    <button class="btn sm" type="button" data-close-dlg>Fertig</button>
+    <button class="btn sm" type="button" onClick="this.closest('dialog').close()">Fertig</button>
   </div>
 </dialog>
 
+<!-- Quick Poll Creator Dialog -->
 <dialog id="pollDlg">
   <form id="pollForm">
     <h3>Schnell-Abstimmung starten</h3>
     <p class="sub">Läuft live über den verschlüsselten P2P-Datenkanal.</p>
     <div style="display:grid;gap:8px">
       <input type="text" id="pollQ" required maxlength="120" placeholder="Frage (z. B. Wann machen wir Pause?)" style="height:44px;border-radius:11px;border:1px solid var(--line-strong);background:var(--paper);padding:0 12px">
-      <input type="text" id="pollO1" required maxlength="60" placeholder="Option 1" style="height:40px;border-radius:11px;border:1px solid var(--line);background:var(--paper);background:var(--paper);padding:0 12px">
+      <input type="text" id="pollO1" required maxlength="60" placeholder="Option 1" style="height:40px;border-radius:11px;border:1px solid var(--line);background:var(--paper);padding:0 12px">
       <input type="text" id="pollO2" required maxlength="60" placeholder="Option 2" style="height:40px;border-radius:11px;border:1px solid var(--line);background:var(--paper);padding:0 12px">
       <input type="text" id="pollO3" maxlength="60" placeholder="Option 3 (optional)" style="height:40px;border-radius:11px;border:1px solid var(--line);background:var(--paper);padding:0 12px">
     </div>
     <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
-      <button class="btn ghost sm" type="button" data-close-dlg>Abbrechen</button>
+      <button class="btn ghost sm" type="button" onClick="this.closest('dialog').close()">Abbrechen</button>
       <button class="btn accent sm" type="submit">Senden</button>
     </div>
   </form>
 </dialog>
 
+<!-- Image Lightbox -->
 <dialog id="lightboxDlg" style="width:auto;max-width:94vw;padding:12px;text-align:center">
   <img id="lbImg" alt="" style="max-width:90vw;max-height:80dvh;border-radius:14px;display:block;margin:0 auto">
   <div style="display:flex;justify-content:center;gap:8px;margin-top:10px">
     <a class="btn sm accent" id="lbDownload" download>Speichern</a>
-    <button class="btn sm ghost" type="button" data-close-dlg>Schließen</button>
+    <button class="btn sm ghost" type="button" onClick="this.closest('dialog').close()">Schließen</button>
   </div>
 </dialog>
 
+<!-- Privacy Info Fallback Dialog -->
 <dialog id="privacyDlg">
   <h3>Datenschutz &amp; Architektur</h3>
   <p class="sub">So schützt anruf.org deine Gespräche technisch statt nur durch Versprechen:</p>
@@ -1986,7 +2247,7 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
     <li><strong>Keine externen Ressourcen:</strong> Keine Google Fonts, keine Analytics, keine Cookies, kein Tracking.</li>
   </ul>
   <div style="display:flex;justify-content:flex-end;margin-top:14px">
-    <button class="btn sm" type="button" data-close-dlg>Verstanden</button>
+    <button class="btn sm" type="button" onClick="this.closest('dialog').close()">Verstanden</button>
   </div>
 </dialog>
 
@@ -2011,138 +2272,2701 @@ dialog p.sub { margin: 0 0 16px; color: var(--mute); font-size: 0.92rem; }
   </div>
 </template>
 
-<script>
-(() => {
-  'use strict';
+<script type="module">
+/* ==========================================================================
+   anruf.org — DirectPulse Zero-TURN P2P Engine & Studio UI
+   100 % Vanilla ES Module · No External Dependencies
+   ========================================================================== */
 
-  const $ = (s, root = document) => root.querySelector(s);
-  const $$ = (s, root = document) => Array.from(root.querySelectorAll(s));
+const $ = (s, root = document) => root.querySelector(s);
+const $$ = (s, root = document) => [...root.querySelectorAll(s)];
 
-  let RELAY_URLS = [
-    'wss://nos.lol',
-    'wss://purplerelay.com',
-    'wss://nostr-01.yakihonne.com',
-    'wss://offchain.pub'
-  ];
-  let STUN_URLS = [
-    'stun:stun.cloudflare.com:3478',
-    'stun:stun.nextcloud.com:443',
-    'stun:stun.sipgate.net:3478',
-    'stun:stun.l.google.com:19302'
-  ];
+/* ---------- Default Network Config (+ optional repo config.mjs merge) ---------- */
+let RELAY_URLS = [
+  'wss://nos.lol',
+  'wss://purplerelay.com',
+  'wss://nostr-01.yakihonne.com',
+  'wss://offchain.pub'
+];
+let STUN_URLS = [
+  'stun:stun.cloudflare.com:3478',
+  'stun:stun.nextcloud.com:443',
+  'stun:stun.sipgate.net:3478',
+  'stun:stun.l.google.com:19302'
+];
 
-  const qs = new URLSearchParams(location.search);
-  if (qs.get('relay')) RELAY_URLS = [qs.get('relay')];
+// Falls im bestehenden anruf.org-Repository gehostet, Relays/STUN nahtlos übernehmen (TURN ignorieren wir bewusst für Zero-TURN!)
+try {
+  const repoCfg = await import('./config.mjs').catch(() => null);
+  if (repoCfg?.PUBLIC_RELAYS?.length) RELAY_URLS = [...new Set([...RELAY_URLS, ...repoCfg.PUBLIC_RELAYS])].slice(0, 6);
+  if (repoCfg?.STUN?.length) STUN_URLS = [...new Set([...STUN_URLS, ...repoCfg.STUN])];
+} catch {}
 
-  const MAX_PEERS = 8;
-  const MAX_FILE_BYTES = 100 * 1024 * 1024;
-  const CHUNK_SIZE = 64 * 1024;
-  const PALETTE = ['#FF5A26', '#25B865', '#4DA3FF', '#F59E0B', '#A87FFB', '#EC4899', '#14B8A6'];
-  const SAS_ICONS = ['🦊','🦉','🐙','🦋','🌿','🔥','⚡','💎','🌙','☀️','🍀','🎯','🛸','🧭','🔑','🌊'];
+const qs = new URLSearchParams(location.search);
+if (qs.get('relay')) RELAY_URLS = [qs.get('relay')];
 
-  const store = {
-    get(k, d = '') { try { return localStorage.getItem('anruf2:' + k) ?? d; } catch { return d; } },
-    set(k, v) { try { localStorage.setItem('anruf2:' + k, v); } catch {} }
+const MAX_PEERS = 8;
+const MAX_FILE_BYTES = 100 * 1024 * 1024; // 100 MB Direct Tunnel
+const CHUNK_SIZE = 64 * 1024;             // 64 KB WebRTC chunks
+const PALETTE = ['#FF5A26', '#25B865', '#4DA3FF', '#F59E0B', '#A87FFB', '#EC4899', '#14B8A6'];
+
+/* ---------- Safe Local Preferences ---------- */
+const store = {
+  get(k, d = '') { try { return localStorage.getItem('anruf2:' + k) ?? d; } catch { return d; } },
+  set(k, v) { try { localStorage.setItem('anruf2:' + k, v); } catch {} }
+};
+
+/* ---------- Helper Utilities ---------- */
+const enc = new TextEncoder();
+const dec = new TextDecoder();
+const toHex = bytes => Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
+const fromHex = hex => new Uint8Array(hex.match(/.{1,2}/g).map(b => parseInt(b, 16)));
+const b64uEnc = bytes => btoa(String.fromCharCode(...bytes)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+const b64uDec = str => {
+  const b64 = str.replace(/-/g, '+').replace(/_/g, '/') + '==='.slice((str.length + 3) % 4);
+  const bin = atob(b64);
+  const out = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+  return out;
+};
+
+function copyText(text, msg = 'In die Zwischenablage kopiert') {
+  if (navigator.clipboard?.writeText) {
+    navigator.clipboard.writeText(text).then(() => toast(msg)).catch(() => fallbackCopy(text, msg));
+  } else fallbackCopy(text, msg);
+}
+function fallbackCopy(text, msg) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;opacity:0;pointer-events:none';
+  document.body.append(ta);
+  ta.select();
+  try { document.execCommand('copy'); toast(msg); } catch { toast('Bitte manuell markieren & kopieren'); }
+  ta.remove();
+}
+
+function toast(text, ms = 2800) {
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.textContent = text;
+  $('#toastBox').append(el);
+  setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity .3s'; setTimeout(() => el.remove(), 320); }, ms);
+}
+
+const hashStr = s => [...String(s)].reduce((h, c) => ((h * 31) + c.charCodeAt(0)) >>> 0, 17);
+const colorFor = id => PALETTE[hashStr(id) % PALETTE.length];
+const cleanName = s => String(s ?? '').replace(/[\u0000-\u001f<>]/g, '').trim().slice(0, 24);
+const slugify = s => String(s ?? '').toLowerCase()
+  .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss')
+  .normalize('NFKD').replace(/[\u0300-\u036f]/g, '')
+  .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 46);
+
+const ADJ = ['blaue','stille','flinke','helle','kluge','sanfte','goldene','mutige','frische','warme','klare','freie'];
+const NOUN = ['moewe','eule','welle','wolke','kiefer','lerche','birke','insel','feder','libelle','meise','robbe'];
+const ANIMALS = ['Fuchs','Otter','Eule','Luchs','Dachs','Kranich','Robbe','Falke','Igel','Biber'];
+const rnd = arr => arr[Math.floor(Math.random() * arr.length)];
+function randomSlug() {
+  const chars = 'abcdefghjkmnpqrstuvwxyz23456789';
+  const r = crypto.getRandomValues(new Uint8Array(4));
+  return `${rnd(ADJ)}-${rnd(NOUN)}-${Array.from(r, b => chars[b % chars.length]).join('')}`;
+}
+
+/* ==========================================================================
+   PURE VANILLA JS BIP-340 SECP256K1 SCHNORR (FOR NOSTR NIP-01 EPHEMERAL)
+   ========================================================================== */
+const SECP_P = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2Fn;
+const SECP_N = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141n;
+const SECP_GX = 0x79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798n;
+const SECP_GY = 0x483ADA7726A3C4655DA4FBFC0E1108A8FD17B448A68554199C47D08FFB10D4B8n;
+
+const mod = (a, m = SECP_P) => { const r = a % m; return r >= 0n ? r : r + m; };
+function modPow(base, exp, m = SECP_P) {
+  let res = 1n, b = mod(base, m), e = exp;
+  while (e > 0n) {
+    if (e & 1n) res = (res * b) % m;
+    b = (b * b) % m;
+    e >>= 1n;
+  }
+  return res;
+}
+const modInv = (a, m = SECP_P) => modPow(a, m - 2n, m);
+
+function ptAdd(p1, p2) {
+  if (!p1) return p2;
+  if (!p2) return p1;
+  if (p1.x === p2.x && p1.y !== p2.y) return null;
+  const lam = p1.x === p2.x
+    ? mod(3n * p1.x * p1.x * modInv(2n * p1.y))
+    : mod((p2.y - p1.y) * modInv(p2.x - p1.x));
+  const x3 = mod(lam * lam - p1.x - p2.x);
+  const y3 = mod(lam * (p1.x - x3) - p1.y);
+  return { x: x3, y: y3 };
+}
+function ptMul(k, pt = { x: SECP_GX, y: SECP_GY }) {
+  let res = null, add = pt, n = k;
+  while (n > 0n) {
+    if (n & 1n) res = ptAdd(res, add);
+    add = ptAdd(add, add);
+    n >>= 1n;
+  }
+  return res;
+}
+const bytesToBig = b => BigInt('0x' + toHex(b));
+function bigTo32Bytes(num) {
+  return fromHex(num.toString(16).padStart(64, '0'));
+}
+async function sha256(uint8) {
+  return new Uint8Array(await crypto.subtle.digest('SHA-256', uint8));
+}
+const tagCache = new Map();
+async function bip340Hash(tag, ...parts) {
+  let th = tagCache.get(tag);
+  if (!th) { th = await sha256(enc.encode(tag)); tagCache.set(tag, th); }
+  const len = th.length * 2 + parts.reduce((s, p) => s + p.length, 0);
+  const buf = new Uint8Array(len);
+  buf.set(th, 0); buf.set(th, th.length);
+  let off = th.length * 2;
+  for (const p of parts) { buf.set(p, off); off += p.length; }
+  return sha256(buf);
+}
+
+function generateNostrKeypair() {
+  const priv = crypto.getRandomValues(new Uint8Array(32));
+  const d0 = mod(bytesToBig(priv), SECP_N - 1n) + 1n;
+  const privBytes = bigTo32Bytes(d0);
+  const P = ptMul(d0);
+  return { privBytes, pubHex: toHex(bigTo32Bytes(P.x)) };
+}
+
+async function signNostrEvent(ev, privBytes) {
+  const serialized = JSON.stringify([0, ev.pubkey, ev.created_at, ev.kind, ev.tags, ev.content]);
+  const idBytes = await sha256(enc.encode(serialized));
+  ev.id = toHex(idBytes);
+
+  const d0 = bytesToBig(privBytes);
+  const P = ptMul(d0);
+  const d = (P.y & 1n) === 0n ? d0 : SECP_N - d0;
+  const aux = crypto.getRandomValues(new Uint8Array(32));
+  const t = d ^ bytesToBig(await bip340Hash('BIP0340/aux', aux));
+  const pxBytes = bigTo32Bytes(P.x);
+  const rand = await bip340Hash('BIP0340/nonce', bigTo32Bytes(t), pxBytes, idBytes);
+  const k0 = mod(bytesToBig(rand), SECP_N);
+  const R = ptMul(k0);
+  const k = (R.y & 1n) === 0n ? k0 : SECP_N - k0;
+  const rxBytes = bigTo32Bytes(R.x);
+  const e = mod(bytesToBig(await bip340Hash('BIP0340/challenge', rxBytes, pxBytes, idBytes)), SECP_N);
+  const s = mod(k + e * d, SECP_N);
+  const sigBytes = new Uint8Array(64);
+  sigBytes.set(rxBytes, 0);
+  sigBytes.set(bigTo32Bytes(s), 32);
+  ev.sig = toHex(sigBytes);
+  return ev;
+}
+
+/* ---------- WebCrypto AES-256-GCM Room Key Derivation ---------- */
+async function deriveRoomCrypto(slug, pin = '') {
+  const rawTag = await sha256(enc.encode('anruf-room-v2:' + slug));
+  const roomTag = toHex(rawTag).slice(0, 32);
+  const baseKey = await crypto.subtle.importKey('raw', enc.encode(`anruf.org:${slug}:${pin}`), 'PBKDF2', false, ['deriveKey']);
+  const aesKey = await crypto.subtle.deriveKey(
+    { name: 'PBKDF2', salt: rawTag, iterations: 12000, hash: 'SHA-256' },
+    baseKey,
+    { name: 'AES-GCM', length: 256 },
+    false,
+    ['encrypt', 'decrypt']
+  );
+  return {
+    roomTag,
+    async encrypt(obj) {
+      const iv = crypto.getRandomValues(new Uint8Array(12));
+      const ct = new Uint8Array(await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, aesKey, enc.encode(JSON.stringify(obj))));
+      const out = new Uint8Array(12 + ct.length);
+      out.set(iv, 0); out.set(ct, 12);
+      return b64uEnc(out);
+    },
+    async decrypt(str) {
+      const raw = b64uDec(str);
+      const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: raw.slice(0, 12) }, aesKey, raw.slice(12));
+      return JSON.parse(dec.decode(pt));
+    }
   };
+}
 
-  /* ---------- Encoding & Helpers ---------- */
-  const enc = new TextEncoder();
-  const dec = new TextDecoder();
-  const toHex = bytes => Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
-  const fromHex = hex => {
-    if (!hex) return new Uint8Array(0);
-    const m = hex.match(/.{1,2}/g);
-    return m ? new Uint8Array(m.map(b => parseInt(b, 16))) : new Uint8Array(0);
+/* ==========================================================================
+   PURE-JS INLINE QR CODE GENERATOR (VERSIONS 1–10, ECC LEVEL L, BYTE MODE)
+   ========================================================================== */
+const QR_CAP = [0, 17, 32, 53, 78, 106, 134, 154, 192, 230, 271];
+const QR_EC  = [0, 7, 10, 15, 20, 26, 18, 20, 24, 30, 18];
+const QR_BLK = [0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 4];
+const QR_ALIGN = [[], [], [6,18], [6,22], [6,26], [6,30], [6,34], [6,22,38], [6,24,42], [6,26,46], [6,28,50]];
+
+const GF_EXP = new Uint8Array(512), GF_LOG = new Uint8Array(256);
+{
+  let x = 1;
+  for (let i = 0; i < 255; i++) { GF_EXP[i] = x; GF_LOG[x] = i; x <<= 1; if (x & 256) x ^= 0x11d; }
+  for (let i = 255; i < 512; i++) GF_EXP[i] = GF_EXP[i - 255];
+}
+const gfMul = (a, b) => (a && b) ? GF_EXP[GF_LOG[a] + GF_LOG[b]] : 0;
+function rsEncode(data, ecLen) {
+  let gen = [1];
+  for (let i = 0; i < ecLen; i++) {
+    const nxt = new Array(gen.length + 1).fill(0);
+    for (let j = 0; j < gen.length; j++) { nxt[j] ^= gen[j]; nxt[j + 1] ^= gfMul(gen[j], GF_EXP[i]); }
+    gen = nxt;
+  }
+  const rem = new Uint8Array(ecLen);
+  for (const b of data) {
+    const f = b ^ rem[0];
+    rem.copyWithin(0, 1); rem[ecLen - 1] = 0;
+    for (let j = 0; j < ecLen; j++) rem[j] ^= gfMul(gen[j + 1], f);
+  }
+  return rem;
+}
+
+function renderQrSvg(text) {
+  const bytes = enc.encode(text);
+  let ver = 1;
+  while (ver <= 10 && bytes.length > QR_CAP[ver]) ver++;
+  if (ver > 10) return `<svg viewBox="0 0 40 40"><rect width="40" height="40" fill="#fff"/><text x="20" y="22" text-anchor="middle" font-size="5" fill="#111">Link</text></svg>`;
+
+  const size = ver * 4 + 17;
+  const totalCodewords = (() => {
+    let bits = size * size - 3 * 64 - 2 * (size - 16) - 1 - 31;
+    const al = QR_ALIGN[ver].length;
+    if (al) bits -= (al * al - 3) * 25 - (al - 2) * 10;
+    if (ver >= 7) bits -= 36;
+    return bits >> 3;
+  })();
+  const blocks = QR_BLK[ver], ecPerBlk = QR_EC[ver];
+  const dataBytesTotal = totalCodewords - blocks * ecPerBlk;
+
+  // Bitstream
+  const bits = [];
+  const pushBits = (val, n) => { for (let i = n - 1; i >= 0; i--) bits.push((val >> i) & 1); };
+  pushBits(0b0100, 4);
+  pushBits(bytes.length, ver >= 10 ? 16 : 8);
+  for (const b of bytes) pushBits(b, 8);
+  for (let i = 0; i < 4 && bits.length < dataBytesTotal * 8; i++) bits.push(0);
+  while (bits.length % 8) bits.push(0);
+  const data = new Uint8Array(dataBytesTotal);
+  for (let i = 0; i < bits.length >> 3; i++) {
+    let v = 0; for (let b = 0; b < 8; b++) v = (v << 1) | bits[i * 8 + b];
+    data[i] = v;
+  }
+  for (let i = bits.length >> 3, p = 0; i < dataBytesTotal; i++, p ^= 1) data[i] = p ? 0x11 : 0xEC;
+
+  // Blocks & interleaving
+  const shortLen = Math.floor(dataBytesTotal / blocks), extra = dataBytesTotal % blocks;
+  const dBlocks = [], eBlocks = [];
+  let off = 0;
+  for (let b = 0; b < blocks; b++) {
+    const ln = shortLen + (b >= blocks - extra ? 1 : 0);
+    const slice = data.slice(off, off + ln); off += ln;
+    dBlocks.push(slice); eBlocks.push(rsEncode(slice, ecPerBlk));
+  }
+  const final = [];
+  for (let i = 0; i <= shortLen; i++) for (let b = 0; b < blocks; b++) if (i < dBlocks[b].length) final.push(dBlocks[b][i]);
+  for (let i = 0; i < ecPerBlk; i++) for (let b = 0; b < blocks; b++) final.push(eBlocks[b][i]);
+
+  // Matrix construction
+  const grid = Array.from({ length: size }, () => new Int8Array(size));
+  const used = Array.from({ length: size }, () => new Uint8Array(size));
+  const setMod = (r, c, v) => { if (r >= 0 && r < size && c >= 0 && c < size) { grid[r][c] = v ? 1 : 0; used[r][c] = 1; } };
+  const finder = (R, C) => {
+    for (let r = -1; r <= 7; r++) for (let c = -1; c <= 7; c++)
+      setMod(R + r, C + c, (r >= 0 && r <= 6 && (c === 0 || c === 6)) || (c >= 0 && c <= 6 && (r === 0 || r === 6)) || (r >= 2 && r <= 4 && c >= 2 && c <= 4));
   };
-  const b64uEnc = bytes => {
-    let bin = '';
-    for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
-    return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-  };
-  const b64uDec = str => {
-    const clean = str.trim();
-    const b64 = clean.replace(/-/g, '+').replace(/_/g, '/') + '==='.slice((clean.length + 3) % 4);
-    const bin = atob(b64);
-    const out = new Uint8Array(bin.length);
-    for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+  finder(0, 0); finder(0, size - 7); finder(size - 7, 0);
+  for (let i = 8; i < size - 8; i++) { setMod(6, i, i % 2 === 0); setMod(i, 6, i % 2 === 0); }
+  const ap = QR_ALIGN[ver];
+  for (const r of ap) for (const c of ap) {
+    if (used[r][c]) continue;
+    for (let dr = -2; dr <= 2; dr++) for (let dc = -2; dc <= 2; dc++)
+      setMod(r + dr, c + dc, Math.max(Math.abs(dr), Math.abs(dc)) !== 1);
+  }
+  for (let i = 0; i < 9; i++) { if (i !== 6) { used[8][i] = 1; used[i][8] = 1; } }
+  for (let i = 0; i < 8; i++) { used[8][size - 1 - i] = 1; used[size - 1 - i][8] = 1; }
+  setMod(size - 8, 8, 1);
+
+  // Place data bits with mask 0 ((r + c) % 2 === 0)
+  let bitIdx = 0;
+  for (let col = size - 1; col >= 1; col -= 2) {
+    if (col === 6) col--;
+    const upward = ((size - 1 - col) >> 1) % 2 === 0;
+    for (let s = 0; s < size; s++) {
+      const r = upward ? size - 1 - s : s;
+      for (const c of [col, col - 1]) {
+        if (used[r][c]) continue;
+        const bit = bitIdx < final.length * 8 ? ((final[bitIdx >> 3] >> (7 - (bitIdx & 7))) & 1) : 0;
+        bitIdx++;
+        grid[r][c] = bit ^ ((r + c) % 2 === 0 ? 1 : 0);
+      }
+    }
+  }
+  // Format info for ECC Level L (01) + Mask 0 (000) -> precomputed BCH = 0x77C4
+  const fmt = 0x77C4;
+  const fPos1 = [[8,0],[8,1],[8,2],[8,3],[8,4],[8,5],[8,7],[8,8],[7,8],[5,8],[4,8],[3,8],[2,8],[1,8],[0,8]];
+  const fPos2 = [[size-1,8],[size-2,8],[size-3,8],[size-4,8],[size-5,8],[size-6,8],[size-7,8],[8,size-8],[8,size-7],[8,size-6],[8,size-5],[8,size-4],[8,size-3],[8,size-2],[8,size-1]];
+  for (let i = 0; i < 15; i++) {
+    const b = (fmt >> (14 - i)) & 1;
+    grid[fPos1[i][0]][fPos1[i][1]] = b;
+    grid[fPos2[i][0]][fPos2[i][1]] = b;
+  }
+
+  let path = '';
+  for (let r = 0; r < size; r++) for (let c = 0; c < size; c++) if (grid[r][c]) path += `M${c} ${r}h1v1h-1z`;
+  return `<svg viewBox="0 0 ${size} ${size}" shape-rendering="crispEdges"><rect width="${size}" height="${size}" fill="#fff"/><path d="${path}" fill="#121210"/></svg>`;
+}
+
+/* ==========================================================================
+   AUDIO SYNTHESIZER, STUDIO VOICE EQ & 3D SPATIAL ENGINE
+   ========================================================================== */
+let actx = null;
+function getAudioCtx() {
+  if (!actx) {
+    try { actx = new (window.AudioContext || window.webkitAudioContext)(); } catch {}
+  }
+  if (actx?.state === 'suspended') actx.resume().catch(() => {});
+  return actx;
+}
+
+function playChime(type = 'join') {
+  const ctx = getAudioCtx();
+  if (!ctx) return;
+  const notes = {
+    enter: [[523.25, 0], [659.25, 0.08], [783.99, 0.16], [1046.5, 0.25]],
+    join:  [[587.33, 0], [880, 0.11], [1174.66, 0.22]],
+    leave: [[783.99, 0], [523.25, 0.12]],
+    knock: [[330, 0], [330, 0.15], [440, 0.42]],
+    msg:   [[1174.66, 0]]
+  }[type] || [[660, 0]];
+  const t0 = ctx.currentTime + 0.02;
+  for (const [freq, delay] of notes) {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.0001, t0 + delay);
+    gain.gain.linearRampToValueAtTime(0.08, t0 + delay + 0.015);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t0 + delay + 0.65);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(t0 + delay);
+    osc.stop(t0 + delay + 0.7);
+  }
+}
+
+function buildVoiceStudioTrack(rawAudioTrack) {
+  if (!rawAudioTrack || !$('#chkVoiceStudio').checked) return rawAudioTrack;
+  const ctx = getAudioCtx();
+  if (!ctx?.createMediaStreamDestination) return rawAudioTrack;
+  try {
+    const src = ctx.createMediaStreamSource(new MediaStream([rawAudioTrack]));
+    const hp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 85;
+    const warm = ctx.createBiquadFilter(); warm.type = 'peaking'; warm.frequency.value = 210; warm.gain.value = 1.6;
+    const pres = ctx.createBiquadFilter(); pres.type = 'peaking'; pres.frequency.value = 3200; pres.gain.value = 2.8;
+    const comp = ctx.createDynamicsCompressor();
+    comp.threshold.value = -24; comp.knee.value = 16; comp.ratio.value = 3.2;
+    const dest = ctx.createMediaStreamDestination();
+    src.connect(hp); hp.connect(warm); warm.connect(pres); pres.connect(comp); comp.connect(dest);
+    const out = dest.stream.getAudioTracks()[0];
+    const origStop = out.stop.bind(out);
+    out.stop = () => { origStop(); rawAudioTrack.stop(); try { src.disconnect(); } catch {} };
     return out;
+  } catch { return rawAudioTrack; }
+}
+
+/* ==========================================================================
+   ZERO-DOWNLOAD REALTIME VIDEO FILTER PIPELINE
+   ========================================================================== */
+const FILTERS = [
+  { id: 'none',    label: 'Natürlich',       css: 'none' },
+  { id: 'studio',  label: 'Studio-Kontrast', css: 'contrast(1.12) saturate(1.1) brightness(1.03)' },
+  { id: 'warm',    label: 'Warmes Licht',    css: 'sepia(0.22) saturate(1.25) contrast(1.05)' },
+  { id: 'mono',    label: 'Schwarz-Weiß',    css: 'grayscale(1) contrast(1.18)' },
+  { id: 'soft',    label: 'Sanfter Fokus',   css: 'contrast(1.04) saturate(1.08) brightness(1.05)' },
+  { id: 'pixel',   label: 'Inkognito-Pixel', css: 'none' }
+];
+let currentFilter = store.get('filter', 'none');
+
+const videoFx = {
+  rawTrack: null,
+  outTrack: null,
+  canvas: null,
+  ctx: null,
+  vid: null,
+  timer: 0,
+  wrap(rawTrack) {
+    this.stopOutOnly();
+    this.rawTrack = rawTrack;
+    if (currentFilter === 'none') return rawTrack;
+    if (!HTMLCanvasElement.prototype.captureStream) return rawTrack;
+
+    if (!this.vid) {
+      this.vid = document.createElement('video');
+      this.vid.muted = true; this.vid.playsInline = true; this.vid.autoplay = true;
+    }
+    this.vid.srcObject = new MediaStream([rawTrack]);
+    this.vid.play().catch(() => {});
+
+    const settings = rawTrack.getSettings?.() || {};
+    const w = settings.width || 960, h = settings.height || 540;
+    this.canvas = document.createElement('canvas');
+    this.canvas.width = w; this.canvas.height = h;
+    this.ctx = this.canvas.getContext('2d');
+    const small = document.createElement('canvas'); small.width = 48; small.height = 28;
+    const sctx = small.getContext('2d');
+
+    clearInterval(this.timer);
+    this.timer = setInterval(() => {
+      if (!this.vid || this.vid.readyState < 2) return;
+      const W = this.canvas.width, H = this.canvas.height;
+      if (currentFilter === 'pixel') {
+        sctx.drawImage(this.vid, 0, 0, small.width, small.height);
+        this.ctx.imageSmoothingEnabled = false;
+        this.ctx.drawImage(small, 0, 0, small.width, small.height, 0, 0, W, H);
+      } else {
+        const f = FILTERS.find(x => x.id === currentFilter);
+        this.ctx.filter = f?.css || 'none';
+        this.ctx.drawImage(this.vid, 0, 0, W, H);
+      }
+    }, 34);
+
+    this.outTrack = this.canvas.captureStream(30).getVideoTracks()[0];
+    return this.outTrack;
+  },
+  stopOutOnly() {
+    clearInterval(this.timer); this.timer = 0;
+    if (this.outTrack) { this.outTrack.stop(); this.outTrack = null; }
+  },
+  stopAll() {
+    this.stopOutOnly();
+    if (this.rawTrack) { this.rawTrack.stop(); this.rawTrack = null; }
+  }
+};
+
+function renderFilterStrip() {
+  const strip = $('#filterStrip');
+  strip.replaceChildren();
+  for (const f of FILTERS) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'flt-chip';
+    b.textContent = f.label;
+    b.setAttribute('role', 'radio');
+    b.setAttribute('aria-checked', String(currentFilter === f.id));
+    b.addEventListener('click', () => setVideoFilter(f.id));
+    strip.append(b);
+  }
+  const active = FILTERS.find(x => x.id === currentFilter) || FILTERS[0];
+  $('#fltActiveLabel').textContent = active.label;
+}
+
+function setVideoFilter(id) {
+  currentFilter = id;
+  store.set('filter', id);
+  renderFilterStrip();
+  if (!videoFx.rawTrack || videoFx.rawTrack.readyState !== 'live') return;
+  const activeStream = CALL?.localStream || LOBBY.stream;
+  if (!activeStream) return;
+  const prevTrack = activeStream.getVideoTracks()[0];
+  const nextTrack = videoFx.wrap(videoFx.rawTrack);
+  if (prevTrack && prevTrack !== nextTrack) {
+    activeStream.removeTrack(prevTrack);
+    activeStream.addTrack(nextTrack);
+    if (CALL) {
+      for (const peer of CALL.peers.values()) {
+        const sender = peer.pc.getSenders().find(s => s.track?.kind === 'video' && !peer.screenSender?.includes?.(s));
+        sender?.replaceTrack(nextTrack).catch(() => {});
+      }
+      bindSelfTileVideo();
+    } else {
+      updateLobbyUI();
+    }
+  }
+}
+
+/* ==========================================================================
+   IDENTITY, THEME & PRE-WARMED ICE POOL
+   ========================================================================== */
+const MY_KEY = generateNostrKeypair();
+const MY_ID = MY_KEY.pubHex.slice(0, 16);
+
+function initTheme() {
+  const saved = store.get('theme', 'auto');
+  document.documentElement.dataset.theme = saved;
+  $('#themeBtn').addEventListener('click', () => {
+    const cur = document.documentElement.dataset.theme || 'auto';
+    const next = cur === 'auto' ? 'dark' : cur === 'dark' ? 'light' : 'auto';
+    document.documentElement.dataset.theme = next;
+    store.set('theme', next);
+    toast(`Farbschema: ${next === 'auto' ? 'Automatisch' : next === 'dark' ? 'Dunkel' : 'Hell'}`);
+  });
+}
+
+function buildIceServers() {
+  const servers = [{ urls: STUN_URLS }];
+  const turnUrl = $('#customTurnUrl')?.value.trim();
+  if (turnUrl) {
+    const cfg = { urls: turnUrl };
+    const u = $('#customTurnUser')?.value.trim();
+    const p = $('#customTurnPass')?.value;
+    if (u) cfg.username = u;
+    if (p) cfg.credential = p;
+    servers.push(cfg);
+  }
+  return servers;
+}
+
+let prewarmPc = null;
+function prewarmIcePool() {
+  try { prewarmPc?.close(); } catch {}
+  try {
+    prewarmPc = new RTCPeerConnection({ iceServers: buildIceServers(), iceCandidatePoolSize: 4 });
+    prewarmPc.createDataChannel('warm');
+    let gotSrflx = false;
+    prewarmPc.onicecandidate = e => {
+      if (e.candidate?.candidate?.includes('srflx') && !gotSrflx) {
+        gotSrflx = true;
+        $('#prewarmText').textContent = 'ICE-Pool bereit · Direkt-UDP aktiv';
+      }
+    };
+    prewarmPc.createOffer().then(o => prewarmPc?.setLocalDescription(o)).catch(() => {});
+    setTimeout(() => {
+      if (!gotSrflx && $('#prewarmText')) $('#prewarmText').textContent = 'ICE-Pool bereit';
+    }, 2200);
+  } catch {
+    $('#prewarmText').textContent = 'Direkt-Modus bereit';
+  }
+}
+
+function setView(view) {
+  const apply = () => { document.body.dataset.view = view; };
+  if (document.startViewTransition) document.startViewTransition(apply);
+  else apply();
+}
+
+function setUrlSlug(slug) {
+  try {
+    const url = slug ? `#${slug}` : location.pathname + location.search;
+    history.replaceState(null, '', url);
+  } catch {}
+}
+
+function roomShareUrl(slug) {
+  const base = location.href.split('#')[0];
+  return `${base}#${slug}`;
+}
+
+/* ==========================================================================
+   LOBBY / STUDIO PREVIEW STATE
+   ========================================================================== */
+const LOBBY = {
+  slug: '',
+  pin: '',
+  stream: null,
+  rawMic: null,
+  micOn: true,
+  camOn: true,
+  specRaf: 0,
+  analyser: null
+};
+
+let CALL = null;
+
+function getDisplayName() {
+  let n = cleanName($('#lobbyNameInput')?.value || store.get('name', ''));
+  if (!n) {
+    n = rnd(ANIMALS);
+    store.set('name', n);
+  }
+  return n;
+}
+
+export function updateLobbyUI() {
+  const stage = $('#pvStage');
+  const vid = $('#pvVideo');
+  const name = getDisplayName();
+  $('#pvAvatar').textContent = (name[0] || 'A').toUpperCase();
+  $('#pvAvatar').style.background = colorFor(MY_ID);
+
+  const vTrack = LOBBY.stream?.getVideoTracks()[0];
+  const hasCam = !!(LOBBY.camOn && vTrack && vTrack.readyState === 'live' && vTrack.enabled);
+  stage.classList.toggle('cam-on', hasCam);
+  if (hasCam && vid.srcObject !== LOBBY.stream) {
+    vid.srcObject = LOBBY.stream;
+    vid.play().catch(() => {});
+  }
+  $('#pvHintMsg').textContent = hasCam ? '' : 'Kamera ist ausgeschaltet';
+  $('#pvMicBtn').classList.toggle('off', !LOBBY.micOn);
+  $('#pvCamBtn').classList.toggle('off', !LOBBY.camOn);
+}
+
+async function startLobbyMedia() {
+  stopLobbyMedia();
+  const micId = $('#selMic').value;
+  const camId = $('#selCam').value;
+  const constraints = {
+    audio: LOBBY.micOn ? (micId ? { deviceId: { exact: micId }, echoCancellation: true, noiseSuppression: true } : { echoCancellation: true, noiseSuppression: true }) : false,
+    video: LOBBY.camOn ? (camId ? { deviceId: { exact: camId }, width: { ideal: 1280 }, height: { ideal: 720 } } : { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: 'user' }) : false
   };
 
-  function copyText(text, msg = 'In die Zwischenablage kopiert') {
-    if (navigator.clipboard?.writeText) {
-      navigator.clipboard.writeText(text).then(() => toast(msg)).catch(() => fallbackCopy(text, msg));
-    } else fallbackCopy(text, msg);
-  }
-  function fallbackCopy(text, msg) {
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    ta.style.cssText = 'position:fixed;opacity:0;pointer-events:none';
-    document.body.append(ta);
-    ta.select();
-    try { document.execCommand('copy'); toast(msg); } catch { toast('Bitte manuell markieren & kopieren'); }
-    ta.remove();
+  if (!constraints.audio && !constraints.video) {
+    LOBBY.stream = new MediaStream();
+    updateLobbyUI();
+    return;
   }
 
-  function toast(text, ms = 2800) {
-    const el = document.createElement('div');
-    el.className = 'toast';
-    el.textContent = text;
-    $('#toastBox').append(el);
-    setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity .3s'; setTimeout(() => el.remove(), 320); }, ms);
+  try {
+    const raw = await navigator.mediaDevices.getUserMedia(constraints);
+    const outTracks = [];
+    const rawAud = raw.getAudioTracks()[0];
+    if (rawAud) {
+      LOBBY.rawMic = rawAud;
+      outTracks.push(buildVoiceStudioTrack(rawAud));
+      startLobbySpectrum(rawAud);
+    }
+    const rawVid = raw.getVideoTracks()[0];
+    if (rawVid) {
+      outTracks.push(videoFx.wrap(rawVid));
+    }
+    LOBBY.stream = new MediaStream(outTracks);
+    await populateDevices();
+  } catch {
+    // Fallback Audio-Only falls keine Kamera vorhanden
+    if (LOBBY.camOn) {
+      LOBBY.camOn = false;
+      try {
+        const raw = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+        const rawAud = raw.getAudioTracks()[0];
+        LOBBY.rawMic = rawAud;
+        LOBBY.stream = new MediaStream(rawAud ? [buildVoiceStudioTrack(rawAud)] : []);
+        if (rawAud) startLobbySpectrum(rawAud);
+        toast('Keine Kamera gefunden – Audio-Modus aktiv');
+      } catch {
+        LOBBY.micOn = false;
+        LOBBY.stream = new MediaStream();
+        toast('Kein Mikrofon/Kamera-Zugriff – Zuhörer- & Chat-Modus aktiv');
+      }
+    } else {
+      LOBBY.micOn = false;
+      LOBBY.stream = new MediaStream();
+    }
+  }
+  updateLobbyUI();
+}
+
+function stopLobbyMedia() {
+  cancelAnimationFrame(LOBBY.specRaf);
+  LOBBY.specRaf = 0;
+  if (LOBBY.stream) {
+    LOBBY.stream.getTracks().forEach(t => t.stop());
+    LOBBY.stream = null;
+  }
+  if (LOBBY.rawMic) {
+    try { LOBBY.rawMic.stop(); } catch {}
+    LOBBY.rawMic = null;
+  }
+  videoFx.stopAll();
+}
+
+function startLobbySpectrum(audioTrack) {
+  cancelAnimationFrame(LOBBY.specRaf);
+  const ctx = getAudioCtx();
+  if (!ctx) return;
+  try {
+    const src = ctx.createMediaStreamSource(new MediaStream([audioTrack]));
+    const an = ctx.createAnalyser();
+    an.fftSize = 64;
+    src.connect(an);
+    const data = new Uint8Array(an.frequencyBinCount);
+    const cvs = $('#pvSpecCanvas');
+    const c = cvs.getContext('2d');
+    const draw = () => {
+      LOBBY.specRaf = requestAnimationFrame(draw);
+      c.clearRect(0, 0, cvs.width, cvs.height);
+      if (!LOBBY.micOn) return;
+      an.getByteFrequencyData(data);
+      let sum = 0;
+      const bars = 14;
+      const bw = cvs.width / bars;
+      for (let i = 0; i < bars; i++) {
+        const v = data[i + 1] / 255;
+        sum += v;
+        const h = Math.max(3, v * cvs.height);
+        c.fillStyle = v > 0.6 ? '#FF4F1A' : '#1FA958';
+        c.fillRect(i * bw + 1, (cvs.height - h) / 2, bw - 3, h);
+      }
+      const lvl = sum / bars;
+      $('#pvAvatar').style.transform = `scale(${1 + lvl * 0.18})`;
+      $('#pvAvatar').style.boxShadow = `0 0 0 ${Math.round(lvl * 22)}px rgba(255,79,26,0.28)`;
+    };
+    draw();
+  } catch {}
+}
+
+async function populateDevices() {
+  if (!navigator.mediaDevices?.enumerateDevices) return;
+  const devs = await navigator.mediaDevices.enumerateDevices();
+  const fill = (sel, kind, fallback) => {
+    const prev = sel.value;
+    const list = devs.filter(d => d.kind === kind);
+    sel.replaceChildren();
+    list.forEach((d, idx) => {
+      const opt = document.createElement('option');
+      opt.value = d.deviceId;
+      opt.textContent = d.label || `${fallback} ${idx + 1}`;
+      sel.append(opt);
+    });
+    if ([...sel.options].some(o => o.value === prev)) sel.value = prev;
+  };
+  fill($('#selMic'), 'audioinput', 'Mikrofon');
+  fill($('#selCam'), 'videoinput', 'Kamera');
+  if ('setSinkId' in HTMLMediaElement.prototype) {
+    $('#lblSpk').hidden = false;
+    fill($('#selSpk'), 'audiooutput', 'Lautsprecher');
+  }
+}
+
+async function openLobby(slug, pin = '') {
+  const clean = slugify(slug) || randomSlug();
+  LOBBY.slug = clean;
+  LOBBY.pin = pin;
+  $('#lobbySlugTitle').textContent = clean;
+  $('#lobbyPinInput').value = pin;
+  if (!$('#lobbyNameInput').value) $('#lobbyNameInput').value = store.get('name', '') || rnd(ANIMALS);
+  setUrlSlug(clean);
+  setView('join');
+  prewarmIcePool();
+  await startLobbyMedia();
+}
+
+function goHome() {
+  if (CALL) leaveCall(false);
+  stopLobbyMedia();
+  setUrlSlug('');
+  setView('home');
+}
+
+/* ==========================================================================
+   SIGNALING BUS (INSTANT BROADCASTCHANNEL + ENCRYPTED NOSTR RELAYS)
+   ========================================================================== */
+class SignalBus {
+  constructor(roomCrypto, onMsg, onStatus) {
+    this.crypto = roomCrypto;
+    this.onMsg = onMsg;
+    this.onStatus = onStatus;
+    this.seen = new Set();
+    this.sockets = [];
+    this.closed = false;
+    this.bc = null;
+
+    try {
+      this.bc = new BroadcastChannel('anruf-sig:' + roomCrypto.roomTag);
+      this.bc.onmessage = e => this._ingest(e.data, 'local');
+    } catch {}
+
+    this._connectRelays();
   }
 
-  const hashStr = s => Array.from(String(s)).reduce((h, c) => ((h * 31) + c.charCodeAt(0)) >>> 0, 17);
-  const colorFor = id => PALETTE[hashStr(id) % PALETTE.length];
-  const cleanName = s => String(s ?? '').replace(/[\u0000-\u001f<>]/g, '').trim().slice(0, 24);
-  const slugify = s => String(s ?? '').toLowerCase()
-    .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss')
-    .normalize('NFKD').replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 46);
-  const fmtBytes = n => n < 1024 ? `${n} B` : n < 1048576 ? `${(n / 1024).toFixed(1)} KB` : `${(n / 1048576).toFixed(1)} MB`;
+  _connectRelays() {
+    let openCount = 0;
+    const subId = 'anruf-' + MY_ID.slice(0, 8);
+    const since = Math.floor(Date.now() / 1000) - 30;
 
-  const ADJ = ['blaue','stille','flinke','helle','kluge','sanfte','goldene','mutige','frische','warme','klare','freie'];
-  const NOUN = ['moewe','eule','welle','wolke','kiefer','lerche','birke','insel','feder','libelle','meise','robbe'];
-  const ANIMALS = ['Fuchs','Otter','Eule','Luchs','Dachs','Kranich','Robbe','Falke','Igel','Biber'];
-  const rnd = arr => arr[Math.floor(Math.random() * arr.length)];
-  function randomSlug() {
-    const chars = 'abcdefghjkmnpqrstuvwxyz23456789';
-    const r = crypto.getRandomValues(new Uint8Array(4));
-    return `${rnd(ADJ)}-${rnd(NOUN)}-${Array.from(r, b => chars[b % chars.length]).join('')}`;
-  }
-  function randId(bytes = 8) {
-    return toHex(crypto.getRandomValues(new Uint8Array(bytes)));
+    for (const url of RELAY_URLS) {
+      try {
+        const ws = new WebSocket(url);
+        this.sockets.push(ws);
+        ws.onopen = () => {
+          if (this.closed) { ws.close(); return; }
+          openCount++;
+          this.onStatus?.(openCount);
+          ws.send(JSON.stringify(['REQ', subId, { kinds: [25050, 24242], '#t': [this.crypto.roomTag], since }]));
+        };
+        ws.onmessage = async ev => {
+          try {
+            const msg = JSON.parse(ev.data);
+            if (msg[0] === 'EVENT' && msg[2]?.content) {
+              if (msg[2].pubkey === MY_KEY.pubHex) return;
+              const data = await this.crypto.decrypt(msg[2].content);
+              this._ingest(data, 'nostr');
+            }
+          } catch {}
+        };
+        ws.onclose = () => {
+          openCount = Math.max(0, openCount - 1);
+          this.onStatus?.(openCount);
+        };
+      } catch {}
+    }
   }
 
-  /* ==========================================================================
-     BIP-340 SECP256K1 SCHNORR (NOSTR NIP-01 EPHEMERAL SIGNALING)
-     ========================================================================== */
-  const SECP_P = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2Fn;
-  const SECP_N = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141n;
-  const SECP_GX = 0x79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798n;
-  const SECP_GY = 0x483ADA7726A3C4655DA4FBFC0E1108A8FD17B448A68554199C47D08FFB10D4B8n;
+  _ingest(pkt, via) {
+    if (!pkt || pkt.from === MY_ID || !pkt.mid) return;
+    if (pkt.to && pkt.to !== MY_ID) return;
+    if (this.seen.has(pkt.mid)) return;
+    this.seen.add(pkt.mid);
+    if (this.seen.size > 800) {
+      const first = this.seen.values().next().value;
+      this.seen.delete(first);
+    }
+    this.onMsg(pkt, via);
+  }
 
-  const mod = (a, m = SECP_P) => { const r = a % m; return r >= 0n ? r : r + m; };
-  function modPow(base, exp, m = SECP_P) {
-    let res = 1n, b = mod(base, m), e = exp;
-    while (e > 0n) { if (e & 1n) res = (res * b) % m; b = (b * b) % m; e >>= 1n; }
-    return res;
+  async send(payload, to = null) {
+    if (this.closed) return;
+    const pkt = {
+      ...payload,
+      from: MY_ID,
+      to,
+      mid: toHex(crypto.getRandomValues(new Uint8Array(8)))
+    };
+    try { this.bc?.postMessage(pkt); } catch {}
+    try {
+      const content = await this.crypto.encrypt(pkt);
+      const ev = await signNostrEvent({
+        pubkey: MY_KEY.pubHex,
+        created_at: Math.floor(Date.now() / 1000),
+        kind: 25050,
+        tags: [['t', this.crypto.roomTag]],
+        content
+      }, MY_KEY.privBytes);
+      const wire = JSON.stringify(['EVENT', ev]);
+      for (const ws of this.sockets) {
+        if (ws.readyState === WebSocket.OPEN) ws.send(wire);
+      }
+    } catch {}
   }
-  const modInv = (a, m = SECP_P) => modPow(a, m - 2n, m);
-  function ptAdd(p1, p2) {
-    if (!p1) return p2;
-    if (!p2) return p1;
-    if (p1.x === p2.x && p1.y !== p2.y) return null;
-    const lam = p1.x === p2.x
-      ? mod(3n * p1.x * p1.x * modInv(2n * p1.y))
-      : mod((p2.y - p1.y) * modInv(p2.x - p1.x));
-    const x3 = mod(lam * lam - p1.x - p2.x);
-    const y3 = mod(lam * (p1.x - x3) - p1.y);
-    return { x: x3, y: y3 };
+
+  close() {
+    this.closed = true;
+    try { this.bc?.close(); } catch {}
+    for (const ws of this.sockets) {
+      try { ws.close(); } catch {}
+    }
+    this.sockets = [];
   }
-  function ptMul(k, pt = { x: SECP_GX, y: SECP_GY }) {
-    let res = null, add = pt, n = k;
-    while (n > 0n) { if (n & 1n) res = ptAdd(res, add); add = ptAdd(add, add); n >>= 1n; }
-    return res;
+}
+
+/* ==========================================================================
+   ORGANIC AVATAR BLOBS & TILES STAGE
+   ========================================================================== */
+function blobPath(seed, amp, time) {
+  const pts = 8;
+  const coords = [];
+  for (let i = 0; i < pts; i++) {
+    const ang = (i / pts) * Math.PI * 2;
+    const wave = Math.sin(time * 2.4 + i * 1.7 + seed) * (5 + amp * 18) +
+                 Math.cos(time * 1.6 - i * 2.3 + seed) * (3 + amp * 10);
+    const r = 64 + wave;
+    coords.push([Math.cos(ang) * r, Math.sin(ang) * r]);
   }
-  const bytesToBig = b => BigInt('0x' + toHex(b));
-  const bigTo32Bytes = num => fromHex(
+  let d = '';
+  for (let i = 0; i < pts; i++) {
+    const p0 = coords[i];
+    const p1 = coords[(i + 1) % pts];
+    const mx = (p0[0] + p1[0]) / 2;
+    const my = (p0[1] + p1[1]) / 2;
+    if (i === 0) {
+      const prev = coords[pts - 1];
+      d += `M ${(prev[0] + p0[0]) / 2} ${(prev[1] + p0[1]) / 2} `;
+    }
+    d += `Q ${p0[0]} ${p0[1]} ${mx} ${my} `;
+  }
+  return d + 'Z';
+}
+
+function createTile({ id, name, self = false, screen = false }) {
+  const tpl = $('#tileTemplate').content.firstElementChild.cloneNode(true);
+  tpl.dataset.id = id;
+  tpl.style.setProperty('--c', colorFor(id));
+  if (self) tpl.classList.add('self');
+  if (screen) tpl.classList.add('screen-tile', 'cam');
+  $('.nm', tpl).textContent = self ? `${name} (Du)` : name;
+  $('.blob-ini', tpl).textContent = (name[0] || '?').toUpperCase();
+  $('.p2p-tag', tpl).textContent = self ? 'LOKAL' : screen ? 'SCREEN' : 'P2P';
+  const seed = (hashStr(id) % 100) * 0.1;
+  $('.halo', tpl).setAttribute('d', blobPath(seed, 0.35, 0));
+  $('.body', tpl).setAttribute('d', blobPath(seed, 0.05, 0));
+  return tpl;
+}
+
+export function bindSelfTileVideo() {
+  if (!CALL?.selfTile) return;
+  const vid = $('video', CALL.selfTile);
+  const vTrack = CALL.localStream?.getVideoTracks()[0];
+  const camActive = !!(CALL.camOn && vTrack && vTrack.readyState === 'live' && vTrack.enabled);
+  CALL.selfTile.classList.toggle('cam', camActive);
+  CALL.selfTile.classList.toggle('muted', !CALL.micOn);
+  if (vid.srcObject !== CALL.localStream) {
+    vid.srcObject = CALL.localStream;
+  }
+  vid.muted = true;
+  if (camActive) vid.play().catch(() => {});
+}
+
+function updateGridLayout() {
+  const grid = $('#tilesGrid');
+  const tiles = $$('.tile', grid);
+  const n = tiles.length;
+  const cols = n <= 1 ? 1 : n <= 4 ? 2 : n <= 6 ? 3 : 4;
+  grid.style.setProperty('--cols', String(cols));
+  const peerCount = CALL ? CALL.peers.size : 0;
+  grid.classList.toggle('alone', peerCount === 0 && !WB.open);
+  grid.classList.toggle('duo', n === 2 && !WB.open);
+  $('#stageWrap').classList.toggle('has-work', WB.open);
+  updateSpatialPanners();
+  updateSasBadge();
+  updateHeaderSummary();
+}
+
+function updateSpatialPanners() {
+  if (!CALL) return;
+  const enabled = $('#chkSpatialAudio').checked;
+  const peers = [...CALL.peers.values()];
+  peers.forEach((p, idx) => {
+    if (!p.panner) return;
+    if (!enabled || peers.length <= 1) p.panner.pan.value = 0;
+    else {
+      const pos = (idx / (peers.length - 1)) * 1.3 - 0.65;
+      p.panner.pan.value = Math.max(-0.75, Math.min(0.75, pos));
+    }
+  });
+}
+
+const SAS_EMOJIS = ['🦊','🦉','🐬','🦋','🍀','🔥','⚡','🌈','🧭','🏔️','🎸','🚀','💎','🌻','🐳','🍎'];
+async function updateSasBadge() {
+  const btn = $('#sasBtn');
+  if (!CALL || CALL.peers.size === 0) {
+    btn.hidden = true;
+    return;
+  }
+  const ids = [MY_ID, ...CALL.peers.keys()].sort().join(':');
+  const digest = await sha256(enc.encode(CALL.roomCrypto.roomTag + ':' + ids));
+  const syms = [0, 1, 2, 3].map(i => SAS_EMOJIS[digest[i] % SAS_EMOJIS.length]).join(' ');
+  $('#sasEmojis').textContent = syms;
+  btn.hidden = false;
+}
+
+function updateHeaderSummary() {
+  if (!CALL) return;
+  const n = CALL.peers.size;
+  const dot = $('#roomP2pDot');
+  const sum = $('#roomP2pSummary');
+  if (n === 0) {
+    dot.className = 'status-dot warn';
+    sum.textContent = 'Wartet auf Gast';
+  } else {
+    const connected = [...CALL.peers.values()].filter(p => p.pc.connectionState === 'connected').length;
+    dot.className = connected > 0 ? 'status-dot online' : 'status-dot warn';
+    sum.textContent = `${connected}/${n} Direkt-P2P`;
+  }
+}
+
+/* ==========================================================================
+   IN-CALL WEBRTC MESH ENGINE
+   ========================================================================== */
+async function enterCall() {
+  if (CALL) return;
+  getAudioCtx();
+  const name = getDisplayName();
+  store.set('name', name);
+  const slug = LOBBY.slug || randomSlug();
+  const pin = $('#lobbyPinInput').value.trim();
+
+  try { prewarmPc?.close(); prewarmPc = null; } catch {}
+  cancelAnimationFrame(LOBBY.specRaf);
+
+  let localStream = LOBBY.stream;
+  if (!localStream) {
+    await startLobbyMedia();
+    localStream = LOBBY.stream || new MediaStream();
+  }
+  LOBBY.stream = null;
+
+  const roomCrypto = await deriveRoomCrypto(slug, pin);
+  const shareUrl = roomShareUrl(slug);
+
+  CALL = {
+    slug,
+    pin,
+    name,
+    roomCrypto,
+    localStream,
+    rawMic: LOBBY.rawMic,
+    micOn: LOBBY.micOn,
+    camOn: LOBBY.camOn,
+    locked: false,
+    handUp: false,
+    peers: new Map(),
+    polls: new Map(),
+    incomingFiles: new Map(),
+    selfTile: null,
+    screenStream: null,
+    screenTile: null,
+    bus: null,
+    startTime: Date.now(),
+    timerInt: 0,
+    statsInt: 0,
+    animRaf: 0,
+    prevStats: { sent: 0, recv: 0, ts: performance.now() },
+    histDown: new Array(28).fill(0),
+    histUp: new Array(28).fill(0),
+    selfAnalyser: null
+  };
+  LOBBY.rawMic = null;
+
+  // UI vorbereiten
+  $('#roomSlugLabel').textContent = slug;
+  $('#waitLinkCode').textContent = shareUrl;
+  $('#dlgLinkCode').textContent = shareUrl;
+  $('#waitQr').innerHTML = renderQrSvg(shareUrl);
+  $('#dlgQrBox').innerHTML = renderQrSvg(shareUrl);
+  $('#chatMsgs').replaceChildren();
+  $('#knockStack').replaceChildren();
+  $('#lockRoomChk').checked = false;
+  $('#roomLockBadge').hidden = true;
+  $('#dockMicBtn').classList.toggle('off', !CALL.micOn);
+  $('#dockCamBtn').classList.toggle('off', !CALL.camOn);
+
+  // Altes Grid bereinigen (WaitCard behalten)
+  $$('#tilesGrid .tile').forEach(t => t.remove());
+  CALL.selfTile = createTile({ id: MY_ID, name, self: true });
+  $('#tilesGrid').prepend(CALL.selfTile);
+  bindSelfTileVideo();
+  setupSelfAudioMeter();
+
+  setView('room');
+  playChime('enter');
+  updateGridLayout();
+
+  // Timer & Telemetrie
+  CALL.timerInt = setInterval(() => {
+    if (!CALL) return;
+    const sec = Math.floor((Date.now() - CALL.startTime) / 1000);
+    const m = String(Math.floor(sec / 60)).padStart(2, '0');
+    const s = String(sec % 60).padStart(2, '0');
+    $('#roomTimer').textContent = `${m}:${s}`;
+  }, 1000);
+
+  CALL.statsInt = setInterval(pollWebRtcStats, 1500);
+  startAvatarAnimationLoop();
+
+  // Signaling starten & Anwesenheit ankündigen
+  CALL.bus = new SignalBus(roomCrypto, handleSignalMessage, () => {});
+  await CALL.bus.send({ type: 'hello', name: CALL.name });
+  // Zweiter Ping nach kurzem Intervall für frisch verbundene Relays
+  setTimeout(() => CALL?.bus?.send({ type: 'hello', name: CALL.name }), 1300);
+}
+
+function setupSelfAudioMeter() {
+  const ctx = getAudioCtx();
+  const aTrack = CALL?.localStream?.getAudioTracks()[0];
+  if (!ctx || !aTrack) return;
+  try {
+    const src = ctx.createMediaStreamSource(new MediaStream([aTrack]));
+    const an = ctx.createAnalyser();
+    an.fftSize = 64;
+    src.connect(an);
+    CALL.selfAnalyser = { an, buf: new Uint8Array(an.frequencyBinCount) };
+  } catch {}
+}
+
+function startAvatarAnimationLoop() {
+  const step = now => {
+    if (!CALL) return;
+    CALL.animRaf = requestAnimationFrame(step);
+    const t = now * 0.001;
+
+    // Self Level
+    if (CALL.selfTile) {
+      let lvl = 0;
+      if (CALL.micOn && CALL.selfAnalyser) {
+        CALL.selfAnalyser.an.getByteFrequencyData(CALL.selfAnalyser.buf);
+        lvl = CALL.selfAnalyser.buf.reduce((a, b) => a + b, 0) / (CALL.selfAnalyser.buf.length * 255);
+      }
+      CALL.selfTile.classList.toggle('speaking', lvl > 0.14);
+      const seed = (hashStr(MY_ID) % 100) * 0.1;
+      $('.halo', CALL.selfTile).setAttribute('d', blobPath(seed, 0.25 + lvl * 1.4, t));
+      $('.body', CALL.selfTile).setAttribute('d', blobPath(seed, lvl * 0.8, t));
+    }
+
+    // Remote Peers Level
+    for (const p of CALL.peers.values()) {
+      let lvl = 0;
+      if (!p.muted && p.analyser) {
+        p.analyser.getByteFrequencyData(p.dataArr);
+        lvl = p.dataArr.reduce((a, b) => a + b, 0) / (p.dataArr.length * 255);
+      }
+      p.tile.classList.toggle('speaking', lvl > 0.13);
+      const seed = (hashStr(p.id) % 100) * 0.1;
+      $('.halo', p.tile)?.setAttribute('d', blobPath(seed, 0.25 + lvl * 1.4, t));
+      $('.body', p.tile)?.setAttribute('d', blobPath(seed, lvl * 0.8, t));
+    }
+  };
+  CALL.animRaf = requestAnimationFrame(step);
+}
+
+async function handleSignalMessage(pkt) {
+  if (!CALL) return;
+  const { from, type } = pkt;
+
+  if (type === 'hello') {
+    if (CALL.peers.size >= MAX_PEERS && !CALL.peers.has(from)) return;
+    if (CALL.locked && !CALL.peers.has(from)) {
+      await CALL.bus.send({ type: 'locked-notice' }, from);
+      showKnockPrompt(from, cleanName(pkt.name) || 'Gast');
+      return;
+    }
+    const peer = getOrCreatePeer(from, cleanName(pkt.name) || 'Gast');
+    await CALL.bus.send({ type: 'welcome', name: CALL.name }, from);
+    if (MY_ID < from) await triggerNegotiation(peer);
+    return;
+  }
+
+  if (type === 'locked-notice') {
+    toast('Raum ist abgeschlossen – es wurde angeklopft…', 4000);
+    return;
+  }
+
+  if (type === 'admit') {
+    toast('Einlass gewährt – verbinde direkt…');
+    const peer = getOrCreatePeer(from, cleanName(pkt.name) || 'Gast');
+    await triggerNegotiation(peer);
+    return;
+  }
+
+  if (type === 'deny') {
+    toast('Einlass wurde abgelehnt');
+    leaveCall(true);
+    return;
+  }
+
+  if (type === 'welcome') {
+    const peer = getOrCreatePeer(from, cleanName(pkt.name) || 'Gast');
+    if (MY_ID < from) await triggerNegotiation(peer);
+    return;
+  }
+
+  if (type === 'bye') {
+    removePeer(from, true);
+    return;
+  }
+
+  if (type === 'sdp') {
+    if (CALL.locked && !CALL.peers.has(from)) return;
+    const peer = getOrCreatePeer(from, cleanName(pkt.name) || 'Gast');
+    const desc = pkt.sdp;
+    try {
+      const offerCollision = desc.type === 'offer' && (peer.makingOffer || peer.pc.signalingState !== 'stable');
+      peer.ignoreOffer = !peer.polite && offerCollision;
+      if (peer.ignoreOffer) return;
+
+      await peer.pc.setRemoteDescription(desc);
+      while (peer.pendingIce.length) {
+        await peer.pc.addIceCandidate(peer.pendingIce.shift()).catch(() => {});
+      }
+      if (desc.type === 'offer') {
+        await peer.pc.setLocalDescription();
+        await CALL.bus.send({ type: 'sdp', sdp: peer.pc.localDescription, name: CALL.name }, from);
+      }
+    } catch {}
+    return;
+  }
+
+  if (type === 'ice' && pkt.candidate) {
+    const peer = CALL.peers.get(from);
+    if (!peer || peer.ignoreOffer) return;
+    if (peer.pc.remoteDescription) {
+      await peer.pc.addIceCandidate(pkt.candidate).catch(() => {});
+    } else {
+      peer.pendingIce.push(pkt.candidate);
+    }
+  }
+}
+
+function showKnockPrompt(peerId, peerName) {
+  if ($(`[data-knock="${peerId}"]`, $('#knockStack'))) return;
+  playChime('knock');
+  const card = document.createElement('div');
+  card.className = 'knock-card';
+  card.dataset.knock = peerId;
+  card.innerHTML = `
+    <div><strong>🚪 ${peerName}</strong> möchte beitreten.</div>
+    <div style="display:flex;gap:8px">
+      <button class="btn sm p2p" data-act="admit">Einlassen</button>
+      <button class="btn sm ghost" data-act="deny">Ablehnen</button>
+    </div>
+  `;
+  $('[data-act="admit"]', card).onclick = async () => {
+    card.remove();
+    getOrCreatePeer(peerId, peerName);
+    await CALL.bus.send({ type: 'admit', name: CALL.name }, peerId);
+  };
+  $('[data-act="deny"]', card).onclick = async () => {
+    card.remove();
+    await CALL.bus.send({ type: 'deny' }, peerId);
+  };
+  $('#knockStack').append(card);
+}
+
+function getOrCreatePeer(peerId, peerName = 'Gast') {
+  let peer = CALL.peers.get(peerId);
+  if (peer) {
+    if (peerName && peerName !== 'Gast') {
+      peer.name = peerName;
+      $('.nm', peer.tile).textContent = peerName;
+      $('.blob-ini', peer.tile).textContent = (peerName[0] || '?').toUpperCase();
+    }
+    return peer;
+  }
+
+  const pc = new RTCPeerConnection({ iceServers: buildIceServers() });
+  const dc = pc.createDataChannel('anruf-dc', { negotiated: true, id: 0 });
+  dc.binaryType = 'arraybuffer';
+
+  const tile = createTile({ id: peerId, name: peerName });
+  $('#tilesGrid').append(tile);
+
+  peer = {
+    id: peerId,
+    name: peerName,
+    pc,
+    dc,
+    polite: MY_ID < peerId,
+    makingOffer: false,
+    ignoreOffer: false,
+    pendingIce: [],
+    stream: new MediaStream(),
+    tile,
+    audioEl: null,
+    panner: null,
+    analyser: null,
+    dataArr: null,
+    muted: false,
+    camOn: true,
+    screenSender: [],
+    screenTile: null,
+    rtt: null,
+    candType: 'P2P'
+  };
+
+  CALL.peers.set(peerId, peer);
+  setupPeerDataChannel(peer, dc);
+
+  // Lokale Tracks anhängen
+  for (const track of CALL.localStream.getTracks()) {
+    pc.addTrack(track, CALL.localStream);
+  }
+  if (CALL.screenStream) {
+    for (const st of CALL.screenStream.getTracks()) {
+      peer.screenSender.push(pc.addTrack(st, CALL.screenStream));
+    }
+  }
+
+  pc.onicecandidate = e => {
+    if (e.candidate) CALL?.bus?.send({ type: 'ice', candidate: e.candidate }, peerId);
+  };
+
+  pc.onnegotiationneeded = () => triggerNegotiation(peer);
+
+  pc.ontrack = ev => {
+    const track = ev.track;
+    const stream = ev.streams[0] || peer.stream;
+
+    // Zweiter Video-Stream = Bildschirmfreigabe
+    if (track.kind === 'video' && peer.mainVideoId && peer.mainVideoId !== track.id) {
+      if (!peer.screenTile) {
+        peer.screenTile = createTile({ id: peerId + ':screen', name: `${peer.name} · Bildschirm`, screen: true });
+        attachLaserOverlay(peer.screenTile, peerId + ':screen');
+        $('#tilesGrid').prepend(peer.screenTile);
+      }
+      const sv = $('video', peer.screenTile);
+      sv.srcObject = new MediaStream([track]);
+      sv.play().catch(() => {});
+      track.onended = () => { peer.screenTile?.remove(); peer.screenTile = null; updateGridLayout(); };
+      updateGridLayout();
+      return;
+    }
+
+    if (track.kind === 'video') {
+      peer.mainVideoId = track.id;
+      peer.stream.addTrack(track);
+      const vid = $('video', peer.tile);
+      vid.srcObject = peer.stream;
+      vid.muted = true;
+      vid.play().catch(() => {});
+      peer.tile.classList.toggle('cam', peer.camOn);
+      track.onmute = () => peer.tile.classList.remove('cam');
+      track.onunmute = () => { if (peer.camOn) peer.tile.classList.add('cam'); };
+    } else if (track.kind === 'audio') {
+      attachRemoteAudio(peer, track, stream);
+    }
+  };
+
+  pc.onconnectionstatechange = () => {
+    updateHeaderSummary();
+    if (pc.connectionState === 'connected') {
+      playChime('join');
+      addSysMsg(`${peer.name} ist direkt verbunden`);
+    } else if (pc.connectionState === 'failed' || pc.connectionState === 'closed') {
+      removePeer(peerId, true);
+    }
+  };
+
+  updateGridLayout();
+  return peer;
+}
+
+async function triggerNegotiation(peer) {
+  if (!CALL || peer.makingOffer || peer.pc.signalingState !== 'stable') return;
+  try {
+    peer.makingOffer = true;
+    await peer.pc.setLocalDescription();
+    await CALL.bus.send({ type: 'sdp', sdp: peer.pc.localDescription, name: CALL.name }, peer.id);
+  } catch {} finally {
+    peer.makingOffer = false;
+  }
+}
+
+function attachRemoteAudio(peer, audioTrack) {
+  const ms = new MediaStream([audioTrack]);
+  // Fallback Audio-Element für zuverlässiges Autoplay + setSinkId
+  const audio = new Audio();
+  audio.autoplay = true;
+  audio.playsInline = true;
+  const spkId = $('#selSpk')?.value;
+  if (spkId && audio.setSinkId) audio.setSinkId(spkId).catch(() => {});
+
+  const ctx = getAudioCtx();
+  if (ctx && ctx.createStereoPanner && ctx.createMediaStreamDestination) {
+    try {
+      // Chrome WebRTC-Quirk: stummes Audio-Element hält den Track aktiv
+      const keepAlive = new Audio();
+      keepAlive.srcObject = ms;
+      keepAlive.muted = true;
+      keepAlive.play().catch(() => {});
+
+      const src = ctx.createMediaStreamSource(ms);
+      const panner = ctx.createStereoPanner();
+      const analyser = ctx.createAnalyser();
+      analyser.fftSize = 64;
+      const dest = ctx.createMediaStreamDestination();
+      src.connect(analyser);
+      analyser.connect(panner);
+      panner.connect(dest);
+
+      audio.srcObject = dest.stream;
+      audio.play().catch(() => {});
+      peer.panner = panner;
+      peer.analyser = analyser;
+      peer.dataArr = new Uint8Array(analyser.frequencyBinCount);
+      peer.audioEl = audio;
+      updateSpatialPanners();
+      return;
+    } catch {}
+  }
+  audio.srcObject = ms;
+  audio.play().catch(() => {});
+  peer.audioEl = audio;
+}
+
+function removePeer(peerId, notify = false) {
+  if (!CALL) return;
+  const peer = CALL.peers.get(peerId);
+  if (!peer) return;
+  CALL.peers.delete(peerId);
+  try { peer.dc?.close(); } catch {}
+  try { peer.pc?.close(); } catch {}
+  if (peer.audioEl) { peer.audioEl.srcObject = null; }
+  peer.tile?.remove();
+  peer.screenTile?.remove();
+  if (notify) {
+    playChime('leave');
+    addSysMsg(`${peer.name} hat das Gespräch verlassen`);
+  }
+  updateGridLayout();
+}
+
+function leaveCall(navigateHome = true) {
+  if (!CALL) return;
+  stopCaptions();
+  if (CALL.screenStream) stopScreenShare();
+  CALL.bus?.send({ type: 'bye' });
+  CALL.bus?.close();
+  clearInterval(CALL.timerInt);
+  clearInterval(CALL.statsInt);
+  cancelAnimationFrame(CALL.animRaf);
+
+  for (const id of [...CALL.peers.keys()]) removePeer(id, false);
+  CALL.localStream?.getTracks().forEach(t => t.stop());
+  try { CALL.rawMic?.stop(); } catch {}
+  videoFx.stopAll();
+  WB.reset();
+
+  // Studio-Rack zurück in die Lobby legen, falls noch im Dialog
+  if ($('#studioRack').parentElement !== $('.pv-card')) {
+    $('.pv-card').append($('#studioRack'));
+  }
+
+  CALL = null;
+  if (navigateHome) {
+    setUrlSlug('');
+    setView('home');
+  }
+}
+
+/* ==========================================================================
+   DATACHANNEL PROTOCOL: CHAT, FILES, POLLS, WHITEBOARD, LASER, CAPTIONS
+   ========================================================================== */
+function sendDcAll(obj) {
+  if (!CALL) return;
+  const raw = JSON.stringify(obj);
+  for (const p of CALL.peers.values()) {
+    if (p.dc?.readyState === 'open') {
+      try { p.dc.send(raw); } catch {}
+    }
+  }
+}
+
+function setupPeerDataChannel(peer, dc) {
+  dc.onopen = () => {
+    dc.send(JSON.stringify({
+      t: 'state',
+      name: CALL.name,
+      mic: CALL.micOn,
+      cam: CALL.camOn,
+      hand: CALL.handUp
+    }));
+    if (WB.strokes.length) {
+      dc.send(JSON.stringify({ t: 'wb-sync', strokes: WB.strokes, open: WB.open }));
+    }
+  };
+
+  dc.onmessage = ev => {
+    if (typeof ev.data !== 'string') {
+      handleBinaryChunk(peer, ev.data);
+      return;
+    }
+    try {
+      const m = JSON.parse(ev.data);
+      handleDcJson(peer, m);
+    } catch {}
+  };
+}
+
+function handleDcJson(peer, m) {
+  if (!CALL) return;
+  switch (m.t) {
+    case 'state':
+      if (m.name) {
+        peer.name = cleanName(m.name) || peer.name;
+        $('.nm', peer.tile).textContent = peer.name;
+        $('.blob-ini', peer.tile).textContent = (peer.name[0] || '?').toUpperCase();
+      }
+      peer.muted = !m.mic;
+      peer.camOn = !!m.cam;
+      peer.tile.classList.toggle('muted', peer.muted);
+      peer.tile.classList.toggle('cam', peer.camOn && !!peer.mainVideoId);
+      peer.tile.classList.toggle('hand-up', !!m.hand);
+      break;
+
+    case 'chat':
+      appendChatBubble({ who: peer.name, text: String(m.text || '').slice(0, 1200), me: false });
+      playChime('msg');
+      bumpUnread();
+      break;
+
+    case 'emo':
+      spawnFlyingEmoji(m.emo);
+      break;
+
+    case 'cc':
+      showSubtitleLine(peer.name, String(m.text || '').slice(0, 180));
+      break;
+
+    case 'wb-open':
+      WB.toggle(true, false);
+      break;
+
+    case 'wb-stroke':
+      if (!WB.open) WB.toggle(true, false);
+      WB.strokes.push(m.stroke);
+      WB.redraw();
+      break;
+
+    case 'wb-clear':
+      WB.strokes = [];
+      WB.redraw();
+      break;
+
+    case 'wb-sync':
+      if (Array.isArray(m.strokes)) {
+        WB.strokes = m.strokes;
+        if (m.open) WB.toggle(true, false);
+        WB.redraw();
+      }
+      break;
+
+    case 'laser':
+      renderLaserDot(m.targetId, m.x, m.y, colorFor(peer.id));
+      break;
+
+    case 'screen-stop':
+      peer.screenTile?.remove();
+      peer.screenTile = null;
+      updateGridLayout();
+      break;
+
+    case 'poll-new':
+      renderPollCard(m.poll, false);
+      bumpUnread();
+      break;
+
+    case 'poll-vote': {
+      const poll = CALL.polls.get(m.id);
+      if (poll && typeof m.idx === 'number') {
+        poll.votes[peer.id] = m.idx;
+        updatePollUI(poll);
+      }
+      break;
+    }
+
+    case 'file-start': {
+      if (m.size > MAX_FILE_BYTES) return;
+      const ui = createFileTransferBubble({ who: peer.name, name: m.name, size: m.size, me: false });
+      CALL.incomingFiles.set(peer.id + ':' + m.fid, {
+        fid: m.fid,
+        name: cleanName(m.name) || 'datei.bin',
+        mime: m.mime || 'application/octet-stream',
+        size: m.size,
+        got: 0,
+        chunks: [],
+        ui
+      });
+      peer.activeFid = m.fid;
+      bumpUnread();
+      break;
+    }
+  }
+}
+
+/* ---------- Chunked Binary File Tunnel ---------- */
+function handleBinaryChunk(peer, buf) {
+  const key = peer.id + ':' + peer.activeFid;
+  const entry = CALL?.incomingFiles.get(key);
+  if (!entry) return;
+  entry.chunks.push(buf);
+  entry.got += buf.byteLength;
+  const pct = Math.min(100, Math.round((entry.got / Math.max(1, entry.size)) * 100));
+  entry.ui.setProgress(pct);
+
+  if (entry.got >= entry.size) {
+    const blob = new Blob(entry.chunks, { type: entry.mime });
+    const url = URL.createObjectURL(blob);
+    entry.ui.finish(url, entry.mime.startsWith('image/'));
+    CALL.incomingFiles.delete(key);
+    playChime('msg');
+  }
+}
+
+async function sendFileOverTunnel(file) {
+  if (!CALL || !file) return;
+  if (file.size > MAX_FILE_BYTES) {
+    toast('Maximal 100 MB pro Direkt-Transfer');
+    return;
+  }
+  const openPeers = [...CALL.peers.values()].filter(p => p.dc?.readyState === 'open');
+  if (!openPeers.length) {
+    toast('Noch niemand verbunden für Datei-Transfer');
+    return;
+  }
+
+  const fid = toHex(crypto.getRandomValues(new Uint8Array(6)));
+  const ui = createFileTransferBubble({ who: 'Du', name: file.name, size: file.size, me: true });
+  const meta = JSON.stringify({ t: 'file-start', fid, name: file.name, size: file.size, mime: file.type });
+
+  for (const p of openPeers) p.dc.send(meta);
+
+  const buf = await file.arrayBuffer();
+  let offset = 0;
+  while (offset < buf.byteLength) {
+    const slice = buf.slice(offset, offset + CHUNK_SIZE);
+    for (const p of openPeers) {
+      if (p.dc.readyState !== 'open') continue;
+      if (p.dc.bufferedAmount > 2 * 1024 * 1024) {
+        await new Promise(res => {
+          p.dc.bufferedAmountLowThreshold = 512 * 1024;
+          p.dc.onbufferedamountlow = () => { p.dc.onbufferedamountlow = null; res(); };
+          setTimeout(res, 250);
+        });
+      }
+      try { p.dc.send(slice); } catch {}
+    }
+    offset += slice.byteLength;
+    ui.setProgress(Math.round((offset / Math.max(1, buf.byteLength)) * 100));
+  }
+  const localUrl = URL.createObjectURL(file);
+  ui.finish(localUrl, file.type.startsWith('image/'));
+}
+
+function formatBytes(b) {
+  if (b < 1024) return `${b} B`;
+  if (b < 1048576) return `${(b / 1024).toFixed(1)} KB`;
+  return `${(b / 1048576).toFixed(1)} MB`;
+}
+
+function createFileTransferBubble({ who, name, size, me }) {
+  const li = document.createElement('li');
+  li.className = `c-msg ${me ? 'me' : ''}`;
+  li.innerHTML = `
+    <span class="c-who">${who}</span>
+    <div class="c-bub file-bub">
+      <div class="img-slot"></div>
+      <div class="file-meta-row">
+        <strong style="word-break:break-all">${name}</strong>
+        <span class="mono">${formatBytes(size)}</span>
+      </div>
+      <div class="file-prog"><i></i></div>
+      <div class="dl-slot" style="margin-top:6px"></div>
+    </div>
+  `;
+  $('#chatMsgs').append(li);
+  $('#chatMsgs').scrollTop = $('#chatMsgs').scrollHeight;
+  const bar = $('.file-prog i', li);
+  return {
+    setProgress(pct) { bar.style.width = pct + '%'; },
+    finish(url, isImg) {
+      bar.parentElement.remove();
+      if (isImg) {
+        const img = document.createElement('img');
+        img.src = url;
+        img.alt = name;
+        img.onclick = () => {
+          $('#lbImg').src = url;
+          $('#lbDownload').href = url;
+          $('#lbDownload').download = name;
+          $('#lightboxDlg').showModal();
+        };
+        $('.img-slot', li).append(img);
+      }
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = name;
+      a.textContent = '⬇ Speichern';
+      a.style.cssText = 'font-size:0.8rem;font-weight:700;text-decoration:underline';
+      $('.dl-slot', li).append(a);
+      $('#chatMsgs').scrollTop = $('#chatMsgs').scrollHeight;
+    }
+  };
+}
+
+/* ---------- Chat & Quick Polls ---------- */
+function appendChatBubble({ who, text, me }) {
+  const li = document.createElement('li');
+  li.className = `c-msg ${me ? 'me' : ''}`;
+  const sp = document.createElement('span');
+  sp.className = 'c-who';
+  sp.textContent = who;
+  const bub = document.createElement('div');
+  bub.className = 'c-bub';
+  bub.textContent = text;
+  li.append(sp, bub);
+  $('#chatMsgs').append(li);
+  $('#chatMsgs').scrollTop = $('#chatMsgs').scrollHeight;
+}
+
+function addSysMsg(text) {
+  const li = document.createElement('li');
+  li.className = 'c-sys';
+  li.textContent = text;
+  $('#chatMsgs').append(li);
+  $('#chatMsgs').scrollTop = $('#chatMsgs').scrollHeight;
+}
+
+function bumpUnread() {
+  if ($('#room').classList.contains('chat-open')) return;
+  const dot = $('#chatUnreadDot');
+  dot.hidden = false;
+  dot.textContent = String((parseInt(dot.textContent || '0', 10) || 0) + 1);
+}
+
+function renderPollCard(pollData, me) {
+  if (!CALL) return;
+  const poll = { ...pollData, votes: pollData.votes || {} };
+  CALL.polls.set(poll.id, poll);
+
+  const li = document.createElement('li');
+  li.className = `c-msg ${me ? 'me' : ''}`;
+  li.dataset.pollId = poll.id;
+  li.innerHTML = `<span class="c-who">${poll.by} · Umfrage</span><div class="c-bub"><div class="poll-box"><div class="poll-q"></div><div class="poll-opts" style="display:grid;gap:5px"></div></div></div>`;
+  $('.poll-q', li).textContent = poll.q;
+  const optsWrap = $('.poll-opts', li);
+
+  poll.options.forEach((optText, idx) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'poll-opt';
+    b.innerHTML = `<i class="fill"></i><span class="lbl"></span><span class="cnt mono">0</span>`;
+    $('.lbl', b).textContent = optText;
+    b.onclick = () => {
+      poll.votes[MY_ID] = idx;
+      updatePollUI(poll);
+      sendDcAll({ t: 'poll-vote', id: poll.id, idx });
+    };
+    optsWrap.append(b);
+  });
+
+  $('#chatMsgs').append(li);
+  $('#chatMsgs').scrollTop = $('#chatMsgs').scrollHeight;
+  updatePollUI(poll);
+}
+
+function updatePollUI(poll) {
+  const li = $(`[data-poll-id="${poll.id}"]`, $('#chatMsgs'));
+  if (!li) return;
+  const vals = Object.values(poll.votes);
+  const total = vals.length;
+  const btns = $$('.poll-opt', li);
+  btns.forEach((b, idx) => {
+    const c = vals.filter(v => v === idx).length;
+    const pct = total ? Math.round((c / total) * 100) : 0;
+    $('.fill', b).style.width = pct + '%';
+    $('.cnt', b).textContent = `${c} (${pct}%)`;
+  });
+}
+
+/* ==========================================================================
+   COLLABORATIVE WHITEBOARD & SCREEN LASER POINTER
+   ========================================================================== */
+const WB = {
+  open: false,
+  tool: 'pen',
+  color: '#FF4F1A',
+  strokes: [],
+  drawing: null,
+  toggle(force, broadcast = true) {
+    this.open = typeof force === 'boolean' ? force : !this.open;
+    $('#whiteboardPane').hidden = !this.open;
+    $('#dockWbBtn').classList.toggle('active', this.open);
+    updateGridLayout();
+    if (this.open) {
+      requestAnimationFrame(() => this.resize());
+      if (broadcast) sendDcAll({ t: 'wb-open' });
+    }
+  },
+  resize() {
+    const cvs = $('#wbCanvas');
+    const wrap = $('#wbWrap');
+    if (!cvs || !wrap.clientWidth) return;
+    const dpr = window.devicePixelRatio || 1;
+    cvs.width = wrap.clientWidth * dpr;
+    cvs.height = wrap.clientHeight * dpr;
+    this.redraw();
+  },
+  redraw() {
+    const cvs = $('#wbCanvas');
+    const ctx = cvs.getContext('2d');
+    const W = cvs.width, H = cvs.height;
+    ctx.clearRect(0, 0, W, H);
+    const all = this.drawing ? [...this.strokes, this.drawing] : this.strokes;
+    for (const s of all) {
+      if (!s.pts?.length) continue;
+      ctx.save();
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      const base = Math.max(W, H) * 0.003;
+      if (s.tool === 'eraser') {
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.lineWidth = base * 7;
+      } else if (s.tool === 'hl') {
+        ctx.globalAlpha = 0.34;
+        ctx.strokeStyle = s.color;
+        ctx.lineWidth = base * 6;
+      } else {
+        ctx.strokeStyle = s.color;
+        ctx.lineWidth = base * 1.4;
+      }
+
+      const p0 = s.pts[0];
+      const pLast = s.pts[s.pts.length - 1];
+      if (s.tool === 'rect') {
+        ctx.strokeRect(p0[0] * W, p0[1] * H, (pLast[0] - p0[0]) * W, (pLast[1] - p0[1]) * H);
+      } else if (s.tool === 'arrow') {
+        const x1 = p0[0] * W, y1 = p0[1] * H, x2 = pLast[0] * W, y2 = pLast[1] * H;
+        const ang = Math.atan2(y2 - y1, x2 - x1);
+        const head = base * 6;
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.lineTo(x2 - head * Math.cos(ang - 0.45), y2 - head * Math.sin(ang - 0.45));
+        ctx.moveTo(x2, y2);
+        ctx.lineTo(x2 - head * Math.cos(ang + 0.45), y2 - head * Math.sin(ang + 0.45));
+        ctx.stroke();
+      } else {
+        ctx.beginPath();
+        ctx.moveTo(p0[0] * W, p0[1] * H);
+        for (let i = 1; i < s.pts.length; i++) ctx.lineTo(s.pts[i][0] * W, s.pts[i][1] * H);
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+  },
+  reset() {
+    this.open = false;
+    this.strokes = [];
+    this.drawing = null;
+    $('#whiteboardPane').hidden = true;
+    $('#dockWbBtn').classList.remove('active');
+  }
+};
+
+function initWhiteboardEvents() {
+  const cvs = $('#wbCanvas');
+  const normPt = e => {
+    const r = cvs.getBoundingClientRect();
+    return [
+      Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)),
+      Math.max(0, Math.min(1, (e.clientY - r.top) / r.height))
+    ];
+  };
+
+  cvs.addEventListener('pointerdown', e => {
+    cvs.setPointerCapture(e.pointerId);
+    WB.drawing = { tool: WB.tool, color: WB.color, pts: [normPt(e)] };
+    WB.redraw();
+  });
+  cvs.addEventListener('pointermove', e => {
+    if (!WB.drawing) return;
+    const pt = normPt(e);
+    if (WB.tool === 'rect' || WB.tool === 'arrow') WB.drawing.pts = [WB.drawing.pts[0], pt];
+    else WB.drawing.pts.push(pt);
+    WB.redraw();
+  });
+  const finish = () => {
+    if (!WB.drawing) return;
+    const done = WB.drawing;
+    WB.drawing = null;
+    WB.strokes.push(done);
+    WB.redraw();
+    sendDcAll({ t: 'wb-stroke', stroke: done });
+  };
+  cvs.addEventListener('pointerup', finish);
+  cvs.addEventListener('pointercancel', finish);
+
+  $$('[data-wbtool]').forEach(btn => btn.addEventListener('click', () => {
+    WB.tool = btn.dataset.wbtool;
+    $$('[data-wbtool]').forEach(b => b.classList.toggle('active', b === btn));
+  }));
+  $$('[data-wbcol]').forEach(btn => btn.addEventListener('click', () => {
+    WB.color = btn.dataset.wbcol;
+    $$('[data-wbcol]').forEach(b => b.classList.toggle('active', b === btn));
+  }));
+
+  $('#wbClearBtn').onclick = () => {
+    WB.strokes = [];
+    WB.redraw();
+    sendDcAll({ t: 'wb-clear' });
+  };
+  $('#wbSaveBtn').onclick = () => {
+    const a = document.createElement('a');
+    a.href = cvs.toDataURL('image/png');
+    a.download = `whiteboard-${CALL?.slug || 'anruf'}.png`;
+    a.click();
+  };
+  $('#wbCloseBtn').onclick = () => WB.toggle(false, false);
+  window.addEventListener('resize', () => { if (WB.open) WB.resize(); });
+}
+
+/* ---------- Screen Share + Laser Pointer ---------- */
+const laserTrails = new Map();
+
+function attachLaserOverlay(tile, targetId) {
+  const cvs = document.createElement('canvas');
+  cvs.className = 'annot-layer';
+  tile.append(cvs);
+  cvs.addEventListener('pointermove', e => {
+    if (e.buttons !== 1 && e.pointerType === 'mouse') return;
+    const r = cvs.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width;
+    const y = (e.clientY - r.top) / r.height;
+    renderLaserDot(targetId, x, y, '#FF4F1A');
+    sendDcAll({ t: 'laser', targetId, x, y });
+  });
+}
+
+function renderLaserDot(targetId, x, y, color) {
+  const localTarget = targetId === MY_ID + ':screen' ? CALL?.screenTile : $(`.tile[data-id="${targetId}"]`, $('#tilesGrid'));
+  const tile = localTarget || $('.tile.screen-tile', $('#tilesGrid'));
+  if (!tile) return;
+  const cvs = $('.annot-layer', tile);
+  if (!cvs) return;
+  if (cvs.width !== tile.clientWidth) { cvs.width = tile.clientWidth; cvs.height = tile.clientHeight; }
+
+  let trail = laserTrails.get(cvs);
+  if (!trail) {
+    trail = [];
+    laserTrails.set(cvs, trail);
+    const loop = () => {
+      const ctx = cvs.getContext('2d');
+      ctx.clearRect(0, 0, cvs.width, cvs.height);
+      const now = performance.now();
+      while (trail.length && now - trail[0].ts > 650) trail.shift();
+      for (const pt of trail) {
+        const alpha = 1 - (now - pt.ts) / 650;
+        ctx.beginPath();
+        ctx.arc(pt.x * cvs.width, pt.y * cvs.height, 8 * alpha + 3, 0, Math.PI * 2);
+        ctx.fillStyle = pt.color;
+        ctx.globalAlpha = alpha;
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+      if (trail.length) requestAnimationFrame(loop);
+      else laserTrails.delete(cvs);
+    };
+    requestAnimationFrame(loop);
+  }
+  trail.push({ x, y, color, ts: performance.now() });
+}
+
+async function toggleScreenShare() {
+  if (!CALL) return;
+  if (CALL.screenStream) {
+    stopScreenShare();
+    return;
+  }
+  if (!navigator.mediaDevices?.getDisplayMedia) {
+    toast('Bildschirmfreigabe wird von diesem Browser nicht unterstützt');
+    return;
+  }
+  try {
+    const stream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: false });
+    CALL.screenStream = stream;
+    $('#dockScreenBtn').classList.add('live');
+
+    CALL.screenTile = createTile({ id: MY_ID + ':screen', name: 'Dein Bildschirm (Laser-fähig)', self: true, screen: true });
+    attachLaserOverlay(CALL.screenTile, MY_ID + ':screen');
+    $('video', CALL.screenTile).srcObject = stream;
+    $('video', CALL.screenTile).play().catch(() => {});
+    $('#tilesGrid').prepend(CALL.screenTile);
+    updateGridLayout();
+
+    const vTrack = stream.getVideoTracks()[0];
+    vTrack.onended = () => stopScreenShare();
+
+    for (const p of CALL.peers.values()) {
+      p.screenSender = [p.pc.addTrack(vTrack, stream)];
+    }
+  } catch {}
+}
+
+function stopScreenShare() {
+  if (!CALL?.screenStream) return;
+  CALL.screenStream.getTracks().forEach(t => t.stop());
+  CALL.screenStream = null;
+  CALL.screenTile?.remove();
+  CALL.screenTile = null;
+  $('#dockScreenBtn').classList.remove('live');
+  for (const p of CALL.peers.values()) {
+    for (const s of p.screenSender || []) {
+      try { p.pc.removeTrack(s); } catch {}
+    }
+    p.screenSender = [];
+  }
+  sendDcAll({ t: 'screen-stop' });
+  updateGridLayout();
+}
+
+/* ==========================================================================
+   LIVE SUBTITLES (CC), REACTIONS & TELEMETRY RADAR
+   ========================================================================== */
+let speechRec = null;
+function toggleCaptions() {
+  if (speechRec) {
+    stopCaptions();
+    toast('Live-Untertitel beendet');
+    return;
+  }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    toast('Dein Browser unterstützt keine lokale Spracherkennung');
+    return;
+  }
+  speechRec = new SR();
+  speechRec.lang = 'de-DE';
+  speechRec.continuous = true;
+  speechRec.interimResults = true;
+  speechRec.onresult = ev => {
+    const res = ev.results[ev.results.length - 1];
+    const txt = res?.[0]?.transcript?.trim();
+    if (!txt) return;
+    showSubtitleLine(CALL?.name || 'Du', txt);
+    sendDcAll({ t: 'cc', text: txt });
+  };
+  speechRec.onend = () => {
+    if (speechRec && CALL) { try { speechRec.start(); } catch {} }
+  };
+  try {
+    speechRec.start();
+    $('#dockCcBtn').classList.add('active');
+    toast('Live-Untertitel (Deutsch) aktiviert');
+  } catch {
+    speechRec = null;
+  }
+}
+
+function stopCaptions() {
+  if (!speechRec) return;
+  const r = speechRec;
+  speechRec = null;
+  try { r.stop(); } catch {}
+  $('#dockCcBtn').classList.remove('active');
+}
+
+const ccTimers = new Map();
+function showSubtitleLine(who, text) {
+  const box = $('#ccOverlay');
+  let line = $(`[data-who="${CSS.escape(who)}"]`, box);
+  if (!line) {
+    line = document.createElement('div');
+    line.className = 'cc-line';
+    line.dataset.who = who;
+    box.append(line);
+  }
+  line.innerHTML = '';
+  const b = document.createElement('b');
+  b.textContent = who + ':';
+  line.append(b, document.createTextNode(' ' + text));
+  clearTimeout(ccTimers.get(who));
+  ccTimers.set(who, setTimeout(() => line.remove(), 4200));
+}
+
+function spawnFlyingEmoji(emo) {
+  const el = document.createElement('div');
+  el.className = 'fly-emoji';
+  el.textContent = emo;
+  el.style.setProperty('--x', `${20 + Math.random() * 60}%`);
+  el.style.setProperty('--r', `${(Math.random() * 30 - 15).toFixed(1)}deg`);
+  $('#stageWrap').append(el);
+  setTimeout(() => el.remove(), 2700);
+}
+
+/* ---------- Live P2P Mesh Radar & Sparkline ---------- */
+async function pollWebRtcStats() {
+  if (!CALL) return;
+  let totalSent = 0, totalRecv = 0, rttSum = 0, rttN = 0, lost = 0, pkts = 0;
+  let anyRelay = false;
+  const peerRows = [];
+
+  for (const p of CALL.peers.values()) {
+    try {
+      const stats = await p.pc.getStats();
+      let pairRtt = null, localType = 'direkt';
+      const cands = new Map();
+      stats.forEach(r => {
+        if (r.type === 'local-candidate' || r.type === 'remote-candidate') cands.set(r.id, r);
+        if (r.type === 'outbound-rtp') totalSent += r.bytesSent || 0;
+        if (r.type === 'inbound-rtp') {
+          totalRecv += r.bytesReceived || 0;
+          lost += r.packetsLost || 0;
+          pkts += (r.packetsReceived || 0) + (r.packetsLost || 0);
+        }
+      });
+      stats.forEach(r => {
+        if (r.type === 'candidate-pair' && r.state === 'succeeded') {
+          if (typeof r.currentRoundTripTime === 'number') {
+            pairRtt = Math.round(r.currentRoundTripTime * 1000);
+            rttSum += pairRtt; rttN++;
+          }
+          const lc = cands.get(r.localCandidateId);
+          if (lc?.candidateType) {
+            localType = lc.candidateType;
+            if (localType === 'relay') anyRelay = true;
+          }
+        }
+      });
+      p.rtt = pairRtt;
+      p.candType = localType;
+      $('.p2p-tag', p.tile).textContent = localType === 'relay' ? 'TURN' : 'P2P ' + (pairRtt != null ? `${pairRtt}ms` : '');
+      peerRows.push(`<li><strong>${p.name}</strong><span>Typ: ${localType.toUpperCase()} · Ping: ${pairRtt ?? '—'} ms · Status: ${p.pc.connectionState}</span></li>`);
+    } catch {}
+  }
+
+  const now = performance.now();
+  const dt = Math.max(0.2, (now - CALL.prevStats.ts) / 1000);
+  const upKbps = Math.max(0, Math.round(((totalSent - CALL.prevStats.sent) * 8) / 1000 / dt));
+  const downKbps = Math.max(0, Math.round(((totalRecv - CALL.prevStats.recv) * 8) / 1000 / dt));
+  CALL.prevStats = { sent: totalSent, recv: totalRecv, ts: now };
+
+  CALL.histDown.push(downKbps); CALL.histDown.shift();
+  CALL.histUp.push(upKbps); CALL.histUp.shift();
+
+  $('#statDownRate').textContent = `${downKbps} kbit/s`;
+  $('#statUpRate').textContent = `${upKbps} kbit/s`;
+  $('#statRtt').textContent = rttN ? `${Math.round(rttSum / rttN)} ms` : '—';
+  $('#statLoss').textContent = pkts > 0 ? `${((Math.max(0, lost) / pkts) * 100).toFixed(1).replace('.', ',')} %` : '0,0 %';
+  $('#statSent').textContent = formatBytes(totalSent);
+  $('#statRecv').textContent = formatBytes(totalRecv);
+  $('#radarModeChip').textContent = anyRelay ? 'Custom TURN' : 'Zero-TURN Direkt';
+  $('#peerStatList').innerHTML = peerRows.join('') || '<li>Noch keine Gegenstelle verbunden</li>';
+
+  renderSparklines();
+  renderMeshTopology();
+}
+
+function renderSparklines() {
+  const maxVal = Math.max(100, ...CALL.histDown, ...CALL.histUp);
+  const W = 280, H = 62;
+  const pts = arr => arr.map((v, i) => `${((i / (arr.length - 1)) * W).toFixed(1)},${(H - 4 - (v / maxVal) * (H - 10)).toFixed(1)}`);
+  const dPts = pts(CALL.histDown);
+  const uPts = pts(CALL.histUp);
+  $('#sparkDownLine').setAttribute('d', 'M' + dPts.join(' L'));
+  $('#sparkDownArea').setAttribute('d', `M0,${H} L${dPts.join(' L')} L${W},${H} Z`);
+  $('#sparkUpLine').setAttribute('d', 'M' + uPts.join(' L'));
+}
+
+function renderMeshTopology() {
+  const svg = $('#meshSvg');
+  if (!CALL) return;
+  const peers = [...CALL.peers.values()];
+  const cx = 160, cy = 63;
+  let html = '';
+  peers.forEach((p, i) => {
+    const ang = (i / Math.max(1, peers.length)) * Math.PI * 2 - Math.PI / 2;
+    const px = cx + Math.cos(ang) * 96;
+    const py = cy + Math.sin(ang) * 42;
+    const ok = p.pc.connectionState === 'connected';
+    html += `<line x1="${cx}" y1="${cy}" x2="${px}" y2="${py}" stroke="${ok ? '#1FA958' : '#E59915'}" stroke-width="2" ${ok ? '' : 'stroke-dasharray="4 4"'}/>`;
+    html += `<circle cx="${px}" cy="${py}" r="14" fill="${colorFor(p.id)}"/><text x="${px}" y="${py + 4}" text-anchor="middle" font-size="10" font-weight="700" fill="#121210">${(p.name[0] || '?').toUpperCase()}</text>`;
+  });
+  html += `<circle cx="${cx}" cy="${cy}" r="17" fill="#FF4F1A"/><text x="${cx}" y="${cy + 4}" text-anchor="middle" font-size="10" font-weight="800" fill="#fff">DU</text>`;
+  svg.innerHTML = html;
+}
+
+/* ==========================================================================
+   AIRGAP MANUAL PAIRING & NAT DIAGNOSTIC SCANNER
+   ========================================================================== */
+let airgapPeer = null;
+
+async function generateAirgapOffer() {
+  if (!CALL) {
+    await enterCall();
+  }
+  const peerId = 'airgap-' + toHex(crypto.getRandomValues(new Uint8Array(4)));
+  const peer = getOrCreatePeer(peerId, 'Airgap-Partner');
+  peer.pc.onicecandidate = null; // Vollständiges ICE im SDP sammeln
+  airgapPeer = peer;
+
+  $('#airgapOut').value = 'Sammle lokale & STUN-Kandidaten (ca. 1–2 Sek.)…';
+  const offer = await peer.pc.createOffer();
+  await peer.pc.setLocalDescription(offer);
+  await waitIceComplete(peer.pc, 2200);
+
+  const token = 'ANRUF1:' + b64uEnc(enc.encode(JSON.stringify({
+    k: 'offer',
+    id: MY_ID,
+    name: CALL.name,
+    sdp: peer.pc.localDescription
+  })));
+  $('#airgapOut').value = token;
+  toast('Einladungs-Paket erstellt – jetzt kopieren & senden!');
+}
+
+async function applyAirgapToken() {
+  const raw = $('#airgapIn').value.trim();
+  if (!raw.startsWith('ANRUF1:')) {
+    toast('Ungültiges Airgap-Paket (muss mit ANRUF1: beginnen)');
+    return;
+  }
+  try {
+    const data = JSON.parse(dec.decode(b64uDec(raw.slice(7))));
+    if (!CALL) await enterCall();
+
+    if (data.k === 'offer') {
+      const peer = getOrCreatePeer(data.id || 'airgap-gast', cleanName(data.name) || 'Airgap-Gast');
+      peer.pc.onicecandidate = null;
+      await peer.pc.setRemoteDescription(data.sdp);
+      const ans = await peer.pc.createAnswer();
+      await peer.pc.setLocalDescription(ans);
+      await waitIceComplete(peer.pc, 2200);
+      const reply = 'ANRUF1:' + b64uEnc(enc.encode(JSON.stringify({
+        k: 'answer',
+        id: MY_ID,
+        name: CALL.name,
+        sdp: peer.pc.localDescription
+      })));
+      $('#airgapOut').value = reply;
+      toast('Antwort-Paket erzeugt! Sende Feld 1 zurück an die Gegenseite.');
+    } else if (data.k === 'answer' && airgapPeer) {
+      if (data.name) {
+        airgapPeer.name = cleanName(data.name);
+        $('.nm', airgapPeer.tile).textContent = airgapPeer.name;
+      }
+      await airgapPeer.pc.setRemoteDescription(data.sdp);
+      $('#inviteDlg').close();
+      toast('Direkte Airgap-Verbindung hergestellt!');
+    }
+  } catch {
+    toast('Airgap-Paket konnte nicht gelesen werden');
+  }
+}
+
+function waitIceComplete(pc, timeoutMs = 2000) {
+  if (pc.iceGatheringState === 'complete') return Promise.resolve();
+  return new Promise(resolve => {
+    const t = setTimeout(resolve, timeoutMs);
+    pc.addEventListener('icegatheringstatechange', () => {
+      if (pc.iceGatheringState === 'complete') { clearTimeout(t); resolve(); }
+    });
+  });
+}
+
+/* ---------- NAT & Direct P2P Scanner ---------- */
+let lastDiagReport = '';
+async function runNatDiagnostics() {
+  const setBadge = (sel, cls, txt) => {
+    const el = $(sel);
+    el.className = `diag-badge ${cls}`;
+    el.textContent = txt;
+  };
+  ['#dgLocal','#dgRelay','#dgStun','#dgIpv6','#dgNat'].forEach(s => setBadge(s, 'wait', 'Prüfe…'));
+  $('#diagVerdict').textContent = 'Messung läuft…';
+
+  // 1. BroadcastChannel
+  const bcOk = typeof BroadcastChannel !== 'undefined';
+  setBadge('#dgLocal', bcOk ? 'ok' : 'warn', bcOk ? 'Bereit (0 ms)' : 'Nicht verfügbar');
+
+  // 2. Nostr WebSocket Relay Reachability
+  const relayPromise = new Promise(resolve => {
+    let done = false;
+    const t0 = performance.now();
+    const socks = RELAY_URLS.slice(0, 3).map(u => {
+      try {
+        const w = new WebSocket(u);
+        w.onopen = () => {
+          if (!done) { done = true; resolve(Math.round(performance.now() - t0)); }
+          w.close();
+        };
+        return w;
+      } catch { return null; }
+    });
+    setTimeout(() => { if (!done) resolve(null); socks.forEach(w => { try { w?.close(); } catch {} }); }, 2800);
+  });
+
+  // 3-5. ICE STUN / IPv6 / Port-Mapping
+  const icePromise = new Promise(resolve => {
+    const res = { srflxPorts: new Set(), ipv6: false, host: false };
+    try {
+      const pc = new RTCPeerConnection({ iceServers: [{ urls: STUN_URLS }] });
+      pc.createDataChannel('diag');
+      pc.onicecandidate = e => {
+        const c = e.candidate?.candidate;
+        if (!c) return;
+        const parts = c.split(' ');
+        const ip = parts[4] || '';
+        const port = parts[5] || '';
+        if (ip.includes(':') && !ip.endsWith('.local')) res.ipv6 = true;
+        if (c.includes('typ host')) res.host = true;
+        if (c.includes('typ srflx')) res.srflxPorts.add(port);
+      };
+      pc.createOffer().then(o => pc.setLocalDescription(o));
+      setTimeout(() => { try { pc.close(); } catch {} resolve(res); }, 2600);
+    } catch { resolve(res); }
+  });
+
+  const [relayMs, ice] = await Promise.all([relayPromise, icePromise]);
+
+  setBadge('#dgRelay', relayMs != null ? 'ok' : 'warn', relayMs != null ? `Verbunden (${relayMs} ms)` : 'Blockiert (Airgap nutzen)');
+  const hasSrflx = ice.srflxPorts.size > 0;
+  setBadge('#dgStun', hasSrflx ? 'ok' : 'warn', hasSrflx ? 'Offen (UDP srflx)' : 'UDP gefiltert');
+  setBadge('#dgIpv6', ice.ipv6 ? 'ok' : 'wait', ice.ipv6 ? 'Nativ IPv6 aktiv' : 'Nur IPv4');
+
+  const symmetric = ice.srflxPorts.size > 1;
+  setBadge('#dgNat', hasSrflx && !symmetric ? 'ok' : 'warn',
+    !hasSrflx ? 'Strenge Firewall' : symmetric ? 'Symmetrisches NAT' : 'Cone-NAT (Optimal)');
+
+  const good = hasSrflx && !symmetric;
+  $('#homeNetDot').className = `status-dot ${good ? 'online' : 'warn'}`;
+  $('#homeNetLabel').textContent = good ? 'Direkt-P2P optimal' : 'Eingeschränktes NAT';
+
+  const verdict = good
+    ? '✅ Exzellent: Dein Anschluss unterstützt direktes Zero-TURN UDP Hole-Punching ohne Relay-Server.'
+    : '⚠️ Hinweis: Dein Router/Mobilfunk nutzt symmetrisches NAT oder blockiert UDP. Mit Gegenstellen im offenen Netz klappt P2P meist trotzdem; andernfalls kann ein eigener TURN eingetragen werden.';
+  $('#diagVerdict').textContent = verdict;
+
+  lastDiagReport = `anruf.org P2P-Diagnose (${new Date().toISOString()})\nRelay-WS: ${relayMs ?? 'blockiert'} ms | STUN-UDP: ${hasSrflx} | IPv6: ${ice.ipv6} | Ports: ${[...ice.srflxPorts].join(',') || 'keine'}\nFazit: ${verdict}`;
+}
+
+/* ==========================================================================
+   UI EVENT WIRING & INITIALIZATION
+   ========================================================================== */
+function wireEvents() {
+  // Navigation & Startseite
+  $('#homeSlugInput').value = randomSlug();
+  $('#rollSlugBtn').onclick = () => { $('#homeSlugInput').value = randomSlug(); };
+
+  $('#quickRoomForm').onsubmit = e => {
+    e.preventDefault();
+    openLobby($('#homeSlugInput').value || randomSlug(), $('#homePinInput').value.trim());
+  };
+  $('#heroStartBtn').onclick = () => {
+    openLobby($('#homeSlugInput').value || randomSlug(), $('#homePinInput').value.trim());
+  };
+
+  // Saubere SPA-Rückkehr statt hartem Reload (wichtig auch für lokales file:// Testen)
+  ['#lobbyBackBrand', '#lobbyCancelBtn', '#roomBrandExit'].forEach(sel => {
+    $(sel).addEventListener('click', e => {
+      e.preventDefault();
+      goHome();
+    });
+  });
+  $('.brand', $('#home')).addEventListener('click', e => { e.preventDefault(); });
+
+  // Diagnose & Airgap-Shortcuts
+  const openDiag = () => { $('#diagDlg').showModal(); runNatDiagnostics(); };
+  $('#openDiagBtn').onclick = openDiag;
+  $('#footerDiagBtn').onclick = openDiag;
+  $('#lobbyDiagBtn').onclick = openDiag;
+  $('#rerunDiagBtn').onclick = runNatDiagnostics;
+  $('#copyDiagBtn').onclick = () => copyText(lastDiagReport || 'Bitte erst Messung abwarten', 'Diagnose-Bericht kopiert');
+
+  $('#footerAirgapInfo').onclick = async () => {
+    await openLobby($('#homeSlugInput').value || randomSlug());
+    await enterCall();
+    switchInviteTab('airgap');
+    $('#inviteDlg').showModal();
+  };
+
+  // Lobby Steuerung
+  $('#pvMicBtn').onclick = async () => {
+    LOBBY.micOn = !LOBBY.micOn;
+    await startLobbyMedia();
+  };
+  $('#pvCamBtn').onclick = async () => {
+    LOBBY.camOn = !LOBBY.camOn;
+    await startLobbyMedia();
+  };
+  $('#selMic').onchange = () => { if (CALL) switchInCallDevices(); else startLobbyMedia(); };
+  $('#selCam').onchange = () => { if (CALL) switchInCallDevices(); else startLobbyMedia(); };
+  $('#selSpk').onchange = () => {
+    const id = $('#selSpk').value;
+    if (CALL) for (const p of CALL.peers.values()) p.audioEl?.setSinkId?.(id).catch(() => {});
+  };
+  $('#chkVoiceStudio').onchange = () => { if (!CALL) startLobbyMedia(); };
+  $('#chkSpatialAudio').onchange = updateSpatialPanners;
+  $('#testToneBtn').onclick = () => playChime('enter');
+  $('#lobbyNameInput').oninput = () => {
+    store.set('name', cleanName($('#lobbyNameInput').value));
+    updateLobbyUI();
+  };
+
+  // 3-Sekunden lokaler RAM Stimm-Check
+  $('#micCheckBtn').onclick = () => {
+    const aTrack = LOBBY.stream?.getAudioTracks()[0];
+    if (!aTrack || !LOBBY.micOn || typeof MediaRecorder === 'undefined') {
+      toast('Bitte zuerst Mikrofon aktivieren');
+      return;
+    }
+    const btn = $('#micCheckBtn');
+    if (btn.disabled) return;
+    btn.disabled = true;
+    btn.classList.add('rec');
+    $('#micCheckLabel').textContent = 'Aufnahme (3s)…';
+    const chunks = [];
+    const rec = new MediaRecorder(new MediaStream([aTrack]));
+    rec.ondataavailable = e => { if (e.data.size) chunks.push(e.data); };
+    rec.onstop = () => {
+      btn.classList.remove('rec');
+      $('#micCheckLabel').textContent = 'Spielt ab…';
+      const url = URL.createObjectURL(new Blob(chunks, { type: rec.mimeType }));
+      const au = new Audio(url);
+      au.onended = () => {
+        URL.revokeObjectURL(url);
+        btn.disabled = false;
+        $('#micCheckLabel').textContent = '3s Stimm-Check';
+      };
+      au.play().catch(() => { btn.disabled = false; $('#micCheckLabel').textContent = '3s Stimm-Check'; });
+    };
+    rec.start();
+    setTimeout(() => { if (rec.state === 'recording') rec.stop(); }, 3000);
+  };
+
+  // Raumname in Lobby ändern
+  $('#editSlugBtn').onclick = () => {
+    $('#slugEditInput').value = LOBBY.slug;
+    $('#slugDlg').showModal();
+  };
+  $('#slugEditForm').onsubmit = e => {
+    e.preventDefault();
+    const next = slugify($('#slugEditInput').value) || randomSlug();
+    LOBBY.slug = next;
+    $('#lobbySlugTitle').textContent = next;
+    setUrlSlug(next);
+    $('#slugDlg').close();
+  };
+
+  $('#joinCallBtn').onclick = enterCall;
+
+  // In-Call Dock Buttons
+  $('#dockMicBtn').onclick = () => toggleCallMic();
+  $('#dockCamBtn').onclick = () => toggleCallCam();
+  $('#dockScreenBtn').onclick = toggleScreenShare;
+  $('#dockWbBtn').onclick = () => WB.toggle();
+  $('#dockCcBtn').onclick = toggleCaptions;
+  $('#dockHangupBtn').onclick = () => leaveCall(true);
+
+  $('#dockFsBtn').onclick = () => {
+    if (!document.fullscreenElement) document.documentElement.requestFullscreen?.().catch(() => {});
+    else document.exitFullscreen?.().catch(() => {});
+  };
+
+  // Studio-Einstellungen live im Anruf öffnen & beim Schließen zurücklegen
+  $('#dockStudioBtn').onclick = () => {
+    $('#inCallStudioSlot').append($('#studioRack'));
+    $('#inCallStudioDlg').showModal();
+  };
+  $('#inCallStudioDlg').addEventListener('close', () => {
+    $('.pv-card').append($('#studioRack'));
+  });
+
+  // Reaktionen & Hand heben
+  $('#dockReactBtn').onclick = () => { $('#reactBar').hidden = !$('#reactBar').hidden; };
+  $$('[data-emo]', $('#reactBar')).forEach(b => b.onclick = () => {
+    spawnFlyingEmoji(b.dataset.emo);
+    sendDcAll({ t: 'emo', emo: b.dataset.emo });
+    $('#reactBar').hidden = true;
+  });
+  $('#handRaiseBtn').onclick = () => {
+    if (!CALL) return;
+    CALL.handUp = !CALL.handUp;
+    $('#handRaiseBtn').classList.toggle('active', CALL.handUp);
+    CALL.selfTile?.classList.toggle('hand-up', CALL.handUp);
+    sendDcAll({ t: 'state', name: CALL.name, mic: CALL.micOn, cam: CALL.camOn, hand: CALL.handUp });
+  };
+
+  // Chat, Datei-Upload, Drag&Drop & Clipboard-Paste
+  const toggleChat = force => {
+    const open = typeof force === 'boolean' ? force : !$('#room').classList.contains('chat-open');
+    $('#room').classList.toggle('chat-open', open);
+    $('#dockChatBtn').classList.toggle('active', open);
+    if (open) {
+      $('#chatUnreadDot').hidden = true;
+      $('#chatUnreadDot').textContent = '0';
+      $('#chatTextInput').focus();
+    }
+  };
+  $('#dockChatBtn').onclick = () => toggleChat();
+  $('#closeChatBtn').onclick = () => toggleChat(false);
+
+  $('#chatForm').onsubmit = e => {
+    e.preventDefault();
+    if (!CALL) return;
+    const text = $('#chatTextInput').value.trim();
+    if (!text) return;
+    $('#chatTextInput').value = '';
+    appendChatBubble({ who: 'Du', text, me: true });
+    sendDcAll({ t: 'chat', text });
+  };
+
+  $('#attachFileBtn').onclick = () => $('#chatFileInput').click();
+  $('#chatFileInput').onchange = e => {
+    [...(e.target.files || [])].forEach(sendFileOverTunnel);
+    e.target.value = '';
+  };
+
+  const chatPane = $('#chatPane');
+  chatPane.addEventListener('dragover', e => { e.preventDefault(); chatPane.classList.add('drag'); });
+  chatPane.addEventListener('dragleave', () => chatPane.classList.remove('drag'));
+  chatPane.addEventListener('drop', e => {
+    e.preventDefault();
+    chatPane.classList.remove('drag');
+    [...(e.dataTransfer?.files || [])].forEach(sendFileOverTunnel);
+  });
+  window.addEventListener('paste', e => {
+    if (!CALL) return;
+    const files = [...(e.clipboardData?.files || [])];
+    if (files.length) {
+      toggleChat(true);
+      files.forEach(sendFileOverTunnel);
+    }
+  });
+
+  // Umfragen (Polls)
+  $('#openPollBtn').onclick = () => $('#pollDlg').showModal();
+  $('#pollForm').onsubmit = e => {
+    e.preventDefault();
+    if (!CALL) return;
+    const q = $('#pollQ').value.trim();
+    const options = [$('#pollO1').value, $('#pollO2').value, $('#pollO3').value].map(s => s.trim()).filter(Boolean);
+    if (!q || options.length < 2) return;
+    const poll = { id: toHex(crypto.getRandomValues(new Uint8Array(5))), by: CALL.name, q, options, votes: {} };
+    renderPollCard(poll, true);
+    sendDcAll({ t: 'poll-new', poll });
+    $('#pollForm').reset();
+    $('#pollDlg').close();
+  };
+
+  // Einladen, Raum sperren, SAS & Airgap
+  const switchInviteTab = tab => {
+    $$('[data-invtab]').forEach(b => b.classList.toggle('active', b.dataset.invtab === tab));
+    $('#invTabLink').hidden = tab !== 'link';
+    $('#invTabAirgap').hidden = tab !== 'airgap';
+  };
+  $$('[data-invtab]').forEach(b => b.onclick = () => switchInviteTab(b.dataset.invtab));
+
+  $('#inviteTopBtn').onclick = () => { switchInviteTab('link'); $('#inviteDlg').showModal(); };
+  $('#waitCopyBtn').onclick = () => copyText($('#waitLinkCode').textContent, 'Raum-Link kopiert!');
+  $('#dlgCopyBtn').onclick = () => copyText($('#dlgLinkCode').textContent, 'Raum-Link kopiert!');
+  $('#waitAirgapBtn').onclick = () => { switchInviteTab('airgap'); $('#inviteDlg').showModal(); };
+  $('#genOfferBtn').onclick = generateAirgapOffer;
+  $('#copyAirgapOutBtn').onclick = () => copyText($('#airgapOut').value, 'Airgap-Paket kopiert!');
+  $('#applyAirgapBtn').onclick = applyAirgapToken;
+
+  $('#lockRoomChk').onchange = e => {
+    if (!CALL) return;
+    CALL.locked = e.target.checked;
+    $('#roomLockBadge').hidden = !CALL.locked;
+    toast(CALL.locked ? 'Raum abgeschlossen (neue Gäste klopfen an)' : 'Raum wieder offen');
+  };
+
+  $('#sasBtn').onclick = () => {
+    toast(`Sicherheitscode (SAS): ${$('#sasEmojis').textContent} — Vergleiche die 4 Symbole mit der Gegenseite`, 4500);
+  };
+
+  // Live P2P Radar Popover
+  $('#radarBtn').onclick = e => {
+    e.stopPropagation();
+    const pop = $('#radarPopover');
+    pop.hidden = !pop.hidden;
+    $('#radarBtn').setAttribute('aria-expanded', String(!pop.hidden));
+    if (!pop.hidden) pollWebRtcStats();
+  };
+  document.addEventListener('click', e => {
+    if (!$('#radarWrap').contains(e.target)) $('#radarPopover').hidden = true;
+    if (!e.target.closest('#reactBar') && !e.target.closest('#dockReactBtn')) $('#reactBar').hidden = true;
+  });
+
+  // Tastatur-Kürzel & Push-to-Talk (Leertaste)
+  let pttActive = false;
+  window.addEventListener('keydown', e => {
+    if (!CALL || e.target.matches('input, textarea, select, [contenteditable]')) return;
+    if (e.code === 'Space' && !CALL.micOn && !pttActive) {
+      e.preventDefault();
+      pttActive = true;
+      toggleCallMic(true);
+      return;
+    }
+    if (e.repeat || e.metaKey || e.ctrlKey || e.altKey) return;
+    const k = e.key.toLowerCase();
+    if (k === 'm') toggleCallMic();
+    else if (k === 'v') toggleCallCam();
+    else if (k === 's') toggleScreenShare();
+    else if (k === 'w') WB.toggle();
+    else if (k === 'c') toggleCaptions();
+    else if (k === 'r') $('#reactBar').hidden = !$('#reactBar').hidden;
+    else if (k === 'f') $('#dockFsBtn').click();
+  });
+  window.addEventListener('keyup', e => {
+    if (e.code === 'Space' && pttActive) {
+      pttActive = false;
+      if (CALL?.micOn) toggleCallMic(false);
+    }
+  });
+
+  // URL-Hash Routing (z.B. direktes Öffnen von anruf.org/#mein-raum)
+  window.addEventListener('hashchange', () => {
+    const h = slugify(decodeURIComponent(location.hash.slice(1)));
+    if (!h && CALL) leaveCall(true);
+    else if (h && !CALL && LOBBY.slug !== h) openLobby(h);
+  });
+  window.addEventListener('beforeunload', () => {
+    CALL?.bus?.send({ type: 'bye' });
+  });
+}
+
+async function toggleCallMic(force) {
+  if (!CALL) return;
+  CALL.micOn = typeof force === 'boolean' ? force : !CALL.micOn;
+  let aTrack = CALL.localStream.getAudioTracks()[0];
+  if (CALL.micOn && !aTrack) {
+    try {
+      const raw = await navigator.mediaDevices.getUserMedia({ audio: true });
+      CALL.rawMic = raw.getAudioTracks()[0];
+      aTrack = buildVoiceStudioTrack(CALL.rawMic);
+      CALL.localStream.addTrack(aTrack);
+      for (const p of CALL.peers.values()) p.pc.addTrack(aTrack, CALL.localStream);
+      setupSelfAudioMeter();
+    } catch { CALL.micOn = false; }
+  }
+  if (aTrack) aTrack.enabled = CALL.micOn;
+  $('#dockMicBtn').classList.toggle('off', !CALL.micOn);
+  bindSelfTileVideo();
+  sendDcAll({ t: 'state', name: CALL.name, mic: CALL.micOn, cam: CALL.camOn, hand: CALL.handUp });
+}
+
+async function toggleCallCam() {
+  if (!CALL) return;
+  CALL.camOn = !CALL.camOn;
+  let vTrack = CALL.localStream.getVideoTracks()[0];
+  if (CALL.camOn && (!vTrack || vTrack.readyState !== 'live')) {
+    try {
+      const raw = await navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 1280 }, height: { ideal: 720 } } });
+      vTrack = videoFx.wrap(raw.getVideoTracks()[0]);
+      CALL.localStream.getVideoTracks().forEach(t => CALL.localStream.removeTrack(t));
+      CALL.localStream.addTrack(vTrack);
+      for (const p of CALL.peers.values()) {
+        const sender = p.pc.getSenders().find(s => s.track?.kind === 'video' && !p.screenSender?.includes(s));
+        if (sender) await sender.replaceTrack(vTrack);
+        else p.pc.addTrack(vTrack, CALL.localStream);
+      }
+    } catch { CALL.camOn = false; }
+  }
+  if (vTrack) vTrack.enabled = CALL.camOn;
+  $('#dockCamBtn').classList.toggle('off', !CALL.camOn);
+  bindSelfTileVideo();
+  sendDcAll({ t: 'state', name: CALL.name, mic: CALL.micOn, cam: CALL.camOn, hand: CALL.handUp });
+}
+
+async function switchInCallDevices() {
+  if (!CALL) return;
+  try {
+    if (CALL.micOn) {
+      const rawA = await navigator.mediaDevices.getUserMedia({ audio: { deviceId: { exact: $('#selMic').value } } });
+      try { CALL.rawMic?.stop(); } catch {}
+      CALL.rawMic = rawA.getAudioTracks()[0];
+      const nextA = buildVoiceStudioTrack(CALL.rawMic);
+      CALL.localStream.getAudioTracks().forEach(t => { CALL.localStream.removeTrack(t); t.stop(); });
+      CALL.localStream.addTrack(nextA);
+      for (const p of CALL.peers.values()) {
+        const s = p.pc.getSenders().find(x => x.track?.kind === 'audio');
+        s?.replaceTrack(nextA).catch(() => {});
+      }
+    }
+    if (CALL.camOn) {
+      const rawV = await navigator.mediaDevices.getUserMedia({ video: { deviceId: { exact: $('#selCam').value } } });
+      const nextV = videoFx.wrap(rawV.getVideoTracks()[0]);
+      CALL.localStream.getVideoTracks().forEach(t => { if (t !== nextV) { CALL.localStream.removeTrack(t); t.stop(); } });
+      CALL.localStream.addTrack(nextV);
+      for (const p of CALL.peers.values()) {
+        const s = p.pc.getSenders().find(x => x.track?.kind === 'video' && !p.screenSender?.includes(x));
+        s?.replaceTrack(nextV).catch(() => {});
+      }
+      bindSelfTileVideo();
+    }
+  } catch {}
+}
+
+/* ---------- Boot ---------- */
+initTheme();
+renderFilterStrip();
+initWhiteboardEvents();
+wireEvents();
+
+const initialSlug = slugify(decodeURIComponent(location.hash.slice(1)));
+if (initialSlug) {
+  openLobby(initialSlug);
+}
+</script>
+</body>
+</html>
