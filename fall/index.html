@@ -78,6 +78,7 @@ details.code summary{cursor:pointer}
 
 /* ---------- Anruf ---------- */
 #room{grid-template-rows:auto auto 1fr auto auto;height:100dvh;position:relative;overflow:clip}
+#room>header{grid-row:1}#room>#goal{grid-row:2}#room>#stage{grid-row:3}#room>#stage+div{grid-row:4}#room>.dock{grid-row:5}
 header{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--line)}
 header .t{font-weight:700;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 header .sp{flex:1}
