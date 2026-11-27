@@ -132,7 +132,7 @@ async function loadAudio(id) {
 const lineMeta = (npc, text, name = spokenName()) => AU.manifest[akey(npc, audioText(text, name))] || AU.manifest[akey(npc, audioText(text, ''))]
 function stopVoice() {
   try { AU.el?.pause() } catch {}
-  AU.el = null; cancelAnimationFrame(AU.raf)
+  AU.el = null; AU.utterance = null; cancelAnimationFrame(AU.raf)
   $$('.tile.npc').forEach(t => t.style.setProperty('--m', 0))
   if ('speechSynthesis' in window) speechSynthesis.cancel()
 }
@@ -159,7 +159,14 @@ function speak(npc, text, tile) {
       }
       loop()
     } catch { el.volume = voiceVol }
-    el.play().catch(() => {})
+    const finished = () => {
+      if (AU.el !== el) return
+      cancelAnimationFrame(AU.raf)
+      tile?.style.setProperty('--m', 0)
+      AU.el = null
+    }
+    el.onended = el.onerror = finished
+    el.play().catch(finished)
     return
   }
   // Keine Aufnahme: lokale Sprachausgabe, der Mund bewegt sich dann zufällig
@@ -168,9 +175,13 @@ function speak(npc, text, tile) {
   u.voice = deVoice; u.lang = deVoice.lang; u.volume = voiceVol
   const v = G.c?.npcs[npc]?.tts || {}
   u.pitch = v.pitch ?? 1; u.rate = v.rate ?? 1
-  let on = true
-  u.onend = () => { on = false; tile?.style.setProperty('--m', 0) }
-  const wob = () => { if (!on) return; tile?.style.setProperty('--m', (Math.random() * .8).toFixed(2)); setTimeout(wob, 110) }
+  AU.utterance = u
+  u.onend = u.onerror = () => {
+    if (AU.utterance !== u) return
+    AU.utterance = null
+    tile?.style.setProperty('--m', 0)
+  }
+  const wob = () => { if (AU.utterance !== u) return; tile?.style.setProperty('--m', (Math.random() * .8).toFixed(2)); setTimeout(wob, 110) }
   wob()
   speechSynthesis.speak(u)
 }
@@ -372,12 +383,12 @@ const roleName = r => !r ? '' : r === 'beide' ? Object.values(G.c.roles).map(x =
 const STAGE = () => $('#stage')
 function makeTile(p) {
   const t = h('div', {class: 'tile' + (p.self ? ' me' : '') + (p.npc ? ' npc' : '')},
-    p.npc ? h('div', {class: 'pic', html: portrait(p.face)}) : h('div', {class: 'face'}, h('span', {class: 'ini'}, (p.name || '?').slice(0, 1).toUpperCase())),
+    p.npc ? h('div', {class: 'pic', html: portrait(p.face, true)}) : h('div', {class: 'face'}, h('span', {class: 'ini'}, (p.name || '?').slice(0, 1).toUpperCase())),
     p.npc ? h('canvas', {class: 'static', width: 96, height: 60}) : h('video', {autoplay: true, playsinline: true, muted: !!p.self}),
     p.npc ? h('div', {class: 'lamp'}) : null,
     p.npc ? h('div', {class: 'signote', hidden: true}) : null,
     h('div', {class: 'label'}, h('span', {class: 'nm'}, p.self ? `${p.name} (du)` : p.name), h('span', {class: 'role'}), h('span', {class: 'mut', title: 'stumm'}, '🔇')),
-    p.npc ? h('div', {class: 'sub2'}, h('span', {class: 'camoff'}, 'Kamera aus'), ' · ', p.sub || '') : null
+    p.npc ? h('div', {class: 'sub2'}, p.face?.photo ? null : h('span', {class: 'camoff'}, 'Kamera aus · '), p.sub || '') : null
   )
   STAGE().append(t)
   requestAnimationFrame(() => t.classList.add('in'))
@@ -550,6 +561,7 @@ const G = {
       if (!s.ask.used.includes(o.id)) s.ask.used.push(o.id)
       s.ask.busy = true
       s.ask.last = o.label
+      s.ask.pose = o.pose || null
       rt.queue = (o.say || []).map(x => Array.isArray(x) ? x : [o.npc || st[1], x])
       ;(o.unlock || []).forEach(p => this.unlock(p))
       if (o.set) Object.assign(s.flags, o.set)
@@ -773,7 +785,18 @@ const G = {
       t.dataset.npc = id
       if (n.look) t.classList.add(...n.look.split(/\s+/).map(l => 'look-' + l))
       if (n.widget) t.append(h('button', {class: 'info', title: 'Verbindungsdetails', onclick: () => t.classList.toggle('show-net')}, 'i'), h('div', {class: 'net', 'data-widget': n.widget}))
+      t.dataset.pose = n.face.photo || ''
       this.npcTiles.set(id, t)
+    }
+    for (const [id, tile] of this.npcTiles) {
+      const n = this.c.npcs[id]
+      if (!n.face.photo) continue
+      const votePose = n.afterVote && s.results?.[n.afterVote.id] && n.afterVote.pose
+      const askPose = s.ask?.npc === id && s.ask.busy && s.ask.pose
+      const pose = askPose || votePose || n.face.photo
+      if (pose === tile.dataset.pose) continue
+      tile.dataset.pose = pose
+      $('.pic', tile).innerHTML = portrait({...n.face, photo: pose}, true)
     }
     layout()
     // Untertitel + Stimme

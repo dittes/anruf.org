@@ -6,7 +6,7 @@ Mehrere Fälle zum gemeinsamen Lösen im Videoanruf, auf Basis von anruf.org (gl
 |---|---|
 | `index.html` | Startseite (Fallauswahl, Codename, Fortsetzen, Epilog-Codes) und Anruf-Oberfläche |
 | `app.mjs` | Anruf + Spiel-Engine (Host arbeitet das Skript ab, schickt den ganzen Spielstand an alle) |
-| `portrait.mjs` | Gezeichnete Profilbilder der Figuren (SVG, blinzeln, Mund folgt der Stimme) |
+| `portrait.mjs` | Fotoporträts aus `portraits/` mit Blinzeln, lautstärkegesteuertem Mund und szenischen Reaktionen. Figuren ohne Foto nutzen die SVG-Zeichnung. |
 | `lib.mjs` | Gemeinsame Helfer (Audio-Schlüssel, Codenamen, Normalisierung, Hash) |
 | `cases/index.mjs` | Liste der Fälle |
 | `cases/<fall>/story.mjs` | Ein Fall: Figuren, Akten, Rätsel, Enden, Skript |

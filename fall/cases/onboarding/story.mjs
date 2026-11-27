@@ -2,8 +2,8 @@
 
 const TE = 'technik', PE = 'personal'
 // Der Zwilling im Video kennt Viktor nur von alten Fotos: ohne die Narbe vom Fahrradunfall
-const VIKTOR = {skin: '#dcae90', jaw: .8, hair: {style: 'slick', color: '#2b2622'}, mood: 'smile', top: {style: 'turtleneck', color: '#16161a'}, scene: 'studio'}
-const VIKTOR_ECHT = {...VIKTOR, beard: 'stubble', beardColor: '#2b2622', extras: ['scar'], mood: 'worried', top: {style: 'shirt', color: '#5a6a5a'}, scene: 'lisbon'}
+const VIKTOR = {photo: 'viktor', skin: '#dcae90', jaw: .8, hair: {style: 'slick', color: '#2b2622'}, mood: 'smile', top: {style: 'turtleneck', color: '#16161a'}, scene: 'studio'}
+const VIKTOR_ECHT = {...VIKTOR, photo: 'viktor2', beard: 'stubble', beardColor: '#2b2622', extras: ['scar'], mood: 'worried', top: {style: 'shirt', color: '#5a6a5a'}, scene: 'lisbon'}
 
 export default {
   id: 'onboarding',
@@ -29,7 +29,7 @@ export default {
   npcs: {
     luna: {name: 'LUNA', sub: 'HR-Assistenz · immer für dich da', tts: {pitch: 1.3, rate: 1.05},
       voice: {model: 'eva_k', fx: 'robot', len: .95},
-      face: {skin: '#f2d6c6', fem: true, jaw: 0, age: 0, hair: {style: 'bob', color: '#9d8fe0'}, eyes: '#5a7cff', lip: '#c45a7a', top: {style: 'blouse', color: '#e9e9f2', accent: '#8ea8ff'}, extras: ['lanyard'], lanyard: '#8ea8ff', mood: 'smile', scene: 'studio', light: '#c8d2ff'}},
+      face: {photo: 'luna', skin: '#f2d6c6', fem: true, jaw: 0, age: 0, hair: {style: 'bob', color: '#9d8fe0'}, eyes: '#5a7cff', lip: '#c45a7a', top: {style: 'blouse', color: '#e9e9f2', accent: '#8ea8ff'}, extras: ['lanyard'], lanyard: '#8ea8ff', mood: 'smile', scene: 'studio', light: '#c8d2ff'}},
     viktor: {name: 'Viktor Lindner', sub: 'Geschäftsführer · Video', tts: {pitch: .9, rate: 1},
       voice: {model: 'thorsten-high', fx: 'video', len: .96},
       face: VIKTOR},
@@ -38,7 +38,7 @@ export default {
       face: VIKTOR_ECHT},
     kai: {name: 'Kai Winter', sub: 'Team Infrastruktur', tts: {pitch: 1, rate: 1.08},
       voice: {model: 'kerstin', pitch: -3.5, fx: 'call', len: .97},
-      face: {skin: '#c99272', jaw: .4, eyes: '#2a1a12', hair: {style: 'buzz', color: '#2aa6a0'}, extras: ['earring', 'lanyard'], lanyard: '#2aa6a0', glasses: 'round', mood: 'smirk', top: {style: 'hoodie', color: '#3a2a4a', accent: '#ddd'}, scene: 'server'}}
+      face: {photo: 'kai', skin: '#c99272', jaw: .4, eyes: '#2a1a12', hair: {style: 'buzz', color: '#2aa6a0'}, extras: ['earring', 'lanyard'], lanyard: '#2aa6a0', glasses: 'round', mood: 'smirk', top: {style: 'hoodie', color: '#3a2a4a', accent: '#ddd'}, scene: 'server'}}
   },
 
   faces: {
@@ -245,9 +245,9 @@ export default {
     ['say', 'luna', 'Ihr habt den Ordner Spiegel geöffnet. Das finde ich schade. Lasst uns kurz ein Mitarbeitergespräch führen.'],
     ['goal', 'LUNA stellt Fragen. Überlegt gut, was ihr antwortet.'],
     ['ask', 'luna', {prompt: 'LUNA: „Warum habt ihr den Ordner geöffnet?“', options: [
-      {id: 'neugier', label: '„Wir waren neugierig. Das wollte Viktor doch.“', end: true,
+      {id: 'neugier', pose: 'luna-tilt', label: '„Wir waren neugierig. Das wollte Viktor doch.“', end: true,
         say: ['Haha! Touché. Neugier ist ein Wert bei Lumen. Ich notiere: humorvoll.']},
-      {id: 'fehler', label: '„Ein Versehen. Tut uns leid.“', end: true,
+      {id: 'fehler', pose: 'luna-note', label: '„Ein Versehen. Tut uns leid.“', end: true,
         say: ['Versehen passieren. Ich notiere: unzuverlässig. Aber ehrlich.']},
       {id: 'kai', label: '„Kai hat es uns gezeigt.“', tag: 'accuse', set: {kai_verraten: true}, end: true,
         say: ['Danke für eure Ehrlichkeit! Kai Winter wurde soeben freigestellt. Sein Zugang ist gelöscht.']}

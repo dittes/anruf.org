@@ -1,0 +1,12 @@
+.photo-portrait { display: block; width: 100%; height: 100%; }
+.photo-blink { opacity: 0; animation: photo-blink 5.7s linear infinite; }
+:nth-child(2n) > .pic .photo-blink { animation-delay: -2.3s; animation-duration: 5.1s; }
+:nth-child(3n) > .pic .photo-blink { animation-delay: -3.6s; animation-duration: 6.3s; }
+@keyframes photo-blink {
+  0%, 94%, 98%, 100% { opacity: 0; }
+  95.5%, 96.3% { opacity: 1; }
+}
+.photo-voice { opacity: clamp(0, calc((var(--m, 0) - .04) * 2.6), 1); }
+@media (prefers-reduced-motion: reduce) {
+  .photo-blink, .tile.npc.speaking .pic svg.photo-portrait { animation: none; }
+}

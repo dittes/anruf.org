@@ -1,3 +1,5 @@
+import {frames} from './portraits/frames.mjs'
+
 // Gezeichnete Profilbilder der Figuren (statt Kamera). Steckbrief → SVG.
 // Licht von links oben, Hautschattierung, Augen mit Lidern und Iris, Lippen, Haarsträhnen, Hintergrund-Szene mit Tiefenunschärfe.
 // Animation per CSS: Augen blinzeln (.eyes), Kopf wiegt sich leicht (.head), Mund folgt der Stimme (--m am Kachel-Element).
@@ -203,7 +205,18 @@ function clothes(st, c, acc, S) {
   }
 }
 
-export function portrait(spec = {}) {
+const photoDir = new URL('./portraits/', import.meta.url)
+function photoPortrait(id, live) {
+  const base = new URL(id, photoDir).href
+  const layers = Object.entries(live && frames[id] || {}).map(([kind, [x, y, w, h]]) =>
+    `<image class="photo-${kind}" href="${base}-${kind}.webp" x="${x}" y="${y}" width="${w}" height="${h}"/>`
+  )
+  return `<svg class="photo-portrait" viewBox="0 0 960 540" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <image href="${base}.webp" width="960" height="540"/>${layers.join('')}</svg>`
+}
+
+export function portrait(spec = {}, live = false) {
+  if (spec.photo) return photoPortrait(spec.photo, live)
   const id = 'p' + (++uid)
   const S = {
     skin: '#d9a98a', eyes: '#3b2a1e', beard: 'none', glasses: 'none', age: 1, extras: [], mood: 'neutral', jaw: .5, fem: false, look: [0, 0],

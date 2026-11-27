@@ -27,21 +27,21 @@ export default {
   npcs: {
     sommer: {name: 'KHK H. Sommer', sub: 'Dezernat 0 · Leitung', tts: {pitch: .85, rate: 1.04},
       voice: {model: 'thorsten-high', fx: 'call', len: 1.02},
-      face: {skin: '#d6a486', hair: {style: 'short', color: '#8f8b86'}, beard: 'stubble', beardColor: '#8f8b86', glasses: 'half', age: 2, mood: 'stern', jaw: .8, top: {style: 'suit', color: '#262c36', accent: '#d9d6cf', tie: '#5a2630'}, scene: 'police'}},
+      face: {photo: 'sommer', skin: '#d6a486', hair: {style: 'short', color: '#8f8b86'}, beard: 'stubble', beardColor: '#8f8b86', glasses: 'half', age: 2, mood: 'stern', jaw: .8, top: {style: 'suit', color: '#262c36', accent: '#d9d6cf', tie: '#5a2630'}, scene: 'police'}},
     geist: {name: 'Lena Brandt', sub: 'Konto seit 2023 inaktiv', look: 'ghost',
-      face: {skin: '#e8bea2', fem: true, jaw: .2, hair: {style: 'bob', color: '#2a1d16'}, extras: ['freckles', 'earring'], mood: 'smile', top: {style: 'sweater', color: '#3a4a4a'}, scene: 'night'}},
+      face: {photo: 'geist', skin: '#e8bea2', fem: true, jaw: .2, hair: {style: 'bob', color: '#2a1d16'}, extras: ['freckles', 'earring'], mood: 'smile', top: {style: 'sweater', color: '#3a4a4a'}, scene: 'night'}},
     moewe: {name: 'Unbekannt', sub: 'Rufnummer unterdrückt', look: 'weak', tts: {pitch: .45, rate: .86},
       voice: {model: 'thorsten_emotional', speaker: 7, fx: 'whisper', len: 1.08},
-      face: {silhouette: true, hair: {style: 'hood'}, top: {style: 'coat', color: '#111'}, scene: 'storm'}},
+      face: {photo: 'moewe', silhouette: true, hair: {style: 'hood'}, top: {style: 'coat', color: '#111'}, scene: 'storm'}},
     bernd: {name: 'Bernd Ahrens', sub: 'Mobil · München', tts: {pitch: .8, rate: .95},
       voice: {model: 'thorsten_emotional', speaker: 4, pitch: -2.5, fx: 'phone', len: 1.08},
-      face: {skin: '#e3ad90', hair: {style: 'bald', color: '#9a948c'}, beard: 'mustache', beardColor: '#8a8178', age: 2, jaw: .9, mood: 'worried', look: [-1.2, .4], glasses: 'square', glassColor: '#6a5a3a', top: {style: 'jacket', color: '#46553a', accent: '#e8e2d6'}, scene: 'office'}},
+      face: {photo: 'bernd', skin: '#e3ad90', hair: {style: 'bald', color: '#9a948c'}, beard: 'mustache', beardColor: '#8a8178', age: 2, jaw: .9, mood: 'worried', look: [-1.2, .4], glasses: 'square', glassColor: '#6a5a3a', top: {style: 'jacket', color: '#46553a', accent: '#e8e2d6'}, scene: 'office'}},
     neun: {name: 'Teilnehmer 9', sub: 'nicht eingeladen', look: 'void glitchy', tts: {pitch: .1, rate: .78}, widget: 'ping',
       voice: {model: 'thorsten-high', fx: 'demon', len: 1.15},
-      face: {silhouette: true, glow: '#ff3b30', hair: {style: 'hood'}, scene: 'void'}},
+      face: {photo: 'neun', silhouette: true, glow: '#ff3b30', hair: {style: 'hood'}, scene: 'void'}},
     lena: {name: 'Lena Brandt', sub: 'Wetterwarte · Notstrom', look: 'weak', tts: {pitch: 1.1, rate: .96},
       voice: {model: 'kerstin', fx: 'radio', len: 1.0},
-      face: {skin: '#e8bea2', fem: true, jaw: .2, age: 1, hair: {style: 'beanie', color: '#2a1d16', hat: '#7a3a2a'}, extras: ['freckles', 'scarf', 'bandage'], scarf: '#3a5a6a', mood: 'worried', top: {style: 'coat', color: '#2f3b3a'}, scene: 'hut'}}
+      face: {photo: 'lena', skin: '#e8bea2', fem: true, jaw: .2, age: 1, hair: {style: 'beanie', color: '#2a1d16', hat: '#7a3a2a'}, extras: ['freckles', 'scarf', 'bandage'], scarf: '#3a5a6a', mood: 'worried', top: {style: 'coat', color: '#2f3b3a'}, scene: 'hut'}}
   },
 
   clips: {
@@ -402,10 +402,10 @@ export default {
       {id: 'kamera', label: 'Warum hatten Sie die Kamera aus?', say: ['Quellenschutz. Ich war zwanzig Jahre im Werkschutz bei Velmont. Wenn mich da einer erkennt, bin ich erledigt.']},
       {id: 'lena', label: 'Wann haben Sie Lena zuletzt gesprochen?', say: ['Am Tag davor. Sie war nervös. Sie hat gesagt, jemand folgt ihr. Ich habe ihr gesagt, sie soll vorsichtig sein.']},
       {id: 'telefon', label: 'Haben Sie während des Treffens telefoniert?', set: {gelogen: true}, say: ['Nein. Ich habe zugehört. Sonst nichts. Wieso fragen Sie das?']},
-      {id: 'anklage', label: 'Sie haben Lena entführt.', tag: 'accuse', wrong: true, say: ['Wie bitte? Ich habe sie gewarnt! Noch so ein Satz, und ich lege auf.']},
-      {id: 'beweis', label: 'Sie haben um 21:20 Uhr 071 228 9 gewählt. Eine Nummer in St. Gallen.', tag: 'proof', needs: ['nummer', 'gelogen'], set: {bernd_gestanden: true},
+      {id: 'anklage', pose: 'bernd-accuse', label: 'Sie haben Lena entführt.', tag: 'accuse', wrong: true, say: ['Wie bitte? Ich habe sie gewarnt! Noch so ein Satz, und ich lege auf.']},
+      {id: 'beweis', pose: 'bernd-proof', label: 'Sie haben um 21:20 Uhr 071 228 9 gewählt. Eine Nummer in St. Gallen.', tag: 'proof', needs: ['nummer', 'gelogen'], set: {bernd_gestanden: true},
         say: ['Woher haben Sie das? … Na gut. Ich habe angerufen.', 'Man hatte mir die Nummer gegeben. Ich sollte nur durchsagen, wann das Treffen läuft. Ich dachte, es geht um Geld. Nicht um Lena.']},
-      {id: 'notiz', label: 'Lena wusste von Ihrem Anruf. Es steht in ihrem Notizbuch.', tag: 'proof', needs: ['bernd_gestanden', 'notizbuch'], set: {bernd_zeuge: true}, end: true,
+      {id: 'notiz', pose: 'bernd-proof', label: 'Lena wusste von Ihrem Anruf. Es steht in ihrem Notizbuch.', tag: 'proof', needs: ['bernd_gestanden', 'notizbuch'], set: {bernd_zeuge: true}, end: true,
         say: ['Sie wusste es? Und hat mich trotzdem reden lassen.', 'Der Mann am Telefon nannte sich nur Neun. Wenn ihr ihn kriegt, sage ich aus. Vor jedem Gericht.']},
       {id: 'genug', label: 'Danke. Das reicht uns.', tag: 'leave', needs: ['bernd_gestanden'], end: true,
         say: ['Dann lassen Sie mich jetzt in Ruhe.']}

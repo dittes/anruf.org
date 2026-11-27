@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Figuren-Galerie</title>
+<link rel="stylesheet" href="../portraits/motion.css">
 <style>
 :root{color-scheme:dark}
 body{margin:0;background:#0b0c0e;color:#e9e6df;font:14px/1.4 ui-sans-serif,-apple-system,"Segoe UI",Roboto,sans-serif;padding:16px}
@@ -38,7 +39,7 @@ for (const meta of CASES) {
   for (const [id, n] of Object.entries(c.npcs)) {
     if (only && !only.split(',').includes(id)) continue
     const f = document.createElement('figure')
-    f.innerHTML = `<div class="pic">${portrait(n.face)}</div><figcaption>${n.name}<small>${c.title} · ${id} · ${n.face.scene || 'plain'}</small></figcaption>`
+    f.innerHTML = `<div class="pic">${portrait(n.face, true)}</div><figcaption>${n.name}<small>${c.title} · ${id} · ${n.face.scene || 'plain'}</small></figcaption>`
     g.append(f)
   }
 }

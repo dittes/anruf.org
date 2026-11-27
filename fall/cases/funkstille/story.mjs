@@ -25,16 +25,16 @@ export default {
   npcs: {
     jannik: {name: 'Jannik Feddersen', sub: 'Leitstelle Küste · Schichtleitung', tts: {pitch: 1, rate: 1.05},
       voice: {model: 'thorsten-high', pitch: 2, fx: 'call', len: .94},
-      face: {skin: '#ebc0a4', eyes: '#3a6a8a', hair: {style: 'short', color: '#b5652e'}, beard: 'full', beardColor: '#a85a28', extras: ['headset'], mood: 'smile', jaw: .7, top: {style: 'hoodie', color: '#1f3346', accent: '#ccc'}, scene: 'radio'}},
+      face: {photo: 'jannik', skin: '#ebc0a4', eyes: '#3a6a8a', hair: {style: 'short', color: '#b5652e'}, beard: 'full', beardColor: '#a85a28', extras: ['headset'], mood: 'smile', jaw: .7, top: {style: 'hoodie', color: '#1f3346', accent: '#ccc'}, scene: 'radio'}},
     marit: {name: 'Dr. Marit Olsen', sub: 'Station Graudel · Satellit', look: 'weak', tts: {pitch: 1.05, rate: 1},
       voice: {model: 'eva_k', fx: 'radio', len: 1},
-      face: {skin: '#efcbb4', fem: true, jaw: .3, eyes: '#4a6a7a', hair: {style: 'bob', color: '#cbb896'}, glasses: 'round', age: 2, mood: 'stern', top: {style: 'coat', color: '#8a2e2a'}, extras: ['earring'], scene: 'storm'}},
+      face: {photo: 'marit', skin: '#efcbb4', fem: true, jaw: .3, eyes: '#4a6a7a', hair: {style: 'bob', color: '#cbb896'}, glasses: 'round', age: 2, mood: 'stern', top: {style: 'coat', color: '#8a2e2a'}, extras: ['earring'], scene: 'storm'}},
     tom: {name: 'Unbekannt', sub: 'Station Graudel · Handy', look: 'weak', tts: {pitch: 1.2, rate: 1.1},
       voice: {model: 'thorsten_emotional', speaker: 7, fx: 'radio', len: .98},
-      face: {skin: '#e7b99c', age: 0, jaw: .3, eyes: '#4a7a5a', hair: {style: 'curly', color: '#7a4a2a'}, extras: ['freckles'], top: {style: 'hoodie', color: '#d9a21b', accent: '#333'}, mood: 'worried', look: [1, .5], scene: 'storm'}},
-    ole: {name: 'Kapitän Ole Jessen', sub: 'Seenotkreuzer „Hinrich“', tts: {pitch: .8, rate: .95},
+      face: {photo: 'tom', skin: '#e7b99c', age: 0, jaw: .3, eyes: '#4a7a5a', hair: {style: 'curly', color: '#7a4a2a'}, extras: ['freckles'], top: {style: 'hoodie', color: '#d9a21b', accent: '#333'}, mood: 'worried', look: [1, .5], scene: 'storm'}},
+    ole: {name: 'Kapitän Ole Jessen', afterVote: {id: 'fahrt', pose: 'ole-radio'}, sub: 'Seenotkreuzer „Hinrich“', tts: {pitch: .8, rate: .95},
       voice: {model: 'thorsten_emotional', speaker: 4, fx: 'radio', len: 1.05},
-      face: {skin: '#c98f6c', eyes: '#3a5a7a', hair: {style: 'cap', color: '#ddd', hat: '#1b2a3a'}, beard: 'full', beardColor: '#e8e4dc', age: 2, jaw: 1, mood: 'stern', top: {style: 'coat', color: '#c8501f'}, scene: 'storm'}}
+      face: {photo: 'ole', skin: '#c98f6c', eyes: '#3a5a7a', hair: {style: 'cap', color: '#ddd', hat: '#1b2a3a'}, beard: 'full', beardColor: '#e8e4dc', age: 2, jaw: 1, mood: 'stern', top: {style: 'coat', color: '#c8501f'}, scene: 'storm'}}
   },
 
   photos: {
