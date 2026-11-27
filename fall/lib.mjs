@@ -1,8 +1,5 @@
 // Gemeinsame Helfer für Spiel (Browser) und Werkzeuge (Node).
 
-// Codenamen, für die es eigene Sprachaufnahmen gibt: Wer einen davon wählt, wird von den Figuren mit Namen angesprochen.
-export const CODENAMES = ['Falke', 'Kranich', 'Dohle', 'Uhu', 'Elster', 'Rabe', 'Reiher', 'Sperber', 'Kauz', 'Möwe', 'Fuchs', 'Luchs']
-
 // Kurzer Schlüssel für eine Sprachaufnahme (FNV-1a über Figur + gesprochenen Text)
 export function akey(npc, text) {
   let h = 0x811c9dc5
@@ -11,10 +8,10 @@ export function akey(npc, text) {
   return h.toString(16).padStart(8, '0')
 }
 
-// Was tatsächlich gesprochen wird: {me} nur, wenn es eine Aufnahme mit dem Namen gibt, {time} als „schon spät“
-export function audioText(text, name = '') {
+// Was tatsächlich gesprochen wird: Den echten Namen ({me}) kennt nur der Untertitel, {time} wird „schon spät“
+export function audioText(text) {
   return String(text)
-    .replace(/,?\s*\{me\}/g, name ? ', ' + name : '')
+    .replace(/,?\s*\{me\}/g, '')
     .replace(/\{time\}/g, 'schon spät')
     .replace(/^,\s*/, '')
 }

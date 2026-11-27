@@ -60,9 +60,7 @@ body[data-view=room] #room{display:grid}
 .start{max-width:560px;margin:0 auto;text-align:center}
 .namebox{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:8px}
 .namebox input{flex:1;min-width:0;padding:.75em 1em;border-radius:999px;border:1px solid var(--line);background:var(--panel)}
-#names{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:10px 0 2px}
-.chipbtn{border:1px solid var(--line);background:none;border-radius:999px;padding:.2em .7em;font-size:.8rem;color:var(--mute)}
-.chipbtn.on{border-color:var(--amber);color:var(--amber)}
+.namebox input.need{border-color:#ff3b30;box-shadow:0 0 0 3px rgba(255,59,48,.2)}
 .namehint{font-size:.8rem;color:var(--mute);margin:.4em 0 0}
 #saves{margin-top:22px;text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 16px}
 #saveList{list-style:none;padding:0;margin:.4em 0 0}
@@ -204,10 +202,30 @@ body.akte-open #akte, body.chat-open #chat{transform:none}
 #page td:first-child{font-family:var(--mono);white-space:nowrap}
 #page .stamp{font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--red)}
 #page .note{color:var(--amber);font-size:.9rem}
+.tab.pinned{border-color:rgba(255,178,63,.6)}
+.tablebtn{display:block;margin:0 0 10px;font-size:.82rem;padding:.4em .9em}
+#page .ownnote.tbl{border-left-style:solid}
+#screenBtn.live{background:#1d3a24}
+/* Arbeitstisch: geteilte Seiten als Karten auf Holz */
+.tile.desk{background:radial-gradient(ellipse at 30% 20%,#7a5434,#4a3020 70%);box-shadow:inset 0 0 60px rgba(0,0,0,.5)}
+.tile.desk .cards{position:absolute;inset:12px 12px 44px;display:flex;flex-wrap:wrap;gap:10px;align-content:flex-start;overflow:auto}
+.tile.desk .card{transform:rotate(var(--r));background:#efe9d8;color:#222;border:0;border-radius:3px;padding:.5em .7em;min-width:110px;max-width:46%;text-align:left;
+  box-shadow:0 6px 14px rgba(0,0,0,.45);font-size:.82rem;transition:transform .2s}
+.tile.desk .card:hover{transform:rotate(0) scale(1.05)}
+.tile.desk .card b{display:block}
+.tile.desk .card small{color:#6b6252;font-size:.7rem}
+/* geteilter Bildschirm: volle Breite, nichts abschneiden */
+.tile.screen{grid-column:1/-1;grid-row:span 2;background:#000}
+.tile.screen video{object-fit:contain}
 #page .ownnote{font-size:.76rem;color:var(--mute);border-left:2px dashed var(--amber);padding-left:8px}
 #page .log{list-style:none;padding:0;font-size:.9rem}
 #page .log li{padding:.4em 0;border-bottom:1px solid var(--line)}
 #page .log b{font-family:var(--mono);font-weight:500;color:var(--mute);margin-right:.4em}
+#page .letter{background:#f4efe2;color:#2a2620;border-radius:4px;padding:16px 18px;font-family:"Bradley Hand","Segoe Print","Snell Roundhand",cursive;font-size:1.02rem;line-height:1.45;
+  box-shadow:0 10px 30px rgba(0,0,0,.4);transform:rotate(-.6deg);background-image:repeating-linear-gradient(transparent 0 27px,rgba(80,110,160,.18) 27px 28px)}
+#page .letter p{margin:0 0 .5em}
+#page .letter .sig{text-align:right;font-size:1.15rem}
+.solotag{margin-left:8px;padding:.05em .5em;border-radius:999px;background:var(--a,#c9a46a);color:#111;font-weight:700;letter-spacing:.08em}
 #page .paper{background:#e9e3d4;color:#1a1814;border-radius:6px;padding:14px 16px;font-family:var(--mono);font-size:.82rem;box-shadow:0 10px 30px rgba(0,0,0,.4)}
 #page .paper .stamp{color:#a31f1f}
 #page .grid{display:grid;grid-template-columns:repeat(var(--n,4),1fr);gap:4px;font-family:var(--mono);text-align:center}
@@ -365,9 +383,16 @@ body.dark #stage .lamp{z-index:10}
 .cipher .row.sh{color:var(--amber);border-top:1px solid var(--line)}
 .cipher .tctl{display:flex;gap:10px;align-items:center;justify-content:center;margin:10px 0}
 .cipher .dec{font:700 1rem var(--mono);letter-spacing:.08em;background:var(--bg);border-radius:8px;padding:.7em;word-break:break-word}
-.photo .vp{position:relative;overflow:hidden;border-radius:10px;aspect-ratio:4/3;background:#000;cursor:grab;touch-action:none;border:1px solid var(--line)}
+.photo .vp{position:relative;overflow:hidden;border-radius:10px;aspect-ratio:var(--ar,4/3);background:#000;cursor:grab;touch-action:none;border:1px solid var(--line)}
 .photo .img{transform-origin:0 0;width:100%;height:100%}
 .photo .img svg{width:100%;height:100%;display:block}
+.clockpad{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin:8px 0}
+.clockface{width:132px;height:132px;filter:drop-shadow(0 4px 10px rgba(0,0,0,.5))}
+.clockface svg{width:100%;height:100%}
+.clockbtns{display:grid;grid-template-columns:auto auto auto;gap:6px 8px;align-items:center}
+.clockbtns .btn{padding:.3em .8em}
+.tile.flip .pic{animation:flip .5s var(--ease)}
+@keyframes flip{0%{filter:blur(8px) brightness(1.6)}100%{filter:none}}
 .photo .tctl{display:flex;gap:8px;align-items:center;margin-top:8px}
 [data-face]{border-radius:10px;overflow:hidden;position:relative;aspect-ratio:4/3;margin:.6em 0;border:6px solid #e9e3d4;box-shadow:0 8px 24px rgba(0,0,0,.4)}
 [data-face] svg{width:100%;height:100%;display:block}
@@ -424,11 +449,10 @@ body.dark #stage .lamp{z-index:10}
     </div>
     <div id="cases"></div>
     <div class="start">
-      <label class="mono" for="nameIn">Dein Codename</label>
-      <div id="names"></div>
-      <p class="namehint">Mit einem dieser Codenamen sprechen dich die Figuren mit Namen an.</p>
+      <label class="mono" for="nameIn">Dein Name</label>
+      <p class="namehint">So heißt du im Anruf. Die Figuren sprechen dich damit an.</p>
       <div class="namebox">
-        <input id="nameIn" maxlength="24" autocomplete="nickname">
+        <input id="nameIn" maxlength="24" autocomplete="given-name" placeholder="Vorname" required>
         <button class="btn primary" id="goBtn">Fall eröffnen</button>
       </div>
       <div id="saves" hidden>
@@ -474,6 +498,7 @@ body.dark #stage .lamp{z-index:10}
     <button id="camBtn" aria-pressed="false">📷<span class="lb">Kamera an</span></button>
     <button id="akteBtn">🗂<span class="lb">Akte</span></button>
     <button id="chatBtn">💬<span class="lb">Chat</span></button>
+    <button id="screenBtn" hidden title="Bildschirm für alle teilen">🖥<span class="lb">Bildschirm</span></button>
     <button id="voiceBtn" aria-pressed="false">🔊<span class="lb">Stimmen an</span></button>
     <label class="vol" title="Lautstärke der Figuren"><input id="volIn" type="range" min="0" max="1" step="0.05" aria-label="Lautstärke"></label>
     <button id="pauseBtn" hidden>⏸<span class="lb">Pause</span></button>

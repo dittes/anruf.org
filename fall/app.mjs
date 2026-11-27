@@ -9,7 +9,7 @@ import qrcode from '../vendor/qrcode.mjs'
 import {APP_ID, DEFAULT_RELAYS, TURN, TURN_FALLBACK} from '../config.mjs'
 import {CASES} from './cases/index.mjs'
 import {portrait} from './portrait.mjs'
-import {akey, audioText, CODENAMES, norm, sha} from './lib.mjs'
+import {akey, audioText, norm, sha} from './lib.mjs'
 
 const $ = (s, el = document) => el.querySelector(s)
 const $$ = (s, el = document) => [...el.querySelectorAll(s)]
@@ -44,8 +44,7 @@ const randomSlug = () => {
   const r = n => n[Math.floor(Math.random() * n.length)]
   return `${r(a)}-${r(b)}-${Math.random().toString(36).slice(2, 7)}`
 }
-let myName = cleanName(store.get('name', '')) || CODENAMES[Math.floor(Math.random() * CODENAMES.length)]
-const spokenName = () => CODENAMES.includes(myName) ? myName : ''
+let myName = cleanName(store.get('name', ''))
 
 function toast(text, ms = 3400, cls = '') {
   const t = h('div', {class: 'toast ' + cls}, text)
@@ -129,7 +128,7 @@ async function loadAudio(id) {
   const files = [...new Set(Object.values(AU.manifest).map(m => m.f))]
   ;(async () => { for (const f of files) { try { await fetch(AU.base + f) } catch {} } })()
 }
-const lineMeta = (npc, text, name = spokenName()) => AU.manifest[akey(npc, audioText(text, name))] || AU.manifest[akey(npc, audioText(text, ''))]
+const lineMeta = (npc, text) => AU.manifest[akey(npc, audioText(text))]
 function stopVoice() {
   try { AU.el?.pause() } catch {}
   AU.el = null; AU.utterance = null; cancelAnimationFrame(AU.raf)
@@ -213,9 +212,7 @@ function setupHome() {
   const invited = !!slug
   document.body.dataset.invited = invited ? '1' : ''
   $('#nameIn').value = myName
-  const markName = () => $$('#names .chipbtn').forEach(b => b.classList.toggle('on', b.textContent === $('#nameIn').value.trim()))
-  $('#names').replaceChildren(...CODENAMES.map(n => h('button', {class: 'chipbtn', type: 'button', onclick: () => { $('#nameIn').value = n; markName() }}, n)))
-  $('#nameIn').addEventListener('input', markName); markName()
+  $('#nameIn').addEventListener('input', () => $('#nameIn').classList.remove('need'))
   let picked = caseId || store.get('case', CASES[0].id)
   if (!CASES.some(c => c.id === picked)) picked = CASES[0].id
   const renderCases = () => {
@@ -225,7 +222,7 @@ function setupHome() {
     },
     h('div', {class: 'cover', html: portrait(c.cover)}),
     h('div', {class: 'cbody'},
-      h('div', {class: 'mono'}, c.file),
+      h('div', {class: 'mono'}, c.file, c.solo ? h('span', {class: 'solotag'}, 'Solo') : null),
       h('h3', {}, c.title),
       h('p', {}, c.tagline),
       h('div', {class: 'meta'}, h('span', {}, '👥 ' + c.players), h('span', {}, '⏱ ' + c.duration), h('span', {title: 'Schwierigkeit'}, '◆'.repeat(c.difficulty) + '◇'.repeat(3 - c.difficulty)))
@@ -237,7 +234,9 @@ function setupHome() {
     ? 'Du wurdest in einen laufenden Fall gerufen. Jemand braucht deine Hilfe. Jetzt.'
     : 'Exit-Games im Videoanruf. Jede Person bekommt andere Unterlagen. Figuren rufen an, klopfen an, lügen euch an. Ohne Konto, ohne App, direkt im Browser.'
   $('#goBtn').addEventListener('click', () => {
-    myName = cleanName($('#nameIn').value) || myName; store.set('name', myName)
+    const nm = cleanName($('#nameIn').value)
+    if (!nm) { $('#nameIn').classList.add('need'); $('#nameIn').focus(); toast('Wie heißt du? Die anderen und die Figuren sprechen dich mit deinem Namen an.'); return }
+    myName = nm; store.set('name', myName)
     audio()
     if (!slug) { caseId = picked; slug = randomSlug(); sess.set('host.' + caseId + '/' + slug, '1'); history.replaceState(null, '', '#' + caseId + '/' + slug) }
     enter()
@@ -324,6 +323,12 @@ async function enter() {
   R.meta = room.makeAction('meta')
   R.game = room.makeAction('game')
   R.chat = room.makeAction('chat')
+  R.scr = room.makeAction('scr')
+  R.scr.onMessage = (d, {peerId}) => {
+    const p = peerOf(peerId)
+    if (d?.on) p.screenSid = String(d.sid || '')
+    else { p.screenSid = ''; removeScreen(p) }
+  }
   R.meta.onMessage = (d, {peerId}) => {
     if (!d || typeof d !== 'object') return
     const p = peerOf(peerId)
@@ -345,19 +350,25 @@ async function enter() {
     if (R.peers.size >= LIMIT) toast('Die Leitung ist voll (max. 8).')
     if (R.stream.getTracks().length) room.addStream(R.stream, {target: id})
     sendMeta(id)
+    shareScreenTo(id)
     G.onPeerJoin(p)
     SFX.join(); renderLobby()
   }
   room.onPeerLeave = id => {
     const p = R.peers.get(id); if (!p) return
     R.peers.delete(id)
+    removeScreen(p)
     p.tile.classList.add('out'); setTimeout(() => { p.tile.remove(); layout() }, 350)
     if (p.name !== '…') { toast(`${p.name} hat aufgelegt`); sysMsg(`${p.name} hat aufgelegt`) }
     SFX.leave()
     G.onPeerLeave(id)
     renderLobby()
   }
-  room.onPeerStream = (s, id) => setVideo(peerOf(id), s)
+  room.onPeerStream = (s, id, meta) => {
+    const p = peerOf(id)
+    if (meta?.screen || (p.screenSid && s.id === p.screenSid)) addScreen(p, s)
+    else setVideo(p, s)
+  }
   startSensors()
   G.init()
 }
@@ -412,7 +423,7 @@ function updateTile(p) {
   $('.role', t).textContent = G.c ? roleName(G.state?.roles?.[p.self ? selfId : p.id]) : ''
 }
 function layout() {
-  const n = $$('#stage .tile:not(.out)').length
+  const n = $$('#stage .tile:not(.out):not(.screen)').length
   const cols = n <= 1 ? 1 : n <= 4 ? 2 : 3
   STAGE().style.setProperty('--cols', innerWidth < 640 && n > 1 ? Math.min(cols, 2) : cols)
 }
@@ -424,6 +435,9 @@ function syncDock() {
   $('#micBtn .lb').textContent = R.mic ? 'Mikro an' : 'Stumm'
   $('#camBtn').setAttribute('aria-pressed', !R.cam)
   $('#camBtn .lb').textContent = R.cam ? 'Kamera an' : 'Kamera aus'
+  $('#screenBtn').hidden = !canScreen
+  $('#screenBtn').classList.toggle('live', !!R.screen)
+  $('#screenBtn .lb').textContent = R.screen ? 'Teilen beenden' : 'Bildschirm'
   $('#voiceBtn').setAttribute('aria-pressed', !voiceOn)
   $('#voiceBtn .lb').textContent = voiceOn ? 'Stimmen an' : 'Nur Text'
   updateTile(R.self)
@@ -477,7 +491,7 @@ const G = {
     return {v: 1, caseId, phase: 'lobby', host: selfId, step: 0, stepAt: 0, roles: {}, names: {}, npcs: [], sub: null, subN: 0,
       pages: [], puzzle: null, puzzleAt: 0, solved: [], hints: {}, tries: [], knock: null, call: null, ask: null, vote: null, votes: {},
       results: {}, flags: {}, ending: null, fxN: 0, fxq: [], startedAt: 0, endedAt: 0, quiet: null, chapter: null, goal: '', done: [],
-      hold: null, clap: null, timer: null, morse: null, dark: false, lockLeave: false, amb: null, paused: false, chats: [], frags: [], notes: {text: '', by: ''}, strikes: 0}
+      hold: null, clap: null, timer: null, morse: null, dark: false, lockLeave: false, amb: null, paused: false, chats: [], frags: [], notes: {text: '', by: ''}, strikes: 0, table: [], poses: {}}
   },
   claimHost() {
     this.state = this.state ? {...this.state, host: selfId} : this.fresh()
@@ -575,6 +589,15 @@ const G = {
       rt.loud ||= {}; rt.loud[from] = Date.now()
     } else if (d.t === 'hold' && s.hold) {
       rt.holders ||= {}; rt.holders[from] = !!d.on
+    } else if (d.t === 'table' && typeof d.page === 'string' && s.pages.includes(d.page)) {
+      // Arbeitstisch: eine Seite aus der eigenen Akte für alle sichtbar hinlegen (oder wieder wegnehmen)
+      const table = s.table || [], r = this.c.pages[d.page]?.role, role = s.roles[from]
+      const mine = !r || role === 'beide' || r === role
+      const i = table.findIndex(x => x.page === d.page)
+      if (d.on && i < 0 && mine) s.table = [...table.slice(-7), {page: d.page, by: nameOf(from)}]
+      else if (!d.on && i >= 0) s.table = table.filter(x => x.page !== d.page)
+      else return
+      this.commit()
     } else if (d.t === 'notes' && typeof d.text === 'string') {
       s.notes = {text: d.text.slice(0, 5000), by: nameOf(from)}; this.commit()
     } else if (d.t === 'pause') {
@@ -634,7 +657,8 @@ const G = {
     const s = this.state
     if (!s || !this.c || !this.isHost() || s.phase !== 'play' || s.paused) return
     const before = JSON.stringify(s)
-    for (let guard = 0; guard < 40 && this.step1(s); guard++);
+    // Nach einem Ende nichts mehr abarbeiten (sonst liefe das Skript in die nächste Sprungmarke weiter)
+    for (let guard = 0; guard < 40 && s.phase === 'play' && this.step1(s); guard++);
     if (JSON.stringify(s) !== before) this.commit()
   },
   step1(s) {
@@ -655,6 +679,7 @@ const G = {
       case 'join': if (!s.npcs.includes(a)) s.npcs.push(a); this.fx(b || 'join'); this.next(); break
       case 'leave': s.npcs = s.npcs.filter(n => n !== a); if (s.sub?.npc === a) s.sub = null; if (s.morse?.npc === a) s.morse = null; this.fx(b || 'leave'); this.next(); break
       case 'fx': this.fx(a, b); this.next(); break
+      case 'pose': s.poses = {...s.poses, [a]: b || null}; this.next(); break   // Figur zeigt ein anderes Bild (z. B. Handykamera umgedreht)
       case 'unlock': this.unlock(a); this.next(); break
       case 'fragment': s.frags = [...s.frags, {sym: a, val: b}]; this.fx('fragment', a + ' ' + b); this.next(); break
       case 'dark': s.dark = !!a; this.fx(a ? 'off' : 'right'); this.next(); break
@@ -793,10 +818,11 @@ const G = {
       if (!n.face.photo) continue
       const votePose = n.afterVote && s.results?.[n.afterVote.id] && n.afterVote.pose
       const askPose = s.ask?.npc === id && s.ask.busy && s.ask.pose
-      const pose = askPose || votePose || n.face.photo
+      const pose = askPose || s.poses?.[id] || votePose || n.face.photo
       if (pose === tile.dataset.pose) continue
       tile.dataset.pose = pose
       $('.pic', tile).innerHTML = portrait({...n.face, photo: pose}, true)
+      tile.classList.remove('flip'); void tile.offsetWidth; tile.classList.add('flip')
     }
     layout()
     // Untertitel + Stimme
@@ -954,6 +980,70 @@ function renameAll(text) {
   })
 }
 
+/* ---- Arbeitstisch: geteilte Unterlagen als eigene Kachel ---- */
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'})[c])
+function renderTable(s) {
+  const table = s.phase === 'play' ? s.table || [] : []
+  let t = $('#tableTile')
+  if (!table.length) { if (t) { t.id = ''; t.classList.add('out'); setTimeout(() => { t.remove(); layout() }, 350) } return }
+  if (!t) {
+    t = h('div', {class: 'tile desk', id: 'tableTile'}, h('div', {class: 'cards'}), h('div', {class: 'label'}, h('span', {class: 'nm'}, '📌 Arbeitstisch')))
+    STAGE().append(t); requestAnimationFrame(() => t.classList.add('in')); layout()
+  }
+  const key = table.map(x => x.page + x.by).join()
+  if (t.dataset.k === key) return
+  t.dataset.k = key
+  $('.cards', t).replaceChildren(...table.map((x, i) => h('button', {class: 'card', type: 'button', style: `--r:${((i * 37) % 9) - 4}deg`,
+    onclick: () => { G.activePage = x.page; $('#tabs').dataset.k = ''; setSide('akte'); renderDossier(G.state, G.state.roles[selfId]) }},
+    h('b', {}, G.c.pages[x.page]?.title || x.page), h('small', {}, 'von ' + x.by))))
+}
+
+/* ---- Bildschirm teilen (eigener Stream neben der Kamera) ---- */
+const canScreen = !!navigator.mediaDevices?.getDisplayMedia && !/Android|iPhone|iPad/i.test(navigator.userAgent)
+function shareScreenTo(id) {
+  const sc = R.screen; if (!sc) return
+  try { R.scr.send({on: true, sid: sc.stream.id}, id ? {target: id} : undefined)?.catch?.(() => {}) } catch {}
+  try { R.room.addStream(sc.stream, id ? {target: id, metadata: {screen: true}} : {metadata: {screen: true}}) } catch {}
+}
+async function startScreen() {
+  if (!R.room || R.screen) return
+  let ds
+  try { ds = await navigator.mediaDevices.getDisplayMedia({video: {frameRate: {ideal: 15, max: 30}}, audio: false, selfBrowserSurface: 'include', surfaceSwitching: 'include'}) }
+  catch (err) { if (err.name !== 'NotAllowedError' && err.name !== 'AbortError') toast('Bildschirm konnte nicht geteilt werden.'); return }
+  const vt = ds.getVideoTracks()[0]
+  try { vt.contentHint = 'detail' } catch {}
+  R.screen = {stream: ds}
+  vt.onended = () => stopScreen()
+  shareScreenTo()
+  syncDock()
+  toast(R.peers.size ? 'Die anderen sehen jetzt deinen Bildschirm. Tipp: Für einzelne Seiten reicht „📌 Auf den Arbeitstisch legen“ in der Akte.' : 'Du teilst deinen Bildschirm, sobald jemand da ist.', 5000)
+}
+function stopScreen() {
+  const sc = R.screen; if (!sc) return
+  R.screen = null
+  sc.stream.getTracks().forEach(t => { t.onended = null; t.stop() })
+  try { R.scr.send({on: false})?.catch?.(() => {}) } catch {}
+  try { R.room.removeStream(sc.stream) } catch {}
+  syncDock()
+}
+function addScreen(p, s) {
+  if (p.screen?.stream === s) return
+  removeScreen(p)
+  const v = h('video', {autoplay: true, playsinline: true, muted: true})
+  const t = h('div', {class: 'tile screen', title: 'Doppelklick: Vollbild'}, v, h('div', {class: 'label'}, h('span', {class: 'nm'}, '🖥 ' + p.name + ' · Bildschirm')))
+  v.muted = true; v.srcObject = new MediaStream(s.getVideoTracks()); v.play?.().catch(() => {})
+  t.addEventListener('dblclick', () => document.fullscreenElement ? document.exitFullscreen() : t.requestFullscreen?.())
+  STAGE().prepend(t); requestAnimationFrame(() => t.classList.add('in'))
+  p.screen = {stream: s, tile: t}
+  toast(`🖥 ${p.name} teilt den Bildschirm`)
+  layout()
+}
+function removeScreen(p) {
+  const sc = p.screen; if (!sc) return
+  p.screen = null
+  sc.tile.classList.add('out'); setTimeout(() => { sc.tile.remove(); layout() }, 350)
+}
+
 /* ---- Lobby ---- */
 function renderLobby() {
   const s = G.state, el = $('#lobby')
@@ -967,34 +1057,51 @@ function renderLobby() {
   $('#claimBtn').hidden = host || !!s || !G.waitedLong
   $('#lobbyTitle').textContent = G.c ? G.c.title : ''
   $('#lobbyIntro').textContent = G.c ? G.c.lobby : ''
-  $('#lobbyWait').textContent = host ? (ids.length < 2
+  $('#lobbyWait').textContent = host && G.c?.solo ? 'Ein Fall für dich allein. Wer mag, kann über den Link zuschauen und mitraten.' : host ? (ids.length < 2
     ? 'Allein? Öffne den Link auf deinem Handy als zweites Gerät, oder starte allein mit allen Akten.'
     : `${ids.length} in der Leitung. Ihr bekommt verschiedene Akten. Redet miteinander.`)
     : s ? 'Warte, bis die Einsatzleitung beginnt …' : 'Verbinde mit der Leitung …'
-  $('#startBtn').textContent = ids.length < 2 ? 'Allein beginnen' : 'Fall beginnen'
+  $('#startBtn').textContent = G.c?.solo ? 'Anruf annehmen' : ids.length < 2 ? 'Allein beginnen' : 'Fall beginnen'
   el.hidden = !!s && s.phase !== 'lobby'
 }
 
 /* ---- Akte, Notizen, Protokoll ---- */
 function renderDossier(s, role) {
-  const vis = s.pages.filter(id => { const r = G.c.pages[id]?.role; return !r || role === 'beide' || r === role })
+  const table = s.table || [], onTable = id => table.find(x => x.page === id)
+  const own = id => { const r = G.c.pages[id]?.role; return !r || role === 'beide' || r === role }
+  const vis = s.pages.filter(id => own(id) || onTable(id))
   const fresh = vis.filter(id => !G.seen.pages.has(id))
   if (fresh.length) {
     fresh.forEach(id => G.seen.pages.add(id))
     $('#akteBtn').classList.add('dot')
-    if (s.phase === 'play' && G._dossierInit) { SFX.page(); toast(`🗂 Neu in deiner Akte: ${fresh.map(id => G.c.pages[id].title).join(', ')}`) }
+    if (s.phase === 'play' && G._dossierInit) {
+      SFX.page()
+      const put = fresh.filter(id => !own(id)), mine = fresh.filter(own)
+      if (mine.length) toast(`🗂 Neu in deiner Akte: ${mine.map(id => G.c.pages[id].title).join(', ')}`)
+      for (const id of put) toast(`📌 ${onTable(id).by} legt „${G.c.pages[id].title}“ auf den Arbeitstisch`, 4500)
+    }
     G.activePage = fresh.at(-1)
   }
+  // Was vom Tisch genommen wurde und nicht in der eigenen Akte steht, ist wieder weg
+  for (const id of [...G.seen.pages]) if (!vis.includes(id)) G.seen.pages.delete(id)
+  renderTable(s)
   G._dossierInit = true
   if (!vis.includes(G.activePage)) G.activePage = vis[0]
-  const tabs = $('#tabs'), key = vis.join() + '|' + G.activePage
+  const many = players().length > 1
+  const tabs = $('#tabs'), key = vis.join() + '|' + G.activePage + '|' + table.map(x => x.page).join() + '|' + many
   if (tabs.dataset.k !== key) {
     tabs.dataset.k = key
-    tabs.replaceChildren(...vis.map(id => h('button', {class: 'tab' + (G.c.pages[id].role ? ' own' : ''), 'aria-selected': id === G.activePage,
-      onclick: () => { G.activePage = id; renderDossier(G.state, G.state.roles[selfId]) }}, G.c.pages[id].title)))
-    const pg = G.c.pages[G.activePage]
+    tabs.replaceChildren(...vis.map(id => h('button', {class: 'tab' + (G.c.pages[id].role ? ' own' : '') + (onTable(id) ? ' pinned' : ''), 'aria-selected': id === G.activePage,
+      title: onTable(id) ? 'Liegt auf dem Arbeitstisch' : '',
+      onclick: () => { G.activePage = id; renderDossier(G.state, G.state.roles[selfId]) }}, (onTable(id) ? '📌 ' : '') + G.c.pages[id].title)))
+    const id = G.activePage, pg = G.c.pages[id], t = onTable(id)
     $$('.tuner', $('#page')).forEach(t => t._cleanup?.())
-    $('#page').innerHTML = pg ? (pg.role ? `<p class="ownnote">Nur in deiner Akte (${roleName(pg.role)}). Die anderen sehen das nicht.</p>` : '') + pg.html : '<p class="note">Noch keine Unterlagen.</p>'
+    const note = !pg ? '' : t && !own(id) ? `<p class="ownnote tbl">📌 Liegt auf dem Arbeitstisch, von ${esc(t.by)} hingelegt.</p>`
+      : pg.role && role !== 'beide' ? `<p class="ownnote">Nur in deiner Akte (${roleName(pg.role)}). Die anderen sehen das nicht, außer du legst es auf den Tisch.</p>` : ''
+    $('#page').innerHTML = pg ? note + pg.html : '<p class="note">Noch keine Unterlagen.</p>'
+    // Auf den Tisch legen: nur sinnvoll, wenn noch jemand da ist und die anderen die Seite nicht ohnehin haben
+    if (pg && many && (pg.role || t)) $('#page').prepend(h('button', {class: 'btn tablebtn', type: 'button', onclick: () => G.send({t: 'table', page: id, on: !t})},
+      t ? '↩ Vom Arbeitstisch nehmen' : '📌 Auf den Arbeitstisch legen'))
     mountPage($('#page'))
   }
   $('#doneList').replaceChildren(...(s.done || []).map(d => h('li', {}, fill(d))))
@@ -1315,6 +1422,23 @@ function buildInput(p) {
     }}, h('i'), h('span', {}, (p.labels?.[i]) || 'S' + (i + 1)))))
     sync()
   }
+  if (p.input === 'clock') {   // Zeiger stellen: Lösung als „4:10“
+    box.className = 'clockpad'
+    let hh = 12, mm = 0
+    const face = h('div', {class: 'clockface'})
+    const draw = () => {
+      const ha = (hh % 12 + mm / 60) * 30, ma = mm * 6
+      face.innerHTML = `<svg viewBox="-50 -50 100 100"><circle r="47" fill="#efe9d8" stroke="#5a4030" stroke-width="3"/>${
+        Array.from({length: 12}, (_, i) => `<text x="${Math.sin(i * Math.PI / 6) * 36}" y="${-Math.cos(i * Math.PI / 6) * 36 + 4}" font-size="10" text-anchor="middle" fill="#222" font-family="Georgia,serif">${['XII', 'I', 'II', 'III', 'IIII', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI'][i]}</text>`).join('')
+      }<line y2="-22" stroke="#111" stroke-width="3.4" stroke-linecap="round" transform="rotate(${ha})"/><line y2="-34" stroke="#111" stroke-width="2" stroke-linecap="round" transform="rotate(${ma})"/><circle r="2.6" fill="#8a6a2a"/></svg>`
+      $('#pa').value = `${hh}:${String(mm).padStart(2, '0')}`
+    }
+    const btn = (label, f) => h('button', {type: 'button', class: 'btn', onclick: () => { f(); tone(1200, 0, .03, 'square', .03); draw() }}, label)
+    box.append(face, h('div', {class: 'clockbtns'},
+      h('span', {class: 'mono'}, 'Stunde'), btn('−', () => { hh = hh === 1 ? 12 : hh - 1 }), btn('＋', () => { hh = hh === 12 ? 1 : hh + 1 }),
+      h('span', {class: 'mono'}, 'Minute'), btn('−', () => { mm = (mm + 55) % 60 }), btn('＋', () => { mm = (mm + 5) % 60 })))
+    draw()
+  }
   if (p.input === 'colors') {
     box.className = 'colorpad'
     const seq = []
@@ -1400,6 +1524,8 @@ function mountCipher(el) {
 function mountPhoto(el) {
   const svg = G.c.photos?.[el.dataset.photo]; if (!svg) return
   el.classList.add('photo')
+  const vb = svg.match(/viewBox="0 0 (\d+) (\d+)"/)
+  if (vb) el.style.setProperty('--ar', vb[1] + '/' + vb[2])
   el.innerHTML = `<div class="vp"><div class="img">${svg}</div></div><div class="tctl"><button class="btn" type="button" data-z="1.6">＋</button><button class="btn" type="button" data-z=".625">－</button><button class="btn" type="button" data-z="0">⟲</button><span class="mono">Ziehen zum Verschieben</span></div>`
   const vp = $('.vp', el), img = $('.img', el)
   let z = 1, tx = 0, ty = 0
@@ -1443,6 +1569,7 @@ function mountShred(el) {
 function bind() {
   $('#micBtn').onclick = () => setMic(!R.mic)
   $('#camBtn').onclick = () => setCam(!R.cam)
+  $('#screenBtn').onclick = () => R.screen ? stopScreen() : startScreen()
   $('#voiceBtn').onclick = () => { voiceOn = !voiceOn; store.set('voice', voiceOn ? '1' : '0'); if (!voiceOn) stopVoice(); syncDock() }
   $('#volIn').value = voiceVol
   $('#volIn').oninput = e => { voiceVol = Number(e.target.value); store.set('vol', voiceVol); if (AU.amb) AU.amb.volume = .3 * voiceVol }

@@ -1,7 +1,7 @@
 // Listet alle Sprachaufnahmen, die die Fälle brauchen (JSON auf stdout), für voices.py.
-// Zeilen mit {me} bekommen eine Fassung pro Codename und eine ohne Namen.
+// Zeilen mit {me} werden ohne Namen gesprochen, der Name steht nur im Untertitel.
 import {CASES} from '../cases/index.mjs'
-import {akey, audioText, CODENAMES, spokenLines} from '../lib.mjs'
+import {akey, audioText, spokenLines} from '../lib.mjs'
 
 const jobs = []
 for (const meta of CASES) {
@@ -15,8 +15,7 @@ for (const meta of CASES) {
   }
   for (const [npc, text] of spokenLines(c)) {
     const v = c.npcs[npc].voice
-    add(npc, audioText(text, ''), v)
-    if (text.includes('{me}')) for (const n of CODENAMES) add(npc, audioText(text, n), v)
+    add(npc, audioText(text), v)
   }
   for (const [id, clip] of Object.entries(c.clips || {})) {
     add('clip:' + id, clip.text || '', clip.voice || null, {reverse: !!clip.reverse, speed: clip.speed || 0, bells: clip.bells || 0, dtmf: clip.dtmf || ''})

@@ -4,15 +4,15 @@ Mehrere Fälle zum gemeinsamen Lösen im Videoanruf, auf Basis von anruf.org (gl
 
 | Datei | Inhalt |
 |---|---|
-| `index.html` | Startseite (Fallauswahl, Codename, Fortsetzen, Epilog-Codes) und Anruf-Oberfläche |
+| `index.html` | Startseite (Fallauswahl, eigener Name, Fortsetzen, Epilog-Codes) und Anruf-Oberfläche |
 | `app.mjs` | Anruf + Spiel-Engine (Host arbeitet das Skript ab, schickt den ganzen Spielstand an alle) |
 | `portrait.mjs` | Fotoporträts aus `portraits/` mit Blinzeln, lautstärkegesteuertem Mund und szenischen Reaktionen. Figuren ohne Foto nutzen die SVG-Zeichnung. |
-| `lib.mjs` | Gemeinsame Helfer (Audio-Schlüssel, Codenamen, Normalisierung, Hash) |
+| `lib.mjs` | Gemeinsame Helfer (Audio-Schlüssel, Normalisierung, Hash) |
 | `cases/index.mjs` | Liste der Fälle |
 | `cases/<fall>/story.mjs` | Ein Fall: Figuren, Akten, Rätsel, Enden, Skript |
 | `cases/<fall>/audio/` | Sprachaufnahmen + `manifest.json` (Schlüssel → Datei, Dauer) |
 | `audio/` | Atmosphäre-Schleifen |
-| `tools/` | `seal.mjs` (Lösungen hashen), `lines.mjs` + `voices.py` (Stimmen erzeugen) |
+| `tools/` | `seal.mjs` (Lösungen hashen), `lines.mjs` + `voices.py` (Stimmen erzeugen), `portraits/` (Fotos zu Kacheln mit Blinzeln und Mund packen) |
 
 ## Spielmechaniken (Schritte im Skript)
 
@@ -36,16 +36,21 @@ Mehrere Fälle zum gemeinsamen Lösen im Videoanruf, auf Basis von anruf.org (gl
 | `['dark', true]` | Licht aus, Taschenlampe folgt dem Zeiger |
 | `['lockLeave', true]` | Auflegen klappt beim ersten Versuch nicht (`lockText`) |
 | `['ambience', name]` | Atmosphäre-Schleife aus `audio/` |
+| `['pose', npc, bild]` | Figur zeigt ein anderes Foto aus `portraits/` (z. B. dreht die Handykamera um), `null` = wieder das Gesicht |
 | `['fx', art, arg]` | `glitch`, `flash`, `shake`, `static`, `ring`, `crash` (falscher Verbindungsabbruch), `mirror` (eigenes Kamerabild, bleibt lokal), `rename` (Kachelnamen), `toast` |
 | `['fragment', symbol, wert]` | Sammelstück oben in der Ziel-Leiste |
 | `['set', flag, wert]` · `['label', x]` · `['goto', x]` · `['branch', s => …, x]` | Verzweigungen |
 | `['vote', {id, prompt, options}]` · `['ending', id oder s => id]` | Abstimmung, Ende |
 
-Rätsel: `{q, ph, hash, near, hints, input, by}`. `input`: Text (Standard), `digits` (Tastenfeld), `switches` (mit `n`: Kippschalter, Lösung als 0/1-Folge), `colors` (mit `colors: [[name, farbe]]`: Farbtasten, Lösung als Namen mit Leerzeichen). `by: rolle` = nur diese Rolle kann eingeben.
+Rätsel: `{q, ph, hash, near, hints, input, by}`. `input`: Text (Standard), `digits` (Tastenfeld), `switches` (mit `n`: Kippschalter, Lösung als 0/1-Folge), `colors` (mit `colors: [[name, farbe]]`: Farbtasten, Lösung als Namen mit Leerzeichen), `clock` (Zeiger stellen, Lösung als „4:10“). `by: rolle` = nur diese Rolle kann eingeben.
 
-Seiten können außerdem enthalten: `<div data-tape="clip" data-spectrum></div>` (Tonband mit Frequenzanzeige, z. B. für Wähltöne: Clip mit `dtmf: '0712289'`), `<div data-tuner="clip" data-target="156.625" data-min data-max></div>` (Funkempfänger: Stimme taucht aus dem Rauschen auf), `<div data-cipher="GEHEIMTEXT"></div>` (Chiffrierscheibe), `<div data-photo="id"></div>` (Beweisfoto aus `photos`, mit Zoom und Verschieben), `<div data-face="id"></div>` (Profilbild aus `faces`, z. B. zum Vergleichen), `<div data-shred="id"></div>` (Aktenvernichter-Streifen aus `shreds` zum Sortieren).
+Seiten können außerdem enthalten: `<div data-tape="clip" data-spectrum></div>` (Tonband mit Frequenzanzeige, z. B. für Wähltöne: Clip mit `dtmf: '0712289'`), `<div data-tuner="clip" data-target="156.625" data-min data-max></div>` (Funkempfänger: Stimme taucht aus dem Rauschen auf), `<div data-cipher="GEHEIMTEXT"></div>` (Chiffrierscheibe), `<div data-photo="id"></div>` (Beweisfoto aus `photos`, mit Zoom und Verschieben; ein SVG, das auch ein Foto aus `portraits/` per `<image>` einbinden und Schilder darüberlegen kann), `<div data-face="id"></div>` (Profilbild aus `faces`, z. B. zum Vergleichen), `<div data-shred="id"></div>` (Aktenvernichter-Streifen aus `shreds` zum Sortieren).
 
 Seiten können enthalten: `<div class="uv">…<div class="ink">verborgen</div></div>` (UV-Lampe), `<div data-tape="clip"></div>` (Tonband mit Tempo und rückwärts), `<div data-widget="name"></div>` (Live-Anzeige aus `widgets` des Falls).
+
+Gemeinsam ansehen: Jede Seite der eigenen Akte lässt sich mit „📌 Auf den Arbeitstisch legen“ für alle sichtbar machen (eigene Kachel „Arbeitstisch“ mit den Karten, wieder wegnehmen geht auch). Am Computer kann man außerdem den Bildschirm teilen; der erscheint bei den anderen als breite Kachel.
+
+Solo-Fälle: `solo: true` im Fall und in `cases/index.mjs`. Es gibt nur eine Rolle, die Lobby startet mit „Anruf annehmen“. Beispiel: `cases/erbe`.
 
 Hilfen für Spielende: geteilte Notizen, Protokoll aller Sätze (mit ▶ nochmal hören), Hinweise in drei Stufen, „fast richtig“-Rückmeldungen (`near`), Pause mit Speicherstand (Fortsetzen über denselben Link), Kurzanleitung.
 
@@ -64,4 +69,6 @@ Hilfen für Spielende: geteilte Notizen, Protokoll aller Sätze (mit ▶ nochmal
 
 Figuren ansehen: `fall/tools/gallery.html` zeigt alle Profilbilder (`?big`, `?only=id1,id2`).
 
-Testen: `http://localhost:8080/fall/?nomedia&fast` in zwei Tabs (`nomedia` ohne Kamera/Mikro, `fast` verkürzt Wartezeiten, `debug` macht `G` in der Konsole verfügbar, `G.jump(schritt)` springt).
+Neue Fotos für Figuren: 16:9-Bild der Person plus ein bearbeitetes Bild mit geschlossenen Augen und offenem Mund (gleiche Pose). Dann `fall/tools/portraits/landmarks.swift` (Gesichtspunkte, lokal mit Apple Vision) und `pack.py` laufen lassen, siehe Kopf von `pack.py`. In der Figur `face: {photo: 'id'}` setzen.
+
+Testen: `http://localhost:8080/fall/?nomedia&fast` in zwei Tabs (`nomedia` ohne Kamera/Mikro, `fast` verkürzt Wartezeiten, `relay=ws://…` nutzt einen eigenen Nostr-Relay, `debug` macht `G` in der Konsole verfügbar, `G.jump(schritt)` springt).

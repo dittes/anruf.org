@@ -22,5 +22,12 @@ export const CASES = [
     players: '2–4', duration: '45–60 min', difficulty: 2,
     cover: {photo: 'luna', skin: '#f2d6c6', fem: true, jaw: 0, age: 0, hair: {style: 'bob', color: '#9d8fe0'}, eyes: '#5a7cff', lip: '#c45a7a', top: {style: 'blouse', color: '#e9e9f2', accent: '#8ea8ff'}, extras: ['lanyard'], lanyard: '#8ea8ff', mood: 'smile', scene: 'studio', light: '#c8d2ff'},
     load: () => import('./onboarding/story.mjs')
+  },
+  {
+    id: 'erbe', file: 'Nachlass 0-HW-0303', title: 'Das Haus am Wehr', accent: '#c9a46a', solo: true,
+    tagline: 'Ein Notar ruft an: Du hast ein Haus geerbt, von einer Großtante, die du nie getroffen hast. Unterschreib bis Mitternacht, sagt er. Ein Schlüsseldienst steht schon vor der Tür.',
+    players: '1 (Solo)', duration: '45–60 min', difficulty: 2,
+    cover: {photo: 'haus', scene: 'storm'},
+    load: () => import('./erbe/story.mjs')
   }
 ]
