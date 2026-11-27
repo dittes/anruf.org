@@ -76,3 +76,13 @@ python3 -m http.server 8080
 ```
 
 Mit einem lokalen Nostr-Relay geht es auch ganz ohne Internet: `http://localhost:8080/?relay=ws://localhost:7777`.
+
+## Exit-Games „Akte 0“ (`/fall`)
+
+Exit-Games im Videoanruf (anruf.org/fall) für 2–4 Personen, mit gleichem Verbindungsaufbau wie der Anruf (Trystero, `config.mjs`) in eigenen Räumen `fall/<fall>/<name>`. Drei Fälle: „Der neunte Anrufer“ (6 Kapitel, 90–120 min), „Funkstille“ und „Erster Arbeitstag“ (je 4 Kapitel, 45–60 min).
+
+Figuren rufen an, klopfen an, schicken Nachrichten an einzelne Rollen, lassen sich verhören und stellen Bedingungen (alle Mikros aus, alle Kameras an …). Dazu Tonbänder (Tempo, rückwärts), UV-Lampe, Morse-Lampe, gemeinsames Gedrückthalten, Countdown, Licht aus, Verzweigungen und mehrere Enden. Hilfen: geteilte Notizen, Protokoll zum Nachhören, gestufte Hinweise, Pause mit Speicherstand.
+
+Die Stimmen sind mit Piper lokal erzeugte Audiodateien (CC0-Stimmen, siehe `fall/CREDITS.md`), die Profilbilder zeichnet `fall/portrait.mjs` als SVG. Der Kamera-Schnappschuss für den „Spiegel“-Effekt bleibt im Browser. Aufbau, Skript-Schritte und wie man einen neuen Fall baut: `fall/README.md`.
+
+Testen: `http://localhost:8080/fall/?nomedia&fast` in zwei Tabs (`nomedia` = ohne Kamera/Mikro, `fast` = kürzere Wartezeiten).

@@ -1,0 +1,586 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<title>Akte 0 — Exit-Games im Videoanruf</title>
+<meta name="description" content="Exit-Games im Videoanruf: Figuren rufen an, klopfen an und lügen euch an. Jede Person bekommt andere Unterlagen. Für 2 bis 4 Personen, direkt im Browser, ohne Konto.">
+<meta name="theme-color" content="#0b0c0e">
+<meta name="color-scheme" content="dark">
+<meta property="og:title" content="Akte 0 — Exit-Games im Videoanruf">
+<meta property="og:description" content="Acht Personen im Anruf. Neun Stimmen in der Aufnahme. Löst den Fall zusammen.">
+<meta property="og:type" content="website">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="modulepreload" href="../vendor/trystero.mjs">
+<style>
+:root{
+  --bg:#0b0c0e; --panel:#14161a; --panel2:#1b1e23; --ink:#e9e6df; --mute:#8c8a84; --line:rgba(233,230,223,.1);
+  --amber:#ffb23f; --red:#ff3b30; --ok:#3ddc84; --uv:#b98cff;
+  --sans:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Mono","Roboto Mono",Menlo,Consolas,monospace;
+  --ease:cubic-bezier(.22,1,.36,1);
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 var(--sans);-webkit-font-smoothing:antialiased;overflow:hidden}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:2px solid var(--amber);outline-offset:2px;border-radius:6px}
+[hidden]{display:none!important}
+.mono{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+.btn{border:0;border-radius:999px;padding:.75em 1.3em;background:var(--panel2);font-weight:600}
+.btn.primary{background:var(--amber);color:#111}
+.btn:disabled{opacity:.5}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:90;background:repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0 1px,transparent 1px 3px)}
+
+/* ---------- Start ---------- */
+.view{display:none;height:100dvh}
+body[data-view=home] #home{display:block}
+body[data-view=room] #room{display:grid}
+#home{overflow:auto;padding:32px 16px 48px;background:radial-gradient(ellipse at 50% 0%,rgba(255,178,63,.08),transparent 55%)}
+.wrap{max-width:1040px;margin:0 auto}
+.hero{text-align:center;margin-bottom:28px}
+.hero h1{font-size:clamp(2.6rem,8vw,4.4rem);line-height:.95;margin:.25em 0 .25em;letter-spacing:-.03em}
+.hero h1 em{font-style:normal;color:var(--red);text-shadow:0 0 24px rgba(255,59,48,.45)}
+#homeLead{color:var(--mute);font-size:1.06rem;margin:.6em auto 0;max-width:36em}
+#cases{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:24px 0}
+.casecard{--a:var(--amber);text-align:left;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:var(--panel);padding:0;display:flex;flex-direction:column;transition:transform .25s var(--ease),border-color .2s}
+.casecard:hover{transform:translateY(-3px)}
+.casecard.on{border-color:var(--a);box-shadow:0 0 0 1px var(--a),0 20px 50px rgba(0,0,0,.4)}
+.casecard .cover{height:170px;position:relative;overflow:hidden}
+.casecard .cover svg{width:100%;height:100%;display:block}
+.casecard .cbody{padding:14px 16px 16px}
+.casecard h3{margin:.25em 0 .3em;font-size:1.3rem;letter-spacing:-.01em}
+.casecard p{margin:0 0 .8em;color:var(--mute);font-size:.93rem}
+.casecard .meta{display:flex;gap:12px;flex-wrap:wrap;font-size:.8rem;color:var(--mute)}
+.casecard .meta span:last-child{color:var(--a);letter-spacing:.15em}
+.start{max-width:560px;margin:0 auto;text-align:center}
+.namebox{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+.namebox input{flex:1;min-width:0;padding:.75em 1em;border-radius:999px;border:1px solid var(--line);background:var(--panel)}
+#names{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:10px 0 2px}
+.chipbtn{border:1px solid var(--line);background:none;border-radius:999px;padding:.2em .7em;font-size:.8rem;color:var(--mute)}
+.chipbtn.on{border-color:var(--amber);color:var(--amber)}
+.namehint{font-size:.8rem;color:var(--mute);margin:.4em 0 0}
+#saves{margin-top:22px;text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 16px}
+#saveList{list-style:none;padding:0;margin:.4em 0 0}
+#saveList li{display:flex;align-items:center;gap:8px;padding:.3em 0}
+#saveList a{color:var(--amber)}
+#saveList small{color:var(--mute);flex:1}
+#saveList .x{border:0;background:none;color:var(--mute);font-size:1.1rem}
+.fine{font-size:.82rem;color:var(--mute);margin-top:2.2em;line-height:1.6;text-align:center}
+.fine a{color:var(--mute)}
+details.code{margin-top:1.4em;color:var(--mute);text-align:center}
+details.code summary{cursor:pointer}
+#codeForm{display:flex;gap:8px;justify-content:center;margin-top:.8em}
+#codeForm input{padding:.6em .9em;border-radius:999px;border:1px solid var(--line);background:var(--panel);width:12em;text-transform:uppercase;font-family:var(--mono)}
+#codeOut{margin:1em auto 0;max-width:34em;color:var(--ink)}
+
+/* ---------- Anruf ---------- */
+#room{grid-template-rows:auto auto 1fr auto auto;height:100dvh;position:relative}
+header{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--line)}
+header .t{font-weight:700;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+header .sp{flex:1}
+.chip{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;padding:.35em .8em;border-radius:999px;background:var(--panel2);color:var(--amber);white-space:nowrap}
+.chip:empty{display:none}
+#clock{font-family:var(--mono);color:var(--mute)}
+#timer{font-family:var(--mono);color:var(--amber);background:#2a2214;padding:.2em .7em;border-radius:999px}
+#timer.urgent{color:#fff;background:var(--red);animation:blink 1s infinite}
+.iconbtn{border:0;background:var(--panel2);border-radius:999px;width:32px;height:32px;display:grid;place-items:center;font-size:.95rem}
+.rec{width:8px;height:8px;border-radius:50%;background:var(--red);box-shadow:0 0 10px var(--red);animation:blink 1.6s infinite;flex:none}
+body:not([data-phase=play]) .rec{display:none}
+@keyframes blink{50%{opacity:.3}}
+#goal{display:flex;align-items:center;gap:10px;padding:8px 16px;background:linear-gradient(90deg,rgba(255,178,63,.12),transparent);border-bottom:1px solid var(--line);font-size:.92rem}
+#goal .mono{color:var(--amber)}
+#frags{display:flex;gap:6px;align-items:center;margin-left:auto;flex-wrap:wrap}
+.frag{font-family:var(--mono);font-size:.8rem;background:var(--panel2);border:1px solid rgba(255,178,63,.35);border-radius:6px;padding:.1em .5em}
+.frag i{font-style:normal;color:var(--amber)}
+
+#stage{--cols:2;display:grid;grid-template-columns:repeat(var(--cols),minmax(0,1fr));grid-auto-rows:minmax(150px,1fr);gap:10px;padding:12px 16px;min-height:0;overflow:auto;position:relative}
+.tile{position:relative;border-radius:14px;overflow:hidden;background:var(--panel);min-height:0;
+  opacity:0;transform:scale(.96);transition:opacity .35s var(--ease),transform .35s var(--ease),box-shadow .2s}
+.tile.in{opacity:1;transform:none}
+.tile.out{opacity:0;transform:scale(.94)}
+.tile video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tile.me video{transform:scaleX(-1)}
+.tile.nocam video{opacity:0}
+.face{position:absolute;inset:0;display:grid;place-items:center}
+.ini{width:72px;height:72px;border-radius:50%;display:grid;place-items:center;background:var(--panel2);font-size:1.6rem;font-weight:700;color:var(--mute)}
+.label{position:absolute;left:10px;bottom:10px;right:10px;display:flex;gap:8px;align-items:center;font-size:.86rem;z-index:6}
+.label .nm{background:rgba(0,0,0,.6);padding:.2em .6em;border-radius:6px}
+.label .nm.evil{background:var(--red);color:#fff;font-weight:700}
+.label .role{font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--amber);text-shadow:0 1px 3px #000}
+.label .role:empty{display:none}
+.label .mut{display:none;margin-left:auto}
+.tile.muted .label .mut{display:inline}
+.tile.speaking{box-shadow:0 0 0 2px var(--amber),0 0 30px rgba(255,178,63,.25)}
+/* Figuren: gezeichnetes Profilbild, Rauschen, blinzeln, Mund */
+.tile.npc .pic{position:absolute;inset:0}
+.tile.npc .pic svg{width:100%;height:100%;display:block}
+.tile.npc canvas.static{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;opacity:.06;mix-blend-mode:screen;pointer-events:none}
+.tile.npc .sub2{position:absolute;top:10px;left:10px;z-index:6;font-family:var(--mono);font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;color:#cfcac0;background:rgba(0,0,0,.45);padding:.25em .55em;border-radius:5px}
+.camoff{color:var(--red)}
+.portrait .eyes{animation:blinkEye 5.3s infinite;transform-box:view-box}
+.tile:nth-child(2n) .portrait .eyes{animation-duration:4.1s;animation-delay:-1.3s}
+.tile:nth-child(3n) .portrait .eyes{animation-duration:6.7s;animation-delay:-2.2s}
+@keyframes blinkEye{0%,95%,100%{transform:scaleY(1)}97%{transform:scaleY(.08)}}
+.portrait .mouth{transform-box:view-box;transform:scaleY(calc(.04 + var(--m,0) * 1.05));transition:transform 60ms linear}
+.tile.npc.speaking .pic svg{animation:breathe 3s ease-in-out infinite}
+@keyframes breathe{50%{transform:scale(1.012) translateY(-1px)}}
+.look-glitchy .pic{animation:jitter 4s steps(1) infinite}
+@keyframes jitter{0%,93%{transform:none;filter:none}94%{transform:translateX(-5px);filter:hue-rotate(90deg)}96%{transform:translateX(4px)}98%{transform:none;filter:saturate(3)}}
+.look-weak canvas.static{opacity:.22!important}
+.look-weak .pic{animation:weak 2.6s infinite}
+@keyframes weak{0%,100%{filter:brightness(1)}40%{filter:brightness(.6) blur(1px)}42%{filter:brightness(1.3)}}
+.look-void{background:#050505}
+.look-void canvas.static{opacity:.15!important;mix-blend-mode:normal;filter:sepia(1) hue-rotate(-50deg) saturate(5)}
+.look-void.speaking{box-shadow:0 0 0 2px var(--red),0 0 40px rgba(255,59,48,.35)}
+.look-ghost{opacity:.85}
+.look-ghost .pic{filter:grayscale(1) contrast(1.3) brightness(.7)}
+.look-ghost canvas.static{opacity:.35!important}
+.tile .lamp{position:absolute;inset:0;z-index:5;pointer-events:none;background:radial-gradient(circle at 70% 30%,rgba(255,240,200,.95),rgba(255,220,150,.35) 30%,transparent 65%);opacity:0;transition:opacity 40ms}
+.tile .lamp.on{opacity:1}
+.tile .mirror{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:7;filter:grayscale(1) contrast(1.4) brightness(.8);animation:mir 3.6s steps(12) forwards}
+.mirrorlabel{position:absolute;left:0;right:0;top:42%;z-index:8;text-align:center;font:700 1.1rem var(--mono);color:#fff;text-shadow:0 0 12px var(--red);letter-spacing:.1em;animation:mir 3.6s steps(12) forwards}
+@keyframes mir{0%{opacity:0}8%{opacity:1;transform:translateX(-4px)}12%{transform:none}80%{opacity:.9}100%{opacity:0}}
+.tile .info{position:absolute;top:8px;right:8px;z-index:8;width:28px;height:28px;border-radius:50%;border:1px solid rgba(255,59,48,.6);background:rgba(0,0,0,.6);font:700 .85rem var(--mono);color:var(--red)}
+.tile .net{display:none;position:absolute;inset:44px 10px 44px 10px;z-index:8;background:rgba(5,5,5,.94);border:1px solid rgba(255,59,48,.3);border-radius:10px;padding:10px 12px;font-family:var(--mono);font-size:.78rem;overflow:auto}
+.tile.show-net .net{display:block}
+.net p{margin:0 0 .5em}
+.net .row{display:grid;grid-template-columns:1fr auto;gap:2px 10px;margin:.35em 0}
+.net .row b{color:var(--red);font-size:1rem}
+.net .row i{grid-column:1/-1;font-style:normal;color:var(--mute);font-size:.68rem}
+
+#subs{min-height:3.2em;margin:0 16px;padding:.7em 1em;border-radius:12px;background:rgba(0,0,0,.65);font-size:1.08rem;text-align:center;opacity:0;transition:opacity .3s;position:relative;z-index:12}
+#subs.on{opacity:1}
+#subs b{color:var(--amber);font-weight:600}
+
+.dock{display:flex;justify-content:center;gap:8px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));flex-wrap:wrap;position:relative;z-index:12}
+.dock button{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:64px;border:0;border-radius:14px;padding:.55em .6em;background:var(--panel2);font-size:1.12rem}
+.dock .lb{font-size:.64rem;color:var(--mute)}
+.dock button[aria-pressed=true]{background:#3a1d1b}
+.dock .hang{background:var(--red)}
+.dock .hang .lb{color:#fff}
+.dot::after{content:"";position:absolute;top:6px;right:12px;width:9px;height:9px;border-radius:50%;background:var(--amber)}
+#akteBtn.task{box-shadow:0 0 0 2px var(--amber);animation:glow 2s infinite}
+@keyframes glow{50%{box-shadow:0 0 0 2px var(--amber),0 0 18px rgba(255,178,63,.5)}}
+
+/* Verhör */
+#ask{position:relative;z-index:12;margin:0 16px 4px;padding:10px 12px;border-radius:14px;background:rgba(20,22,26,.96);border:1px solid rgba(255,178,63,.35)}
+#ask .who{display:flex;gap:8px;align-items:baseline;margin-bottom:6px}
+#askPrompt{font-weight:600}
+#askOpts{display:flex;flex-wrap:wrap;gap:6px}
+.askbtn{border:1px solid var(--line);background:var(--panel2);border-radius:10px;padding:.45em .8em;font-size:.88rem;text-align:left}
+.askbtn:hover:not(:disabled){border-color:var(--amber)}
+.askbtn.used{opacity:.45}
+.askbtn.tag-accuse{border-color:rgba(255,59,48,.5)}
+.askbtn.tag-proof{border-color:rgba(255,178,63,.6);color:var(--amber)}
+.askbtn:disabled{cursor:default}
+
+/* Seitenleisten */
+.side{position:absolute;top:0;right:0;bottom:0;width:min(460px,100%);background:var(--panel);border-left:1px solid var(--line);z-index:30;
+  transform:translateX(102%);transition:transform .35s var(--ease);display:flex;flex-direction:column}
+body.akte-open #akte, body.chat-open #chat{transform:none}
+.side .hd{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line)}
+.close{border:0;background:none;font-size:1.4rem;color:var(--mute);margin-left:auto}
+#akteSeg{display:flex;gap:4px;background:var(--bg);border-radius:999px;padding:3px}
+#akteSeg button{border:0;background:none;border-radius:999px;padding:.3em .8em;font-size:.84rem;color:var(--mute)}
+#akteSeg button[aria-selected=true]{background:var(--panel2);color:var(--ink)}
+#akte .seg{display:none;flex:1;min-height:0;flex-direction:column}
+#akte[data-seg=akte] .seg-akte, #akte[data-seg=notes] .seg-notes, #akte[data-seg=log] .seg-log{display:flex}
+#akte:not([data-seg]) .seg-akte{display:flex}
+#tabs{display:flex;gap:6px;padding:10px 16px 0;flex-wrap:wrap}
+.tab{border:1px solid var(--line);background:none;border-radius:999px;padding:.3em .8em;font-size:.8rem;color:var(--mute)}
+.tab.own{border-style:dashed}
+.tab[aria-selected=true]{background:var(--amber);color:#111;border-color:var(--amber);border-style:solid}
+.scroll{overflow:auto;padding:12px 16px 24px;flex:1}
+#page h3{margin:.2em 0 .5em}
+#page table{width:100%;border-collapse:collapse;font-size:.84rem;margin:.6em 0}
+#page th,#page td{text-align:left;padding:.35em .4em;border-bottom:1px solid var(--line);vertical-align:top}
+#page th{color:var(--mute);font-weight:500;font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.08em}
+#page td:first-child{font-family:var(--mono);white-space:nowrap}
+#page .stamp{font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--red)}
+#page .note{color:var(--amber);font-size:.9rem}
+#page .ownnote{font-size:.76rem;color:var(--mute);border-left:2px dashed var(--amber);padding-left:8px}
+#page .log{list-style:none;padding:0;font-size:.9rem}
+#page .log li{padding:.4em 0;border-bottom:1px solid var(--line)}
+#page .log b{font-family:var(--mono);font-weight:500;color:var(--mute);margin-right:.4em}
+#page .paper{background:#e9e3d4;color:#1a1814;border-radius:6px;padding:14px 16px;font-family:var(--mono);font-size:.82rem;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+#page .paper .stamp{color:#a31f1f}
+#page .grid{display:grid;grid-template-columns:repeat(var(--n,4),1fr);gap:4px;font-family:var(--mono);text-align:center}
+#page .grid span{background:var(--panel2);border-radius:4px;padding:.35em 0}
+#page .big{font-size:1.4rem;letter-spacing:.2em;font-family:var(--mono)}
+/* UV-Lampe */
+.uv{position:relative;background:#141018;border:1px solid #2b2236;border-radius:10px;padding:16px;min-height:180px;cursor:none;--x:-300px;--y:-300px;overflow:hidden;touch-action:none}
+.uv::before{content:"";position:absolute;inset:0;background:radial-gradient(circle 70px at var(--x) var(--y),rgba(150,90,255,.28),transparent 70%);pointer-events:none}
+.uv .ink{--ix:-300px;--iy:-300px;position:relative;margin-top:16px;min-height:7em;color:var(--uv);text-shadow:0 0 10px rgba(185,140,255,.8);font-family:var(--mono);font-size:.92rem;line-height:1.7;
+  -webkit-mask-image:radial-gradient(circle 70px at var(--ix) var(--iy),#000 45%,transparent 75%);mask-image:radial-gradient(circle 70px at var(--ix) var(--iy),#000 45%,transparent 75%)}
+.uv .plain{color:var(--mute);font-size:.86rem;position:relative}
+.uvhint{font-size:.76rem;color:var(--uv);margin:.4em 0}
+/* Tonband */
+.tape{background:linear-gradient(#24201a,#18150f);border:1px solid #3a3226;border-radius:12px;padding:14px;margin:.6em 0}
+.tape .reels{display:flex;justify-content:center;gap:40px;margin-bottom:8px}
+.tape .reels i{width:46px;height:46px;border-radius:50%;border:6px dotted #6b5a3e;background:#0d0b08}
+.tape.playing .reels i{animation:spin 1.2s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.tape .tname{text-align:center;font-family:var(--mono);font-size:.78rem;color:#d8c9a8;margin-bottom:10px}
+.tape .tctl{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;font-size:.84rem}
+.tape select{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:.2em .4em}
+#puzzle{margin:12px 16px 0;padding:12px 14px;border-radius:12px;background:var(--panel2);border:1px solid rgba(255,178,63,.35)}
+#pq{margin:.3em 0 .7em;font-weight:600}
+#puzzleForm{display:flex;gap:8px}
+#puzzleForm input{flex:1;min-width:0;padding:.6em .9em;border-radius:999px;border:1px solid var(--line);background:var(--bg)}
+#keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px;max-width:240px}
+#keypad button{border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:.5em 0;font:600 1.05rem var(--mono)}
+#keypad button[data-k=ok]{background:var(--amber);color:#111}
+#puzzle ul{list-style:none;padding:0;margin:.6em 0 0;font-size:.86rem}
+#puzzle li{margin:.3em 0}
+#tries li{color:var(--mute);font-family:var(--mono);font-size:.76rem}
+#tries li.ok{color:var(--ok)}
+#tries li.near{color:var(--amber)}
+#hintBtn{margin-top:.6em;background:none;border:0;color:var(--amber);padding:0;font-size:.84rem;text-decoration:underline}
+#hintBtn.pulse{animation:blink 1.2s infinite;font-weight:700}
+#doneBox{margin:10px 16px 0;font-size:.82rem;color:var(--mute)}
+#doneBox summary{cursor:pointer}
+#doneList{margin:.4em 0 0;padding-left:1.1em}
+#doneList li::marker{content:"✓ ";color:var(--ok)}
+#notesIn{flex:1;margin:12px 16px 6px;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px;resize:none;font:.92rem/1.5 var(--mono)}
+#notesBy{margin:0 16px 14px;font-size:.78rem;color:var(--mute)}
+#logList{list-style:none;padding:0;margin:0;font-size:.9rem}
+#logList li{padding:.45em 0;border-bottom:1px solid var(--line)}
+#logList b{color:var(--amber)}
+.replay{border:0;background:var(--panel2);border-radius:50%;width:24px;height:24px;font-size:.7rem;margin-right:6px}
+#msgs{display:flex;flex-direction:column;gap:8px}
+.msg{font-size:.92rem;background:var(--panel2);border-radius:10px;padding:.45em .7em;align-self:flex-start;max-width:90%}
+.msg b{color:var(--ink)}
+.msg small{color:var(--mute)}
+.msg.mine{align-self:flex-end;background:#2a2214}
+.msg.npc{border-left:3px solid var(--amber)}
+.msg.npc b{color:var(--amber)}
+.msg.sys{background:none;color:var(--mute);font-size:.8rem;padding:0}
+#chatForm{display:flex;gap:8px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));border-top:1px solid var(--line)}
+#chatForm input{flex:1;min-width:0;padding:.6em .9em;border-radius:999px;border:1px solid var(--line);background:var(--bg)}
+
+/* Karten über dem Anruf */
+.overlay{position:absolute;inset:0;display:grid;place-items:center;padding:16px;z-index:25;pointer-events:none}
+.card{pointer-events:auto;width:min(460px,100%);background:rgba(20,22,26,.97);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 30px 80px rgba(0,0,0,.6);max-height:100%;overflow:auto}
+.card h2{margin:.2em 0 .4em;font-size:1.35rem;letter-spacing:-.01em}
+.card p{color:var(--mute);margin:.4em 0}
+.row2{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.row2 .btn{flex:1}
+#lobbyQr{width:132px;height:132px;margin:10px auto;border-radius:8px;overflow:hidden}
+#lobbyQr svg{display:block;width:100%;height:100%}
+#lobbyLink{display:block;font-family:var(--mono);font-size:.76rem;word-break:break-all;text-align:center;color:var(--ink);margin:.4em 0}
+#lobbyPlayers{list-style:none;padding:0;margin:10px 0;display:flex;flex-wrap:wrap;gap:6px}
+#lobbyPlayers li{background:var(--panel2);padding:.3em .8em;border-radius:999px;font-size:.88rem}
+#lobbyPlayers small{color:var(--amber)}
+.toastzone{position:absolute;top:96px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;gap:6px;z-index:60;pointer-events:none;width:min(440px,calc(100% - 32px))}
+.toast{background:rgba(27,30,35,.97);border:1px solid var(--line);padding:.6em 1em;border-radius:12px;font-size:.9rem;text-align:center;animation:tin .3s var(--ease)}
+.toast.npcmsg{border-color:rgba(255,178,63,.5);text-align:left}
+.toast.out{opacity:0;transition:opacity .4s}
+@keyframes tin{from{opacity:0;transform:translateY(-6px)}}
+#knock .card{border-color:rgba(255,178,63,.5)}
+/* Eingehender Anruf */
+#call .card{text-align:center;border-color:rgba(61,220,132,.4);width:min(340px,100%)}
+#callPic{width:130px;height:130px;border-radius:50%;overflow:hidden;margin:6px auto 12px;box-shadow:0 0 0 4px rgba(61,220,132,.25);animation:ringpulse 1.4s infinite}
+#callPic svg{width:100%;height:100%}
+@keyframes ringpulse{50%{box-shadow:0 0 0 14px rgba(61,220,132,.08)}}
+#callName{font-size:1.4rem;margin:0}
+#call .row2 .accept{background:var(--ok);color:#06210f}
+#call .row2 .decline{background:var(--red);color:#fff}
+/* Gemeinsam halten */
+#hold .card{text-align:center}
+#holdBtn{width:150px;height:150px;border-radius:50%;border:3px solid var(--amber);background:radial-gradient(circle,#2a2214,#14110a);font:700 1rem var(--mono);color:var(--amber);margin:12px auto;display:block;user-select:none;-webkit-user-select:none;touch-action:none}
+#holdBtn.on{background:radial-gradient(circle,var(--amber),#a86b12);color:#111;transform:scale(.96)}
+#hold.all #holdBtn{box-shadow:0 0 40px var(--amber)}
+#quiet{position:absolute;top:100px;left:50%;transform:translateX(-50%);z-index:26;background:#3a1d1b;border:1px solid rgba(255,59,48,.5);padding:.6em 1.1em;border-radius:999px;font-size:.92rem;white-space:nowrap;animation:blink 2s infinite;max-width:calc(100% - 32px);overflow:hidden;text-overflow:ellipsis}
+#quiet.ok{background:#16301f;border-color:rgba(61,220,132,.5);animation:none}
+#vote .opt{display:block;width:100%;text-align:left;border:1px solid var(--line);background:var(--panel2);border-radius:14px;padding:.9em 1em;margin-top:10px}
+#vote .opt b{display:block;font-size:1.05rem}
+#vote .opt span{color:var(--mute);font-size:.88rem}
+#vote .opt[aria-pressed=true]{border-color:var(--amber);background:#2a2214}
+#end .card{width:min(520px,100%)}
+#endImg{width:100%;border-radius:10px;margin:10px 0;display:block}
+#endStats{font-family:var(--mono);font-size:.8rem;color:var(--amber)}
+#paused{z-index:40;background:rgba(0,0,0,.55);pointer-events:auto}
+#paused .card{text-align:center}
+/* Kapitelkarte */
+#chapterCard{position:absolute;inset:0;z-index:45;display:grid;place-items:center;pointer-events:none;background:radial-gradient(ellipse,rgba(0,0,0,.85),rgba(0,0,0,.55))}
+#chapterCard div{text-align:center}
+#chNum{font-family:var(--mono);letter-spacing:.3em;text-transform:uppercase;color:var(--amber);font-size:.85rem}
+#chTitle{font-size:clamp(2rem,7vw,3.6rem);font-weight:800;letter-spacing:-.02em;margin-top:.2em}
+#chapterCard.go{animation:chap 3.8s var(--ease) forwards}
+@keyframes chap{0%{opacity:0}12%{opacity:1}80%{opacity:1}100%{opacity:0}}
+#chapterCard.go #chTitle{animation:chapT 3.8s var(--ease) forwards}
+@keyframes chapT{0%{letter-spacing:.2em;filter:blur(8px)}25%{letter-spacing:-.02em;filter:none}}
+/* Falscher Absturz */
+#crash{position:absolute;inset:0;z-index:70;background:#0b0c0e;display:grid;place-items:center;text-align:center}
+#crash .spin{width:36px;height:36px;border:3px solid var(--line);border-top-color:var(--ink);border-radius:50%;margin:0 auto 14px;animation:spin 1s linear infinite}
+#help .card ul{padding-left:1.1em;color:var(--mute);margin:.6em 0}
+#help .card li{margin:.35em 0}
+#help .card b{color:var(--ink)}
+.vol{display:flex;align-items:center;gap:6px;font-size:.8rem;color:var(--mute)}
+.vol input{width:80px;accent-color:var(--amber)}
+
+/* Effekte */
+body.glitch #stage{animation:gl .9s steps(9)}
+body.glitch #stage .tile{filter:url(#rgb)}
+@keyframes gl{0%{transform:none}10%{transform:translate(-6px,2px) skewX(4deg)}20%{transform:translate(5px,-3px)}30%{transform:translate(-3px,0) skewX(-6deg)}40%{transform:none;filter:invert(1)}50%{filter:none}60%{transform:translate(8px,1px)}80%{transform:translate(-2px,-2px)}100%{transform:none}}
+body.flash::before{content:"";position:fixed;inset:0;background:#fff;z-index:80;animation:fl .7s forwards;pointer-events:none}
+@keyframes fl{to{opacity:0}}
+body.shake #room{animation:sh .5s}
+@keyframes sh{20%{transform:translate(-8px,3px)}40%{transform:translate(7px,-4px)}60%{transform:translate(-5px,2px)}80%{transform:translate(3px,-1px)}}
+/* Dunkel: nur die Taschenlampe leuchtet */
+body.dark #stage::after{content:"";position:fixed;inset:0;z-index:9;pointer-events:none;
+  background:radial-gradient(circle 150px at var(--lx,50%) var(--ly,50%),transparent 0,rgba(0,0,0,.6) 55%,rgba(0,0,0,.97) 100%)}
+body.dark #stage .lamp{z-index:10}
+
+#call,#knock,#vote,#hold,#end{z-index:35}
+@media (min-width:900px){
+  body.akte-open #stage,body.akte-open #ask,body.akte-open #subs,body.akte-open .dock,body.akte-open #goal,
+  body.chat-open #stage,body.chat-open #ask,body.chat-open #subs,body.chat-open .dock,body.chat-open #goal{margin-right:min(460px,45vw)}
+  body.akte-open .overlay,body.chat-open .overlay{right:min(460px,45vw)}
+  body.akte-open #quiet,body.chat-open #quiet,body.akte-open .toastzone,body.chat-open .toastzone{left:calc(50% - min(230px,22.5vw))}
+  .side{width:min(460px,45vw)}
+}
+@media (max-width:1280px){body.akte-open .dock .vol,body.chat-open .dock .vol{display:none}}
+@media (max-width:640px){
+  header{gap:6px;padding:8px 10px}
+  header .t small,#clock,#caseSub{display:none}
+  .chip{max-width:34vw;overflow:hidden;text-overflow:ellipsis;font-size:.62rem;padding:.35em .6em}
+  .dock{flex-wrap:nowrap;gap:4px;padding-left:6px;padding-right:6px}
+  .dock button{min-width:0;flex:1 1 0;padding:.5em .1em;font-size:1rem}
+  .dock .lb{font-size:.56rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+  #stage{grid-auto-rows:minmax(120px,1fr)}
+  .label{flex-wrap:wrap;gap:4px}
+  .dock .vol{display:none}
+  #stage{gap:8px;padding:8px}
+  #subs{font-size:.98rem;margin:0 8px}
+  #ask{margin:0 8px 4px}
+  #goal{padding:6px 10px;font-size:.84rem}
+}
+@media (prefers-reduced-motion:reduce){body.glitch #stage,body.shake #room,.look-glitchy .pic,.look-weak .pic{animation:none}}
+</style>
+</head>
+<body data-view="home">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="rgb"><feOffset in="SourceGraphic" dx="5" result="r"/><feColorMatrix in="r" type="matrix" values="1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0" result="rr"/><feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0" result="gb"/><feBlend in="rr" in2="gb" mode="screen"/></filter></svg>
+
+<main id="home" class="view">
+  <div class="wrap">
+    <div class="hero">
+      <div class="mono">Akte 0 · Exit-Games im Videoanruf</div>
+      <h1>Wer ist <em>noch</em><br>in der Leitung?</h1>
+      <p id="homeLead"></p>
+    </div>
+    <div id="cases"></div>
+    <div class="start">
+      <label class="mono" for="nameIn">Dein Codename</label>
+      <div id="names"></div>
+      <p class="namehint">Mit einem dieser Codenamen sprechen dich die Figuren mit Namen an.</p>
+      <div class="namebox">
+        <input id="nameIn" maxlength="24" autocomplete="nickname">
+        <button class="btn primary" id="goBtn">Fall eröffnen</button>
+      </div>
+      <div id="saves" hidden>
+        <div class="mono">Angefangene Fälle</div>
+        <ul id="saveList"></ul>
+      </div>
+      <details class="code">
+        <summary>Code aus einer Akte?</summary>
+        <form id="codeForm"><input id="codeIn" placeholder="N9-…" maxlength="24" aria-label="Freigabecode"><button class="btn">Öffnen</button></form>
+        <p id="codeOut"></p>
+      </details>
+    </div>
+    <p class="fine">
+      Kamera und Mikrofon laufen direkt zwischen euren Browsern, wie bei <a href="../">anruf.org</a>. Nichts wird gespeichert, kein Bild verlässt dein Gerät.<br>
+      Stimmen: Piper (lokale Sprachsynthese), Stimmen von Thorsten Müller u. a., siehe <a href="CREDITS.md">CREDITS</a>.<br>
+      Alle Personen, Firmen und Behörden sind frei erfunden. · <a href="../datenschutz.html">Datenschutz</a> · <a href="../impressum.html">Impressum</a>
+    </p>
+  </div>
+</main>
+
+<main id="room" class="view">
+  <header>
+    <span class="rec" aria-hidden="true"></span>
+    <span class="t"><span id="caseTitle">Dezernat 0</span> <small class="mono" id="caseSub"></small></span>
+    <span class="sp"></span>
+    <span id="timer" hidden></span>
+    <span id="clock">00:00</span>
+    <span class="chip" id="chapterChip"></span>
+    <span class="chip" id="roleChip">Lobby</span>
+    <button class="iconbtn" id="helpBtn" title="So spielt ihr" aria-label="Hilfe">?</button>
+  </header>
+  <div id="goal" hidden><span class="mono">Ziel</span><span id="goalText"></span><div id="frags" hidden></div></div>
+  <section id="stage" aria-label="Anruf"></section>
+  <div>
+    <div id="ask" hidden>
+      <div class="who"><span class="mono" id="askWho"></span><span id="askPrompt"></span></div>
+      <div id="askOpts"></div>
+    </div>
+    <div id="subs" aria-live="polite"></div>
+  </div>
+  <nav class="dock">
+    <button id="micBtn" aria-pressed="false">🎙<span class="lb">Mikro an</span></button>
+    <button id="camBtn" aria-pressed="false">📷<span class="lb">Kamera an</span></button>
+    <button id="akteBtn">🗂<span class="lb">Akte</span></button>
+    <button id="chatBtn">💬<span class="lb">Chat</span></button>
+    <button id="voiceBtn" aria-pressed="false">🔊<span class="lb">Stimmen an</span></button>
+    <label class="vol" title="Lautstärke der Figuren"><input id="volIn" type="range" min="0" max="1" step="0.05" aria-label="Lautstärke"></label>
+    <button id="pauseBtn" hidden>⏸<span class="lb">Pause</span></button>
+    <button id="leaveBtn" class="hang">✕<span class="lb">Auflegen</span></button>
+  </nav>
+
+  <aside class="side" id="akte" aria-label="Akte" data-seg="akte">
+    <div class="hd">
+      <div id="akteSeg" role="tablist">
+        <button data-seg="akte" aria-selected="true">Akte</button>
+        <button data-seg="notes">Notizen</button>
+        <button data-seg="log">Protokoll</button>
+      </div>
+      <button class="close" aria-label="Schließen">×</button>
+    </div>
+    <div class="seg seg-akte">
+      <div id="puzzle" hidden>
+        <div class="mono" style="color:var(--amber)">Aufgabe fürs Team</div>
+        <p id="pq"></p>
+        <form id="puzzleForm"><input id="pa" autocomplete="off" aria-label="Lösung"><button class="btn primary">Prüfen</button></form>
+        <div id="keypad" hidden>
+          <button type="button" data-k="1">1</button><button type="button" data-k="2">2</button><button type="button" data-k="3">3</button>
+          <button type="button" data-k="4">4</button><button type="button" data-k="5">5</button><button type="button" data-k="6">6</button>
+          <button type="button" data-k="7">7</button><button type="button" data-k="8">8</button><button type="button" data-k="9">9</button>
+          <button type="button" data-k="<">⌫</button><button type="button" data-k="0">0</button><button type="button" data-k="ok">OK</button>
+        </div>
+        <ul id="tries"></ul>
+        <ul id="hints"></ul>
+        <button id="hintBtn" type="button">Hinweis anfordern</button>
+      </div>
+      <details id="doneBox" hidden><summary>Bisher geschafft</summary><ol id="doneList"></ol></details>
+      <div id="tabs"></div>
+      <div class="scroll"><div id="page"></div></div>
+    </div>
+    <div class="seg seg-notes">
+      <textarea id="notesIn" placeholder="Gemeinsame Notizen: Zahlen, Namen, Verdachte …" aria-label="Gemeinsame Notizen"></textarea>
+      <p id="notesBy"></p>
+    </div>
+    <div class="seg seg-log">
+      <div class="scroll"><ul id="logList"></ul></div>
+    </div>
+  </aside>
+  <aside class="side" id="chat" aria-label="Chat">
+    <div class="hd"><b>Chat</b><button class="close" aria-label="Schließen">×</button></div>
+    <div class="scroll"><div id="msgs"></div></div>
+    <form id="chatForm"><input id="chatIn" placeholder="Nachricht an alle" autocomplete="off" maxlength="500"><button class="btn">Senden</button></form>
+  </aside>
+
+  <div class="overlay" id="lobby">
+    <div class="card">
+      <div class="mono">Lobby</div>
+      <h2 id="lobbyTitle"></h2>
+      <p id="lobbyIntro"></p>
+      <div id="lobbyQr"></div>
+      <span id="lobbyLink"></span>
+      <div class="row2">
+        <button class="btn" id="copyLink">Link kopieren</button>
+        <button class="btn" id="inviteBtn">Geheime Einladung</button>
+      </div>
+      <ul id="lobbyPlayers"></ul>
+      <p id="lobbyWait"></p>
+      <div class="row2">
+        <button class="btn primary" id="startBtn" hidden>Fall beginnen</button>
+        <button class="btn" id="claimBtn" hidden>Fall selbst eröffnen</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="knock" hidden>
+    <div class="card">
+      <div class="mono">Anklopfen</div>
+      <h2 id="knockText">Jemand klopft an.</h2>
+      <p>Diese Person ist nicht eingeladen.</p>
+      <div class="row2"><button class="btn" id="denyBtn">Ablehnen</button><button class="btn primary" id="admitBtn">Reinlassen</button></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="call" hidden>
+    <div class="card">
+      <div class="mono">Eingehender Anruf</div>
+      <div id="callPic"></div>
+      <h2 id="callName"></h2>
+      <p id="callSub"></p>
+      <p id="callNote"></p>
+      <div class="row2"><button class="btn decline" id="declineBtn">Ablehnen</button><button class="btn accept" id="acceptBtn">Annehmen</button></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="hold" hidden>
+    <div class="card">
+      <div class="mono">Alle zusammen</div>
+      <h2 id="holdLabel"></h2>
+      <p>Haltet den Knopf <b>gleichzeitig</b> gedrückt (oder die Leertaste), bis es klappt. Wer loslässt, fängt für alle von vorn an.</p>
+      <button id="holdBtn" type="button">HALTEN</button>
+      <p id="holdCount" class="mono"></p>
+    </div>
+  </div>
+
+  <div id="quiet" hidden><span id="quietText"></span> · <b id="quietCount"></b></div>
+
+  <div class="overlay" id="vote" hidden>
+    <div class="card">
+      <div class="mono">Entscheidung</div>
+      <h2 id="voteTitle"></h2>
+      <p id="voteText"></p>
+      <div id="voteOpts"></div>
+      <p id="voteCount" class="mono" style="margin-top:12px"></p>
+    </div>
+  </div>
+
+  <div class="overlay" id="paused" hidden>
+    <div class="card">
+      <div class="mono">Pause</div>
+      <h2>Der Fall ist angehalten</h2>
+      <p id="pausedBy"></p>
+      <p>Der Stand wird gespeichert. Wer leitet, kann später über denselben Link weitermachen.</p>
+      <div class="row2"><button class="btn primary" id="resumeBtn">Weiter</button></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="help" hidden>
+    <div class="card">
+      <div class="mono">So spielt ihr</div>
+      <h2>Redet. Viel.</h2>
+      <ul>
+        <li><b>🗂 Akte:</b> Jede Person hat andere Unterlagen. Gestrichelte Reiter sieht nur ihr. Lest euch gegenseitig vor.</li>
+        <li><b>Aufgaben</b> stehen oben in der Akte. Jede Person kann eine Lösung eingeben. Hinweise sehen alle.</li>
+        <li><b>Figuren</b> rufen an, klopfen an und stellen Bedingungen. Achtet auf das, was sie verlangen.</li>
+        <li><b>Notizen</b> (in der Akte) teilt ihr. Das <b>Protokoll</b> zeigt alles Gesagte, mit ▶ hört ihr es noch mal.</li>
+        <li><b>⏸ Pause</b> speichert den Fall. Über denselben Link geht es später weiter.</li>
+      </ul>
+      <div class="row2"><button class="btn primary" id="helpOk">Verstanden</button></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="end" hidden>
+    <div class="card">
+      <div class="mono">Akte geschlossen</div>
+      <h2 id="endTitle"></h2>
+      <p id="endText"></p>
+      <p id="endStats"></p>
+      <img id="endImg" alt="Geschwärzte Akte zum Teilen">
+      <p>Teilt die Akte. Sie verrät nichts, aber der Freigabecode öffnet auf der Startseite den Epilog.</p>
+      <div class="row2">
+        <button class="btn primary" id="shareBtn">Akte teilen</button>
+        <button class="btn" id="saveBtn">Bild speichern</button>
+        <button class="btn" id="copyBtn">Text kopieren</button>
+      </div>
+      <div class="row2"><button class="btn" id="againBtn">Noch mal spielen</button><button class="btn" id="homeBtn">Anderer Fall</button></div>
+    </div>
+  </div>
+
+  <div id="chapterCard" hidden><div><div id="chNum"></div><div id="chTitle"></div></div></div>
+  <div id="crash" hidden><div><div class="spin"></div><b>Verbindung unterbrochen</b><p class="mono">Neu verbinden …</p></div></div>
+  <div class="toastzone" id="toasts" aria-live="polite"></div>
+</main>
+
+<script type="module" src="app.mjs"></script>
+</body>
+</html>
