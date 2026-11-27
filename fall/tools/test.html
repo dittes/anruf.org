@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Akte 0 · Testlauf</title>
+<style>
+:root{color-scheme:dark;--bg:#0b0c0e;--ink:#e9e6df;--mute:#8c8a84;--ok:#3ddc84;--bad:#ff3b30}
+body{margin:0;padding:20px;background:var(--bg);color:var(--ink);font:15px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}
+h1{font-size:1.2rem;margin:0 0 6px}
+p{color:var(--mute);margin:0 0 14px}
+table{border-collapse:collapse;width:100%;max-width:980px}
+th,td{text-align:left;padding:6px 10px;border-bottom:1px solid rgba(255,255,255,.08);vertical-align:top}
+td.ok{color:var(--ok)} td.bad{color:var(--bad)} td.run{color:#ffd23f}
+small{color:var(--mute)}
+button{font:inherit;padding:.4em 1em;border-radius:999px;border:1px solid #444;background:#1b1e23;color:var(--ink);cursor:pointer}
+#frame{width:900px;height:560px;border:1px solid #333;margin-top:16px;max-width:100%}
+</style>
+</head>
+<body>
+<h1>Akte 0 · automatischer Durchlauf</h1>
+<p>Spielt jeden Fall und jeden Ausgang im Testtempo durch (<code>?test</code>: Wartezeiten ×0,02, stumm, keine Verbindung nach außen). Achtung: Der Rahmen unten zeigt alle Lösungen.
+Nur bestimmte Durchläufe: <code>?only=erbe,zuschlag</code>.</p>
+<button id="go">Alle starten</button> <span id="sum"></span>
+<table><thead><tr><th>Fall</th><th>Durchlauf</th><th>Erwartet</th><th>Ergebnis</th><th>Zeit</th><th>Verlauf</th></tr></thead><tbody id="rows"></tbody></table>
+<iframe id="frame" title="Testlauf"></iframe>
+<script type="module">
+import {PLAYS} from './plays.mjs'
+
+const only = new URLSearchParams(location.search).get('only')?.split(',')
+const plays = PLAYS.filter(p => !only || only.includes(p.case))
+const rows = document.getElementById('rows'), frame = document.getElementById('frame')
+const sleep = ms => new Promise(r => setTimeout(r, ms))
+const prevName = localStorage.getItem('fall.name')   // eigenen Namen nach dem Test wiederherstellen
+for (const p of plays) {
+  p.tr = rows.insertRow()
+  for (const v of [p.case, p.name, p.expect, '–', '', '']) p.tr.insertCell().textContent = v
+}
+
+async function run(p) {
+  const res = p.tr.cells[3]; res.textContent = 'läuft …'; res.className = 'run'
+  const t0 = Date.now(), slug = 'test-' + Math.random().toString(36).slice(2, 8), errors = [], trace = []
+  // Gleiche Herkunft: Name und Leitungsrolle für den Rahmen vorbelegen
+  localStorage.setItem('fall.name', 'Test')
+  sessionStorage.setItem(`fall.host.${p.case}/${slug}`, '1')
+  frame.src = `../?nomedia&test&debug&relay=ws://127.0.0.1:9#${p.case}/${slug}`
+  await new Promise(r => frame.onload = r)
+  const w = frame.contentWindow, d = w.document
+  w.addEventListener('error', e => errors.push(e.message))
+  const ce = w.console.error; w.console.error = (...a) => { errors.push(a.map(String).join(' ')); ce.apply(w.console, a) }
+  d.getElementById('goBtn').click()
+  let jumped = false, lastStep = -1
+  const sent = {}
+  while (Date.now() - t0 < 240000) {
+    await sleep(120)
+    const G = w.G, s = G?.state
+    if (!s) continue
+    if (s.phase === 'lobby') { G.send({t: 'start'}); continue }
+    if (s.phase === 'end') break
+    if (s.step !== lastStep) { lastStep = s.step; const st = G.c.script[s.step]; if (st && st[0] !== 'say' && st[0] !== 'wait') trace.push(st[0] + (typeof st[1] === 'string' ? ' ' + st[1] : '')) }
+    if (p.expire && !jumped && s.step > 2) {
+      jumped = true
+      const i = G.c.script.findIndex(st => st[0] === p.expire[0] && st[1] === p.expire[1])
+      if (i < 0) { errors.push('Schritt fehlt: ' + p.expire.join(' ')); break }
+      s.timer = {until: Date.now() + 300, label: 'Test'}
+      G.jump(i)
+      continue
+    }
+    if (s.call) G.send({t: 'accept'})
+    if (s.knock) G.send({t: 'admit'})
+    if (s.hold) G.send({t: 'hold', on: true})
+    if (s.vote && !s.votes[s.host]) {
+      const o = s.vote.options, want = p.votes?.[s.vote.id]
+      G.send({t: 'vote', v: want && o.some(x => x.id === want) ? want : p.votes === 'last' ? o.at(-1).id : o[0].id})
+    }
+    if (s.ask && !s.ask.busy) {
+      const opts = s.ask.opts.filter(o => !o.used || o.repeat)
+      const pick = p.asks ? opts.find(o => p.asks.includes(o.id) && !o.used)
+        : opts.find(o => o.tag === 'proof') || opts.find(o => !o.tag) || opts.find(o => o.tag !== 'accuse') || opts[0]
+      if (pick) G.send({t: 'ask', id: pick.id})
+    }
+    const pz = s.puzzle
+    if (pz && !s.solved.includes(pz) && !(p.expire && pz === p.expire[1]) && sent[pz] !== s.v) {
+      sent[pz] = s.v
+      if (p.answers[pz] == null) { errors.push('Keine Testantwort für ' + pz); break }
+      G.send({t: 'answer', p: pz, a: p.answers[pz]})
+    }
+  }
+  const s = w.G?.state, got = s?.phase === 'end' ? s.ending : 'hängt bei Schritt ' + s?.step + ' (' + (w.G?.c.script[s?.step]?.slice(0, 2).join(' ') || '?') + ')'
+  const ok = got === p.expect && !errors.length
+  res.textContent = got + (errors.length ? ' · Fehler: ' + errors.slice(0, 3).join(' | ') : ''); res.className = ok ? 'ok' : 'bad'
+  p.tr.cells[4].textContent = ((Date.now() - t0) / 1000).toFixed(0) + ' s'
+  p.tr.cells[5].innerHTML = '<small>' + trace.filter(t => /^(solve|ask|vote|ending|quiet|clap|hold|call|knock)/.test(t)).join(' → ') + '</small>'
+  sessionStorage.removeItem(`fall.host.${p.case}/${slug}`)
+  return ok
+}
+
+document.getElementById('go').onclick = async () => {
+  let ok = 0
+  for (const p of plays) { if (await run(p)) ok++; document.getElementById('sum').textContent = `${ok} von ${plays.length} bestanden` }
+  frame.src = 'about:blank'
+  // Für automatische Aufrufe: Ergebnis im Fenster ablesbar
+  window.RESULT = {ok, total: plays.length, rows: plays.map(p => [p.case, p.name, p.expect, p.tr.cells[3].textContent])}
+  if (prevName == null) localStorage.removeItem('fall.name'); else localStorage.setItem('fall.name', prevName)
+}
+if (new URLSearchParams(location.search).has('auto')) document.getElementById('go').click()
+</script>
+</body>
+</html>

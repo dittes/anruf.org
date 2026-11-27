@@ -120,11 +120,7 @@ export default {
       <p><b>Seenotkreuzer „Hinrich“:</b> Tiefgang 1,60 m. Vorschrift: mindestens 0,50 m Wasser unter dem Kiel.</p>`},
     morse: {title: 'Morsetafel', role: KA, html: `
       <p class="stamp">Seekarte · Anhang Lichtsignale</p>
-      <div class="grid" style="--n:4">
-      <span>A ·–</span><span>B –···</span><span>C –·–·</span><span>D –··</span><span>E ·</span><span>F ··–·</span><span>G ––·</span><span>H ····</span>
-      <span>I ··</span><span>J ·–––</span><span>K –·–</span><span>L ·–··</span><span>M ––</span><span>N –·</span><span>O –––</span><span>P ·––·</span>
-      <span>Q ––·–</span><span>R ·–·</span><span>S ···</span><span>T –</span><span>U ··–</span><span>V ···–</span><span>W ·––</span><span>X –··–</span>
-      <span>Y –·––</span><span>Z ––··</span></div>
+      <div data-morsetable></div>
       <p class="note">Wortpause = längere Dunkelheit.</p>`}
   },
 
@@ -158,6 +154,7 @@ export default {
     kanal: {
       q: 'Welches Kennwort sagt die Stimme auf dem Notkanal?', ph: 'Kennwort',
       hash: ['552303b9df1ee4999f8cdf518aa85faedd08830e20d6161bf3f0c9820f24a655'],
+      near: {'7d3e851cda39305ae007fd9b70c616841739c3abb311a4c165cff4dc34e95397': 'Das ist der Kanal. Was sagt die Stimme dort?', '9d37981651fd286801d72a06df613d97a8585d1650c2cc71497f1aa8a832067a': 'Das ist die Frequenz. Was sagt die Stimme dort?'},
       hints: ['Seekarte: Im Funkplan steht der Notkanal der Station. Funk: Empfänger an und hindrehen.', 'Kanal 72 ist 156,625 MHz. Mit − und + fein einstellen.', 'Die Stimme sagt „Pricke“.']
     },
     pegel: {

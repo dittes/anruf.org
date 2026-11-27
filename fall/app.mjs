@@ -9,6 +9,7 @@ import qrcode from '../vendor/qrcode.mjs'
 import {APP_ID, DEFAULT_RELAYS, TURN, TURN_FALLBACK} from '../config.mjs'
 import {CASES} from './cases/index.mjs'
 import {portrait} from './portrait.mjs'
+import {cueAt, setMouth, textCues} from './portraits/speech.mjs'
 import {akey, audioText, norm, sha} from './lib.mjs'
 
 const $ = (s, el = document) => el.querySelector(s)
@@ -27,7 +28,9 @@ const h = (tag, attrs = {}, ...kids) => {
 const qs = new URLSearchParams(location.search)
 const RELAYS = qs.get('relay') ? [qs.get('relay')] : DEFAULT_RELAYS
 const LIMIT = 8
-const SPEED = qs.has('fast') ? .1 : 1   // ?fast: Wartezeiten ×0,1 zum Testen
+// ?fast: Wartezeiten ×0,1 zum Ausprobieren · ?test: ×0,02 und stumm, für den automatischen Durchlauf (tools/test.html)
+const TEST = qs.has('test')
+const SPEED = TEST ? .02 : qs.has('fast') ? .1 : 1
 const store = {
   get: (k, d) => { try { return localStorage.getItem('fall.' + k) ?? d } catch { return d } },
   set: (k, v) => { try { localStorage.setItem('fall.' + k, v) } catch {} },
@@ -66,30 +69,62 @@ function qrSvg(text) {
 }
 
 /* =================== Töne =================== */
-let actx = null, master = null
+let actx = null, master = null, sfxBus = null
 function audio() {
   try {
-    if (!actx) { actx = new (window.AudioContext || window.webkitAudioContext)(); master = actx.createGain(); master.connect(actx.destination) }
+    if (!actx) {
+      actx = new (window.AudioContext || window.webkitAudioContext)()
+      // Ausgang: Begrenzer, damit Stimmen + Atmosphäre + Effekte nie übersteuern
+      const lim = actx.createDynamicsCompressor()
+      lim.threshold.value = -6; lim.knee.value = 6; lim.ratio.value = 12; lim.attack.value = .003; lim.release.value = .18
+      lim.connect(actx.destination)
+      master = actx.createGain(); master.connect(lim)
+    }
     if (actx.state === 'suspended') actx.resume()
   } catch {}
   return actx
 }
+// Effekte laufen über einen Bus mit etwas Raumhall; Stimmen und Atmosphäre gehen direkt auf master.
+function impulse(a, secs) {
+  const n = Math.floor(a.sampleRate * secs), ir = a.createBuffer(2, n, a.sampleRate)
+  for (let c = 0; c < 2; c++) {
+    const d = ir.getChannelData(c)
+    for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.exp(-4.5 * i / n) * Math.min(1, i / (a.sampleRate * .012))
+  }
+  return ir
+}
+function bus() {
+  const a = audio(); if (!a) return null
+  if (!sfxBus) {
+    sfxBus = a.createGain(); sfxBus.gain.value = 1.8
+    const room = a.createConvolver(), wet = a.createGain()
+    room.buffer = impulse(a, 1.3); wet.gain.value = .2
+    sfxBus.connect(master); sfxBus.connect(room); room.connect(wet).connect(master)
+  }
+  return sfxBus
+}
 function tone(freq, t0, dur, type = 'sine', vol = .12) {
-  const a = audio(); if (!a) return
-  const o = a.createOscillator(), g = a.createGain()
-  o.type = type; o.frequency.value = freq
-  g.gain.setValueAtTime(0, a.currentTime + t0)
-  g.gain.linearRampToValueAtTime(vol, a.currentTime + t0 + .02)
-  g.gain.exponentialRampToValueAtTime(.0001, a.currentTime + t0 + dur)
-  o.connect(g).connect(master); o.start(a.currentTime + t0); o.stop(a.currentTime + t0 + dur + .05)
+  const a = audio(), out = bus(); if (!a || !out) return
+  const at = a.currentTime + t0
+  // Grundton plus leiser Oberton (klingt weniger nach Piepser); alles mit Hüllkurve gegen Knackser
+  const parts = type === 'sine' ? [[1, 1], [2.01, .22], [3, .06]] : [[1, 1]]
+  for (const [m, k] of parts) {
+    const o = a.createOscillator(), g = a.createGain()
+    o.type = type; o.frequency.value = freq * m
+    g.gain.setValueAtTime(0, at)
+    g.gain.linearRampToValueAtTime(vol * k, at + .015)
+    g.gain.exponentialRampToValueAtTime(.0001, at + dur / (m > 1 ? 1.6 : 1))
+    o.connect(g).connect(out); o.start(at); o.stop(at + dur + .05)
+  }
 }
 function noise(dur, vol = .25, freq = 1800) {
-  const a = audio(); if (!a) return
+  const a = audio(), out = bus(); if (!a || !out) return
   const buf = a.createBuffer(1, Math.max(1, a.sampleRate * dur), a.sampleRate), d = buf.getChannelData(0)
   for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * (Math.random() < .3 ? 1 : .2)
-  const s = a.createBufferSource(), f = a.createBiquadFilter(), g = a.createGain()
-  s.buffer = buf; f.type = 'bandpass'; f.frequency.value = freq; f.Q.value = .7; g.gain.value = vol
-  s.connect(f).connect(g).connect(master); s.start()
+  const s = a.createBufferSource(), f = a.createBiquadFilter(), g = a.createGain(), t = a.currentTime
+  s.buffer = buf; f.type = 'bandpass'; f.frequency.value = freq; f.Q.value = .7
+  g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vol, t + .01); g.gain.exponentialRampToValueAtTime(.001, t + dur)
+  s.connect(f).connect(g).connect(out); s.start()
 }
 const SFX = {
   join: () => { tone(523, 0, .25); tone(659, .1, .25); tone(784, .2, .4) },
@@ -111,9 +146,9 @@ const SFX = {
 }
 
 /* =================== Stimmen: Aufnahmen, sonst Sprachausgabe =================== */
-let voiceOn = store.get('voice', '1') === '1'
+let voiceOn = !TEST && store.get('voice', '1') === '1'
 let voiceVol = Number(store.get('vol', '0.9'))
-const AU = {manifest: {}, base: '', el: null, raf: 0, amb: null, ambName: null}
+const AU = {manifest: {}, cues: {}, base: '', el: null, raf: 0, amb: null, ambName: null}
 let deVoice = null
 function pickVoice() {
   const vs = speechSynthesis?.getVoices?.() || []
@@ -123,7 +158,13 @@ function pickVoice() {
 if ('speechSynthesis' in window) { pickVoice(); speechSynthesis.onvoiceschanged = pickVoice }
 async function loadAudio(id) {
   AU.base = `cases/${id}/audio/`
-  try { AU.manifest = await (await fetch(AU.base + 'manifest.json', {cache: 'no-cache'})).json() } catch { AU.manifest = {} }
+  const read = async file => {
+    try {
+      const res = await fetch(AU.base + file, {cache: 'no-cache'})
+      return res.ok ? await res.json() : {}
+    } catch { return {} }
+  }
+  ;[AU.manifest, AU.cues] = await Promise.all([read('manifest.json'), read('mouth-cues.json')])
   // Aufnahmen im Hintergrund vorladen (klein, damit es später nicht ruckelt)
   const files = [...new Set(Object.values(AU.manifest).map(m => m.f))]
   ;(async () => { for (const f of files) { try { await fetch(AU.base + f) } catch {} } })()
@@ -132,7 +173,7 @@ const lineMeta = (npc, text) => AU.manifest[akey(npc, audioText(text))]
 function stopVoice() {
   try { AU.el?.pause() } catch {}
   AU.el = null; AU.utterance = null; cancelAnimationFrame(AU.raf)
-  $$('.tile.npc').forEach(t => t.style.setProperty('--m', 0))
+  $$('.tile.npc').forEach(t => setMouth(t, null))
   if ('speechSynthesis' in window) speechSynthesis.cancel()
 }
 function speak(npc, text, tile) {
@@ -143,32 +184,45 @@ function speak(npc, text, tile) {
     const a = audio()
     const el = new Audio(AU.base + m.f)
     AU.el = el
+    const cues = AU.cues[m.f]
+    let analyser, buffer, level = 0, previous = performance.now()
     try {
-      const src = a.createMediaElementSource(el), an = a.createAnalyser(), g = a.createGain()
-      an.fftSize = 512; g.gain.value = voiceVol
-      src.connect(an); an.connect(g).connect(master)
-      const buf = new Uint8Array(an.fftSize)
-      const loop = () => {
-        if (AU.el !== el) return
-        an.getByteTimeDomainData(buf)
-        let sum = 0; for (const v of buf) sum += (v - 128) ** 2
-        const rms = Math.sqrt(sum / buf.length) / 128
-        tile?.style.setProperty('--m', Math.min(1, rms * 7).toFixed(2))
-        AU.raf = requestAnimationFrame(loop)
-      }
-      loop()
+      const src = a.createMediaElementSource(el), gain = a.createGain()
+      gain.gain.value = voiceVol
+      if (tile && !cues) {
+        analyser = a.createAnalyser()
+        analyser.fftSize = 512
+        buffer = new Uint8Array(analyser.fftSize)
+        src.connect(analyser); analyser.connect(gain)
+      } else src.connect(gain)
+      gain.connect(master)
     } catch { el.volume = voiceVol }
+    const animate = now => {
+      if (AU.el !== el || !tile) return
+      if (cues) setMouth(tile, cueAt(cues, el.currentTime))
+      else if (analyser) {
+        analyser.getByteTimeDomainData(buffer)
+        let sum = 0
+        for (const v of buffer) sum += (v - 128) ** 2
+        const target = Math.max(0, Math.min(1, (Math.sqrt(sum / buffer.length) / 128 - .02) * 7))
+        level += (target - level) * (1 - Math.exp(-(now - previous) / (target > level ? 35 : 65)))
+        setMouth(tile, null, level)
+      }
+      previous = now
+      AU.raf = requestAnimationFrame(animate)
+    }
+    if (tile) AU.raf = requestAnimationFrame(animate)
     const finished = () => {
       if (AU.el !== el) return
       cancelAnimationFrame(AU.raf)
-      tile?.style.setProperty('--m', 0)
+      setMouth(tile, null)
       AU.el = null
     }
     el.onended = el.onerror = finished
     el.play().catch(finished)
     return
   }
-  // Keine Aufnahme: lokale Sprachausgabe, der Mund bewegt sich dann zufällig
+  // Lokale Ersatzstimme: geschätzte Lautfolge an Wortgrenzen neu verankern.
   if (!('speechSynthesis' in window) || !deVoice) return
   const u = new SpeechSynthesisUtterance(fill(text))
   u.voice = deVoice; u.lang = deVoice.lang; u.volume = voiceVol
@@ -178,10 +232,25 @@ function speak(npc, text, tile) {
   u.onend = u.onerror = () => {
     if (AU.utterance !== u) return
     AU.utterance = null
-    tile?.style.setProperty('--m', 0)
+    setMouth(tile, null)
   }
-  const wob = () => { if (AU.utterance !== u) return; tile?.style.setProperty('--m', (Math.random() * .8).toFixed(2)); setTimeout(wob, 110) }
-  wob()
+  const schedule = textCues(u.text, u.rate)
+  let start = 0, offset = 0
+  const animate = now => {
+    if (AU.utterance !== u || !tile) return
+    setMouth(tile, cueAt(schedule.cues, offset + (now - start) / 1000))
+    AU.raf = requestAnimationFrame(animate)
+  }
+  u.onstart = () => {
+    if (AU.utterance !== u) return
+    start = performance.now()
+    AU.raf = requestAnimationFrame(animate)
+  }
+  u.onboundary = e => {
+    if (e.name !== 'word' || schedule.offsets[e.charIndex] == null) return
+    start = performance.now()
+    offset = schedule.offsets[e.charIndex] / 100
+  }
   speechSynthesis.speak(u)
 }
 function sayDuration(npc, text) {
@@ -189,17 +258,34 @@ function sayDuration(npc, text) {
   if (m) return m.d + 450
   return 1100 + fill(text).length * 62 / (G.c?.npcs[npc]?.tts?.rate || 1)
 }
+// Atmosphäre: Web Audio statt <audio loop>. AAC dämpft die ersten Samples einer Datei, ein Datei-Loop knackt oder
+// „atmet“ darum. Die Dateien tragen 0,5 s Vor- und Nachlauf (voices.py --ambience), die Schleife läuft nur im Innern.
+const AMB_LOOP = 32, AMB_PAD = .5
+const ambBufs = {}
+const ambBuffer = name => ambBufs[name] ||= fetch(`audio/${name}.m4a`).then(r => r.arrayBuffer()).then(b => audio().decodeAudioData(b))
+const ambLevel = () => .5 * voiceVol
 function setAmbience(name) {
+  if (TEST) name = null
   if (AU.ambName === name) return
   AU.ambName = name
   const old = AU.amb
-  if (old) { old.fade = true; const t = setInterval(() => { old.volume = Math.max(0, old.volume - .03); if (old.volume <= 0) { clearInterval(t); old.pause() } }, 60) }
+  if (old) {
+    old.gain.gain.setTargetAtTime(0, actx.currentTime, .35)
+    setTimeout(() => { try { old.src?.stop() } catch {} old.gain.disconnect() }, 2500)
+  }
   AU.amb = null
-  if (!name) return
-  const el = new Audio(`audio/${name}.m4a`); el.loop = true; el.volume = 0
-  AU.amb = el
-  el.play().catch(() => {})
-  const t = setInterval(() => { if (el.fade) return clearInterval(t); el.volume = Math.min(.3 * voiceVol, el.volume + .02); if (el.volume >= .3 * voiceVol) clearInterval(t) }, 80)
+  const a = name && audio()
+  if (!a) return
+  const amb = {gain: a.createGain(), src: null}
+  amb.gain.gain.value = 0; amb.gain.connect(master)
+  AU.amb = amb
+  ambBuffer(name).then(buf => {
+    if (AU.amb !== amb) return
+    const s = a.createBufferSource()
+    s.buffer = buf; s.loop = true; s.loopStart = AMB_PAD; s.loopEnd = AMB_PAD + AMB_LOOP
+    s.connect(amb.gain); s.start(0, AMB_PAD); amb.src = s
+    amb.gain.gain.setTargetAtTime(ambLevel(), a.currentTime, .8)
+  }).catch(() => { delete ambBufs[name] })
 }
 
 /* =================== Startseite =================== */
@@ -504,7 +590,7 @@ const G = {
     // Erst senden, dann anzeigen: Ein Fehler in der Anzeige darf das Spiel der anderen nicht anhalten
     try { R.game.send({t: 'state', s: this.state})?.catch?.(() => {}) } catch {}
     this.render()
-    if (this.isHost() && this.state.phase !== 'lobby') {
+    if (this.isHost() && this.state.phase !== 'lobby' && !TEST) {
       if (this.state.phase === 'end') store.del('save.' + this.room())
       else if (!this._saveT) this._saveT = setTimeout(() => {
         this._saveT = 0
@@ -642,7 +728,7 @@ const G = {
     const s = this.state
     s.subN++
     s.sub = {id: s.subN, npc, text}
-    this.rt.until = Date.now() + sayDuration(npc, text) * (SPEED < 1 ? .25 : 1)
+    this.rt.until = Date.now() + sayDuration(npc, text) * (SPEED < 1 ? SPEED * 2.5 : 1)
   },
   unlock(p) { if (!this.state.pages.includes(p)) this.state.pages.push(p) },
   goal(text) {
@@ -685,7 +771,7 @@ const G = {
       case 'dark': s.dark = !!a; this.fx(a ? 'off' : 'right'); this.next(); break
       case 'lockLeave': s.lockLeave = !!a; this.next(); break
       case 'ambience': s.amb = a || null; this.next(); break
-      case 'morse': s.morse = a && b ? {npc: a, text: b, unit: st[3] || 260, role: st[4] || null, mode: 'morse'} : null; this.next(); break
+      case 'morse': s.morse = a && b ? {npc: a, text: b, unit: Math.max(st[3] || 380, 340), role: st[4] || null, mode: 'morse'} : null; this.next(); break
       case 'signal': s.morse = a && b ? {npc: a, text: b, unit: st[3]?.unit || 520, role: st[3]?.role || null, mode: 'colors'} : null; this.next(); break
       case 'clap': {   // alle gleichzeitig klatschen oder rufen
         const ids = players()
@@ -695,7 +781,7 @@ const G = {
         if (ok.length >= ids.length) { s.clap = null; this.fx('right'); this.next() }
         break
       }
-      case 'timer': s.timer = a ? {until: now + a * (SPEED < 1 ? .3 : 1), label: b || 'Zeit'} : null; this.next(); break
+      case 'timer': s.timer = a ? {until: now + a * (SPEED < 1 ? SPEED * 3 : 1), label: b || 'Zeit'} : null; this.next(); break
       case 'chat': {
         const o = st[3] || {}
         s.chats = [...s.chats.slice(-40), {id: (s.chats.at(-1)?.id || 0) + 1, npc: a, text: b, to: o.to || null}]
@@ -893,17 +979,6 @@ const G = {
       for (let i = 0; i < dd.length; i += 4) { const v = Math.random() * 255; dd[i] = dd[i + 1] = dd[i + 2] = v; dd[i + 3] = 255 }
       x.putImageData(img, 0, 0)
     }
-    // Morse: Lampe auf der Kachel blinkt in Endlosschleife
-    const sm = s?.morse, myRole = s?.roles?.[selfId]
-    const canSee = sm && (!sm.role || myRole === sm.role || myRole === 'beide')
-    const lamp = canSee && $(`.tile[data-npc="${sm.npc}"] .lamp`)
-    $$('.tile .lamp.on').forEach(l => { if (l !== lamp) l.classList.remove('on') })
-    $$('.tile .signote').forEach(n => n.hidden = !(sm && !canSee && n.closest('.tile').dataset.npc === sm.npc))
-    if (sm && !canSee) $$('.tile .signote').forEach(n => n.textContent = `📡 sendet ein Signal. Nur ${roleName(sm.role)} kann es sehen.`)
-    if (lamp) {
-      if (sm.mode === 'colors') { const c = colorAt(sm.text, sm.unit, Date.now()); lamp.classList.add('col'); lamp.style.setProperty('--lc', c || 'transparent'); lamp.classList.toggle('on', !!c) }
-      else { lamp.classList.remove('col'); lamp.classList.toggle('on', morseAt(sm.text, sm.unit, Date.now())) }
-    }
     renderClapLive()
     if (!this._wAt || Date.now() - this._wAt > 850) {
       this._wAt = Date.now()
@@ -924,23 +999,84 @@ const G = {
 /* ---- Morse ---- */
 const MORSE = {A: '.-', B: '-...', C: '-.-.', D: '-..', E: '.', F: '..-.', G: '--.', H: '....', I: '..', J: '.---', K: '-.-', L: '.-..', M: '--', N: '-.', O: '---', P: '.--.', Q: '--.-', R: '.-.', S: '...', T: '-', U: '..-', V: '...-', W: '.--', X: '-..-', Y: '-.--', Z: '--..',
   0: '-----', 1: '.----', 2: '..---', 3: '...--', 4: '....-', 5: '.....', 6: '-....', 7: '--...', 8: '---..', 9: '----.'}
-const morseCache = new Map()
-function morseAt(text, unit, now) {
-  let seq = morseCache.get(text)
-  if (!seq) {
-    seq = []
+// Signalfolge als Liste [an?, Dauer in Takten, Zeichen]: Morse (· — mit Buchstaben- und Wortpausen) oder Farben
+const seqCache = new Map()
+function signalSeq(mode, text) {
+  const k = mode + '|' + text
+  if (seqCache.has(k)) return seqCache.get(k)
+  const seq = []
+  if (mode === 'colors') {
+    for (const ch of text.toUpperCase()) seq.push([COLORS[ch] || null, 2, ch], [null, 1, ''])
+    seq.push([null, 7, 'end'])
+  } else {
     for (const w of text.toUpperCase().split(' ')) {
-      for (const ch of w) { for (const sym of MORSE[ch] || '') seq.push([1, sym === '.' ? 1 : 3], [0, 1]); seq.push([0, 2]) }
-      seq.push([0, 4])
+      for (const ch of w) { for (const sym of MORSE[ch] || '') seq.push([1, sym === '.' ? 1 : 3, sym === '.' ? '·' : '—'], [0, 1, '']); seq.push([0, 2, ' ']) }
+      seq.push([0, 4, '/'])
     }
-    seq.push([0, 10])  // lange Pause, dann von vorn
-    morseCache.set(text, seq)
+    seq.push([0, 10, 'end'])  // lange Pause, dann von vorn
   }
-  const total = seq.reduce((a, [, d]) => a + d, 0)
-  let t = Math.floor(now / unit) % total
-  for (const [on, d] of seq) { if (t < d) return !!on; t -= d }
-  return false
+  seqCache.set(k, seq)
+  return seq
 }
+// Wo steht das Signal gerade? Liefert Lampe (an/Farbe), bisher Gesendetes und ob gerade die Pause vor dem Neubeginn läuft
+function signalAt(mode, text, unit, now) {
+  const seq = signalSeq(mode, text), total = seq.reduce((a, x) => a + x[1], 0)
+  let t = (now / unit) % total
+  const done = []
+  for (let i = 0; i < seq.length; i++) {
+    const [v, d, sym] = seq[i]
+    if (t < d) return {lamp: v, cur: v ? sym : '', done, restart: sym === 'end', idx: i, left: (d - t) * unit}
+    if (v) done.push(sym)
+    else if (sym === ' ' || sym === '/') done.push(sym)
+    t -= d
+  }
+  return {lamp: null, done, restart: true, idx: -1, left: 0}
+}
+// Signallampe: eigener Bildtakt statt des 200-ms-Spieltakts, mit Mitschreibstreifen und wahlweise Piepton
+let sigBeep = store.get('beep', '') === '1', sigLast = -1
+function signalLoop() {
+  requestAnimationFrame(signalLoop)
+  const s = G.state, sm = s?.phase === 'play' && !s.paused ? s.morse : null, myRole = s?.roles?.[selfId]
+  const canSee = sm && (!sm.role || myRole === sm.role || myRole === 'beide')
+  const tile = canSee && $(`.tile[data-npc="${sm.npc}"]`), lamp = tile && $('.lamp', tile)
+  $$('.tile .lamp.on').forEach(l => { if (l !== lamp) l.classList.remove('on') })
+  $$('.tile .sigstrip').forEach(x => { if (x.closest('.tile') !== tile) x.remove() })
+  $$('.tile .signote').forEach(n => {
+    const show = !!(sm && !canSee && n.closest('.tile').dataset.npc === sm.npc)
+    n.hidden = !show
+    if (show) n.textContent = `📡 sendet ein Signal. Nur ${roleName(sm.role)} kann es sehen.`
+  })
+  if (!lamp) { sigLast = -1; return }
+  const st = signalAt(sm.mode, sm.text, sm.unit, Date.now()), col = sm.mode === 'colors'
+  lamp.classList.toggle('col', col)
+  if (col) lamp.style.setProperty('--lc', st.lamp || 'transparent')
+  lamp.classList.toggle('on', !!st.lamp)
+  // Mitschreibstreifen unten auf der Kachel
+  let strip = $('.sigstrip', tile)
+  if (!strip) {
+    strip = h('div', {class: 'sigstrip'}, h('span', {class: 'bulb'}), h('span', {class: 'syms'}),
+      h('button', {type: 'button', class: 'beep', title: 'Signal als Ton mithören', onclick: () => { sigBeep = !sigBeep; store.set('beep', sigBeep ? '1' : ''); strip.dataset.k = '' }}))
+    tile.append(strip)
+  }
+  strip.classList.toggle('lit', !!st.lamp); strip.style.setProperty('--lc', col ? st.lamp || 'transparent' : '#ffe9a8')
+  const key = st.idx + '|' + st.restart + '|' + sigBeep
+  if (strip.dataset.k !== key) {
+    strip.dataset.k = key
+    $('.beep', strip).textContent = sigBeep ? '🔊' : '🔈'
+    const syms = $('.syms', strip)
+    if (st.restart) syms.replaceChildren(h('span', {class: 'restart'}, '⟲ Pause … gleich beginnt das Signal von vorn'))
+    else if (col) syms.replaceChildren(...st.done.filter(x => x !== ' ' && x !== '/').map(c => h('i', {class: 'chip', style: `--c:${COLORS[c]}`})),
+      st.cur ? h('i', {class: 'chip now', style: `--c:${COLORS[st.cur]}`}) : '')
+    else syms.replaceChildren(...st.done.join('').replace(/ +/g, ' ').split(/(\/)/).map(p => p === '/' ? h('b', {class: 'wgap'}, ' / ') : h('span', {}, p)),
+      st.cur ? h('b', {class: 'now'}, st.cur) : '')
+  }
+  // Piepton genau beim Einschalten, so lang wie das Zeichen
+  if (st.idx !== sigLast) {
+    if (sigBeep && st.lamp && !st.restart) tone(col ? 440 + 'RGBYWV'.indexOf(st.cur) * 110 : 680, 0, st.left / 1000, 'sine', .07)
+    sigLast = st.idx
+  }
+}
+requestAnimationFrame(signalLoop)
 
 /* ---- Überraschungen ---- */
 function takeSnap() {
@@ -1126,6 +1262,33 @@ function mountPage(root) {
   $$('[data-photo]', root).forEach(mountPhoto)
   $$('[data-face]', root).forEach(el => { const f = G.c.faces?.[el.dataset.face]; if (f) el.innerHTML = portrait(f.face) + `<div class="facecap">${f.caption || ''}</div>` })
   $$('[data-shred]', root).forEach(mountShred)
+  $$('[data-morsetable]', root).forEach(mountMorseTable)
+}
+// Morsetafel zum Nachschlagen und Mitschreiben: · und – antippen, passender Buchstabe leuchtet auf
+function mountMorseTable(el) {
+  const show = c => c.replace(/\./g, '·').replace(/-/g, '–')
+  const letters = Object.entries(MORSE).filter(([k]) => /[A-Z]/.test(k) || el.dataset.morsetable === 'digits')
+  let cur = '', word = ''
+  el.classList.add('mtable')
+  const draw = () => {
+    const hit = letters.find(([, c]) => c === cur)?.[0]
+    el.replaceChildren(
+      h('div', {class: 'mdec'},
+        h('div', {class: 'mout'}, h('span', {class: 'mword'}, word || ' '), h('span', {class: 'mcur'}, show(cur) || '…'), h('b', {}, cur ? (hit || '?') : '')),
+        h('div', {class: 'mbtns'},
+          h('button', {type: 'button', class: 'btn', onclick: () => { cur += '.'; tone(680, 0, .08, 'sine', .06); draw() }}, '· kurz'),
+          h('button', {type: 'button', class: 'btn', onclick: () => { cur += '-'; tone(680, 0, .24, 'sine', .06); draw() }}, '– lang'),
+          h('button', {type: 'button', class: 'btn', onclick: () => { if (hit) word += hit; cur = ''; draw() }}, 'Buchstabe ✓'),
+          h('button', {type: 'button', class: 'btn', onclick: () => { word += ' '; cur = ''; draw() }}, 'Wort ␣'),
+          h('button', {type: 'button', class: 'btn', onclick: () => { if (cur) cur = cur.slice(0, -1); else word = word.slice(0, -1); draw() }}, '⌫'))),
+      // nach Länge sortiert: Wer „drei Zeichen“ gesehen hat, sucht nur in einer Spalte
+      h('div', {class: 'mcols'}, ...[1, 2, 3, 4, 5].map(n => {
+        const list = letters.filter(([, c]) => c.length === n)
+        return list.length ? h('div', {class: 'mcol'}, h('div', {class: 'mono'}, n + (n === 1 ? ' Zeichen' : ' Zeichen')),
+          ...list.map(([k, c]) => h('div', {class: 'mrow' + (cur && c.startsWith(cur) ? ' fit' : '') + (c === cur ? ' hit' : '')}, h('b', {}, k), h('span', {}, show(c))))) : null
+      })))
+  }
+  draw()
 }
 function mountTape(el, clipId) {
   const clip = G.c.clips?.[clipId]; if (!clip) return
@@ -1400,15 +1563,6 @@ function renderClapLive() {
 
 /* =================== Farbsignal =================== */
 const COLORS = {R: '#ff3b30', G: '#3ddc84', B: '#4a8cff', Y: '#ffd23f', W: '#ffffff', V: '#b98cff'}
-function colorAt(text, unit, now) {
-  const seq = []
-  for (const ch of text.toUpperCase()) seq.push([COLORS[ch] || null, 1], [null, .5])
-  seq.push([null, 4])
-  const total = seq.reduce((a, [, d]) => a + d, 0)
-  let t = (now / unit) % total
-  for (const [c, d] of seq) { if (t < d) return c; t -= d }
-  return null
-}
 
 /* =================== Eingaben: Schalter und Farbtasten =================== */
 function buildInput(p) {
@@ -1572,7 +1726,7 @@ function bind() {
   $('#screenBtn').onclick = () => R.screen ? stopScreen() : startScreen()
   $('#voiceBtn').onclick = () => { voiceOn = !voiceOn; store.set('voice', voiceOn ? '1' : '0'); if (!voiceOn) stopVoice(); syncDock() }
   $('#volIn').value = voiceVol
-  $('#volIn').oninput = e => { voiceVol = Number(e.target.value); store.set('vol', voiceVol); if (AU.amb) AU.amb.volume = .3 * voiceVol }
+  $('#volIn').oninput = e => { voiceVol = Number(e.target.value); store.set('vol', voiceVol); if (AU.amb) AU.amb.gain.gain.setTargetAtTime(ambLevel(), actx.currentTime, .05) }
   $('#akteBtn').onclick = () => setSide(document.body.classList.contains('akte-open') ? null : ($('#akte').dataset.seg || 'akte'))
   $('#chatBtn').onclick = () => setSide(document.body.classList.contains('chat-open') ? null : 'chat')
   $$('#akteSeg button').forEach(b => b.onclick = () => setSide(b.dataset.seg))

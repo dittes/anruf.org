@@ -200,11 +200,7 @@ export default {
     morse: {title: 'Morsetafel', role: A, html: `
       <p class="stamp">Archiv · Funk-Handbuch, Anhang C</p>
       <p>Kurz = · (ein Takt Licht), lang = – (drei Takte). Zwischen Buchstaben kurze Pause, am Ende des Worts lange Pause.</p>
-      <div class="grid" style="--n:4">
-      <span>A ·–</span><span>B –···</span><span>C –·–·</span><span>D –··</span><span>E ·</span><span>F ··–·</span><span>G ––·</span><span>H ····</span>
-      <span>I ··</span><span>J ·–––</span><span>K –·–</span><span>L ·–··</span><span>M ––</span><span>N –·</span><span>O –––</span><span>P ·––·</span>
-      <span>Q ––·–</span><span>R ·–·</span><span>S ···</span><span>T –</span><span>U ··–</span><span>V ···–</span><span>W ·––</span><span>X –··–</span>
-      <span>Y –·––</span><span>Z ––··</span></div>
+      <div data-morsetable></div>
       <p class="note">Die Forensik sieht das Licht genauso wie ihr. Lasst euch kurz und lang ansagen.</p>`},
     licht: {title: 'Lichtsignal', role: F, html: `
       <p class="stamp">Forensik · Hinweis</p>
@@ -244,7 +240,7 @@ export default {
       hints: [
         'Forensik: Lies dem Archiv Tonhöhe und Dialekt vor. Archiv: Ordnet jedem Beitrag eine Person zu.',
         'Ein Beitrag passt zu niemandem auf der Liste: sehr tief und Schweizer Dialekt. Welche Uhrzeit hat er?',
-        'Beitrag S06 um 21:14:07. Was steht in der Abschrift zu dieser Zeit?'
+        'Beitrag S06 um 21:14:07. In der Abschrift steht dort: „Leuchtturm“.'
       ]
     },
     fach: {
@@ -254,7 +250,7 @@ export default {
       hints: [
         'Forensik: Die Mailbox klingt rückwärts. Am Tonband gibt es einen Schalter dafür.',
         'Lena sagt: Geburtstag, Tag und Monat, aber rückwärts. Archiv: Der Geburtstag steht in der Personalakte.',
-        '17.04. → 1704 → rückwärts gelesen.'
+        '17.04. → 1704 → rückwärts: 4071.'
       ]
     },
     nummer: {
@@ -277,7 +273,7 @@ export default {
       q: 'Welche Sicherungen müssen an sein?', input: 'switches', n: 8, by: F,
       hash: ['f9b3f3b45fa23b2125ed9f58683bef880e3e2dc7ea628c66ba77d5bede1dec6d'],
       near: {'d6e6edb0a7c8cb80745b41630c387c11b74bd8e2746902dcd0dc6bd831b1d3fd': 'Fast. Wie hängen Flur und Licht zusammen?', '7b5f9394a33a0e367f44a65377fffe160451d0bd9402481b0426a1b860cf7b7d': 'Die Heizung zieht zu viel.', '5e4fd11c7185fff6f2b159609be735f474ce2e3bda8466387443d725ced13068': 'Der Alarm startet alles neu.', '5936c645cda55cb3e8f867e9ad6c4e2997661f9658afda933f415c87c3b5d54e': 'Ohne Licht keine Kamera.', '67c3f75124c65c36ad2558f59a52b9ab5968261e4eccf9c1e749734425ba1a6b': 'Ohne Licht keine Kamera.'},
-      hints: ['Archiv: Lies die Regeln vor. Forensik: Sag, welcher Schalter wofür ist.', 'An: Funk (S4), Kamera (S7). Daraus folgt Licht (S5) und daraus Server (S2).', 'S2, S4, S5, S7, S8 an. Alles andere aus.']
+      hints: ['Archiv: Lies die Regeln vor. Forensik: Sag, welcher Schalter wofür ist.', 'Zwei Schalter stehen sicher fest: Funk (S4) und Kamera (S7). Geht von dort Regel für Regel weiter.', 'S2, S4, S5, S7, S8 an. Alles andere aus.']
     },
     ping: {
       q: 'Wo sitzt Teilnehmer 9?', ph: 'Ort',
@@ -286,7 +282,7 @@ export default {
       hints: [
         'Forensik: Beobachte die Werte eine Weile und merk dir pro Knoten den niedrigsten.',
         'Archiv: Rechne für jeden Ort 3 + Entfernung ÷ 50. Beispiel Konstanz–Zürich: 3 + 60 ÷ 50 = 4,2 ms.',
-        'Die Minima sind etwa 4,3 / 6,6 / 6,3 ms. Welcher Ort passt zu allen drei?'
+        'Die Minima sind etwa 4,3 / 6,6 / 6,3 ms. Nur St. Gallen passt zu allen drei.'
       ]
     },
     morse: {
@@ -296,7 +292,7 @@ export default {
       hints: [
         'Forensik: Sag jedes Aufleuchten an, „kurz“ oder „lang“. Archiv: schreibt mit und schlagt nach.',
         'Es ist ein Wort mit sieben Zeichen. Es beginnt mit ··· (S).',
-        '··· ·– · –· – ·· ··· — ein Berg in der Ostschweiz.'
+        '··· ·– · –· – ·· ··· = SÄNTIS (geschrieben SAENTIS), ein Berg in der Ostschweiz.'
       ]
     },
     abschaltung: {
@@ -306,7 +302,7 @@ export default {
       hints: [
         'Die Ziffern sind die fünf Fragmente oben neben dem Ziel.',
         'Archiv: Lies die Reihenfolge der Symbole von der Notfallkarte vor.',
-        '△ 4, ☾ 9, ◯ 1, ⚓ 7, ✶ 2.'
+        '△ 4, ☾ 9, ◯ 1, ⚓ 7, ✶ 2: Code 49172.'
       ]
     }
   },

@@ -1,7 +1,8 @@
 """Profilbilder für die Kacheln packen: Grundbild + Blinzel- und Mund-Ebene.
 
 Eingabe ist eine JSON-Datei {id: {"base": "bild.png", "expr": "bild-augen-zu-mund-auf.png"}} („expr“ ist optional,
-dann gibt es nur das Standbild, z. B. für Räume oder Beweisfotos). Die Gesichtspunkte kommen aus landmarks.swift
+dann gibt es nur das Standbild, z. B. für Räume oder Beweisfotos). Optionale Bilder für Lautformen heißen
+„round“ (U), „wide“ (I), „mid“ (halb offen) und „shut“ (Lippen aufeinander). Die Gesichtspunkte kommen aus landmarks.swift
 (Apple Vision, läuft lokal):
 
     swiftc fall/tools/portraits/landmarks.swift -o /tmp/landmarks
@@ -31,12 +32,19 @@ def bounds(pts, part):
     return (left + right) / 2, np.linalg.norm(right - left), math.atan2(*(right - left)[::-1])
 
 
+def eye_span(points):
+    return np.linalg.norm(bounds(points, 'left')[0] - bounds(points, 'right')[0])
+
+
 def patch(src, src_pts, target_pts, part):
     """Ausschnitt (Augen oder Mund) aus dem Ausdrucksbild auf das Grundbild ausrichten, mit weicher Maske."""
     sc, sw, sa = bounds(src_pts, part)
     tc, tw, ta = bounds(target_pts, part)
     angle = sa - ta
-    mat = sw / tw * np.array([[math.cos(angle), -math.sin(angle)], [math.sin(angle), math.cos(angle)]])
+    # Lippenbreiten unterscheiden die Vokale. Am Augenabstand skalieren, damit
+    # ein gerundetes U beim Ausrichten nicht auf die Breite des Ruhemunds wächst.
+    scale = eye_span(src_pts) / eye_span(target_pts) if part == 'mouth' else sw / tw
+    mat = scale * np.array([[math.cos(angle), -math.sin(angle)], [math.sin(angle), math.cos(angle)]])
     reg = Image.open(src).convert('RGB').resize(SIZE, Image.Resampling.LANCZOS).transform(
         SIZE, Image.Transform.AFFINE, tuple(np.c_[mat, sc - mat @ tc].flatten()), Image.Resampling.BICUBIC)
     yy, xx = np.mgrid[:SIZE[1], :SIZE[0]]
@@ -76,7 +84,13 @@ def main(spec_file, points_file):
         closed = patch(expr, ep, bp, 'left')
         closed.alpha_composite(patch(expr, ep, bp, 'right'))
         frames[pid] = {}
-        for kind, layer in {'blink': closed, 'voice': patch(expr, ep, bp, 'mouth')}.items():
+        layers = {'blink': closed, 'voice': patch(expr, ep, bp, 'mouth')}
+        for kind in ('mid', 'round', 'wide', 'shut'):
+            if kind in item:
+                src = item[kind]
+                points = pts.get(str(Path(src).resolve())) or pts[src]
+                layers[kind] = patch(src, points, bp, 'mouth')
+        for kind, layer in layers.items():
             l, t, r, b = layer.getbbox()
             layer.crop((l, t, r, b)).save(OUT / f'{pid}-{kind}.webp', quality=87, method=5)
             frames[pid][kind] = [l, t, r - l, b - t]

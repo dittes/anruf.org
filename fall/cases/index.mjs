@@ -24,10 +24,24 @@ export const CASES = [
     load: () => import('./onboarding/story.mjs')
   },
   {
+    id: 'zuschlag', file: 'Los 1 · AZ 0-ZS-1664', title: 'Zuschlag', accent: '#e3c27a',
+    tagline: 'Ein gestohlenes Gemälde wird heute Nacht versteigert, per Videoanruf an anonyme Bieter. Ihr seid Bieter 7. Ihr habt kein Geld. Ihr habt nur Fragen.',
+    players: '2–4', duration: '50–70 min', difficulty: 2,
+    cover: {photo: 'blanc', silhouette: true, glow: '#e3c27a', scene: 'office'},
+    load: () => import('./zuschlag/story.mjs')
+  },
+  {
     id: 'erbe', file: 'Nachlass 0-HW-0303', title: 'Das Haus am Wehr', accent: '#c9a46a', solo: true,
     tagline: 'Ein Notar ruft an: Du hast ein Haus geerbt, von einer Großtante, die du nie getroffen hast. Unterschreib bis Mitternacht, sagt er. Ein Schlüsseldienst steht schon vor der Tür.',
     players: '1 (Solo)', duration: '45–60 min', difficulty: 2,
     cover: {photo: 'haus', scene: 'storm'},
     load: () => import('./erbe/story.mjs')
+  },
+  {
+    id: 'nachtprogramm', file: 'Sendeprotokoll 0-NP-0300', title: 'Nachtprogramm', accent: '#ff5d73', solo: true,
+    tagline: 'Drei Uhr nachts, du allein in der Regie eines Lokalradios. Eine fremde Stimme übernimmt eure Frequenz und liest Zahlen vor. Sie ruft jemanden, der seit 35 Jahren schweigt.',
+    players: '1 (Solo)', duration: '60–90 min', difficulty: 3,
+    cover: {photo: 'jule', scene: 'radio'},
+    load: () => import('./nachtprogramm/story.mjs')
   }
 ]

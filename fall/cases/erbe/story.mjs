@@ -2,8 +2,6 @@
 
 // Fotos aus portraits/ mit eingeblendeten, gut lesbaren Details (der Bildgenerator schreibt keine verlässliche Schrift)
 const img = (id, extra = '') => `<svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg"><image href="portraits/${id}.webp" width="960" height="540"/>${extra}</svg>`
-const plate = (x, y, w, lines, size = 7, rot = 0) => `<g transform="translate(${x} ${y}) rotate(${rot})" opacity=".92"><rect width="${w}" height="${lines.length * size * 1.35 + size}" rx="2" fill="#ece8de" stroke="#55504a" stroke-width=".8"/>${
-  lines.map((l, i) => `<text x="${w / 2}" y="${size * 1.25 * (i + 1) + 1}" font-size="${size}" font-family="Georgia,serif" text-anchor="middle" fill="#2a2622">${l}</text>`).join('')}</g>`
 
 const SOLO = 'erbe'
 
@@ -40,7 +38,7 @@ export default {
       face: {photo: 'pohl', skin: '#ecc9b4', fem: true, age: 2, hair: {style: 'bun', color: '#e6e2dc'}, glasses: 'round', extras: ['mole'], top: {style: 'sweater', color: '#4a5a3a'}, mood: 'smile', scene: 'night'}},
     notariat: {name: 'Notariat am Domplatz', sub: 'Anrufbeantworter', look: 'weak', tts: {pitch: 1.1, rate: 1},
       voice: {model: 'kerstin', fx: 'mailbox', len: 1.0},
-      face: {silhouette: true, hair: {style: 'bob'}, top: {style: 'blouse', color: '#333'}, scene: 'office'}}
+      face: {photo: 'notariat', silhouette: true, hair: {style: 'bob'}, top: {style: 'blouse', color: '#333'}, scene: 'office'}}
   },
 
   faces: {
@@ -49,9 +47,13 @@ export default {
 
   photos: {
     // Hausfront: Hochwassermarke, Baujahr und Hausnummer stehen auf kleinen Schildern
-    haus: img('haus', plate(232, 236, 78, ['HOCHWASSER', '12. MÄRZ 1954'], 6.2) +
-      `<path d="M150 318 q20 -5 40 0 t40 0 t40 0 t40 0" stroke="#1d3d55" stroke-width="2.5" fill="none" opacity=".8"/>` +
-      plate(612, 150, 64, ['ERBAUT 1781'], 6) + plate(560, 214, 40, ['AM WEHR', '238'], 5.4)),
+    haus: img('haus',
+      // Text auf dem leeren Emailleschild links der Tür (die Wasserlinie ist im Foto schon da)
+      `<g font-family="Georgia,serif" text-anchor="middle" fill="#2a2622"><text x="333.5" y="257" font-size="6.2" letter-spacing=".6">HOCHWASSER</text><text x="333.5" y="268" font-size="6.6">12. MÄRZ 1954</text></g>` +
+      // ins Türbalken-Holz geschnitzt
+      `<text x="522" y="138" font-size="7" font-family="Georgia,serif" text-anchor="middle" fill="#e6d2b0" opacity=".55" letter-spacing="1.5">ERBAUT · 1781</text>` +
+      // blaues Hausnummernschild neben dem Schlüsseltresor
+      `<g transform="translate(667 247)"><rect width="30" height="19" rx="2" fill="#1f3f8a" stroke="#fff" stroke-width=".8"/><text x="15" y="7" font-size="3.6" font-family="Arial,sans-serif" text-anchor="middle" fill="#fff">AM WEHR</text><text x="15" y="16" font-size="8" font-family="Arial,sans-serif" font-weight="700" text-anchor="middle" fill="#fff">238</text></g>`),
     dachboden: img('dachboden')
   },
 
@@ -88,10 +90,10 @@ export default {
         <p>Hiermit schlage ich die Erbschaft nach Frau Irma Kessler, zuletzt wohnhaft Am Wehr, aus allen Berufungsgründen aus.</p>
         <p>Das Grundstück fällt damit an die Gemeinde und wird an die <b>Weserkraft Nord GmbH</b> veräußert.</p>
         <p>Unterschrift: ______________________ (digitale Gesichtssignatur)</p>
-        <p style="font-size:.72rem;opacity:.75">Rückfragen: Notariat am Domplatz · Tel. 0571 88 30 11<br>Frist: heute, 24:00 Uhr</p>
+        <p class="small">Rückfragen: Notariat am Domplatz · Tel. 0571 88 30 11<br>Frist: heute, 24:00 Uhr</p>
       </div>`},
     hausfoto: {title: 'Foto: Hausfront', role: null, html: `
-      <p class="stamp" style="color:var(--amber)">Mehmets Handykamera · Am Wehr</p>
+      <p class="stamp">Mehmets Handykamera · Am Wehr</p>
       <p>Mehmet hat die Hausfront fotografiert. Zoomt hinein: Am Haus hängen kleine Schilder.</p>
       <div data-photo="haus"></div>`},
     traueranzeige: {title: 'Traueranzeige', role: null, html: `
@@ -101,10 +103,10 @@ export default {
         <div data-face="sterbebild"></div>
         <p>Sie ging, wie sie lebte: ohne Aufhebens.</p>
         <p>In stiller Trauer<br><b>Gisela Pohl</b>, Nachbarin und Freundin</p>
-        <p style="font-size:.72rem;opacity:.75">Auf Wunsch der Verstorbenen keine Trauerfeier.</p>
+        <p class="small">Auf Wunsch der Verstorbenen keine Trauerfeier.</p>
       </div>`},
     kassette: {title: 'Kassette', role: null, html: `
-      <p class="stamp" style="color:var(--amber)">Aus der Standuhr · Mehmet spielt sie am Handy ab</p>
+      <p class="stamp">Aus der Standuhr · Mehmet spielt sie am Handy ab</p>
       <p>Die Kassette klingt seltsam. Irgendetwas stimmt mit der Laufrichtung nicht.</p>
       <div data-tape="kassette"></div>`},
     sicherungen: {title: 'Zettel am Sicherungskasten', role: null, html: `
@@ -118,11 +120,11 @@ export default {
         <p class="sig">I.</p>
       </div>`},
     dachboden: {title: 'Foto: Dachboden', role: null, html: `
-      <p class="stamp" style="color:var(--amber)">Mehmets Handykamera · Dachboden</p>
+      <p class="stamp">Mehmets Handykamera · Dachboden</p>
       <p>Die Truhe, und was sonst noch hier oben steht. Schaut genau hin.</p>
       <div data-photo="dachboden"></div>`},
     zettel: {title: 'Zerrissener Zettel', role: null, html: `
-      <p class="stamp" style="color:var(--amber)">Lag zerrissen im Mantel an der Garderobe</p>
+      <p class="stamp">Lag zerrissen im Mantel an der Garderobe</p>
       <div data-shred="zettel"></div>`},
     ab: {title: 'Anrufbeantworter Notariat', role: null, html: `
       <div class="paper">
@@ -140,7 +142,7 @@ export default {
         <p class="sig">Irma Kessler</p>
       </div>`},
     brief: {title: 'Brief in der Truhe', role: null, html: `
-      <p class="stamp" style="color:var(--amber)">Briefumschlag · „Für die Erbin. Das Wort kennst du.“</p>
+      <p class="stamp">Briefumschlag · „Für die Erbin. Das Wort kennst du.“</p>
       <p>Verschlüsselt. Irma mochte Rätsel. Die Verschiebung ist so lang wie das Wort, das du schon kennst.</p>
       <div data-cipher="PJO IPU UPJOA AVA. PJO IPU KPY UHLOLY, HSZ KB KLURZA. IPZ NSLPJO, RPUK."></div>`}
   },
@@ -150,6 +152,7 @@ export default {
       q: 'Schlüsseltresor an der Haustür: vier Ziffern.', ph: 'Code', input: 'digits',
       hash: ['b54de1156a2eb5afc2c750540b230c06c5a11d2291ad6ae6fedcae36d707f90b'],
       near: {'fba7ef71b861d88b23c7ecde10583674de4b3dae714ce5a13e163901acda76df': 'Das ist das Baujahr. Wann kam das Wasser?', '161f16d808ace2419e95357fbb7b5328daba6976d0f3d6a15c91085972c42a81': 'Das ist die Hausnummer.', '6705d82c12db028d73b96bdd617dedf0b02d7c482d53d5cb222525585d8e54e0': 'Fast: Nur das Jahr.'},
+      near: {'0763242057b573a7a0e8674f46dbe60bad49f14cc815db37913517c631b13c00': 'Das ist noch rückwärts.', '837065869affbe340e67842f88b157fc6d836e35351695b7723ab081cdecdce0': 'Und welches Wort soll man ihr sagen?'},
       hints: ['Im Testament steht: „Der Schlüssel wartet, seit das Wasser kam.“', 'Zoomt im Foto der Hausfront an die Wand links neben der Tür. Da ist eine Linie und ein Schild.', '1954.']
     },
     uhr: {
@@ -161,11 +164,12 @@ export default {
     kassette: {
       q: 'Welches Wort soll man der Nachbarin sagen?', ph: 'Wort',
       hash: ['28263ba72b6f54f209d2b390209e06048648ac61b49b67efb2471d8df3035522'],
-      hints: ['Die Kassette ist rückwärts. In der Akte beim Tonband „rückwärts“ ankreuzen.', 'Langsamer abspielen hilft, wenn es zu schnell ist.', 'Das Wort ist „Libelle“.']
+      hints: ['Die Kassette ist rückwärts. In der Akte beim Tonband „rückwärts“ ankreuzen.', 'Rückwärts abspielen. Irma nennt ein Wort, das ihre Nachbarin kennt. Ein Tier.', 'Das Wort ist „Libelle“.']
     },
     nummer: {
       q: 'Ruf beim Notariat an. Welche Nummer wählst du?', ph: 'Nummer', input: 'digits',
       hash: ['5c17dc0d87236fa8908f5ac758f8837d5f0cf0e4a9c1b1a6547def341f50362a', 'e05c5968373a4f0dc6dd6abbe8ef35ddf0449ba22d7ed32b8a9d8d386ba93edd'],
+      near: {'d1c48506b39361d2e15feee4c1ebabf3cb8a0c80cbea124dde42410a6314aa46': 'Die Vorwahl fehlt.'},
       hints: ['Die Nummer steht klein auf dem Formular, das Hensel geschickt hat.', 'Erbausschlagung, unten: „Rückfragen“.', '0571 88 30 11']
     },
     strom: {
@@ -179,7 +183,7 @@ export default {
       q: 'Die Truhe hat drei Zahlenräder.', ph: 'Code', input: 'digits',
       hash: ['c1248a57a9432737e039f3a3dc0a1d147ca737319f33f55b79f9b9a1f3b79b04'],
       near: {'161f16d808ace2419e95357fbb7b5328daba6976d0f3d6a15c91085972c42a81': 'Das ist die Hausnummer. Lest den Zettel ganz.', '7612f1dcd7ca032480aba15b847959fc095a046ce0bf5bd09ab0f75cb6f250cf': 'Mal drei, nicht mal Baujahr.'},
-      hints: ['Setzt den zerrissenen Zettel aus der Akte zusammen.', '„Hausnummer mal drei.“ Die Hausnummer steht auf dem Foto der Hausfront.', '238 × 3 = 714.']
+      hints: ['Setzt den zerrissenen Zettel aus der Akte zusammen.', 'Der Zettel nennt eine Rechnung mit der Hausnummer. Die steht auf einem Schild auf dem Foto der Hausfront.', '238 × 3 = 714.']
     },
     wer: {
       q: 'Wer ist „Gisela Pohl“ wirklich?', ph: 'Name',

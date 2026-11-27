@@ -117,6 +117,9 @@ body:not([data-phase=play]) .rec{display:none}
 .tile.speaking{box-shadow:0 0 0 2px var(--amber),0 0 30px rgba(255,178,63,.25)}
 /* Figuren: gezeichnetes Profilbild, Rauschen, blinzeln, Mund */
 .tile.npc .pic{position:absolute;inset:0}
+/* Gleicher Webcam-Look für alle Fotoporträts: etwas weniger Farbe, leichte Vignette (Rauschen kommt vom Canvas darüber) */
+.tile.npc .photo-portrait{filter:contrast(1.04) saturate(.9) brightness(.97)}
+.tile.npc .pic::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 45%,transparent 58%,rgba(0,0,0,.32))}
 .tile.npc .pic svg{width:100%;height:100%;display:block}
 .tile.npc canvas.static{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;opacity:.06;mix-blend-mode:screen;pointer-events:none}
 .tile.npc .sub2{position:absolute;top:10px;left:10px;z-index:6;font-family:var(--mono);font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;color:#cfcac0;background:rgba(0,0,0,.45);padding:.25em .55em;border-radius:5px}
@@ -139,7 +142,7 @@ body:not([data-phase=play]) .rec{display:none}
 .look-ghost{opacity:.85}
 .look-ghost .pic{filter:grayscale(1) contrast(1.3) brightness(.7)}
 .look-ghost canvas.static{opacity:.35!important}
-.tile .lamp{position:absolute;inset:0;z-index:5;pointer-events:none;background:radial-gradient(circle at 70% 30%,rgba(255,240,200,.95),rgba(255,220,150,.35) 30%,transparent 65%);opacity:0;transition:opacity 40ms}
+.tile .lamp{position:absolute;inset:0;z-index:5;pointer-events:none;background:radial-gradient(circle at 70% 30%,rgba(255,240,200,.95),rgba(255,220,150,.35) 30%,transparent 65%);opacity:0}
 .tile .lamp.on{opacity:1}
 .tile .mirror{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:7;filter:grayscale(1) contrast(1.4) brightness(.8);animation:mir 3.6s steps(12) forwards}
 .mirrorlabel{position:absolute;left:0;right:0;top:42%;z-index:8;text-align:center;font:700 1.1rem var(--mono);color:#fff;text-shadow:0 0 12px var(--red);letter-spacing:.1em;animation:mir 3.6s steps(12) forwards}
@@ -202,6 +205,10 @@ body.akte-open #akte, body.chat-open #chat{transform:none}
 #page th{color:var(--mute);font-weight:500;font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.08em}
 #page td:first-child{font-family:var(--mono);white-space:nowrap}
 #page .stamp{font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--red)}
+/* Herkunftszeile über einem Beweisstück (wer hat es geschickt, woher stammt es) = bernsteinfarben; Stempel auf dem Papier = rot */
+#page > .stamp,#page > .uv > .stamp{color:var(--amber)}
+#page > .stamp::before{content:"📎 ";filter:grayscale(1) brightness(1.6)}
+#page .small{font-size:.72rem;opacity:.75}
 #page .note{color:var(--amber);font-size:.9rem}
 .tab.pinned{border-color:rgba(255,178,63,.6)}
 .tablebtn{display:block;margin:0 0 10px;font-size:.82rem;padding:.4em .9em}
@@ -227,7 +234,9 @@ body.akte-open #akte, body.chat-open #chat{transform:none}
 #page .letter p{margin:0 0 .5em}
 #page .letter .sig{text-align:right;font-size:1.15rem}
 .solotag{margin-left:8px;padding:.05em .5em;border-radius:999px;background:var(--a,#c9a46a);color:#111;font-weight:700;letter-spacing:.08em}
-#page .paper{background:#e9e3d4;color:#1a1814;border-radius:6px;padding:14px 16px;font-family:var(--mono);font-size:.82rem;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+#page .paper{background:#e9e3d4;color:#1a1814;border-radius:4px;padding:14px 16px;font-family:var(--mono);font-size:.82rem;box-shadow:0 10px 30px rgba(0,0,0,.4);border:1px solid rgba(0,0,0,.08);
+  background-image:radial-gradient(ellipse at 15% 0%,rgba(255,255,255,.45),transparent 55%),radial-gradient(ellipse at 100% 100%,rgba(120,90,40,.14),transparent 50%)}
+#page .paper + .paper,#page .paper + .letter{margin-top:12px}
 #page .paper .stamp{color:#a31f1f}
 #page .grid{display:grid;grid-template-columns:repeat(var(--n,4),1fr);gap:4px;font-family:var(--mono);text-align:center}
 #page .grid span{background:var(--panel2);border-radius:4px;padding:.35em 0}
@@ -370,6 +379,38 @@ body.dark #stage .lamp{z-index:10}
 .cp{border:0;border-radius:12px;padding:.7em 1em;background:var(--c);color:#111;font-weight:700;min-width:64px}
 .cp.del{background:var(--panel2);color:var(--ink)}
 .tile .lamp.col{background:radial-gradient(circle at 50% 42%,var(--lc) 0,color-mix(in srgb,var(--lc) 45%,transparent) 35%,transparent 70%)}
+/* Mitschreibstreifen für Morse- und Farbsignale */
+.tile .sigstrip{position:absolute;left:8px;right:8px;bottom:40px;z-index:9;display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:10px;
+  background:rgba(8,8,10,.82);border:1px solid rgba(255,255,255,.12);font:700 1.15rem/1 var(--mono);color:#f2eee6;min-height:38px}
+.sigstrip .bulb{flex:none;width:22px;height:22px;border-radius:50%;background:#2a2a2a;border:2px solid #555}
+.sigstrip.lit .bulb{background:var(--lc);border-color:#fff;box-shadow:0 0 14px var(--lc),0 0 4px #fff}
+.sigstrip .syms{flex:1;min-width:0;overflow:hidden;white-space:nowrap;direction:rtl;text-align:left;letter-spacing:.12em}
+.sigstrip .syms>*{direction:ltr;unicode-bidi:isolate}
+.sigstrip .now{color:#ffd23f}
+.sigstrip .wgap{color:var(--amber)}
+.sigstrip .restart{font:600 .72rem var(--sans,inherit);letter-spacing:.02em;color:var(--mute)}
+.sigstrip .chip{display:inline-block;width:16px;height:16px;border-radius:4px;background:var(--c);margin-right:5px;vertical-align:middle;border:1px solid rgba(255,255,255,.4)}
+.sigstrip .chip.now{outline:2px solid #fff;outline-offset:1px}
+.sigstrip .beep{flex:none;border:0;background:none;font-size:1rem;padding:0 2px}
+.mtable .mdec{background:var(--panel2);border-radius:10px;padding:10px;margin:8px 0}
+.mtable .mout{display:flex;gap:12px;align-items:baseline;font:700 1.3rem var(--mono);min-height:1.6em}
+.mtable .mword{color:var(--amber);letter-spacing:.1em}
+.mtable .mcur{color:var(--mute);letter-spacing:.15em}
+.mtable .mout b{margin-left:auto;font-size:1.6rem;color:#fff}
+.mtable .mbtns{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.mtable .mbtns .btn{padding:.35em .8em;font-size:.86rem}
+.mtable .mcols{display:grid;grid-template-columns:repeat(auto-fit,minmax(92px,1fr));gap:10px}
+.mtable .mrow{display:flex;gap:10px;align-items:center;padding:2px 6px;border-radius:6px;font-family:var(--mono)}
+.mtable .mrow b{width:1.2em;font-size:1.05rem}
+.mtable .mrow span{font-size:1.15rem;letter-spacing:.14em}
+.mtable .mrow.fit{background:rgba(255,178,63,.12)}
+.mtable .mrow.hit{background:var(--amber);color:#111}
+#page .vig{overflow:auto;max-height:340px;border:1px solid var(--line);border-radius:8px}
+#page .vigtab{font:600 .7rem var(--mono);border-collapse:collapse;margin:0}
+#page .vigtab th,#page .vigtab td{padding:1px 3px;text-align:center;border:0}
+#page .vigtab th{color:var(--amber);position:sticky;top:0;background:var(--panel)}
+#page .vigtab tbody th{left:0;position:sticky}
+#page .vigtab tr:hover td{background:rgba(255,178,63,.15)}
 .tile .signote{position:absolute;left:10px;right:10px;top:38px;z-index:7;font:600 .72rem var(--mono);color:var(--amber);background:rgba(0,0,0,.6);padding:.4em .6em;border-radius:6px}
 .spec{font-family:var(--mono);font-size:.9rem;color:var(--ok);text-align:center;margin-top:10px;background:#0b130e;border-radius:8px;padding:.5em}
 .tuner{background:linear-gradient(#1c2320,#111614);border:1px solid #2e3a34;border-radius:12px;padding:14px;margin:.6em 0;text-align:center}

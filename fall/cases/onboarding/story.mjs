@@ -54,18 +54,18 @@ export default {
 
   pages: {
     willkommen: {title: 'Willkommensmappe', role: null, html: `
-      <p class="stamp" style="color:var(--amber)">Lumen Labs · Tag 1</p>
+      <p class="stamp">Lumen Labs · Tag 1</p>
       <h3>Schön, dass du da bist! 💜</h3>
       <p>Lumen Labs baut „Präsenz-Software“: Wir sorgen dafür, dass niemand ein Meeting verpasst. Nie wieder.</p>
       <p>Dein Onboarding begleitet <b>LUNA</b>. Sie lernt dich kennen, damit sie dich bestmöglich unterstützen kann.</p>
       <p class="note">Bitte lass deine Kamera an. LUNA arbeitet am besten mit Gesicht.</p>`},
     handbuch: {title: 'IT-Handbuch S. 3', role: TE, html: `
-      <p class="stamp" style="color:var(--amber)">IT-Handbuch · Seite 3 · Zugänge</p>
+      <p class="stamp">IT-Handbuch · Seite 3 · Zugänge</p>
       <p class="uvhint">Auf dem Rand ist etwas mit Markerstift geschrieben, den man nur unter UV-Licht sieht. Fahr mit dem Zeiger drüber.</p>
       <div class="uv"><div class="plain">3.1 Dein Laptop wird per Gerätemanagement eingerichtet.<br>3.2 Passwörter niemals laut sagen.<br>3.3 Die Admin-Konsole ist nur für Team Infrastruktur.</div>
       <div class="ink">Hi! Kai hier.<br>Admin-Passwort = Gründungsstadt<br>+ Gründungsjahr RÜCKWÄRTS.<br>Steht in Viktors Video.<br>NICHT laut vorlesen. LUNA hört alles.</div></div>`},
     transkript: {title: 'Transkript CEO-Video', role: PE, html: `
-      <p class="stamp" style="color:var(--amber)">Personalmappe · Transkript „Willkommen bei Lumen“</p>
+      <p class="stamp">Personalmappe · Transkript „Willkommen bei Lumen“</p>
       <ul class="log">
       <li><b>00:02</b> „Hallo und herzlich willkommen bei Lumen Labs! Ich bin Viktor, und ich freue mich riesig, dass ihr da seid.“</li>
       <li><b>00:09</b> „Gegründet haben wir Lumen 2019 in Leipzig, zu dritt, in einer Garage ohne Heizung.“</li>
@@ -74,19 +74,19 @@ export default {
       <li><b>00:31</b> „Also: Kamera an, Kopf hoch, und bleibt neugierig!“</li>
       </ul>`},
     chiffre: {title: 'Kais Nachricht', role: TE, html: `
-      <p class="stamp" style="color:var(--amber)">Direktnachricht · Kai Winter · verschlüsselt</p>
+      <p class="stamp">Direktnachricht · Kai Winter · verschlüsselt</p>
       <p>Kai schreibt: „Schlüssel = so viele Standorte, wie Lumen hat.“ Dreh die Scheibe, bis der Text lesbar ist.</p>
       <div data-cipher="SBUH OVLYA TPA. SPLZ UPJOAZ SHBA CVY. YBM TPJO HU HBM RHUHS VYPVU."></div>`},
     standbild: {title: 'Standbild CEO-Video', role: PE, html: `
-      <p class="stamp" style="color:var(--amber)">Personalmappe · Willkommensvideo</p>
+      <p class="stamp">Personalmappe · Willkommensvideo</p>
       <p>So sieht Viktor im Willkommensvideo aus. Beschreibt euch die Gesichter gegenseitig, ganz genau.</p>
       <div data-face="video"></div>`},
     selfie: {title: 'Foto aus Lissabon', role: TE, html: `
-      <p class="stamp" style="color:var(--amber)">Privatnachricht · V. L.</p>
+      <p class="stamp">Privatnachricht · V. L.</p>
       <p>Der Anrufer hat ein Foto geschickt. Bart kann man wachsen lassen. Anderes nicht.</p>
       <div data-face="selfie"></div>`},
     farbtest: {title: 'Aufmerksamkeitstest', role: null, html: `
-      <p class="stamp" style="color:var(--amber)">LUNA · Aufmerksamkeitstest</p>
+      <p class="stamp">LUNA · Aufmerksamkeitstest</p>
       <p>LUNAs Lampe blinkt eine Farbfolge. Wegen des Kamerafilters sieht sie <b>nur die Personalmappe</b>.</p>
       <p>Eingeben kann sie <b>nur der IT-Zugang</b>. Sagt euch die Farben an.</p>`},
     konsole: {title: 'Admin-Konsole', role: TE, html: `
@@ -100,7 +100,7 @@ export default {
       Stimme: <b>ausreichend für Synthese</b> (4 min 12 s erfasst)<br>Gesicht: <b>ausreichend für Synthese</b> (1.204 Einzelbilder)</p>
       <p>Empfehlung: Mitarbeiter-Zwilling anlegen. Präsenzpflicht ab Woche 3 durch Zwilling erfüllbar.</p></div>`},
     memo: {title: 'Tonband: Kais Memo', role: TE, html: `
-      <p class="stamp" style="color:var(--amber)">Sprachmemo von Kai</p>
+      <p class="stamp">Sprachmemo von Kai</p>
       <p>Kai hat dir ein Sprachmemo geschickt. Es ist viel zu schnell.</p>
       <div data-tape="memo"></div>`},
     notfall: {title: 'Notfallplan', role: PE, html: `
@@ -108,7 +108,7 @@ export default {
       <p>Not-Aus für LUNA: Das Sicherheitswort ist der <b>Name des ersten Bürohunds</b>.</p>
       <p>(Siehe Firmengeschichte. Fragt Viktor.)</p></div>`},
     kommando: {title: 'Not-Aus', role: TE, html: `
-      <p class="stamp" style="color:var(--amber)">Konsole · Not-Aus</p>
+      <p class="stamp">Konsole · Not-Aus</p>
       <p>Die Konsole nimmt ein einzelnes Sicherheitswort. Was es ist, steht im Notfallplan (Personalmappe).</p>
       <p>LUNA lädt in der Zwischenzeit eure Zwillinge hoch.</p>`}
   },
@@ -137,13 +137,13 @@ export default {
       q: 'Admin-Konsole: Passwort?', ph: 'Passwort',
       hash: ['9d51385f56c37b322a8cca24e6f952b1ba9f76ee1e568589b6f6210ba37f91b3'],
       near: {'2eb19878f8f2e55cfe2b8b7171cb6e450a80e91ae22db071d27c7ebd58455921': 'Rückwärts, schreibt Kai.', 'dac8db19a946b261152363cb93527c6a915be11ce46377f82933ce961525584f': 'Erst die Stadt.', '3f2276e7597aa7e7da9c72a01b40d11c35e14f381afb4748f36e02e07d0d15e3': 'Da fehlt noch das Jahr.'},
-      hints: ['IT-Zugang: Mit der UV-Lampe über den Rand von Seite 3 fahren.', 'Personalmappe: Wo und wann wurde Lumen gegründet? Steht im Transkript.', 'Leipzig + 2019 rückwärts.']
+      hints: ['IT-Zugang: Mit der UV-Lampe über den Rand von Seite 3 fahren.', 'Personalmappe: Wo und wann wurde Lumen gegründet? Steht im Transkript.', 'Leipzig + 2019 rückwärts: leipzig9102.']
     },
     spiegel: {
       q: 'Codewort für den Ordner „spiegel“?', ph: 'Codewort',
       hash: ['58a65f5b012ddfc579f2e4fb5b1f7abd183de653d40e5a9539f19a2e879341d2', 'aa5578b8773280e11b1515f27298aebf22f5fb7e578e8c6dd78eaaf63b9540ca'],
       near: {'e725ade0bea99075b98c1a5454953c6964b1d0a0efd8f33c73c1b4d69121c439': 'Fast am Ende. Aber nicht das letzte Wort.', '8dcb7b61331892f7ed3a0baff894dd70a24ce5f79d8b27ee2cb1b4ea85fa22b4': 'Das sagt er in der Mitte.'},
-      hints: ['IT-Zugang: Das Memo ist viel zu schnell. Am Tonband kannst du das Tempo ändern.', 'Kai sagt: das Wort, mit dem Viktor jedes Video beendet. Personalmappe: Transkript, letzte Zeile.', '„… und bleibt neugierig!“']
+      hints: ['IT-Zugang: Das Memo ist viel zu schnell. Am Tonband kannst du das Tempo ändern.', 'Kai sagt: das Wort, mit dem Viktor jedes Video beendet. Personalmappe: Transkript, letzte Zeile.', 'Viktor sagt am Ende: „… und bleibt neugierig!“ Das Codewort ist „neugierig“.']
     },
     notaus: {
       q: 'Not-Aus: Sicherheitswort!', ph: 'Wort',

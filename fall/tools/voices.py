@@ -5,13 +5,14 @@ Aufruf (aus dem Repo):
     node fall/tools/lines.mjs > /tmp/jobs.json
     python fall/tools/voices.py /tmp/jobs.json            # nur fehlende Dateien
     python fall/tools/voices.py /tmp/jobs.json --force    # alles neu
-    python fall/tools/voices.py --ambience                # Hintergrundgeräusche in fall/audio/
+    python fall/tools/voices.py --ambience                # Hintergrundgeräusche in fall/audio/ (nahtlose Schleifen)
+    python fall/tools/voices.py --normalize               # vorhandene Aufnahmen auf gleiche Lautheit bringen (Zeitmarken bleiben gültig)
     python fall/tools/voices.py --probe mls 0 1 2 ...     # Tonhöhe von Sprechern messen (zum Aussuchen)
 
 Braucht: pip install piper-tts, ffmpeg, Stimmen in ~/.cache/piper (de_DE-<name>.onnx + .onnx.json).
 Lizenzen der Stimmen: siehe fall/CREDITS.md.
 """
-import json, os, subprocess, sys, tempfile, wave
+import json, os, re, subprocess, sys, tempfile, wave
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -71,6 +72,45 @@ def run(args):
     subprocess.run(['ffmpeg', '-hide_banner', '-loglevel', 'error', '-y', *args], check=True)
 
 
+TARGET_LUFS = -18.0  # Sprache: einheitliche Lautheit über alle Figuren
+BED_LUFS = -24.0     # Atmosphäre-Schleifen: deutlich leiser als die Stimmen
+PEAK = 0.84          # Spitzen-Grenze, ca. -1,5 dBFS (Luft für die AAC-Kodierung)
+BITRATE = '96k'
+
+
+def loudness(path):
+    """Integrierte Lautheit (LUFS, EBU R128) einer Datei."""
+    r = subprocess.run(['ffmpeg', '-hide_banner', '-nostats', '-i', str(path), '-af', 'ebur128', '-f', 'null', '-'],
+                       capture_output=True, text=True)
+    m = re.findall(r'I:\s+(-?[\d.]+) LUFS', r.stderr)
+    return float(m[-1]) if m else None
+
+
+def normalize(path, target=TARGET_LUFS):
+    """Hebt/senkt die Datei auf die Ziel-Lautheit, Spitzen werden begrenzt. Läuft nur, wenn nötig."""
+    i = loudness(path)
+    if i is None or i < -60 or abs(target - i) < .6:
+        return False
+    tmp = Path(path).with_suffix('.tmp.m4a')
+    run(['-i', str(path), '-af', f'volume={target - i:.2f}dB,alimiter=limit={PEAK}:level=disabled',
+         '-ac', '1', '-ar', '44100', '-c:a', 'aac', '-b:a', BITRATE, '-movflags', '+faststart', str(tmp)])
+    tmp.replace(path)
+    return True
+
+
+def normalize_all():
+    for mf in sorted((ROOT / 'cases').glob('*/audio/manifest.json')):
+        manifest = json.loads(mf.read_text())
+        changed = 0
+        for k, v in manifest.items():
+            f = mf.parent / v['f']
+            if f.exists() and normalize(f):
+                v['d'] = int(duration(f) * 1000)
+                changed += 1
+        mf.write_text(json.dumps(manifest, separators=(',', ':')))
+        print(f'{mf.parent.parent.name}: {changed}/{len(manifest)} angepasst')
+
+
 def duration(path):
     out = subprocess.run(['ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', str(path)], capture_output=True, text=True).stdout
     return float(out.strip() or 0)
@@ -97,7 +137,8 @@ def render_dtmf(digits, out):
         with wave.open(str(w), 'wb') as f:
             f.setnchannels(1); f.setsampwidth(2); f.setframerate(sr)
             f.writeframes((np.clip(x, -1, 1) * 32767).astype(np.int16).tobytes())
-        run(['-i', str(w), '-c:a', 'aac', '-b:a', '96k', str(out)])
+        run(['-i', str(w), '-c:a', 'aac', '-b:a', BITRATE, str(out)])
+    normalize(out)
 
 
 def render(job, out):
@@ -144,7 +185,8 @@ def render(job, out):
             post.append('areverse')
         post.append('alimiter=limit=0.95,afade=t=in:d=0.05')
         graph += f';{last}' + ','.join(post) + '[out]'
-        run([*inputs, '-filter_complex', graph, '-map', '[out]', '-ac', '1', '-ar', '44100', '-c:a', 'aac', '-b:a', '64k', '-movflags', '+faststart', str(out)])
+        run([*inputs, '-filter_complex', graph, '-map', '[out]', '-ac', '1', '-ar', '44100', '-c:a', 'aac', '-b:a', BITRATE, '-movflags', '+faststart', str(out)])
+        normalize(out)
 
 
 def main_jobs(path, force):
@@ -179,8 +221,8 @@ def main_jobs(path, force):
 
 AMB = {
     'hum': "aevalsrc='0.05*sin(2*PI*50*t)+0.03*sin(2*PI*100*t)+0.015*sin(2*PI*150*t)':s=44100,volume=0.8[a];anoisesrc=color=pink:amplitude=0.03:r=44100,lowpass=f=1200[b];[a][b]amix=inputs=2:normalize=0",
-    'wind': 'anoisesrc=color=brown:amplitude=0.5:r=44100,lowpass=f=700,tremolo=f=0.13:d=0.7,volume=0.8',
-    'storm': "anoisesrc=color=brown:amplitude=0.6:r=44100,lowpass=f=900,tremolo=f=0.21:d=0.8[a];anoisesrc=color=pink:amplitude=0.2:r=44100,highpass=f=1500,tremolo=f=0.37:d=0.9[b];aevalsrc='0.08*sin(2*PI*38*t)*(0.5+0.5*sin(2*PI*0.07*t))':s=44100[c];[a][b][c]amix=inputs=3:normalize=0",
+    'wind': 'anoisesrc=color=brown:amplitude=0.5:r=44100,lowpass=f=700,tremolo=f=0.125:d=0.7,volume=0.8',
+    'storm': "anoisesrc=color=brown:amplitude=0.6:r=44100,lowpass=f=900,tremolo=f=0.21875:d=0.8[a];anoisesrc=color=pink:amplitude=0.2:r=44100,highpass=f=1500,tremolo=f=0.375:d=0.9[b];aevalsrc='0.08*sin(2*PI*38*t)*(0.5+0.5*sin(2*PI*0.0625*t))':s=44100[c];[a][b][c]amix=inputs=3:normalize=0",
     'radio': 'anoisesrc=color=white:amplitude=0.12:r=44100,bandpass=f=2200:width_type=h:w=2600,tremolo=f=9:d=0.6,volume=0.6',
     # Fahrstuhlmusik: Arpeggio über C – Am – F – G
     'wartemusik': ("aevalsrc='"
@@ -192,14 +234,41 @@ AMB = {
 }
 
 
+LOOP = 32   # Sekunden
+XFADE = 6   # Überblendung am Schleifenende (Rauschen)
+PAD = 0.5   # Sekunden Vor-/Nachlauf: AAC dämpft die ersten Samples, die Schleife läuft darum nur im Innern (app.mjs: AMB_PAD)
+
+
 def ambience():
+    """Nahtlose Schleifen: 38 s rendern, das Ende gleichleise ('equal power') in den Anfang überblenden.
+    Die Wartemusik ist periodisch und wird stattdessen gefaltet (Echo-Schwanz läuft in den Anfang)."""
+    import numpy as np
     d = ROOT / 'audio'
     d.mkdir(exist_ok=True)
+    sr = 44100
+    n, x = LOOP * sr, XFADE * sr
     for name, src in AMB.items():
-        out = d / f'{name}.m4a'
         print('Atmo', name)
-        graph = src + ',afade=t=in:d=1,afade=t=out:st=31:d=1'
-        run(['-filter_complex', graph + '[o]', '-map', '[o]', '-t', '32', '-ac', '1', '-c:a', 'aac', '-b:a', '48k', str(out)])
+        with tempfile.TemporaryDirectory() as td:
+            raw, final = Path(td) / 'a.wav', Path(td) / 'b.wav'
+            run(['-filter_complex', src + '[o]', '-map', '[o]', '-t', str(LOOP + XFADE), '-ac', '1', '-ar', str(sr), str(raw)])
+            with wave.open(str(raw)) as w:
+                y = np.frombuffer(w.readframes(w.getnframes()), dtype=np.int16).astype(np.float64) / 32768
+            y = np.pad(y, (0, max(0, n + x - len(y))))
+            out = y[:n].copy()
+            if name == 'wartemusik':
+                out[:x] += y[n:n + x]
+            else:
+                t = np.linspace(0, np.pi / 2, x)
+                out[:x] = out[:x] * np.sin(t) + y[n:n + x] * np.cos(t)
+            p = int(PAD * sr)
+            out = np.concatenate([out[-p:], out, out[:p]])  # Datei = Ende + Schleife + Anfang
+            with wave.open(str(final), 'wb') as w:
+                w.setnchannels(1); w.setsampwidth(2); w.setframerate(sr)
+                w.writeframes((np.clip(out, -1, 1) * 32767).astype(np.int16).tobytes())
+            dest = d / f'{name}.m4a'
+            run(['-i', str(final), '-ac', '1', '-c:a', 'aac', '-b:a', '64k', '-movflags', '+faststart', str(dest)])
+            normalize(dest, BED_LUFS)
 
 
 def probe(model, speakers):
@@ -229,6 +298,8 @@ if __name__ == '__main__':
         print(__doc__); sys.exit(1)
     if a[0] == '--ambience':
         ambience()
+    elif a[0] == '--normalize':
+        normalize_all()
     elif a[0] == '--probe':
         probe(a[1], a[2:])
     else:

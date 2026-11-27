@@ -10,3 +10,16 @@
 @media (prefers-reduced-motion: reduce) {
   .photo-blink, .tile.npc.speaking .pic svg.photo-portrait { animation: none; }
 }
+/* The recording supplies the shape. Short overlaps soften changes without dragging the jaw through pauses. */
+.photo-shut, .photo-wide, .photo-round, .photo-mid { opacity: 0; }
+.photo-shut { opacity: clamp(0, calc(1 - var(--m, 0) * 4), 1); }
+[data-viseme] :is(.photo-voice,.photo-shut,.photo-wide,.photo-round,.photo-mid) {
+  opacity: 0; transition: opacity 45ms ease-out;
+}
+:is([data-viseme="A"], [data-viseme="X"]) .photo-shut { opacity: 1; }
+[data-viseme="B"] .photo-wide, [data-viseme="G"] .photo-wide { opacity: .85; }
+[data-viseme="D"] .photo-voice { opacity: 1; }
+[data-viseme="C"] .photo-voice, [data-viseme="H"] .photo-voice { opacity: .55; }
+[data-viseme="C"] .photo-mid, [data-viseme="H"] .photo-mid { opacity: 1; }
+[data-viseme="E"] .photo-round { opacity: .8; }
+[data-viseme="F"] .photo-round { opacity: 1; }
