@@ -72,6 +72,10 @@ Gemeinsam ansehen: Jede Seite der eigenen Akte lässt sich mit „📌 Auf den A
 
 Solo-Fälle: `solo: true` im Fall und in `cases/index.mjs`. Es gibt nur eine Rolle, die Lobby startet mit „Anruf annehmen“. Beispiele: `cases/erbe`, `cases/nachtprogramm` (schwer).
 
+Schwierigkeit (wählt die Einsatzleitung in der Lobby): **Leicht** (Figuren schicken nach 2½ und 5 Minuten den nächsten Hinweis per Chat, Countdowns ×1,5), **Normal** (Hinweis per Chat nach 5 Minuten), **Schwer** (höchstens zwei Hinweise pro Rätsel, keine Hilfe von Figuren, Countdowns ×0,8, Signale ohne Mitschreibstreifen). Hinweise schicken nur Verbündete: Figuren mit `helps: false` (Täter, Lügner) nie, dann kommt der Hinweis aus der Akte.
+
+Am Ende zeigt „Euer Verlauf“ pro Rätsel Zeit, Hinweise und Fehlversuche (bleibt im Browser, lässt sich als Text kopieren). Farbsignale lassen sich mit ◐ als Buchstaben anzeigen (für Farbenblinde, pro Person gespeichert).
+
 Hilfen für Spielende: geteilte Notizen, Protokoll aller Sätze (mit ▶ nochmal hören), Hinweise in drei Stufen, „fast richtig“-Rückmeldungen (`near`), Pause mit Speicherstand (Fortsetzen über denselben Link), Kurzanleitung.
 
 ## Neuen Fall bauen

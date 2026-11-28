@@ -39,7 +39,7 @@ export const G = {
     return {v: 1, caseId, phase: 'lobby', host: selfId, step: 0, stepAt: 0, roles: {}, names: {}, npcs: [], sub: null, subN: 0,
       pages: [], puzzle: null, puzzleAt: 0, solved: [], hints: {}, tries: [], knock: null, call: null, ask: null, vote: null, votes: {},
       results: {}, flags: {}, ending: null, fxN: 0, fxq: [], startedAt: 0, endedAt: 0, quiet: null, chapter: null, goal: '', done: [],
-      hold: null, clap: null, timer: null, morse: null, dark: false, lockLeave: false, amb: null, paused: false, chats: [], frags: [], notes: {text: '', by: ''}, strikes: 0, table: [], poses: {}}
+      hold: null, clap: null, timer: null, morse: null, dark: false, lockLeave: false, amb: null, paused: false, chats: [], frags: [], notes: {text: '', by: ''}, strikes: 0, table: [], poses: {}, level: 'normal', stats: {}}
   },
   claimHost() {
     this.state = this.state ? {...this.state, host: selfId} : this.fresh()
@@ -106,13 +106,17 @@ export const G = {
         if (this.state.puzzle !== d.p) return
         const ok = pz.hash.includes(hash), near = !ok && pz.near?.[hash]
         if (ok && !s.solved.includes(d.p)) s.solved.push(d.p)
+        const stat = s.stats?.[d.p]
+        if (stat) { if (ok) stat.end ||= Date.now(); else stat.wrong++ }
         this.fx(ok ? 'right' : near ? 'near' : 'wrong')
         s.tries = [...s.tries.slice(-5), {by: nameOf(from), a, ok, near: near || ''}]
         this.commit()
       })
+    } else if (d.t === 'level' && s.phase === 'lobby' && from === s.host && LEVELS[d.v]) {
+      s.level = d.v; this.commit()
     } else if (d.t === 'hint' && s.puzzle === d.p) {
       const n = s.hints[d.p] || 0
-      if (n < this.c.puzzles[d.p].hints.length) { s.hints[d.p] = n + 1; this.commit() }
+      if (n < hintMax(s, d.p)) { s.hints[d.p] = n + 1; this.commit() }
     } else if (d.t === 'admit' && s.knock) rt.admitted = true
     else if (d.t === 'deny' && s.knock) { s.knock = null; rt.retryAt = Date.now() + 7000; this.commit() }
     else if (d.t === 'accept' && s.call) rt.accepted = true
@@ -158,6 +162,7 @@ export const G = {
         if (rt.ringAt) rt.ringAt += dt
         if (s.timer) s.timer.until += dt
         if (s.startedAt) s.startedAt += dt
+        for (const st of Object.values(s.stats || {})) if (!st.end) st.start += dt
         if (s.puzzleAt) s.puzzleAt += dt
         if (s.sub) { s.subN++; s.sub = {...s.sub, id: s.subN} }   // letzten Satz noch einmal sagen
       }
@@ -243,7 +248,7 @@ export const G = {
         if (ok.length >= ids.length) { s.clap = null; this.fx('right'); this.next() }
         break
       }
-      case 'timer': s.timer = a ? {until: now + a * (SPEED < 1 ? SPEED * 3 : 1), label: b || t('game.timer')} : null; this.next(); break
+      case 'timer': s.timer = a ? {until: now + a * lvl(s).timer * (SPEED < 1 ? SPEED * 3 : 1), label: b || t('game.timer')} : null; this.next(); break
       case 'chat': {
         const o = st[3] || {}
         s.chats = [...s.chats.slice(-40), {id: (s.chats.at(-1)?.id || 0) + 1, npc: a, text: b, to: o.to || null}]
@@ -270,6 +275,15 @@ export const G = {
         const o = b || {}
         if (s.solved.includes(a)) { s.puzzle = null; this.next(); break }
         if (s.puzzle !== a) { s.puzzle = a; s.puzzleAt = now; s.tries = [] }
+        const stat = (s.stats ||= {})[a] ||= {start: now, end: 0, wrong: 0, nudged: 0}
+        // Hängt das Team fest, schickt eine Figur den nächsten Hinweis per Chat (nach Schwierigkeit, „schwer“: nie)
+        const due = lvl(s).nudge.filter(ms => now - stat.start > ms * (SPEED < 1 ? SPEED : 1)).length, have = s.hints[a] || 0
+        if (due > stat.nudged && have < hintMax(s, a)) {
+          stat.nudged = due; s.hints[a] = have + 1
+          // Helfen tun nur Verbündete (Figuren mit helps: false, z. B. Täter, nie); sonst kommt der Hinweis aus der Akte
+          const helper = [o.npc, ...s.npcs].find(n => n && s.npcs.includes(n) && this.c.npcs[n].helps !== false) || ''
+          s.chats = [...s.chats.slice(-40), {id: (s.chats.at(-1)?.id || 0) + 1, npc: helper, text: t('nudge.say', {hint: this.c.puzzles[a].hints[have]}), to: null}]
+        }
         if (o.onFail && s.timer && now > s.timer.until) { s.timer = null; s.puzzle = null; this.goto(o.onFail); break }
         if (o.every && o.taunts?.length && now - (rt.lastT || s.stepAt) > o.every * SPEED && (!rt.until || now > rt.until)) {
           rt.lastT = now; rt.ti = rt.ti || 0
@@ -397,8 +411,8 @@ export const G = {
       this.seen.chats = m.id
       if (m.to && role !== m.to && role !== 'beide') continue
       const n = this.c.npcs[m.npc]
-      addMsg(n?.name || m.npc, fill(m.text), 'npc', m.to ? t('chat.onlyFor', {role: roleName(m.to)}) : '')
-      toast(`💬 ${n?.name || m.npc}${m.to ? t('toast.onlyYou') : ''}: ${fill(m.text).slice(0, 90)}${m.text.length > 90 ? '…' : ''}`, 6000, 'npcmsg')
+      addMsg(n?.name || m.npc || this.c.file, fill(m.text), 'npc', m.to ? t('chat.onlyFor', {role: roleName(m.to)}) : '')
+      toast(`💬 ${n?.name || m.npc || this.c.file}${m.to ? t('toast.onlyYou') : ''}: ${fill(m.text).slice(0, 90)}${m.text.length > 90 ? '…' : ''}`, 6000, 'npcmsg')
     }
     renderDossier(s, role)
     renderPuzzle(s)
@@ -449,12 +463,6 @@ export const G = {
         try { fn(el, {role: s?.roles[selfId], state: s, now: Date.now(), elapsed: s?.startedAt ? Date.now() - s.startedAt : 0}) } catch (e) { console.warn(e) }
       }
     }
-    // Hinweis-Schubser nach 6 Minuten an einem Rätsel
-    if (s?.puzzle && s.puzzleAt && !s.paused && Date.now() - s.puzzleAt > 6 * 60000 * SPEED && !this._nudged?.[s.puzzle]) {
-      (this._nudged ||= {})[s.puzzle] = true
-      $('#hintBtn').classList.add('pulse')
-      toast(t('toast.hint'), 5000)
-    }
   }
 }
 
@@ -495,7 +503,8 @@ export function signalAt(mode, text, unit, now) {
   return {lamp: null, done, restart: true, idx: -1, left: 0}
 }
 // Signallampe: eigener Bildtakt statt des 200-ms-Spieltakts, mit Mitschreibstreifen und wahlweise Piepton
-export let sigBeep = store.get('beep', '') === '1', sigLast = -1
+export let sigBeep = store.get('beep', '') === '1', sigLast = -1, sigCb = store.get('cb', '') === '1'
+const cbLabel = c => c ? t('color.' + c) : ''
 export function signalLoop() {
   requestAnimationFrame(signalLoop)
   const s = G.state, sm = s?.phase === 'play' && !s.paused ? s.morse : null, myRole = s?.roles?.[selfId]
@@ -513,22 +522,28 @@ export function signalLoop() {
   lamp.classList.toggle('col', col)
   if (col) lamp.style.setProperty('--lc', st.lamp || 'transparent')
   lamp.classList.toggle('on', !!st.lamp)
-  // Mitschreibstreifen unten auf der Kachel
+  // Mitschreibstreifen unten auf der Kachel (auf „schwer“ nur Lampe und Ton, kein Mitschreiben)
+  const full = lvl(s).strip
   let strip = $('.sigstrip', tile)
   if (!strip) {
     strip = h('div', {class: 'sigstrip'}, h('span', {class: 'bulb'}), h('span', {class: 'syms'}),
+      col ? h('button', {type: 'button', class: 'cb', title: t('sig.cb'), onclick: () => { sigCb = !sigCb; store.set('cb', sigCb ? '1' : ''); strip.dataset.k = '' }}, '◐') : null,
       h('button', {type: 'button', class: 'beep', title: t('sig.beep'), onclick: () => { sigBeep = !sigBeep; store.set('beep', sigBeep ? '1' : ''); strip.dataset.k = '' }}))
     tile.append(strip)
   }
   strip.classList.toggle('lit', !!st.lamp); strip.style.setProperty('--lc', col ? st.lamp || 'transparent' : '#ffe9a8')
-  const key = st.idx + '|' + st.restart + '|' + sigBeep
+  strip.classList.toggle('cbon', col && sigCb)
+  $('.bulb', strip).textContent = col && sigCb ? cbLabel(st.cur) : ''
+  const key = st.idx + '|' + st.restart + '|' + sigBeep + '|' + sigCb + '|' + full
   if (strip.dataset.k !== key) {
     strip.dataset.k = key
     $('.beep', strip).textContent = sigBeep ? '🔊' : '🔈'
+    $('.cb', strip)?.setAttribute('aria-pressed', sigCb)
     const syms = $('.syms', strip)
     if (st.restart) syms.replaceChildren(h('span', {class: 'restart'}, t('sig.restart')))
-    else if (col) syms.replaceChildren(...st.done.filter(x => x !== ' ' && x !== '/').map(c => h('i', {class: 'chip', style: `--c:${COLORS[c]}`})),
-      st.cur ? h('i', {class: 'chip now', style: `--c:${COLORS[st.cur]}`}) : '')
+    else if (!full) syms.replaceChildren(h('span', {class: 'restart'}, t('sig.hard')))
+    else if (col) syms.replaceChildren(...st.done.filter(x => x !== ' ' && x !== '/').map(c => h('i', {class: 'chip', style: `--c:${COLORS[c]}`}, sigCb ? cbLabel(c) : '')),
+      st.cur ? h('i', {class: 'chip now', style: `--c:${COLORS[st.cur]}`}, sigCb ? cbLabel(st.cur) : '') : '')
     else syms.replaceChildren(...st.done.join('').replace(/ +/g, ' ').split(/(\/)/).map(p => p === '/' ? h('b', {class: 'wgap'}, ' / ') : h('span', {}, p)),
       st.cur ? h('b', {class: 'now'}, st.cur) : '')
   }
@@ -597,6 +612,15 @@ export function renderTable(s) {
 }
 
 /* ---- Lobby ---- */
+// Schwierigkeit: wann Figuren mit Hinweisen helfen, wie viele Hinweise es gibt, wie lang Countdowns laufen
+export const LEVELS = {
+  leicht: {timer: 1.5, nudge: [150000, 300000], maxHints: 9, strip: true},
+  normal: {timer: 1, nudge: [300000], maxHints: 9, strip: true},
+  schwer: {timer: .8, nudge: [], maxHints: 2, strip: false}
+}
+export const lvl = s => LEVELS[s?.level] || LEVELS.normal
+const hintMax = (s, p) => Math.min(G.c.puzzles[p].hints.length, lvl(s).maxHints)
+
 export function renderLobby() {
   const s = G.state, el = $('#lobby')
   const link = location.origin + location.pathname + '#' + roomKey()
@@ -615,6 +639,14 @@ export function renderLobby() {
     : s ? t('lobby.waitHost') : t('lobby.connecting')
   $('#startBtn').textContent = G.c?.solo ? t('lobby.startSolo') : ids.length < 2 ? t('lobby.startAlone') : t('lobby.start')
   $('#claimBtn').textContent = t('lobby.claim')
+  const box = $('#levelBox'), level = s?.level || 'normal'
+  box.hidden = !s
+  if (box.dataset.k !== level + host) {
+    box.dataset.k = level + host
+    $('#levelBtns').replaceChildren(...Object.keys(LEVELS).map(id => h('button', {type: 'button', class: 'chipbtn' + (id === level ? ' on' : ''), disabled: !host,
+      'aria-pressed': id === level, onclick: () => G.send({t: 'level', v: id})}, t('level.' + id))))
+    $('#levelDesc').textContent = t('level.d.' + level) + (host ? '' : ' ' + t('level.hostOnly'))
+  }
   el.hidden = !!s && s.phase !== 'lobby'
 }
 
@@ -696,10 +728,10 @@ export function renderPuzzle(s) {
   $('#puzzleForm').hidden = locked; $('#keypad').hidden = locked || p.input !== 'digits'; $('#pextra').hidden = locked
   $('#pby').hidden = !p.by
   $('#pby').textContent = locked ? t('puz.only', {role: roleName(p.by)}) : p.by ? t('puz.onlyYou', {role: roleName(p.by)}) : ''
-  const n = s.hints[s.puzzle] || 0
+  const n = s.hints[s.puzzle] || 0, max = hintMax(s, s.puzzle)
   $('#hints').replaceChildren(...p.hints.slice(0, n).map((x, i) => h('li', {}, h('b', {}, t('puz.hintN', {n: i + 1})), x)))
-  $('#hintBtn').hidden = n >= p.hints.length
-  $('#hintBtn').textContent = t('puz.hintBtn', {n, total: p.hints.length})
+  $('#hintBtn').hidden = n >= max
+  $('#hintBtn').textContent = t('puz.hintBtn', {n, total: max})
   $('#tries').replaceChildren(...s.tries.slice(-3).map(t => h('li', {class: t.ok ? 'ok' : t.near ? 'near' : ''}, `${t.by}: „${t.a}“ ${t.ok ? '✓' : t.near ? '≈ ' + t.near : '✗'}`)))
 }
 export function renderKnock(s) {
@@ -799,7 +831,8 @@ export function renderEnd(s) {
   const team = Object.values(s.names)
   const time = fmtClock(s.endedAt - s.startedAt)
   const hints = Object.values(s.hints).reduce((a, b) => a + b, 0)
-  $('#endStats').textContent = t('end.stats', {time, hints, n: Object.keys(G.c.endings).length})
+  $('#endStats').textContent = t('end.stats', {time, hints, level: t('level.' + (s.level || 'normal')), n: Object.keys(G.c.endings).length})
+  renderReport(s, time)
   const canvas = drawFile({team, time, code: e.code, hints})
   $('#endImg').src = canvas.toDataURL('image/png')
   const url = location.origin + location.pathname
@@ -812,6 +845,20 @@ export function renderEnd(s) {
   }
   $('#saveBtn').onclick = () => canvas.toBlob(downloadBlob, 'image/png')
   $('#copyBtn').onclick = () => navigator.clipboard?.writeText(text).then(() => toast(t('end.copied')), () => toast(t('end.copyFail')))
+}
+// Verlauf pro Rätsel: Zeit, Hinweise, Fehlversuche. Bleibt im Browser; wer mag, kopiert ihn als Text.
+function renderReport(s, time) {
+  const rows = Object.entries(s.stats || {}).filter(([p]) => G.c.puzzles[p]).sort((a, b) => a[1].start - b[1].start)
+    .map(([p, st]) => ({p, q: fill(G.c.puzzles[p].q), ms: Math.max(0, (st.end || s.endedAt) - st.start), hints: s.hints[p] || 0, wrong: st.wrong || 0, done: !!st.end}))
+  $('#endReport').hidden = !rows.length
+  if (!rows.length) return
+  const longest = rows.reduce((a, b) => b.ms > a.ms ? b : a)
+  $('#reportRows').replaceChildren(...rows.map(r => h('tr', {class: r === longest ? 'long' : ''},
+    h('td', {}, r.q.length > 52 ? r.q.slice(0, 50) + '…' : r.q), h('td', {}, fmtClock(r.ms) + (r === longest ? ' ⏱' : '')),
+    h('td', {}, String(r.hints)), h('td', {}, String(r.wrong)), h('td', {}, r.done ? '✓' : '–'))))
+  const text = [`${G.c.title} · ${G.c.endings[s.ending]?.title || ''} · ${time} · ${t('level.' + (s.level || 'normal'))} · ${Object.keys(s.names).length} ${t('report.people')}`,
+    ...rows.map(r => `${fmtClock(r.ms)}  ${t('report.hints')} ${r.hints}  ${t('report.wrong')} ${r.wrong}  ${r.done ? '✓' : '–'}  ${r.q}`)].join('\n')
+  $('#reportBtn').onclick = () => navigator.clipboard?.writeText(text).then(() => toast(t('end.copied')), () => toast(t('end.copyFail')))
 }
 export function downloadBlob(blob) {
   const a = h('a', {href: URL.createObjectURL(blob), download: `akte-${G.c.id}.png`}); a.click()

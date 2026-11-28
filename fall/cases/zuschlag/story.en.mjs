@@ -27,7 +27,7 @@ export default {
   },
 
   npcs: {
-    blanc: {name: 'Monsieur Blanc', sub: 'Auctioneer · encrypted', tts: {pitch: .9, rate: .98},
+    blanc: {helps: false, name: 'Monsieur Blanc', sub: 'Auctioneer · encrypted', tts: {pitch: .9, rate: .98},
       voice: {model: 'en_nem', pitch: -2, fx: 'video', len: 1.03},
       face: {photo: 'blanc', silhouette: true, glow: '#e3c27a', hair: {style: 'slick'}, scene: 'office'}},
     vasquez: {name: 'Bidder 3', sub: 'Madrid · anonymous', tts: {pitch: .9, rate: 1},

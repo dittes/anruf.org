@@ -26,7 +26,7 @@ export default {
     jannik: {name: 'Jannik Feddersen', sub: 'Leitstelle Küste · Schichtleitung', tts: {pitch: 1, rate: 1.05},
       voice: {model: 'thorsten-high', pitch: 2, fx: 'call', len: .94},
       face: {photo: 'jannik', skin: '#ebc0a4', eyes: '#3a6a8a', hair: {style: 'short', color: '#b5652e'}, beard: 'full', beardColor: '#a85a28', extras: ['headset'], mood: 'smile', jaw: .7, top: {style: 'hoodie', color: '#1f3346', accent: '#ccc'}, scene: 'radio'}},
-    marit: {name: 'Dr. Marit Olsen', sub: 'Station Graudel · Satellit', look: 'weak', tts: {pitch: 1.05, rate: 1},
+    marit: {helps: false, name: 'Dr. Marit Olsen', sub: 'Station Graudel · Satellit', look: 'weak', tts: {pitch: 1.05, rate: 1},
       voice: {model: 'eva_k', fx: 'radio', len: 1},
       face: {photo: 'marit', skin: '#efcbb4', fem: true, jaw: .3, eyes: '#4a6a7a', hair: {style: 'bob', color: '#cbb896'}, glasses: 'round', age: 2, mood: 'stern', top: {style: 'coat', color: '#8a2e2a'}, extras: ['earring'], scene: 'storm'}},
     tom: {name: 'Unbekannt', sub: 'Station Graudel · Handy', look: 'weak', tts: {pitch: 1.2, rate: 1.1},

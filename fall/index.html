@@ -389,13 +389,30 @@ body.dark #stage .lamp{z-index:10}
   background:rgba(8,8,10,.82);border:1px solid rgba(255,255,255,.12);font:700 1.15rem/1 var(--mono);color:#f2eee6;min-height:38px}
 .sigstrip .bulb{flex:none;width:22px;height:22px;border-radius:50%;background:#2a2a2a;border:2px solid #555}
 .sigstrip.lit .bulb{background:var(--lc);border-color:#fff;box-shadow:0 0 14px var(--lc),0 0 4px #fff}
-.sigstrip .syms{flex:1;min-width:0;overflow:hidden;white-space:nowrap;direction:rtl;text-align:left;letter-spacing:.12em}
-.sigstrip .syms>*{direction:ltr;unicode-bidi:isolate}
+/* Neuestes Zeichen bleibt rechts sichtbar: rechtsbündig, Überlänge verschwindet links (Reihenfolge bleibt lesbar von links nach rechts) */
+.sigstrip .syms{flex:1;min-width:0;overflow:hidden;white-space:pre;display:flex;align-items:center;justify-content:flex-end;letter-spacing:.12em}
+.sigstrip .syms>*{flex:none}
 .sigstrip .now{color:#ffd23f}
 .sigstrip .wgap{color:var(--amber)}
 .sigstrip .restart{font:600 .72rem var(--sans,inherit);letter-spacing:.02em;color:var(--mute)}
 .sigstrip .chip{display:inline-block;width:16px;height:16px;border-radius:4px;background:var(--c);margin-right:5px;vertical-align:middle;border:1px solid rgba(255,255,255,.4)}
 .sigstrip .chip.now{outline:2px solid #fff;outline-offset:1px}
+.sigstrip.cbon .chip{width:24px;height:20px;font:700 .62rem/20px var(--mono);text-align:center;color:#111;font-style:normal}
+.sigstrip.cbon .bulb{font:700 .6rem/18px var(--mono);text-align:center;color:#111}
+.sigstrip .cb{flex:none;border:0;background:none;font-size:1rem;padding:0 2px;color:var(--mute)}
+.sigstrip .cb[aria-pressed=true]{color:var(--amber)}
+#levelBox{margin:10px 0 4px}
+#levelBtns{display:flex;gap:6px;justify-content:center;margin:6px 0}
+#levelBtns .chipbtn{border:1px solid var(--line);background:none;border-radius:999px;padding:.3em .9em;font-size:.86rem;color:var(--mute)}
+#levelBtns .chipbtn.on{border-color:var(--amber);color:var(--amber)}
+#levelBtns .chipbtn:disabled{cursor:default}
+#levelDesc{font-size:.8rem;color:var(--mute);margin:0}
+#endReport{text-align:left;margin:8px 0;font-size:.82rem}
+#endReport summary{cursor:pointer;color:var(--amber)}
+#endReport table{width:100%;border-collapse:collapse;margin:8px 0}
+#endReport th,#endReport td{padding:.25em .4em;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+#endReport td:nth-child(n+2),#endReport th:nth-child(n+2){text-align:right;white-space:nowrap}
+#endReport tr.long td{color:var(--amber)}
 .sigstrip .beep{flex:none;border:0;background:none;font-size:1rem;padding:0 2px}
 .mtable .mdec{background:var(--panel2);border-radius:10px;padding:10px;margin:8px 0}
 .mtable .mout{display:flex;gap:12px;align-items:baseline;font:700 1.3rem var(--mono);min-height:1.6em}
@@ -610,6 +627,7 @@ body.dark #stage .lamp{z-index:10}
       </div>
       <ul id="lobbyPlayers"></ul>
       <p id="lobbyWait"></p>
+      <div id="levelBox" hidden><span class="mono" data-t="level.label">Schwierigkeit</span><div id="levelBtns"></div><p id="levelDesc"></p></div>
       <div class="row2">
         <button class="btn primary" id="startBtn" hidden>Fall beginnen</button>
         <button class="btn" id="claimBtn" hidden>Fall selbst eröffnen</button>
@@ -701,6 +719,10 @@ body.dark #stage .lamp{z-index:10}
       <h2 id="endTitle"></h2>
       <p id="endText"></p>
       <p id="endStats"></p>
+      <details id="endReport" hidden><summary data-t="report.title">Euer Verlauf</summary>
+        <table><thead><tr><th data-t="report.q">Rätsel</th><th data-t="report.time">Zeit</th><th data-t="report.hints">Hinweise</th><th data-t="report.wrong">Fehlversuche</th><th></th></tr></thead><tbody id="reportRows"></tbody></table>
+        <p class="note" data-t="report.note">Bleibt auf deinem Gerät.</p><button class="btn" id="reportBtn" type="button" data-t="report.copy">Verlauf kopieren</button>
+      </details>
       <img id="endImg" alt="Geschwärzte Akte zum Teilen" data-ta="end.imgAlt">
       <p data-t="end.text">Teilt die Akte. Sie verrät nichts, aber der Freigabecode öffnet auf der Startseite den Epilog.</p>
       <div class="row2">

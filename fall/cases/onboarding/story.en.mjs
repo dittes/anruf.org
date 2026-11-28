@@ -27,10 +27,10 @@ export default {
   },
 
   npcs: {
-    luna: {name: 'LUNA', sub: 'HR assistant · always there for you', tts: {pitch: 1.3, rate: 1.05},
+    luna: {helps: false, name: 'LUNA', sub: 'HR assistant · always there for you', tts: {pitch: 1.3, rate: 1.05},
       voice: {model: 'en_kristin', fx: 'robot', len: .95},
       face: {photo: 'luna', skin: '#f2d6c6', fem: true, jaw: 0, age: 0, hair: {style: 'bob', color: '#9d8fe0'}, eyes: '#5a7cff', lip: '#c45a7a', top: {style: 'blouse', color: '#e9e9f2', accent: '#8ea8ff'}, extras: ['lanyard'], lanyard: '#8ea8ff', mood: 'smile', scene: 'studio', light: '#c8d2ff'}},
-    viktor: {name: 'Victor Lindsey', sub: 'CEO · Video', tts: {pitch: .9, rate: 1},
+    viktor: {helps: false, name: 'Victor Lindsey', sub: 'CEO · Video', tts: {pitch: .9, rate: 1},
       voice: {model: 'en_joe', fx: 'video', len: .96},
       face: VIKTOR},
     viktor2: {name: 'V. L.', sub: 'private · Lisbon', look: 'weak', tts: {pitch: .85, rate: .95},

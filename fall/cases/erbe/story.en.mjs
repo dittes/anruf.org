@@ -27,7 +27,7 @@ export default {
   },
 
   npcs: {
-    hensel: {name: 'Dr. K. Hensley', sub: 'Cathedral Square Notary', tts: {pitch: .85, rate: 1.02},
+    hensel: {helps: false, name: 'Dr. K. Hensley', sub: 'Cathedral Square Notary', tts: {pitch: .85, rate: 1.02},
       voice: {model: 'en_joe', pitch: -2, fx: 'video', len: 1.0},
       face: {photo: 'hensel', skin: '#e0b496', age: 2, hair: {style: 'slick', color: '#c9c6c0'}, glasses: 'half', top: {style: 'suit', color: '#2a2c30', accent: '#e8e4da', tie: '#1f4a34'}, mood: 'smile', scene: 'office'}},
     mehmet: {name: 'Mike Aydin', sub: 'Locksmith · Mobile', tts: {pitch: 1, rate: 1.05},
@@ -36,7 +36,7 @@ export default {
     pohl: {name: 'Gladys Pool', sub: 'Neighbor · Tablet', tts: {pitch: 1.05, rate: .95},
       voice: {model: 'en_cori', pitch: -2, fx: 'call', len: 1.04},
       face: {photo: 'pohl', skin: '#ecc9b4', fem: true, age: 2, hair: {style: 'bun', color: '#e6e2dc'}, glasses: 'round', extras: ['mole'], top: {style: 'sweater', color: '#4a5a3a'}, mood: 'smile', scene: 'night'}},
-    notariat: {name: 'Cathedral Square Notary', sub: 'Answering machine', look: 'weak', tts: {pitch: 1.1, rate: 1},
+    notariat: {helps: false, name: 'Cathedral Square Notary', sub: 'Answering machine', look: 'weak', tts: {pitch: 1.1, rate: 1},
       voice: {model: 'en_kristin', fx: 'mailbox', len: 1.0},
       face: {photo: 'notariat', silhouette: true, hair: {style: 'bob'}, top: {style: 'blouse', color: '#333'}, scene: 'office'}}
   },

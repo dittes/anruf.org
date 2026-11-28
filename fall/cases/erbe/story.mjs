@@ -27,7 +27,7 @@ export default {
   },
 
   npcs: {
-    hensel: {name: 'Dr. K. Hensel', sub: 'Notariat am Domplatz', tts: {pitch: .85, rate: 1.02},
+    hensel: {helps: false, name: 'Dr. K. Hensel', sub: 'Notariat am Domplatz', tts: {pitch: .85, rate: 1.02},
       voice: {model: 'thorsten_emotional', speaker: 4, pitch: -1.5, fx: 'video', len: 1.0},
       face: {photo: 'hensel', skin: '#e0b496', age: 2, hair: {style: 'slick', color: '#c9c6c0'}, glasses: 'half', top: {style: 'suit', color: '#2a2c30', accent: '#e8e4da', tie: '#1f4a34'}, mood: 'smile', scene: 'office'}},
     mehmet: {name: 'Mehmet Aydın', sub: 'Schlüsseldienst · Handy', tts: {pitch: 1, rate: 1.05},
@@ -36,7 +36,7 @@ export default {
     pohl: {name: 'Gisela Pohl', sub: 'Nachbarin · Tablet', tts: {pitch: 1.05, rate: .95},
       voice: {model: 'eva_k', pitch: -2, fx: 'call', len: 1.04},
       face: {photo: 'pohl', skin: '#ecc9b4', fem: true, age: 2, hair: {style: 'bun', color: '#e6e2dc'}, glasses: 'round', extras: ['mole'], top: {style: 'sweater', color: '#4a5a3a'}, mood: 'smile', scene: 'night'}},
-    notariat: {name: 'Notariat am Domplatz', sub: 'Anrufbeantworter', look: 'weak', tts: {pitch: 1.1, rate: 1},
+    notariat: {helps: false, name: 'Notariat am Domplatz', sub: 'Anrufbeantworter', look: 'weak', tts: {pitch: 1.1, rate: 1},
       voice: {model: 'kerstin', fx: 'mailbox', len: 1.0},
       face: {photo: 'notariat', silhouette: true, hair: {style: 'bob'}, top: {style: 'blouse', color: '#333'}, scene: 'office'}}
   },

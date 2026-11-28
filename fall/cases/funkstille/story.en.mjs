@@ -26,7 +26,7 @@ export default {
     jannik: {name: 'Jake Fenton', sub: 'Coastal Control · Shift supervisor', tts: {pitch: 1, rate: 1.05},
       voice: {model: 'en_norman', pitch: 1, fx: 'call', len: .95},
       face: {photo: 'jannik', skin: '#ebc0a4', eyes: '#3a6a8a', hair: {style: 'short', color: '#b5652e'}, beard: 'full', beardColor: '#a85a28', extras: ['headset'], mood: 'smile', jaw: .7, top: {style: 'hoodie', color: '#1f3346', accent: '#ccc'}, scene: 'radio'}},
-    marit: {name: 'Dr. Marit Olsen', sub: 'Graudel Station · Satellite', look: 'weak', tts: {pitch: 1.05, rate: 1},
+    marit: {helps: false, name: 'Dr. Marit Olsen', sub: 'Graudel Station · Satellite', look: 'weak', tts: {pitch: 1.05, rate: 1},
       voice: {model: 'en_alba', fx: 'radio', len: 1},
       face: {photo: 'marit', skin: '#efcbb4', fem: true, jaw: .3, eyes: '#4a6a7a', hair: {style: 'bob', color: '#cbb896'}, glasses: 'round', age: 2, mood: 'stern', top: {style: 'coat', color: '#8a2e2a'}, extras: ['earring'], scene: 'storm'}},
     tom: {name: 'Unknown', sub: 'Graudel Station · Mobile', look: 'weak', tts: {pitch: 1.2, rate: 1.1},
