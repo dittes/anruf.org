@@ -27,7 +27,7 @@ Oben rechts auf der Startseite schaltet **DE | EN** um (gemerkt in `localStorage
 |---|---|
 | `i18n.mjs` | Sprachwahl, Wörterbuch der Oberfläche (`t('schlüssel')`), statische Texte per `data-t`/`data-th`/`data-tp`/`data-ta`/`data-tt` in `index.html` |
 | `cases/<fall>/story.en.mjs` | Englische Fassung des Falls (gleiche Schritte, Rätsel-IDs und Skriptlänge, andere Namen, Texte und Lösungen) |
-| `cases/<fall>/audio-en/` | Englische Sprachaufnahmen + `manifest.json` (+ optional `mouth-cues.json`) |
+| `cases/<fall>/audio-en/` | Englische Sprachaufnahmen + `manifest.json` + `mouth-cues.json` |
 | `cases/index.mjs` | pro Fall `loadEn` und `en: {file, title, tagline, players, duration}` |
 
 Werkzeuge mit Umgebungsvariable `FALL_LANG=en`: `node fall/tools/lines.mjs > /tmp/jobs.json`, `python fall/tools/voices.py /tmp/jobs.json`, `python fall/tools/mouth_cues.py`. `node fall/tools/seal.mjs` versiegelt auch `story.en.mjs`. Ohne `mouth-cues.json` bewegt sich der Mund nach der Lautstärke. `tools/test.html?lang=en` spielt nur die englischen Durchläufe (`PLAYS_EN` in `plays.mjs`).
@@ -82,7 +82,7 @@ Hilfen für Spielende: geteilte Notizen, Protokoll aller Sätze (mit ▶ nochmal
 
 1. Ordner `cases/<id>/` mit `story.mjs` anlegen (Vorlage: einer der bestehenden Fälle), in `cases/index.mjs` eintragen.
 2. Lösungen als `'@@klartext'` schreiben, dann `node fall/tools/seal.mjs` (ersetzt sie durch Hashes).
-3. Stimmen erzeugen:
+3. Die sechs bestehenden Fälle verwenden die deutsch-englische Qwen3-TTS-Studiobesetzung (siehe `CREDITS.md`). Für neue Zeilen steht als einfache lokale Alternative auch Piper zur Verfügung:
    ```sh
    python3 -m venv .venv && .venv/bin/pip install piper-tts
    # Stimmen nach ~/.cache/piper laden (siehe CREDITS.md), espeak-ng-data dorthin verlinken, wenn der venv-Pfad lang ist
@@ -99,4 +99,4 @@ Automatischer Durchlauf: `http://localhost:8080/fall/tools/test.html` spielt jed
 
 Von Hand testen: `http://localhost:8080/fall/?nomedia&fast` in zwei Tabs (`nomedia` ohne Kamera/Mikro, `fast` verkürzt Wartezeiten, `relay=ws://…` nutzt einen eigenen Nostr-Relay, `debug` macht `G` in der Konsole verfügbar, `G.jump(schritt)` springt).
 
-Nach Änderungen an Sprachaufnahmen erzeugt `python3 fall/tools/mouth_cues.py [fall-id]` die Lippen-Zeitmarken neu (ffmpeg und Rhubarb Lip Sync im PATH). `--rhubarb` nimmt einen expliziten Programmpfad an.
+Nach Änderungen an Sprachaufnahmen erzeugt `python3 fall/tools/mouth_cues.py [fall-id]` die deutschen Lippen-Zeitmarken neu. Für die englische Fassung denselben Befehl mit `FALL_LANG=en` aufrufen. Benötigt ffmpeg und Rhubarb Lip Sync im PATH. `--rhubarb` nimmt einen expliziten Programmpfad an.

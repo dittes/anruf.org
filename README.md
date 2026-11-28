@@ -83,6 +83,6 @@ Exit-Games im Videoanruf (anruf.org/fall) für 2–4 Personen, mit gleichem Verb
 
 Figuren rufen an, klopfen an, schicken Nachrichten an einzelne Rollen, lassen sich verhören und stellen Bedingungen (alle Mikros aus, alle Kameras an …). Dazu Tonbänder (Tempo, rückwärts, Frequenzanzeige für Wähltöne), Funkempfänger, Chiffrierscheibe, Beweisfotos mit Zoom, Gesichtervergleich, Aktenvernichter-Streifen, Sicherungskasten, Farbsignale, die nur eine Rolle sieht, Eingaben, die nur eine Rolle machen darf, UV-Lampe, Morse-Lampe, gemeinsames Gedrückthalten und Klatschen, Kameras zuhalten, Countdown, Licht aus, Verzweigungen und mehrere Enden. Hilfen: geteilte Notizen, Protokoll zum Nachhören, gestufte Hinweise, Pause mit Speicherstand.
 
-Die Stimmen sind mit Piper lokal erzeugte Audiodateien (CC0-Stimmen, siehe `fall/CREDITS.md`), die Figuren verwenden lokal gespeicherte, animierte Fotoporträts. Der Kamera-Schnappschuss für den „Spiegel“-Effekt bleibt im Browser. Aufbau, Skript-Schritte und wie man einen neuen Fall baut: `fall/README.md`.
+Die Stimmen sind lokal produzierte deutsche und englische Studioaufnahmen mit synthetischen Figurenstimmen (siehe `fall/CREDITS.md`), die Figuren verwenden lokal gespeicherte, animierte Fotoporträts. Der Kamera-Schnappschuss für den „Spiegel“-Effekt bleibt im Browser. Aufbau, Skript-Schritte und wie man einen neuen Fall baut: `fall/README.md`.
 
 Testen: `http://localhost:8080/fall/?nomedia&fast` in zwei Tabs (`nomedia` = ohne Kamera/Mikro, `fast` = kürzere Wartezeiten).

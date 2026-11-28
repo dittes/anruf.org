@@ -2,7 +2,11 @@
 
 ## Stimmen
 
-Die Sprachaufnahmen in `cases/*/audio/` sind mit [Piper](https://github.com/OHF-Voice/piper1-gpl) lokal erzeugt und mit ffmpeg nachbearbeitet (Telefon, Funk, Flüstern …). Piper selbst ist nur Werkzeug und nicht Teil der Seite.
+Für die deutsche und englische Besetzung der sechs Fälle wurden mit Qwen3-TTS VoiceDesign fiktive Stimmen entworfen. Qwen3-TTS Base spricht die Dialoge und die vertonten Beweise beider Sprachfassungen mit denselben Figurenreferenzen. Die Aufnahmen wurden lokal mit MLX Audio erzeugt und mit ffmpeg für Videoanruf, Telefon, Funk und Band gemischt. Die fertigen Audiodateien liegen in `cases/*/audio/` und `cases/*/audio-en/`. [Qwen3-TTS](https://github.com/QwenLM/Qwen3-TTS) · [MLX Audio](https://github.com/Blaizzy/mlx-audio)
+
+### Frühere Piper-Besetzung und lokales Werkzeug
+
+`tools/voices.py` kann weiterhin Aufnahmen mit [Piper](https://github.com/OHF-Voice/piper1-gpl) erzeugen. Für die frühere deutsche Besetzung wurden folgende Modelle verwendet.
 
 | Stimme | Figuren | Datensatz | Lizenz |
 |---|---|---|---|
@@ -13,9 +17,9 @@ Die Sprachaufnahmen in `cases/*/audio/` sind mit [Piper](https://github.com/OHF-
 
 Stimmmodelle: [rhasspy/piper-voices](https://huggingface.co/rhasspy/piper-voices).
 
-### Englische Fassung (`cases/*/audio-en/`)
+### Frühere englische Piper-Besetzung
 
-Ebenfalls mit Piper erzeugt (`FALL_LANG=en`), bewusst nur mit Stimmen, die frei nutzbar sind:
+Modelle der früheren englischen Fassung (`FALL_LANG=en`):
 
 | Stimme | Datensatz | Lizenz |
 |---|---|---|
