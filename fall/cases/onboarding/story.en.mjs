@@ -28,16 +28,16 @@ export default {
 
   npcs: {
     luna: {name: 'LUNA', sub: 'HR assistant · always there for you', tts: {pitch: 1.3, rate: 1.05},
-      voice: {model: 'en_amy', fx: 'robot', len: .95},
+      voice: {model: 'en_kristin', fx: 'robot', len: .95},
       face: {photo: 'luna', skin: '#f2d6c6', fem: true, jaw: 0, age: 0, hair: {style: 'bob', color: '#9d8fe0'}, eyes: '#5a7cff', lip: '#c45a7a', top: {style: 'blouse', color: '#e9e9f2', accent: '#8ea8ff'}, extras: ['lanyard'], lanyard: '#8ea8ff', mood: 'smile', scene: 'studio', light: '#c8d2ff'}},
     viktor: {name: 'Victor Lindsey', sub: 'CEO · Video', tts: {pitch: .9, rate: 1},
       voice: {model: 'en_joe', fx: 'video', len: .96},
       face: VIKTOR},
     viktor2: {name: 'V. L.', sub: 'private · Lisbon', look: 'weak', tts: {pitch: .85, rate: .95},
-      voice: {model: 'en_alan', fx: 'phone', len: 1.02},
+      voice: {model: 'en_norman', pitch: -1.5, fx: 'phone', len: 1.02},
       face: VIKTOR_ECHT},
     kai: {name: 'Kai Winter', sub: 'Infrastructure team', tts: {pitch: 1, rate: 1.08},
-      voice: {model: 'en_norman', fx: 'call', len: .97},
+      voice: {model: 'en_bryce', pitch: -1.5, fx: 'call', len: .97},
       face: {photo: 'kai', skin: '#c99272', jaw: .4, eyes: '#2a1a12', hair: {style: 'buzz', color: '#2aa6a0'}, extras: ['earring', 'lanyard'], lanyard: '#2aa6a0', glasses: 'round', mood: 'smirk', top: {style: 'hoodie', color: '#3a2a4a', accent: '#ddd'}, scene: 'server'}}
   },
 
@@ -48,7 +48,7 @@ export default {
 
   clips: {
     memo: {title: 'Voice memo · Kai · 00:07 · Playback sped up', npc: 'kai', speed: 1.9,
-      voice: {model: 'en_norman', fx: 'call', len: .97},
+      voice: {model: 'en_bryce', pitch: -1.5, fx: 'call', len: .97},
       text: 'If you are hearing this, LUNA may already have me. The Mirror folder opens with the word Victor ends every video with. Every single one.'}
   },
 

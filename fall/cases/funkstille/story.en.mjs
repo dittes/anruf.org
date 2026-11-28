@@ -24,13 +24,13 @@ export default {
 
   npcs: {
     jannik: {name: 'Jake Fenton', sub: 'Coastal Control · Shift supervisor', tts: {pitch: 1, rate: 1.05},
-      voice: {model: 'en_joe', pitch: 1, fx: 'call', len: .95},
+      voice: {model: 'en_norman', pitch: 1, fx: 'call', len: .95},
       face: {photo: 'jannik', skin: '#ebc0a4', eyes: '#3a6a8a', hair: {style: 'short', color: '#b5652e'}, beard: 'full', beardColor: '#a85a28', extras: ['headset'], mood: 'smile', jaw: .7, top: {style: 'hoodie', color: '#1f3346', accent: '#ccc'}, scene: 'radio'}},
     marit: {name: 'Dr. Marit Olsen', sub: 'Graudel Station · Satellite', look: 'weak', tts: {pitch: 1.05, rate: 1},
-      voice: {model: 'en_hfc_f', fx: 'radio', len: 1},
+      voice: {model: 'en_alba', fx: 'radio', len: 1},
       face: {photo: 'marit', skin: '#efcbb4', fem: true, jaw: .3, eyes: '#4a6a7a', hair: {style: 'bob', color: '#cbb896'}, glasses: 'round', age: 2, mood: 'stern', top: {style: 'coat', color: '#8a2e2a'}, extras: ['earring'], scene: 'storm'}},
     tom: {name: 'Unknown', sub: 'Graudel Station · Mobile', look: 'weak', tts: {pitch: 1.2, rate: 1.1},
-      voice: {model: 'en_bryce', fx: 'radio', len: .98},
+      voice: {model: 'en_bryce', pitch: 1, fx: 'radio', len: .98},
       face: {photo: 'tom', skin: '#e7b99c', age: 0, jaw: .3, eyes: '#4a7a5a', hair: {style: 'curly', color: '#7a4a2a'}, extras: ['freckles'], top: {style: 'hoodie', color: '#d9a21b', accent: '#333'}, mood: 'worried', look: [1, .5], scene: 'storm'}},
     ole: {name: 'Captain Olly Jessop', afterVote: {id: 'fahrt', pose: 'ole-radio'}, sub: 'Lifeboat “Harriet”', tts: {pitch: .8, rate: .95},
       voice: {model: 'en_nem', pitch: -2, fx: 'radio', len: 1.05},
@@ -42,10 +42,10 @@ export default {
   },
 
   clips: {
-    notruf: {title: 'Emergency channel', npc: 'tom', voice: {model: 'en_bryce', fx: 'radio', len: .98},
+    notruf: {title: 'Emergency channel', npc: 'tom', voice: {model: 'en_bryce', pitch: 1, fx: 'radio', len: .98},
       text: 'Graudel here. Can anyone hear me? If you can hear this: the password for Coastal Control is Beacon. Beacon. I am trying to get through to you.'},
     funk1: {title: 'Recording of radio message 1 · Graudel Station · 22:31', npc: 'marit', bells: 9,
-      voice: {model: 'en_hfc_f', fx: 'radio', len: 1},
+      voice: {model: 'en_alba', fx: 'radio', len: 1},
       text: 'This is Graudel Station, Olsen. Everything is fine with us. The generator is giving us trouble, but we are safe. Do not send anyone out in this weather.'}
   },
 

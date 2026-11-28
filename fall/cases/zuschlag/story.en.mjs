@@ -28,13 +28,13 @@ export default {
 
   npcs: {
     blanc: {name: 'Monsieur Blanc', sub: 'Auctioneer · encrypted', tts: {pitch: .9, rate: .98},
-      voice: {model: 'en_joe', pitch: -2, fx: 'video', len: 1.03},
+      voice: {model: 'en_nem', pitch: -2, fx: 'video', len: 1.03},
       face: {photo: 'blanc', silhouette: true, glow: '#e3c27a', hair: {style: 'slick'}, scene: 'office'}},
     vasquez: {name: 'Bidder 3', sub: 'Madrid · anonymous', tts: {pitch: .9, rate: 1},
-      voice: {model: 'en_jenny', pitch: -1.5, fx: 'call', len: 1.0},
+      voice: {model: 'en_alba', pitch: -1, fx: 'call', len: 1.0},
       face: {photo: 'vasquez', skin: '#d8a888', fem: true, age: 1, hair: {style: 'bun', color: '#2a2424'}, extras: ['earring'], top: {style: 'blouse', color: '#111'}, mood: 'smirk', scene: 'studio'}},
     roth: {name: 'Dr. Margaret Roth', sub: 'Director · Ebersbach House Museum', tts: {pitch: 1.05, rate: 1.02},
-      voice: {model: 'en_hfc_f', pitch: -1, fx: 'call', len: 1.0},
+      voice: {model: 'en_cori', fx: 'call', len: 1.0},
       face: {photo: 'roth', skin: '#eac6b0', fem: true, age: 2, hair: {style: 'short', color: '#e8dcc0'}, glasses: 'square', top: {style: 'jacket', color: '#222'}, mood: 'worried', scene: 'office'}}
   },
 

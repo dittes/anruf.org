@@ -28,10 +28,10 @@ export default {
 
   npcs: {
     hensel: {name: 'Dr. K. Hensley', sub: 'Cathedral Square Notary', tts: {pitch: .85, rate: 1.02},
-      voice: {model: 'en_alan', pitch: -1.5, fx: 'video', len: 1.0},
+      voice: {model: 'en_joe', pitch: -2, fx: 'video', len: 1.0},
       face: {photo: 'hensel', skin: '#e0b496', age: 2, hair: {style: 'slick', color: '#c9c6c0'}, glasses: 'half', top: {style: 'suit', color: '#2a2c30', accent: '#e8e4da', tie: '#1f4a34'}, mood: 'smile', scene: 'office'}},
     mehmet: {name: 'Mike Aydin', sub: 'Locksmith · Mobile', tts: {pitch: 1, rate: 1.05},
-      voice: {model: 'en_ryan', pitch: 0, fx: 'phone', len: 1.0},
+      voice: {model: 'en_bryce', pitch: 0, fx: 'phone', len: 1.0},
       face: {photo: 'mehmet', skin: '#c99272', jaw: .7, hair: {style: 'short', color: '#1c1a18'}, beard: 'full', beardColor: '#1c1a18', top: {style: 'jacket', color: '#1f2a44'}, mood: 'worried', scene: 'storm'}},
     pohl: {name: 'Gladys Pool', sub: 'Neighbor · Tablet', tts: {pitch: 1.05, rate: .95},
       voice: {model: 'en_cori', pitch: -2, fx: 'call', len: 1.04},

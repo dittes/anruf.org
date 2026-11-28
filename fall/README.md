@@ -19,6 +19,21 @@ Mehrere Fälle zum gemeinsamen Lösen im Videoanruf, auf Basis von anruf.org (gl
 | `audio/` | Atmosphäre-Schleifen |
 | `tools/` | `test.html` + `plays.mjs` (automatischer Durchlauf aller Fälle), `seal.mjs` (Lösungen hashen), `lines.mjs` + `voices.py` (Stimmen erzeugen), `portraits/` (Fotos zu Kacheln mit Blinzeln und Mund packen) |
 
+## Sprachen (Deutsch / English)
+
+Oben rechts auf der Startseite schaltet **DE | EN** um (gemerkt in `localStorage`, Vorgabe: Browsersprache). Die Sprache gehört zum Raum: Englische Räume heißen `#en/<fall>/<raum>`, deutsche wie bisher `#<fall>/<raum>`. Beide Fassungen sind getrennte Anrufräume, so landen nie Leute mit verschiedenen Texten im selben Anruf.
+
+| Datei | Inhalt |
+|---|---|
+| `i18n.mjs` | Sprachwahl, Wörterbuch der Oberfläche (`t('schlüssel')`), statische Texte per `data-t`/`data-th`/`data-tp`/`data-ta`/`data-tt` in `index.html` |
+| `cases/<fall>/story.en.mjs` | Englische Fassung des Falls (gleiche Schritte, Rätsel-IDs und Skriptlänge, andere Namen, Texte und Lösungen) |
+| `cases/<fall>/audio-en/` | Englische Sprachaufnahmen + `manifest.json` (+ optional `mouth-cues.json`) |
+| `cases/index.mjs` | pro Fall `loadEn` und `en: {file, title, tagline, players, duration}` |
+
+Werkzeuge mit Umgebungsvariable `FALL_LANG=en`: `node fall/tools/lines.mjs > /tmp/jobs.json`, `python fall/tools/voices.py /tmp/jobs.json`, `python fall/tools/mouth_cues.py`. `node fall/tools/seal.mjs` versiegelt auch `story.en.mjs`. Ohne `mouth-cues.json` bewegt sich der Mund nach der Lautstärke. `tools/test.html?lang=en` spielt nur die englischen Durchläufe (`PLAYS_EN` in `plays.mjs`).
+
+Beim Übersetzen eines Falls müssen Rätsel, deren Lösung vom Wortlaut abhängt (Chiffren, Morse, Wortlösungen), neu gebaut werden. Beispiel: „Libelle“ → „dragonfly“ mit Verschiebung 9, „Falter“ → „CANDLE“ als Einmalschlüssel.
+
 ## Spielmechaniken (Schritte im Skript)
 
 | Schritt | Wirkung |

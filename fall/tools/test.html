@@ -28,13 +28,14 @@ Nur bestimmte Durchläufe: <code>?only=erbe,zuschlag</code>.</p>
 import {PLAYS} from './plays.mjs'
 
 const only = new URLSearchParams(location.search).get('only')?.split(',')
-const plays = PLAYS.filter(p => !only || only.includes(p.case))
+const lang = new URLSearchParams(location.search).get('lang')   // ?lang=en: nur die englische Fassung, ?lang=de: nur die deutsche
+const plays = PLAYS.filter(p => (!only || only.includes(p.case)) && (!lang || (p.lang || 'de') === lang))
 const rows = document.getElementById('rows'), frame = document.getElementById('frame')
 const sleep = ms => new Promise(r => setTimeout(r, ms))
 const prevName = localStorage.getItem('fall.name')   // eigenen Namen nach dem Test wiederherstellen
 for (const p of plays) {
   p.tr = rows.insertRow()
-  for (const v of [p.case, p.name, p.expect, '–', '', '']) p.tr.insertCell().textContent = v
+  for (const v of [p.case + (p.lang === 'en' ? ' (en)' : ''), p.name, p.expect, '–', '', '']) p.tr.insertCell().textContent = v
 }
 
 async function run(p) {
@@ -42,8 +43,9 @@ async function run(p) {
   const t0 = Date.now(), slug = 'test-' + Math.random().toString(36).slice(2, 8), errors = [], trace = []
   // Gleiche Herkunft: Name und Leitungsrolle für den Rahmen vorbelegen
   localStorage.setItem('fall.name', 'Test')
-  sessionStorage.setItem(`fall.host.${p.case}/${slug}`, '1')
-  frame.src = `../?nomedia&test&debug&relay=ws://127.0.0.1:9#${p.case}/${slug}`
+  const pre = p.lang === 'en' ? 'en/' : ''
+  sessionStorage.setItem(`fall.host.${pre}${p.case}/${slug}`, '1')
+  frame.src = `../?nomedia&test&debug&relay=ws://127.0.0.1:9#${pre}${p.case}/${slug}`
   await new Promise(r => frame.onload = r)
   const w = frame.contentWindow, d = w.document
   w.addEventListener('error', e => errors.push(e.message))
@@ -91,7 +93,7 @@ async function run(p) {
   res.textContent = got + (errors.length ? ' · Fehler: ' + errors.slice(0, 3).join(' | ') : ''); res.className = ok ? 'ok' : 'bad'
   p.tr.cells[4].textContent = ((Date.now() - t0) / 1000).toFixed(0) + ' s'
   p.tr.cells[5].innerHTML = '<small>' + trace.filter(t => /^(solve|ask|vote|ending|quiet|clap|hold|call|knock)/.test(t)).join(' → ') + '</small>'
-  sessionStorage.removeItem(`fall.host.${p.case}/${slug}`)
+  sessionStorage.removeItem(`fall.host.${pre}${p.case}/${slug}`)
   return ok
 }
 

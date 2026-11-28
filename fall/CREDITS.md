@@ -13,6 +13,20 @@ Die Sprachaufnahmen in `cases/*/audio/` sind mit [Piper](https://github.com/OHF-
 
 Stimmmodelle: [rhasspy/piper-voices](https://huggingface.co/rhasspy/piper-voices).
 
+### Englische Fassung (`cases/*/audio-en/`)
+
+Ebenfalls mit Piper erzeugt (`FALL_LANG=en`), bewusst nur mit Stimmen, die frei nutzbar sind:
+
+| Stimme | Datensatz | Lizenz |
+|---|---|---|
+| en_US-joe-medium | [OHF-Voice/voice-datasets](https://github.com/OHF-Voice/voice-datasets) | CC0 |
+| en_US-kristin-medium, en_US-norman-medium, en_US-bryce-medium | LibriVox-Aufnahmen, Datensätze von Piper-Mitwirkenden | Public Domain |
+| en_GB-cori-high | LibriVox-Aufnahmen | Public Domain |
+| en_GB-alba-medium | Alba (Scottish English) | CC BY 4.0 |
+| en_GB-northern_english_male-medium | Northern English Male | CC BY-SA 4.0 |
+
+Modelle: [rhasspy/piper-voices](https://huggingface.co/rhasspy/piper-voices).
+
 ## Geräusche und Bilder
 
 - Atmosphäre (`audio/*.m4a`: Brummen, Wind, Sturm, Funkrauschen, Wartemusik) ist mit ffmpeg synthetisch erzeugt, ohne fremde Aufnahmen.

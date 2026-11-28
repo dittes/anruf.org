@@ -58,6 +58,7 @@ function setupHome() {
   }
   const renderHome = () => {
     applyStatic()
+    document.title = lang === 'en' ? 'File 0 — escape games on a video call' : 'Akte 0 — Exit-Games im Videoanruf'
     $$('.langsw button').forEach(b => b.setAttribute('aria-pressed', b.dataset.lang === lang))
     renderCases(); renderSaves()
     $('#goBtn').textContent = invited ? t('home.join') : t('home.go')
@@ -76,9 +77,11 @@ function setupHome() {
   $('#codeForm').addEventListener('submit', async e => {
     e.preventDefault()
     const code = norm($('#codeIn').value)
+    // Codes aus beiden Sprachfassungen werden erkannt; der Epilog erscheint in der gewählten Sprache
     for (const meta of CASES) {
-      const c = (await loadCase(meta)).default
-      const k = c.codes?.[await sha(c.id, code)]
+      const c = (await loadCase(meta)).default, other = (await (lang === 'en' ? meta.load() : meta.loadEn())).default
+      const hash = await sha(c.id, code)
+      const k = c.codes?.[hash] || other.codes?.[hash]
       if (k) { const en = c.endings[k]; $('#codeOut').replaceChildren(h('b', {}, `${c.title} · ${en.title}`), h('br'), en.epilog); return }
     }
     $('#codeOut').textContent = t('home.codeBad')

@@ -12,7 +12,16 @@ const HW = {tuer: '1954', uhr: '4:10', kassette: 'libelle', nummer: '0571883011'
 const NP = {blatt: 'Blatt sieben', gruppen: 'falter', fernwahl: '04215573', klartext: 'senderchef', schalter: '10101101', kranich: 'Wendt'}
 const ZS = {echt: '11100000', ort: 'St. Jakobi', erhoehung: '0205', mail: 'Das Original bleibt hier'}
 
-export const PLAYS = [
+// Englische Fassung: gleiche Wege, andere Lösungsworte
+const NS_EN = {stimme: 'Lighthouse', fach: '4071', nummer: '0712289', krell: 'Krell', ping: 'St. Gallen', strom: '01011011', morse: 'Saentis', abschaltung: '49172'}
+const FS_EN = {boje: 'D4', echo: '9 pm', fass: 'Lead sludge', kanal: 'Beacon', pegel: '3.00 m', licht: 'Only two'}
+const OB_EN = {konsole: 'Boston9102', kai: 'Orion', spiegel: 'curious', echt: 'Scar', farben: 'red blue yellow green red blue', notaus: 'Bruno'}
+const HW_EN = {tuer: '1954', uhr: '4:10', kassette: 'dragonfly', nummer: '0571883011', strom: '00101', truhe: '714', wer: 'Irma'}
+const NP_EN = {blatt: 'Sheet seven', gruppen: 'candle', fernwahl: '04215573', klartext: 'station chief', schalter: '10101101', kranich: 'Wendt'}
+const ZS_EN = {echt: '11100000', ort: 'St. James', erhoehung: '0205', mail: 'The original stays here'}
+const EN_ANSWERS = {nachtschicht: NS_EN, funkstille: FS_EN, onboarding: OB_EN, erbe: HW_EN, nachtprogramm: NP_EN, zuschlag: ZS_EN}
+
+export const PLAYS_DE = [
   {case: 'nachtschicht', name: 'Hauptweg', answers: NS, votes: 'last', expect: 'leuchtturm'},
   {case: 'nachtschicht', name: 'Abschaltung verpasst', answers: NS, expire: ['solve', 'abschaltung'], expect: 'verloren'},
   {case: 'funkstille', name: 'Hauptweg', answers: FS, votes: 'last', expect: 'warft'},
@@ -30,3 +39,6 @@ export const PLAYS = [
   {case: 'nachtprogramm', name: 'Regler runter', answers: NP, asks: ['name', 'weiter', 'chef', 'schwaermer', 'geständnis', 'nichts'], votes: {regler: 'aus'}, expect: 'aus'},
   {case: 'nachtprogramm', name: 'Netzagentur', answers: NP, expire: ['solve', 'schalter'], expect: 'stoerung'}
 ]
+
+export const PLAYS_EN = PLAYS_DE.map(p => ({...p, lang: 'en', answers: EN_ANSWERS[p.case]}))
+export const PLAYS = [...PLAYS_DE, ...PLAYS_EN]
