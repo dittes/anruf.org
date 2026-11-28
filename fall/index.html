@@ -135,7 +135,7 @@ body:not([data-phase=play]) .rec{display:none}
 @keyframes blinkEye{0%,95%,100%{transform:scaleY(1)}97%{transform:scaleY(.08)}}
 .portrait .mouth{transform-box:view-box;transform:scaleY(calc(.04 + var(--m,0) * 1.05));transition:transform 60ms linear}
 .tile.npc.speaking .pic svg{animation:breathe 3s ease-in-out infinite}
-@keyframes breathe{50%{transform:scale(1.012) translateY(-1px)}}
+@keyframes breathe{50%{transform:scale(1.005) translateY(-.5px)}}
 .look-glitchy .pic{animation:jitter 4s steps(1) infinite}
 @keyframes jitter{0%,93%{transform:none;filter:none}94%{transform:translateX(-5px);filter:hue-rotate(90deg)}96%{transform:translateX(4px)}98%{transform:none;filter:saturate(3)}}
 .look-weak canvas.static{opacity:.22!important}
