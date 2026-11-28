@@ -694,7 +694,7 @@ export function renderDossier(s, role) {
 }
 export function renderLog() {
   $('#logList').replaceChildren(...G.log.slice().reverse().map(l => h('li', {},
-    l.npc && (lineMeta(l.npc, l.raw) || deVoice) ? h('button', {class: 'replay', title: t('log.replay'), type: 'button', onclick: () => speak(l.npc, l.raw, G.npcTiles.get(l.npc))}, '▶') : null,
+    l.npc && (lineMeta(l.npc, l.raw) || deVoice) ? h('button', {class: 'replay', title: t('log.replay'), type: 'button', onclick: () => speak(l.npc, l.raw, G.npcTiles.get(l.npc), true)}, '▶') : null,
     h('b', {}, l.who + ': '), l.text)))
 }
 export let notesDirty = 0

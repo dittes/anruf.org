@@ -111,11 +111,20 @@ export async function loadAudio(id) {
 export const lineMeta = (npc, text) => AU.manifest[akey(npc, audioText(text, lang))]
 export function stopVoice() {
   try { AU.el?.pause() } catch {}
-  AU.el = null; AU.utterance = null; cancelAnimationFrame(AU.raf)
+  AU.el = null; AU.utterance = null; AU.queued = null; cancelAnimationFrame(AU.raf)
   $$('.tile.npc').forEach(t => setMouth(t, null))
   if ('speechSynthesis' in window) speechSynthesis.cancel()
 }
-export function speak(npc, text, tile) {
+export function speak(npc, text, tile, now = false) {
+  // Läuft noch eine Aufnahme (z. B. weil sie bei dieser Person später losging als beim Host), wird sie nicht abgewürgt:
+  // Die neue Zeile startet, sobald die alte zu Ende ist. Nur das Nochmal-Hören (now) unterbricht sofort.
+  const cur = AU.el
+  if (!now && cur && !cur.paused && !cur.ended && isFinite(cur.duration) && cur.duration - cur.currentTime < 4) {
+    AU.queued = () => speak(npc, text, tile, true)
+    clearTimeout(AU.qT); AU.qT = setTimeout(() => { const q = AU.queued; AU.queued = null; q?.() }, (cur.duration - cur.currentTime) * 1000 + 400)
+    return
+  }
+  clearTimeout(AU.qT)
   stopVoice()
   if (!voiceOn) return
   const m = lineMeta(npc, text)
@@ -156,6 +165,7 @@ export function speak(npc, text, tile) {
       cancelAnimationFrame(AU.raf)
       setMouth(tile, null)
       AU.el = null
+      const q = AU.queued; AU.queued = null; clearTimeout(AU.qT); q?.()
     }
     el.onended = el.onerror = finished
     el.play().catch(finished)
