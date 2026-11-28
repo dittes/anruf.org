@@ -1,7 +1,7 @@
 // Service Worker: macht anruf.org installierbar und die Oberfläche offlinefähig.
 // Gespräche selbst brauchen weiter Netz. Es werden nur Dateien von anruf.org gecacht, keine Anrufdaten.
 // Bei Änderungen an den Dateien unten VERSION erhöhen.
-const VERSION = 'v3'
+const VERSION = 'v4'
 const CACHE = 'anruf-' + VERSION
 const SHELL = [
   './', 'index.html', 'config.mjs', 'vendor/trystero.mjs', 'vendor/qrcode.mjs',
